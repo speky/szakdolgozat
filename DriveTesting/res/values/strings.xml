@@ -12,4 +12,9 @@
 	<string name="checkbox2">checkbox2</string>
 	<string name="text">text</string>
 	<string name="list">list</string>
+	<string name="export">Start Export</string>
+	<string name="outputname">Output file  name</string>
+	<string name="kml">Export to KML format</string>
+	<string name="plaintext">Eport to plain text</string>
+	<string name="menu_export">Export</string>
 </resources>

@@ -17,12 +17,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     
     
-    <application
+    <application        
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name = ".DriveTestApp"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".DriveTestActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_drive_test" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +33,7 @@
         </activity>
         
         <activity android:label="@string/app_name" android:name=".PrefsActivity"></activity>
+        <activity  android:name=".ExportActivity"></activity>
         
         <service android:name=".UpdateService"></service>
         
