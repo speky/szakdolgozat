@@ -1,8 +1,15 @@
 <resources>
 
-    <string name="app_name">DriveTesting</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_drive_test">DriveTestActivity</string>
-
+	 <string name="app_name">DriveTesting</string>
+	 <string name="hello_world">Hello world!</string>
+	 <string name="menu_settings">Settings</string>
+	 <string name="title_activity_drive_test">DriveTestActivity</string>
+	 <string name="dbname">Adatbázis név</string>
+	 <string name="dbname_sum">Elmentett adatbázis fájl neve</string>
+	
+	<string name="checkbox">checkbox</string>
+	<string name="ringtone">ringtone</string>
+	<string name="checkbox2">checkbox2</string>
+	<string name="text">text</string>
+	<string name="list">list</string>
 </resources>
