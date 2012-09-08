@@ -1,0 +1,675 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass book
+\begin_preamble
+% Using a custom title page, \title required
+\title{}
+
+% PDF Generation settings
+\hypersetup{
+    pdfstartview={FitH},
+    linkcolor=black,
+    citecolor=black,
+    filecolor=blue,
+    urlcolor=blue,
+    linktoc=all
+}
+
+% Remove page numbering from the TOC
+\addtocontents{toc}{
+ \protect \thispagestyle{empty}
+}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language magyar
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans helvet
+\font_typewriter courier
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format pdf2
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 4
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language swedish
+\papercolumns 1
+\papersides 2
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Kedves dokumentum felhasználó! Ezt a sablon dokumentumot az ELTE IKs szakdolgoza
+t-dokumentációd megírásának megkönnyítéséért adom.
+ Bárki felhasználhatja, átalakíthatja szabadon.
+ A dokumentum elkészítéséhez használd a 
+\begin_inset Quotes sld
+\end_inset
+
+szemecskés
+\begin_inset Quotes srd
+\end_inset
+
+ ikont (Nézet, Ctrl+R).
+ Ajánlott fordítási formátum: pdflatex.
+\end_layout
+
+\begin_layout Plain Layout
+Az alábbiakban írok pár megjegyzést a munkád segítéséhez!
+\end_layout
+
+\begin_layout Itemize
+Ajánlott átnézni a Dokumentum -> Beállítások...
+ menüpontot a dokumentum szinte bármely tulajdonságának állításához, pl:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Egy/kétoldalasság megváltoztatása: Dokumentum -> Beállítások...
+ -> Oldal formátum -> Kétoldalas dokumentum
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Hivatkozások hozzáadása:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+A hivatkozás céljánál Beszúrás -> Címke...
+\end_layout
+
+\begin_layout Itemize
+A hivatkozás helyén Beszúrás -> Kereszthivatkozás...
+ (formátumként kiválasztani a hivatkozás szövegstílusát is)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Ábrák ajánlott hozzáadása:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Beszúrás -> Úsztatás -> Ábra
+\end_layout
+
+\begin_layout Itemize
+A keret felső részére a kép beszúrása
+\end_layout
+
+\begin_layout Itemize
+A keret-beli alsó keretbe az ábra nevének begépelése
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Vektorgrafikus képek (pl UML modellek) optimális hozzáadása:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Nyomtasd ki a programból a képet egy PDF nyomtatóval
+\end_layout
+
+\begin_layout Itemize
+Konvertáld a képet PDF-ből EPS-re egy internetes szolgáltatás segítségével
+ (ha lehet, ASCII és level 3-as, beágyazott betűtipusú formátumba)
+\end_layout
+
+\begin_layout Itemize
+Beszúrás -> Képek
+\end_layout
+
+\begin_layout Itemize
+Állíts be vágást a fehér részek eltüntetéséhez, 100% sorszélességet az oldalhoz
+ állításhoz
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Index kitöltése: Ha látsz egy szót amit az indexhez akarsz adni, Beszúrás
+ -> Tárgyszó
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+% Document front matter settings
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+frontmatter              % Starts front matter
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+pagestyle{empty}         % Removes page numbering (this needs to be reset
+ in main matter)
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{titlepage}         % Starts the custom title page
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle" tabularwidth="100col%">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0pt">
+<row interlinespace="2mm">
+<cell multirow="3" alignment="center" valignment="middle" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+\begin_inset Graphics
+	filename C:/Users/speky/Downloads/ELTE_logo.eps
+	lyxscale 15
+	width 3.5cm
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="2mm">
+<cell multirow="4" alignment="center" valignment="middle" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series bold
+EÖTVÖS LORÁND TUDOMÁNYEGYETEM
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row interlinespace="2mm">
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series bold
+INFORMATIKAI KAR
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row bottomspace="3mm" interlinespace="2mm">
+<cell multirow="4" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series bold
+Programozáselmélet és Szoftvertechnológiai Tanszék
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset CommandInset line
+LatexCommand rule
+offset "0.5ex"
+width "100col%"
+height "0.2mm"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\series bold
+\size largest
+Szakdoli Címe
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset VSpace 6em
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="2">
+<features tabularvalignment="middle" tabularwidth="100col%">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0pt">
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Témavezető Neve
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Specker ZSolt
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+ELTE IK Programozáselmélet és
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+ELTE IK Programtervező
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Szoftvertechnológiai Tanszék
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Informatikus BSc
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size large
+Budapest, 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Ends the custom title page
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{titlepage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage cleardoublepage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Document main matter start
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mainmatter
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage cleardoublepage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Resets the empty front matter page style to plain
+\end_layout
+
+\begin_layout Plain Layout
+
+% Change this if an other style's prefered
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+pagestyle{plain}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Bevezetés
+\end_layout
+
+\begin_layout Standard
+A Bevezetés a témaválasztás indoklását és a megoldandó feladat rövid, közérthető
+ leírását tartalmazza.
+\end_layout
+
+\begin_layout Chapter
+Felhasználói dokumentáció
+\end_layout
+
+\begin_layout Standard
+A Felhasználói dokumentáció tartalmazza
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a megoldott probléma rövid megfogalmazását,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a felhasznált módszerek rövid leírását,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a program használatához szükséges összes információt.
+\end_layout
+
+\begin_layout Chapter
+Fejlesztői dokumentáció
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a probléma részletes specifikációját,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a felhasznált módszerek részletes leírását, a használt fogalmak definícióját,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a program logikai és fizikai szerkezetének leírását (adatszerkezetek,
+ adatbázisok, modulfelbontás),
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a tesztelési tervet és a tesztelés eredményeit.
+\end_layout
+
+\begin_layout Chapter
+\start_of_appendix
+Mellékletnév
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage cleardoublepage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset CommandInset index_print
+LatexCommand printindex
+type "idx"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
