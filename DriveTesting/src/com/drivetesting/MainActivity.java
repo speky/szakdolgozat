@@ -47,6 +47,10 @@ public class MainActivity extends Activity {
 			case R.id.menu_export:
 				startActivity(new Intent(this, ExportActivity.class));
 				return true;
+			
+			case R.id.menu_map:
+				startActivity(new Intent(this, OSMActivity.class));
+				return true;
 				
 			default:
 				return false;			
