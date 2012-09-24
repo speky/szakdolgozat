@@ -1,0 +1,342 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass book
+\begin_preamble
+% Using a custom title page, \title required
+\title{}
+
+% PDF Generation settings
+\hypersetup{
+    pdfstartview={FitH},
+    linkcolor=black,
+    citecolor=black,
+    filecolor=blue,
+    urlcolor=blue,
+    linktoc=all
+}
+
+% Remove page numbering from the TOC
+\addtocontents{toc}{
+ \protect \thispagestyle{empty}
+}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language magyar
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans helvet
+\font_typewriter courier
+\font_default_family sfdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format pdf2
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing onehalf
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered true
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 4
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language swedish
+\papercolumns 1
+\papersides 2
+\paperpagestyle plain
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Document main matter start
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mainmatter
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Bevezetés
+\end_layout
+
+\begin_layout Standard
+A Bevezetés a témaválasztás indoklását és a megoldandó feladat rövid, közérthető
+ leírását tartalmazza.
+\end_layout
+
+\begin_layout Section
+Probléma leírása
+\end_layout
+
+\begin_layout Standard
+Drive testing leírása, jelenlegi módszere(k) vázolása
+\end_layout
+
+\begin_layout Section
+Szakdolgozat célja
+\end_layout
+
+\begin_layout Standard
+A program céljának ismertetése, előnyeinek, felhasználhatóságának bemutatása
+\end_layout
+
+\begin_layout Chapter
+Felhasználói dokumentáció
+\end_layout
+
+\begin_layout Standard
+A Felhasználói dokumentáció tartalmazza
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a megoldott probléma rövid megfogalmazását,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a felhasznált módszerek rövid leírását,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a program használatához szükséges összes információt.
+\end_layout
+
+\begin_layout Section
+Program bemutatása
+\end_layout
+
+\begin_layout Subsection
+A program ismertetése
+\end_layout
+
+\begin_layout Standard
+A program céljának leírása a felhasználó szemszögéből.
+\end_layout
+
+\begin_layout Subsection
+Program használatának feltételei
+\end_layout
+
+\begin_layout Standard
+A program által használt interfészek, eszközök engedélyek listája, leírása
+\end_layout
+
+\begin_layout Section
+Program használatának bemutatása
+\end_layout
+
+\begin_layout Subsection
+Menü áttekintése
+\end_layout
+
+\begin_layout Standard
+A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismertetése
+\end_layout
+
+\begin_layout Subsection
+Teszt típusok ismertetése
+\end_layout
+
+\begin_layout Standard
+Tesztek bemutatása (UDP, TCP, gyors teszt stb.) tesztek működésének ismertetése
+\end_layout
+
+\begin_layout Subsection
+Teszt futtatás
+\end_layout
+
+\begin_layout Standard
+tesztek futtatásának leírása, eredmények értelmezésének, mentésének leírása.
+\end_layout
+
+\begin_layout Section
+Referencia
+\end_layout
+
+\begin_layout Chapter
+Fejlesztői dokumentáció
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a probléma részletes specifikációját,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a felhasznált módszerek részletes leírását, a használt fogalmak definícióját,
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a program logikai és fizikai szerkezetének leírását (adatszerkezetek,
+ adatbázisok, modulfelbontás),
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+- a tesztelési tervet és a tesztelés eredményeit.
+\end_layout
+
+\begin_layout Section
+Projekt könyvtár szerkezete
+\end_layout
+
+\begin_layout Section
+Android platform bemutatása
+\end_layout
+
+\begin_layout Subsection
+Architektúra
+\end_layout
+
+\begin_layout Standard
+Android fő komponenseinek bemutatása
+\end_layout
+
+\begin_layout Subsection
+Futási környezet, erőforrás kezelés
+\end_layout
+
+\begin_layout Standard
+Java és az android kapcsolata, dalvik virtuális gép.
+ Erőforrások (képek, szövegek, hangok) kezelése
+\end_layout
+
+\begin_layout Subsection
+Komponensek leírása 
+\end_layout
+
+\begin_layout Standard
+A programban használt elemek leírása (Activity, broadcast receiver, manager-ek)
+\end_layout
+
+\begin_layout Section
+Mobilhálózatok bemutatása
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatok fejlődése
+\end_layout
+
+\begin_layout Standard
+A hálózatok evolúciójának leírása (1G , 2G, EDGE, 3G, LTE)
+\end_layout
+
+\begin_layout Subsection
+A hálózatok vizsgált adatai
+\end_layout
+
+\begin_layout Standard
+A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
+ értékhatárokkal
+\end_layout
+
+\begin_layout Section
+A program modell
+\end_layout
+
+\begin_layout Subsection
+A program szerkezete
+\end_layout
+
+\begin_layout Standard
+Osztályok kapcsolatainak bemutatása
+\end_layout
+
+\begin_layout Subsection
+Osztályok
+\end_layout
+
+\begin_layout Section
+Tesztelés
+\end_layout
+
+\begin_layout Section
+Továbbfejlesztési lehetőségek
+\end_layout
+
+\begin_layout Chapter
+Összefoglalás
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document
