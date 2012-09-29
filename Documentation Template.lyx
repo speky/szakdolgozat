@@ -399,7 +399,7 @@ Drive testing Androiddal
 \begin_layout Plain Layout
 
 \size large
-Témavezető Neve
+Sike Sándor
 \end_layout
 
 \end_inset
@@ -410,7 +410,7 @@ Témavezető Neve
 \begin_layout Plain Layout
 
 \size large
-Specker ZSolt
+Specker Zsolt
 \end_layout
 
 \end_inset
@@ -599,6 +599,22 @@ A Bevezetés a témaválasztás indoklását és a megoldandó feladat rövid, k
  leírását tartalmazza.
 \end_layout
 
+\begin_layout Section
+Probléma leírása
+\end_layout
+
+\begin_layout Standard
+Drive testing leírása, jelenlegi módszere(k) vázolása
+\end_layout
+
+\begin_layout Section
+Szakdolgozat célja
+\end_layout
+
+\begin_layout Standard
+A program céljának ismertetése, előnyeinek, felhasználhatóságának bemutatása
+\end_layout
+
 \begin_layout Chapter
 Felhasználói dokumentáció
 \end_layout
@@ -620,6 +636,73 @@ A Felhasználói dokumentáció tartalmazza
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
 - a program használatához szükséges összes információt.
+\end_layout
+
+\begin_layout Section
+Program bemutatása
+\end_layout
+
+\begin_layout Standard
+A program céljának leírása a felhasználó(k) szemszögéből.
+ A célközönség bemutatása (mobil felhasználó, operátor)
+\end_layout
+
+\begin_layout Subsection
+Program használatának feltételei
+\end_layout
+
+\begin_layout Standard
+A program által használt interfészek, eszközök(HW, SW) leírása
+\end_layout
+
+\begin_layout Section
+Program használatának bemutatása
+\end_layout
+
+\begin_layout Subsection
+Program telepítése
+\end_layout
+
+\begin_layout Standard
+nem lesz elérhető a marketről, így a felmásolás és telepítés lépéseit fogom
+ leírni
+\end_layout
+
+\begin_layout Subsection
+Menü áttekintése
+\end_layout
+
+\begin_layout Standard
+A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismertetése
+ képekkel illusztrálva.
+ Menüpontok (activityk) közti váltás módjának, módjainak leírása
+\end_layout
+
+\begin_layout Subsection
+Teszt típusok ismertetése
+\end_layout
+
+\begin_layout Standard
+Tesztek bemutatása (UDP, TCP, gyors teszt stb.) tesztek működésének ismertetése
+\end_layout
+
+\begin_layout Subsection
+Teszt futtatás
+\end_layout
+
+\begin_layout Standard
+tesztek futtatásának leírása, eredmények értelmezésének, mentésének leírása,
+ képekkel illusztrálva
+\end_layout
+
+\begin_layout Subsection
+Hibaüzenetek
+\end_layout
+
+\begin_layout Standard
+mikor jelez a program hibát és mit tegyen a felhasználó ha ilyennel találkozik
+ (pl.
+ nem elérhető a GPS szolgáltatás, stb.)
 \end_layout
 
 \begin_layout Chapter
@@ -647,9 +730,241 @@ Fejlesztői dokumentáció
 - a tesztelési tervet és a tesztelés eredményeit.
 \end_layout
 
+\begin_layout Section
+Mobilhálózatok bemutatása
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatok fejlődése
+\end_layout
+
+\begin_layout Standard
+A hálózatok evolúciójának leírása (1G , 2G, 2.5G, 3G, LTE), a hálózatban
+ résztvevő komponensek strukturális bemutatása képekkel
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatokban használt kifejezések definíciója
+\end_layout
+
+\begin_layout Standard
+Fontos hálózati komponensek, rövidítések bemutatása, leírása
+\end_layout
+
+\begin_layout Subsection
+A hálózatok vizsgált adatai
+\end_layout
+
+\begin_layout Standard
+A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
+ értékhatárokkal
+\end_layout
+
+\begin_layout Section
+Android platform bemutatása
+\end_layout
+
+\begin_layout Subsection
+Architektúra
+\end_layout
+
+\begin_layout Standard
+Az Android fejlesztőkörnyezetnek három komponensét használom.
+ Mindegyiknek különböző célja és életciklusa van.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Activity
+\end_layout
+
+\begin_layout Standard
+Egy activity reprezentál egy felhasználói felülettel rendelkező képernyőt.
+ Például egy zenelejátszó program egy activitje lehet ami megejeleníti a
+ lejátszó felületet és egy másik ahol kiválaszthatja a felhasználó a lejátszandó
+ zenéket.
+ Habár mindegyik activity a zenelejátszó programban együttműködve adja a
+ teljes felhasználói élményt, mégis mindegyik független a többitől.
+\end_layout
+
+\begin_layout Subsubsection
+Services
+\end_layout
+
+\begin_layout Standard
+A service (szolgáltatás) egy háttérben, párhuzamosan futó komponens.
+ Sokáig futó művelet végrehajtására használható és nem biztosít felhasználói
+ felületet.
+ Ilyen művelet lehet például a zenelejátszás, miközben a felhasználó más
+ alkalmazást használ anélkül hogy a háttérben futó zenelejátszás blokkolná
+ vagy zavarná a másik alkalmazást illetve a felhasználót.
+ Egy másik komponens, mint például egy activity indíthat service-t és interakció
+ba léphet vele.
+\end_layout
+
+\begin_layout Subsubsection
+Broadcast receiver
+\end_layout
+
+\begin_layout Standard
+A broadcast receiver egy olyan komponens, amely válaszol a rendszerszintű
+ üzenetekre.
+ Számos rendszerüzenetet kezelhet például a képernyő kikapcsolásról vagy
+ az akkumulátor töltöttségének csökkenéséről érkező üzeneteket.
+ Az alkalmazás is kezdeményezhet ilyen üzenet küldést például, ha egy másik
+ alkalmazásnak akar üzenetet küldeni.
+ A service-hez hasonlóan enm rendelkezik felhasználói felülettel.
+\end_layout
+
+\begin_layout Standard
+Az egyes komponenseket egy aszinkron üzenettel lehet activálni amit Inetent-nek
+ neveznek.
+ Ez kapcsol össze komponenseket futási időben, akkor is ha a komponens egy
+ másik aplikációhoz tartozik.
+ Az intent közvetithet üzenetet másik komponensnek, például hogy jelenítsenek
+ meg egy képet vagy nyisson meg egy weboldalt.
+\end_layout
+
+\begin_layout Subsection
+Futási környezet, erőforrás kezelés
+\end_layout
+
+\begin_layout Standard
+Java és az android kapcsolata, dalvik virtuális gép.
+ Erőforrások (képek, szövegek, hangok) kezelése
+\end_layout
+
+\begin_layout Subsection
+Komponensek leírása 
+\end_layout
+
+\begin_layout Standard
+A programban használt elemek leírása (Activity, broadcast receiver, manager-ek)
+\end_layout
+
+\begin_layout Section
+A program architektúrája
+\end_layout
+
+\begin_layout Standard
+alrendszerek, rétegek kapcsolatainak bemutatása, a fentebb definiált komponensek
+ összekapcsolásának terve
+\end_layout
+
+\begin_layout Subsection
+Szerver oldali komponens
+\end_layout
+
+\begin_layout Standard
+a szerver (HTTPx) funkciójának bemutatása; a használt protokoll és szerver-klien
+s kommunikáció leírása
+\end_layout
+
+\begin_layout Subsection
+Adatbázis leírása
+\end_layout
+
+\begin_layout Standard
+A program által használt adatbázis modell bemutatása, mezők jellemzése
+\end_layout
+
+\begin_layout Subsection
+Felhasználó felület terve
+\end_layout
+
+\begin_layout Standard
+áttekintő ábra, amely mutatja a képernyők közti navigálási lehetőségeket,
+ irányokat.
+ Kiemelve a fontosabb felhasználói eseménykezeléseket
+\end_layout
+
+\begin_layout Section
+A program megvalósítása
+\end_layout
+
+\begin_layout Subsection
+Döntések a megvalósítás során
+\end_layout
+
+\begin_layout Standard
+Ide kerül annak a leírása, hogy miért nem lettek megvalósítva a hívás indításos
+ mérések; A több szálúság szükségessége és a komponensek kommunikációjának
+ miértjei
+\end_layout
+
+\begin_layout Subsection
+Osztályok bemutatása
+\end_layout
+
+\begin_layout Standard
+A program osztály hierarchiájának az osztályok szerepének bemutatása 
+\end_layout
+
+\begin_layout Subsection
+Activity-k egymás közti kommunikációja
+\end_layout
+
+\begin_layout Standard
+Az aszinkron működés kommunikációs megoldásainak leírása
+\end_layout
+
+\begin_layout Subsection
+Fájlok kapcsolata
+\end_layout
+
+\begin_layout Standard
+a projekt könyvtár szerkezetének és a fájlok szerepének bemutatása 
+\end_layout
+
+\begin_layout Section
+Tesztelés
+\end_layout
+
+\begin_layout Subsection
+Unit teszt
+\end_layout
+
+\begin_layout Standard
+unit tesztek és tesztek lefedettségének leírása (whitebox)
+\end_layout
+
+\begin_layout Subsection
+Rendszer teszt
+\end_layout
+
+\begin_layout Standard
+program tesztelése valódi mobilon és emulátoron.
+ (blackbox)
+\end_layout
+
+\begin_layout Subsection
+Tesztelés eredménye
+\end_layout
+
+\begin_layout Standard
+tesztelések eredményének összefoglalása, a tesztelés alatt előforduló hibák
+ megjegyzése és a javítás dokumentálása
+\end_layout
+
+\begin_layout Standard
+esetleg hatékonyság elemzés, 
+\end_layout
+
+\begin_layout Section
+Továbbfejlesztési lehetőségek
+\end_layout
+
+\begin_layout Standard
+limitációk, ToDo-k, tervezett módosítások összegzése.
+\end_layout
+
+\begin_layout Chapter
+Összefoglalás
+\end_layout
+
 \begin_layout Chapter
 \start_of_appendix
-Mellékletnév
+Használt eszközök a fejlesztés során
 \end_layout
 
 \begin_layout Standard

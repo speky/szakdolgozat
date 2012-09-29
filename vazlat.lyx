@@ -179,12 +179,9 @@ A Felhasználói dokumentáció tartalmazza
 Program bemutatása
 \end_layout
 
-\begin_layout Subsection
-A program ismertetése
-\end_layout
-
 \begin_layout Standard
-A program céljának leírása a felhasználó szemszögéből.
+A program céljának leírása a felhasználó(k) szemszögéből.
+ A célközönség bemutatása (mobil felhasználó, operátor)
 \end_layout
 
 \begin_layout Subsection
@@ -192,11 +189,20 @@ Program használatának feltételei
 \end_layout
 
 \begin_layout Standard
-A program által használt interfészek, eszközök engedélyek listája, leírása
+A program által használt interfészek, eszközök(HW, SW) leírása
 \end_layout
 
 \begin_layout Section
 Program használatának bemutatása
+\end_layout
+
+\begin_layout Subsection
+Program telepítése
+\end_layout
+
+\begin_layout Standard
+nem lesz elérhető a marketről, így a felmásolás és telepítés lépéseit fogom
+ leírni
 \end_layout
 
 \begin_layout Subsection
@@ -205,6 +211,8 @@ Menü áttekintése
 
 \begin_layout Standard
 A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismertetése
+ képekkel illusztrálva.
+ Menüpontok (activityk) közti váltás módjának, módjainak leírása
 \end_layout
 
 \begin_layout Subsection
@@ -220,11 +228,18 @@ Teszt futtatás
 \end_layout
 
 \begin_layout Standard
-tesztek futtatásának leírása, eredmények értelmezésének, mentésének leírása.
+tesztek futtatásának leírása, eredmények értelmezésének, mentésének leírása,
+ képekkel illusztrálva
 \end_layout
 
-\begin_layout Section
-Referencia
+\begin_layout Subsection
+Hibaüzenetek
+\end_layout
+
+\begin_layout Standard
+mikor jelez a program hibát és mit tegyen a felhasználó ha ilyennel találkozik
+ (pl.
+ nem elérhető a GPS szolgáltatás, stb.)
 \end_layout
 
 \begin_layout Chapter
@@ -253,7 +268,33 @@ Fejlesztői dokumentáció
 \end_layout
 
 \begin_layout Section
-Projekt könyvtár szerkezete
+Mobilhálózatok bemutatása
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatok fejlődése
+\end_layout
+
+\begin_layout Standard
+A hálózatok evolúciójának leírása (1G , 2G, 2.5G, 3G, LTE), a hálózatban
+ résztvevő komponensek strukturális bemutatása képekkel
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatokban használt kifejezések definíciója
+\end_layout
+
+\begin_layout Standard
+Fontos hálózati komponensek, rövidítések bemutatása, leírása
+\end_layout
+
+\begin_layout Subsection
+A hálózatok vizsgált adatai
+\end_layout
+
+\begin_layout Standard
+A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
+ értékhatárokkal
 \end_layout
 
 \begin_layout Section
@@ -265,7 +306,7 @@ Architektúra
 \end_layout
 
 \begin_layout Standard
-Android fő komponenseinek bemutatása
+Android fő komponenseinek bemutatása, életciklusukkal és főbb jellemzőikkel
 \end_layout
 
 \begin_layout Subsection
@@ -286,48 +327,119 @@ A programban használt elemek leírása (Activity, broadcast receiver, manager-e
 \end_layout
 
 \begin_layout Section
-Mobilhálózatok bemutatása
-\end_layout
-
-\begin_layout Subsection
-Mobilhálózatok fejlődése
+A program architektúrája
 \end_layout
 
 \begin_layout Standard
-A hálózatok evolúciójának leírása (1G , 2G, EDGE, 3G, LTE)
+alrendszerek, rétegek kapcsolatainak bemutatása, a fentebb definiált komponensek
+ összekapcsolásának terve
 \end_layout
 
 \begin_layout Subsection
-A hálózatok vizsgált adatai
+Szerver oldali komponens
 \end_layout
 
 \begin_layout Standard
-A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
- értékhatárokkal
+a szerver (HTTPx) funkciójának bemutatása; a használt protokoll és szerver-klien
+s kommunikáció leírása
+\end_layout
+
+\begin_layout Subsection
+Adatbázis leírása
+\end_layout
+
+\begin_layout Standard
+A program által használt adatbázis modell bemutatása, mezők jellemzése
+\end_layout
+
+\begin_layout Subsection
+Felhasználó felület terve
+\end_layout
+
+\begin_layout Standard
+áttekintő ábra, amely mutatja a képernyők közti navigálási lehetőségeket,
+ irányokat.
+ Kiemelve a fontosabb felhasználói eseménykezeléseket
 \end_layout
 
 \begin_layout Section
-A program modell
+A program megvalósítása
 \end_layout
 
 \begin_layout Subsection
-A program szerkezete
+Döntések a megvalósítás során
 \end_layout
 
 \begin_layout Standard
-Osztályok kapcsolatainak bemutatása
+Ide kerül annak a leírása, hogy miért nem lettek megvalósítva a hívás indításos
+ mérések; A több szálúság szükségessége és a komponensek kommunikációjának
+ miértjei
 \end_layout
 
 \begin_layout Subsection
-Osztályok
+Osztályok bemutatása
+\end_layout
+
+\begin_layout Standard
+A program osztály hierarchiájának az osztályok szerepének bemutatása 
+\end_layout
+
+\begin_layout Subsection
+Activity-k egymás közti kommunikációja
+\end_layout
+
+\begin_layout Standard
+Az aszinkron működés kommunikációs megoldásainak leírása
+\end_layout
+
+\begin_layout Subsection
+Fájlok kapcsolata
+\end_layout
+
+\begin_layout Standard
+a projekt könyvtár szerkezetének és a fájlok szerepének bemutatása 
 \end_layout
 
 \begin_layout Section
 Tesztelés
 \end_layout
 
+\begin_layout Subsection
+Unit teszt
+\end_layout
+
+\begin_layout Standard
+unit tesztek és tesztek lefedettségének leírása (whitebox)
+\end_layout
+
+\begin_layout Subsection
+Rendszer teszt
+\end_layout
+
+\begin_layout Standard
+program tesztelése valódi mobilon és emulátoron.
+ (blackbox)
+\end_layout
+
+\begin_layout Subsection
+Tesztelés eredménye
+\end_layout
+
+\begin_layout Standard
+tesztelések eredményének összefoglalása, a tesztelés alatt előforduló hibák
+ megjegyzése és a javítás dokumentálása
+\end_layout
+
+\begin_layout Standard
+esetleg hatékonyság elemzés, 
+\end_layout
+
 \begin_layout Section
 Továbbfejlesztési lehetőségek
+\end_layout
+
+\begin_layout Standard
+limitációk, ToDo-k, tervezett módosítások összegzése.
 \end_layout
 
 \begin_layout Chapter
@@ -335,7 +447,15 @@ Továbbfejlesztési lehetőségek
 \end_layout
 
 \begin_layout Standard
+szakdolgozat összegzése, teljesült-e a terv megvalósítása;
+\end_layout
 
+\begin_layout Chapter
+Melléklet
+\end_layout
+
+\begin_layout Section
+Használt eszközök a fejlesztés során
 \end_layout
 
 \end_body
