@@ -51,6 +51,8 @@ figs-within-sections
 \paperfontsize 12
 \spacing onehalf
 \use_hyperref true
+\pdf_title "Drive Testing szakdolgozat"
+\pdf_author "Specker Zsolt"
 \pdf_bookmarks true
 \pdf_bookmarksnumbered true
 \pdf_bookmarksopen false
@@ -251,7 +253,7 @@ begin{titlepage}         % Starts the custom title page
 
 \series bold
 \begin_inset Graphics
-	filename C:/Users/speky/Downloads/ELTE_logo.eps
+	filename ELTE_logo.eps
 	lyxscale 15
 	width 3.5cm
 
@@ -687,7 +689,7 @@ Tesztek bemutatása (UDP, TCP, gyors teszt stb.) tesztek működésének ismerte
 \end_layout
 
 \begin_layout Subsection
-Teszt futtatás
+Teszt futtatásD
 \end_layout
 
 \begin_layout Standard
@@ -770,7 +772,7 @@ Architektúra
 
 \begin_layout Standard
 Az Android fejlesztőkörnyezetnek három komponensét használom.
- Mindegyiknek különböző célja és életciklusa van.
+ Mindegyiknek különböző célja és szerepe van a programban.
  
 \end_layout
 
@@ -779,12 +781,213 @@ Activity
 \end_layout
 
 \begin_layout Standard
-Egy activity reprezentál egy felhasználói felülettel rendelkező képernyőt.
- Például egy zenelejátszó program egy activitje lehet ami megejeleníti a
- lejátszó felületet és egy másik ahol kiválaszthatja a felhasználó a lejátszandó
+Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nevezünk.
+ Például egy zenelejátszó program activitje lehet, ami megejeleníti a lejátszó
+ felületet, és egy másik, ahol kiválaszthatja a felhasználó a lejátszandó
  zenéket.
+ Minden alkalmazásnak van egy kitüntett "main
+\begin_inset Quotes srd
+\end_inset
+
+ activity-je, ha a felhasználó elindítja a programot ez az ablak jelenik
+ meg.
  Habár mindegyik activity a zenelejátszó programban együttműködve adja a
  teljes felhasználói élményt, mégis mindegyik független a többitől.
+ 
+\end_layout
+
+\begin_layout Standard
+A hagyományos applikációkkal ellentétben az Android programoknak nincs kontrollj
+uk az életciklusuk felett.
+ Így az alkalmazás komponenseinek figyelnie kell a program állapot változására
+ és aszerint reagálni.
+ A komponensek állapota befolyásolja a program állapotát, mely meghatározza
+ a program prioritását a rendszerben.
+ Az Activity-k úgynevezett Activity stack-en, azaz egy Last-In-First-Out
+ adatszerkezetben tárolódnak.
+ Mikor egy új Activity elindul, az előtte futó kerül a stack tetejére.
+ Ha az előtérben lévő, aktív Activity bezáródik vagy a felhasználó megnyomja
+ a Vissza gombot, akkor a verem tetején lévő kerül előtérbe.
+ Ha az Activity-t megsemmisíti a rendszer, mert már nincs rá szükség, akkor
+ felszabadítja annak erőforrásait és eltávolítja a veremből.
+ A folyamatot az alábbi kép szemlélteti.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename stack.png
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Activity-ket tartalmazó verem
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az Activity-nek négy állapota lehet:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Aktiv 
+\series default
+(Active), ebben az állpotban a verem tetején lévő activity lehet, ilyenkor
+ az ablak az eltrben van és képes fogadni a felhasználói utasításokat.
+ Az Android rendszer mindent megtesz annak érdekében, hogy ez az Activity
+ futhasson.
+ Így, ha kevés az erőforrás, a memória, akkor leállítja a verem alján lévőket
+ és felszabadítja azok erőforrását.
+ Mikor egy másik Activity lesz az aktiv, akkor az előbbi állpota felfüggesztett
+ lesz.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Felfüggesztett
+\series default
+ (Paused) állpotban az Activity látható maradhat, de nem reagál felhasználói
+ eseményekre, nincs fókusza.
+ Ez akkor fordulhat elő, ha az előtérben lévő ablak átlátszó vagy nem fedi
+ le a teljes képernyőt.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Leállt 
+\series default
+(Stopped), ekkor az Activity nem látható, lállt.
+ Az erőforrások még nem szabadulnak fel és a veremből sem kerül ki.
+ A leállt Activity-k prioritása a legkisebb, így ezeket terminálja legelőször
+ a rendszer, ha erőforrásra van szüksége.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Inaktív 
+\series default
+(Inactive) állapotba kerül, ha terminálva lett vagy mielőtt elindul.
+ Ezek az Activity-k nincsenek a veremben és csak újraindításkor válhat aktivvá.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename activity_lifecycle.png
+	scale 60
+	clip
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Activity életciklusa
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Android rendszer biztosítja, hogy az egyes Activity-k reagálhassanak az
+ állapotváltásra.
+ A lenti képen láthatóak az Activity életciklusai.
+ A téglalapok visszahívó (callback) metódusokat szimbolizálnak.
+ Ezek felhasználhatók különféle műveletek végrehajtására az egyes átmenetek
+ során.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onCreate() 
+\series default
+Az Activity létrejöttekor hívódik meg.
+ Itt kell az összes statikus adatokat beállítani.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStart()
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onRestart()
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onResume()
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onPause()
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStop()
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onDestroy()
 \end_layout
 
 \begin_layout Subsubsection
