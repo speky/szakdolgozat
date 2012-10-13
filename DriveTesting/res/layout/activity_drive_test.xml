@@ -1,46 +1,23 @@
-<TableLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
->
-  <TableRow>
-    <TextView
-        android:text="Checkbox:"
-        android:paddingRight="5dip"
-    />
-    <TextView android:id="@+id/checkbox"
-    />
-  </TableRow>
-  <TableRow>
-    <TextView
-        android:text="Ringtone:"
-        android:paddingRight="5dip"
-    />
-    <TextView android:id="@+id/ringtone"
-    />
-  </TableRow>
-  <TableRow>
-    <TextView
-        android:text="Checkbox #2:"
-        android:paddingRight="5dip"
-    />
-    <TextView android:id="@+id/checkbox2"
-    />
-  </TableRow>
-  <TableRow>
-    <TextView
-        android:text="Text:"
-        android:paddingRight="5dip"
-    />
-    <TextView android:id="@+id/text"
-    />
-  </TableRow>
-  <TableRow>
-    <TextView
-        android:text="List Selection:"
-        android:paddingRight="5dip"
-    />
-    <TextView android:id="@+id/list"
-    />
-  </TableRow>
-</TableLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:gravity="center_horizontal" 
+		android:padding="10dp"
+		android:scrollbars="vertical"
+	>
+
+		<TextView android:id="@+id/intro_label_telmgr"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp" android:layout_marginBottom="15dp" android:layout_marginTop="15dp"
+			android:textStyle="bold" android:text="Telephony Manager Information:" />
+			
+		<TextView android:id="@+id/telmgroutput" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginLeft="10dp"
+			android:layout_marginBottom="20dp" android:layout_below="@id/intro_label_telmgr"
+			android:text="" />
+
+	</RelativeLayout>
+</ScrollView>

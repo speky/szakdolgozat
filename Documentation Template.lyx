@@ -53,7 +53,7 @@ figs-within-sections
 \use_hyperref true
 \pdf_title "Drive Testing szakdolgozat"
 \pdf_author "Specker Zsolt"
-\pdf_bookmarks true
+\pdf_bookmarks false
 \pdf_bookmarksnumbered true
 \pdf_bookmarksopen false
 \pdf_bookmarksopenlevel 4
@@ -390,7 +390,7 @@ Drive testing Androiddal
 \begin_layout Standard
 \align center
 \begin_inset Tabular
-<lyxtabular version="3" rows="3" columns="2">
+<lyxtabular version="3" rows="6" columns="2">
 <features tabularvalignment="middle" tabularwidth="100col%">
 <column alignment="center" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0pt">
@@ -466,6 +466,70 @@ Informatikus BSc
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Dósa István
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size large
+Ericsson Hungary, 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
 
 \end_inset
@@ -487,13 +551,15 @@ Informatikus BSc
 \size large
 Budapest, 
 \begin_inset ERT
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
 
 \backslash
-today
+the
+\backslash
+year
 \end_layout
 
 \end_inset
@@ -596,17 +662,98 @@ pagestyle{plain}
 Bevezetés
 \end_layout
 
-\begin_layout Standard
-A Bevezetés a témaválasztás indoklását és a megoldandó feladat rövid, közérthető
- leírását tartalmazza.
-\end_layout
-
 \begin_layout Section
 Probléma leírása
 \end_layout
 
 \begin_layout Standard
-Drive testing leírása, jelenlegi módszere(k) vázolása
+A drive testing egyfajta mérési módszere és értékelése a mobiltelefon hálózatok
+ lefedettségének, kapacitásának és minőségének.
+ Ez a teszt fontos szerepet kap a telefonhálózatokat üzemeltető cégek hálózat
+ tervezési, üzemeltetési stratégiáiban és nem utolsó sorban a hibák felderítéséb
+en.
+ Drive test felszerelés tipikusan ilyen adatokat gyűjt a hálózatról:
+\end_layout
+
+\begin_layout Itemize
+Jel intenzitás, erősség 
+\end_layout
+
+\begin_layout Itemize
+Eldobott hívások
+\end_layout
+
+\begin_layout Itemize
+Blokkolt hívások
+\end_layout
+
+\begin_layout Itemize
+Handover információk 
+\end_layout
+
+\begin_layout Itemize
+Szomszédos cella információk
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Wrap figure
+lines 0
+placement r
+overhang 0in
+width "40text%"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Drive-Test-System.jpg
+	scale 90
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\size small
+Drive Test felszerelés
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+A manapság használt megoldások nagyon költségesek a drága eszközök és szakembere
+k miatt.
+ A mérés során a teszter -aki általában egy mérnök- egy speciálisan felszerelt
+ autóval kivonul a megadott területre, ahol a tesztet el kell végeznie.
+ Majd bekonfigurálja az eszközöket a méréshez.
+ Egy egyszerűbb felszerelés látható a jobb oldali képen.
+ A mérés típusától függöen egyre bonyolultabb és költségesebb eszközökre,
+ felszerelésekre van szükség.
+ Majd az autóval végigjárja a kijelölt útvonalat, akár többször is, miközben
+ a mérési eredményeket rögzíti a számítógép.
+ A mérés végeztével kiértékeli az eredményeket, általában egy erre a célra
+ készült program segítségével.
+ Látható, hogy sok költséges, speciális eszközre van szükség a mérések elvégzésé
+hez.
+ 
 \end_layout
 
 \begin_layout Section
@@ -614,7 +761,20 @@ Szakdolgozat célja
 \end_layout
 
 \begin_layout Standard
-A program céljának ismertetése, előnyeinek, felhasználhatóságának bemutatása
+A szakdolgozatom célja egy 
+\begin_inset Quotes sld
+\end_inset
+
+drive testing" alkalmazás megvalósítása, egy kis költségvetésű mobil egység
+ segítségével.
+ Nagy előnye a programnak, hogy a teszt elvégzéséhez elég egy telefon.
+ Az Android platform lehetőséget nyújt arra, hogy az alkalmazás információkat
+ gyűjtsön a telefonról, a mobil hálózatról.
+ Ezen információk segítségével egy olyan program készíthető, amely képes
+ részben vagy teljesen kiváltani a fent említett eljárást.
+ Segítséget nyújt a telefonhálózat problémáinak felderítésében, fejlesztendő
+ területek feltérképezésében.
+ 
 \end_layout
 
 \begin_layout Chapter
@@ -666,7 +826,7 @@ Program telepítése
 \end_layout
 
 \begin_layout Standard
-nem lesz elérhető a marketről, így a felmásolás és telepítés lépéseit fogom
+nem lesz elérhető a market-ről, így a felmásolás és telepítés lépéseit fogom
  leírni
 \end_layout
 
@@ -677,7 +837,7 @@ Menü áttekintése
 \begin_layout Standard
 A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismertetése
  képekkel illusztrálva.
- Menüpontok (activityk) közti váltás módjának, módjainak leírása
+ Menüpontok (Activity-k) közti váltás módjának, módjainak leírása
 \end_layout
 
 \begin_layout Subsection
@@ -689,7 +849,7 @@ Tesztek bemutatása (UDP, TCP, gyors teszt stb.) tesztek működésének ismerte
 \end_layout
 
 \begin_layout Subsection
-Teszt futtatásD
+Teszt futtatása
 \end_layout
 
 \begin_layout Standard
@@ -766,6 +926,13 @@ A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó ada
 Android platform bemutatása
 \end_layout
 
+\begin_layout Standard
+Az Andoroid fejlesztő környezet széleskörű támogatást nyújt a fejlesztőknek
+ a telefon és a hálózat adatainak lekéréséhez, ami nagyban megkönnyíti az
+ alkalmazás fejlesztését.
+ 
+\end_layout
+
 \begin_layout Subsection
 Architektúra
 \end_layout
@@ -782,16 +949,16 @@ Activity
 
 \begin_layout Standard
 Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nevezünk.
- Például egy zenelejátszó program activitje lehet, ami megejeleníti a lejátszó
+ Például egy zenelejátszó program Activity-je lehet, ami megjeleníti a lejátszó
  felületet, és egy másik, ahol kiválaszthatja a felhasználó a lejátszandó
  zenéket.
- Minden alkalmazásnak van egy kitüntett "main
+ Minden alkalmazásnak van egy kitüntet "main
 \begin_inset Quotes srd
 \end_inset
 
- activity-je, ha a felhasználó elindítja a programot ez az ablak jelenik
+ Activity-je, ha a felhasználó elindítja a programot ez az ablak jelenik
  meg.
- Habár mindegyik activity a zenelejátszó programban együttműködve adja a
+ Habár mindegyik Activity a zenelejátszó programban együttműködve adja a
  teljes felhasználói élményt, mégis mindegyik független a többitől.
  
 \end_layout
@@ -856,15 +1023,15 @@ Az Activity-nek négy állapota lehet:
 \begin_layout Itemize
 
 \series bold
-Aktiv 
+Aktív 
 \series default
-(Active), ebben az állpotban a verem tetején lévő activity lehet, ilyenkor
- az ablak az eltrben van és képes fogadni a felhasználói utasításokat.
+(Active), ebben az állapotban a verem tetején lévő Activity lehet, ilyenkor
+ az ablak az előtérben van és képes fogadni a felhasználói utasításokat.
  Az Android rendszer mindent megtesz annak érdekében, hogy ez az Activity
  futhasson.
  Így, ha kevés az erőforrás, a memória, akkor leállítja a verem alján lévőket
  és felszabadítja azok erőforrását.
- Mikor egy másik Activity lesz az aktiv, akkor az előbbi állpota felfüggesztett
+ Mikor egy másik Activity lesz az aktív, akkor az előbbi állapota felfüggesztett
  lesz.
 \end_layout
 
@@ -873,7 +1040,7 @@ Aktiv
 \series bold
 Felfüggesztett
 \series default
- (Paused) állpotban az Activity látható maradhat, de nem reagál felhasználói
+ (Paused) állapotban az Activity látható maradhat, de nem reagál felhasználói
  eseményekre, nincs fókusza.
  Ez akkor fordulhat elő, ha az előtérben lévő ablak átlátszó vagy nem fedi
  le a teljes képernyőt.
@@ -885,7 +1052,7 @@ Felfüggesztett
 \series bold
 Leállt 
 \series default
-(Stopped), ekkor az Activity nem látható, lállt.
+(Stopped), ekkor az Activity nem látható, leállt.
  Az erőforrások még nem szabadulnak fel és a veremből sem kerül ki.
  A leállt Activity-k prioritása a legkisebb, így ezeket terminálja legelőször
  a rendszer, ha erőforrásra van szüksége.
@@ -897,7 +1064,7 @@ Leállt
 Inaktív 
 \series default
 (Inactive) állapotba kerül, ha terminálva lett vagy mielőtt elindul.
- Ezek az Activity-k nincsenek a veremben és csak újraindításkor válhat aktivvá.
+ Ezek az Activity-k nincsenek a veremben és csak újraindításkor válhat aktívvá.
 \end_layout
 
 \begin_layout Standard
@@ -951,58 +1118,165 @@ Android rendszer biztosítja, hogy az egyes Activity-k reagálhassanak az
 onCreate() 
 \series default
 Az Activity létrejöttekor hívódik meg.
- Itt kell az összes statikus adatokat beállítani.
+ Itt kell az összes statikus adatot inicializálni, például nézetek létrehozása.
+ Ez a függvény kap egy Bundle típusú paramétert, mely az Activity előző
+ állapotát tartalmazza.
+ Mindenképp onStart() metódus hívás követi.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-onStart()
+onRestart() 
+\series default
+egy leálított Activity újraindlása előtt hívódik meg.
+ OnStart() metódus követi.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-onRestart()
+onStart() 
+\series default
+az előtt hívódik, hogy az Activity láthatóvá válna a felhasználó számára.
+ OnResume() metódus hívódik ezután, ha az Activity előtérbe kerül vagy az
+ onStop(), ha háttérbe kerül.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-onResume()
+onResume() 
+\series default
+akkor hívódik, ha az Activity a verem tetejére kerül, mielőtt aktívvá válna
+ és felhasználói inputot fogadna.
+ Minden esetben onPause() hívódik utána.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-onPause()
+onPause() 
+\series default
+egy másik alkalmazás folytatása váltja ki ezt a metódushívást.
+ Itt célszerű elmenteni az adatokat, illetve leállítani az erőforrás igényes
+ műveleteket, mint például az animáció lejátszást.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
-onStop()
+onStop() 
+\series default
+az Activity leállásakor vagy egy másik Activity aktívvá válásakor hívódik,
+ ilyenkor Ezután onRestart() hívás jelzi, hogy újra aktívvá vált az Activity.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onDestroy() 
+\series default
+az Activity megszűnésekor kerül meghívásra, amit vagy a rendszer vált ki,
+ mert erőforrásra van szüksége vagy meghívták rá az 
+\shape italic
+finish()
+\shape default
+ metódust.
+\end_layout
+
+\begin_layout Subsubsection
+Service
+\end_layout
+
+\begin_layout Standard
+A Service (szolgáltatás) egy háttérben, párhuzamosan futó komponens.
+ Sokáig futó műveletek végrehajtására használható és nem biztosít felhasználói
+ felületet.
+ Ilyen művelet lehet például a zenelejátszás, miközben a felhasználó más
+ alkalmazást használ, anélkül, hogy a háttérben futó zenelejátszás blokkolná
+ vagy zavarná a másik alkalmazást, illetve a felhasználót.
+ Egy másik komponens, mint például egy Activity indíthat Service-t és interakció
+ba léphet vele.
+ Egy új service-t indíthat egy komponens a 
+\shape italic
+startService()
+\shape default
+ metódus hívással, ami akkor is fut, ha a hívó komponens megszűnik.
+ Service automatikusan leáll, ha a feladatát befejezte.
+ Ez a feladat lehet például egy fájl feltöltése.
+ Másik müködési módja a service-nek az úgynevezett kötött (bound) service.
+ Egy komponens a 
+\shape italic
+bindService()
+\shape default
+ metódussal tud összeköttetésbe kerülni ezzel service-vel.
+ Több komponens is kapcsolódhat egy service-hez, ha már egy komponens se
+ kapcsolódik a szolgáltatáshoz, akkor megszűnik a service.
+ Fontos callback metódusok, melyeket implementálhat egy service-nek:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStartCommand() 
+\series default
+akkor hívódik, mikor egy másik komponens meghívja a 
+\shape italic
+startService()
+\shape default
+ metódust.
+ Ha ez a metódus implementálásra kerül és befejetze a müködését, akkor a
+ le kell állítani a 
+\shape italic
+stopSelf()
+\shape default
+ vagy 
+\shape italic
+stopService()
+\shape default
+ metódussal.
+ Ha csak kötött szolgáltatásként szeretnénk használni , akkor nem kell implement
+álni ezt a metódust.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onBind()
+\series default
+ metódus hívódik, ha egy másik komponens akar kapcsolódni a service-hez
+ a 
+\shape italic
+bindService()
+\shape default
+ függvény hívással.
+ Ha nem akarjuk megengedni a szolgáltatáshoz való csatlakozást akkor null-t
+ kell visszatérő paraméterként, egyébként pedig egy IBinder típusú objektumot,
+ amin keresztül a hívó komponens komunikálhat a szolgáltatással.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onCreate()
+\series default
+ a service létrehozásakor hívódik az 
+\shape italic
+onStartCommand()
+\shape default
+ előtt.
 \end_layout
 
 \begin_layout Itemize
 
 \series bold
 onDestroy()
-\end_layout
-
-\begin_layout Subsubsection
-Services
-\end_layout
-
-\begin_layout Standard
-A service (szolgáltatás) egy háttérben, párhuzamosan futó komponens.
- Sokáig futó művelet végrehajtására használható és nem biztosít felhasználói
- felületet.
- Ilyen művelet lehet például a zenelejátszás, miközben a felhasználó más
- alkalmazást használ anélkül hogy a háttérben futó zenelejátszás blokkolná
- vagy zavarná a másik alkalmazást illetve a felhasználót.
- Egy másik komponens, mint például egy activity indíthat service-t és interakció
-ba léphet vele.
+\series default
+ a rendszer hívja ezt a metódust, mikor a szolgáltatást már nem használják
+ többé és meg kell szünteni.
+ Itt kell felszabadítani a foglalt erőforrásokat, szálakat.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1016,15 +1290,15 @@ A broadcast receiver egy olyan komponens, amely válaszol a rendszerszintű
  az akkumulátor töltöttségének csökkenéséről érkező üzeneteket.
  Az alkalmazás is kezdeményezhet ilyen üzenet küldést például, ha egy másik
  alkalmazásnak akar üzenetet küldeni.
- A service-hez hasonlóan enm rendelkezik felhasználói felülettel.
+ A service-hez hasonlóan nem rendelkezik felhasználói felülettel.
 \end_layout
 
 \begin_layout Standard
-Az egyes komponenseket egy aszinkron üzenettel lehet activálni amit Inetent-nek
+Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni amit Inetent-nek
  neveznek.
- Ez kapcsol össze komponenseket futási időben, akkor is ha a komponens egy
- másik aplikációhoz tartozik.
- Az intent közvetithet üzenetet másik komponensnek, például hogy jelenítsenek
+ Ez kapcsol össze komponenseket futási időben, akkor is, ha a komponens
+ egy másik applikációhoz tartozik.
+ Az Intent közvetíthet üzenetet másik komponensnek, például, hogy jelenítsenek
  meg egy képet vagy nyisson meg egy weboldalt.
 \end_layout
 
