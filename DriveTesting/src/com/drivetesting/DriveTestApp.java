@@ -26,7 +26,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
+	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
 		Log.d(TAG, "On Change preferences: "+ key);
 	}

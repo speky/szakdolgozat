@@ -5,134 +5,335 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity  {
 
-	private ListView telephonyManagerOutput = null;
-	static final  String TAG = "MainActivity";
-	
-	String[] from = new String[] {"name", "value"};
-	int[] to = new int[] { R.id.column_name, R.id.column_value};
-	List<HashMap<String, String>> telephonyOverview  = new ArrayList<HashMap<String, String>>();
-	
+	private static final  String TAG = "MainActivity";
+	private static final int EXCELLENT_LEVEL = 75;
+	private static final int GOOD_LEVEL = 50;
+	private static final int MODERATE_LEVEL = 25;
+	private static final int WEAK_LEVEL = 0;
+	private final String NO_SIGNAL_STRENGTH = "?";
+
+	private Context context = null;
+	private TelephonyManager telephonyManager = null;
+	private CustomPhoneStateListener phoneStateListener = null;
+	private BroadcastReceiver connectivityBroadcastReceiver = null;
+	private IntentFilter networkStateChangedFilter;
+
+	private String[] from = new String[] {"name", "value"};
+	private int[] to = new int[] { R.id.column_name, R.id.column_value};
+	private List<HashMap<String, String>> phoneDataList  = new ArrayList<HashMap<String, String>>();
+	private List<HashMap<String, String>> networkDataList  = new ArrayList<HashMap<String, String>>();
+	private List<HashMap<String, String>> dataList  = new ArrayList<HashMap<String, String>>();
+	private SeparatedListAdapter separatedAdapter = null;
+	private SimpleAdapter phoneDataAdapter = null;
+	private SimpleAdapter networkDataAdapter = null;
+	private  boolean isNetworkConnected = false;
+		
+	//dynamically changed variable
+	private String signalStrengthString = "99";
+	private String cdmaEcio = "-1";
+	private String evdoDbm = "-1";
+	private String evdoEcio = "-1";
+	private String evdoSnr = "-1";
+	private String gsmBitErrorRate = "-1"; 
+	private String serviceStateString = "";
+	private String callState = "";
+	private String networkState = "";
+	private String dataConnectionState = "";
+	private String dataDirection= "";
+	private String networkType= "";
+
+
+	private void startSignalLevelListener() {
+		if (telephonyManager == null){  
+			telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		}
+		int events = PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | 
+				PhoneStateListener.LISTEN_DATA_ACTIVITY |
+				PhoneStateListener.LISTEN_DATA_CONNECTION_STATE |				
+				PhoneStateListener.LISTEN_CELL_LOCATION |
+				PhoneStateListener.LISTEN_CALL_STATE |				
+				PhoneStateListener.LISTEN_SERVICE_STATE;
+
+		telephonyManager.listen(phoneStateListener, events);
+	}
+
+	private void stopListening(){
+		if (telephonyManager == null){  
+			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);	
+		}       
+	}
+
+	private String getSignalLevelString(int level) {
+		String signalLevelString = "Weak";
+
+		if (level > EXCELLENT_LEVEL){
+			signalLevelString = "Excellent";
+		}
+		else if (level > GOOD_LEVEL){
+			signalLevelString = "Good";
+		}
+		else if (level > MODERATE_LEVEL){
+			signalLevelString = "Moderate";
+		}
+		else if (level > WEAK_LEVEL){
+			signalLevelString = "Weak";
+		}
+		return signalLevelString;
+	}
+
+	public  boolean isInternetConnectionActive() {
+		return isNetworkConnected;
+	}
+
+	public  void setConnectionState(boolean connectionState ) {
+		isNetworkConnected = connectionState;
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		networkStateChangedFilter = new IntentFilter();
+		networkStateChangedFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
+		connectivityBroadcastReceiver = new BroadcastReceiver() {
+		    @Override
+		    public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+			    NetworkInfo info = ((ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+			    String mTypeName = info.getTypeName();
+			    networkType = info.getSubtypeName();
+			    Log.i(TAG, "*** Network Type: " + mTypeName 
+					+ ", subtype: " + networkType);
+			    //updateScreen();
+			}
+		    }
+		};
+		
 		setContentView(R.layout.main);
 
-		telephonyManagerOutput = (ListView)findViewById(R.id.listview);
-
-				
-		// prepare the list of all records
-		/*List<HashMap<String, String>> telephonyOverview  = new ArrayList<HashMap<String, String>>();
-		for(int i = 0; i < 10; i++){
-			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("name", "" + i);
-			map.put("value", "col_1_item_" + i);		            
-			telephonyOverview .add(map);
-
-		}*/
+		context = this;		
+		phoneStateListener = new CustomPhoneStateListener();
+		startSignalLevelListener();
 		
-	}
+		// Registers BroadcastReceiver to track network connection changes.
+		//connectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();		
+		//this.registerReceiver(connectivityBroadcastReceiver, filter);
+	
+		// fill in the grid_item layout			
+		phoneDataAdapter = new SimpleAdapter(this, phoneDataList, R.layout.grid, from, to);
+		networkDataAdapter = new SimpleAdapter(this, networkDataList, R.layout.grid, from, to);		
+
+		// create our list and custom adapter  
+		separatedAdapter = new SeparatedListAdapter(this);
+		separatedAdapter .addSection(this.getString(R.string.phone_header), phoneDataAdapter);  
+		separatedAdapter .addSection(this.getString(R.string.network_header), networkDataAdapter );
+
+		ListView list = (ListView)findViewById(R.id.listview);
+		list.setAdapter(separatedAdapter);
+
+		refreshPhoneDataList();
+		refreshNetworkDataList();
+	}	
+
 	@Override
-	public void onStart() {
-		super.onStart();
+	protected void onPause() {
+		Log.d(TAG, "onPause");
+		super.onPause();
+		if (connectivityBroadcastReceiver != null) {
+			unregisterReceiver(connectivityBroadcastReceiver);
+		}
+		
+		// Unregister the listener with the telephony manager
+		stopListening();
+	}
 
-        // TelephonyManager
-       final TelephonyManager  telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        //this.telephonyManagerOutput.setText(telephonyManager.toString());
-
-        // PhoneStateListener
-        PhoneStateListener phoneStateListener = new PhoneStateListener() {
-
-            @Override
-            public void onCallStateChanged(final int state, final String incomingNumber) {
-            	//telephonyManagerOutput.setText(getPhoneOverview(telephonyManager));
-                Log.d(TAG, "phoneState updated - incoming number - " + incomingNumber);
-            }
-        };
+	@Override
+	protected void onResume() {
+		Log.d(TAG, "onREsume ");
+		super.onResume();
+	
+		registerReceiver(connectivityBroadcastReceiver, networkStateChangedFilter);
 		// Register the listener with the telephony manager
-        telephonyManager.listen(phoneStateListener, 
-        		PhoneStateListener.LISTEN_CALL_STATE|
-        		PhoneStateListener.LISTEN_CELL_LOCATION|
-        		PhoneStateListener.LISTEN_DATA_ACTIVITY|
-        		PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR|
-        		PhoneStateListener.LISTEN_DATA_CONNECTION_STATE|
-        		PhoneStateListener.LISTEN_SERVICE_STATE|
-        		PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		startSignalLevelListener();
 
-            getPhoneOverview(telephonyManager);
-
-     // fill in the grid_item layout
-  		SpecialAdapter adapter = new SpecialAdapter(this, telephonyOverview, R.layout.grid, from, to);
-
-   		telephonyManagerOutput.setAdapter(adapter);
-
+		/*SharedPreferences prefs = ((DriveTestApp)getApplication()).prefs;
+		checkbox.setText(new Boolean(prefs.getBoolean("checkbox", false)).toString());
+		ringtone.setText(prefs.getString("ringtone", "<unset>"));
+		checkbox2.setText(new Boolean(prefs.getBoolean("checkbox2", false)).toString());
+		//text.setText(prefs.getString("text", "<unset>"));
+		list.setText(prefs.getString("list", "<unset>"));
+		 */
 	}
+
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
-		return true;
+	protected void onDestroy(){
+		Log.d(TAG, "onDestroy ");
+		super.onDestroy();		
 	}
 
-	/**
-	 * Parse TelephonyManager values into a human readable String.
-	 * 
-	 * @param telephonyManager
-	 * @return
-	 */
-	public void getPhoneOverview(final TelephonyManager telephonyManager) {
+	private class CustomPhoneStateListener extends PhoneStateListener{
+		@Override
+		public void onSignalStrengthsChanged(SignalStrength signalStrength)
+		{
+			super.onSignalStrengthsChanged(signalStrength);
 
-		telephonyOverview.clear();
-		
+			switch (telephonyManager.getPhoneType()){
+			case TelephonyManager.PHONE_TYPE_CDMA:
+				signalStrengthString = String.valueOf(signalStrength.getCdmaDbm()) + context .getString(R.string.unit_dbm); 
+				break;
+			case TelephonyManager.PHONE_TYPE_GSM:
+				int rssi = signalStrength.getGsmSignalStrength();
+				int rssi_dbm = -113 + 2 *  rssi;
+				signalStrengthString = String.valueOf(rssi_dbm) + context .getString(R.string.unit_dbm);
+				break;
+			case TelephonyManager.PHONE_TYPE_NONE:
+			default:
+				signalStrengthString = NO_SIGNAL_STRENGTH;
+				break;
+			}
+
+			cdmaEcio = String.valueOf(signalStrength.getCdmaEcio());
+			evdoDbm = String.valueOf(signalStrength.getEvdoDbm())+ context .getString(R.string.unit_dbm);
+			evdoEcio = String.valueOf(signalStrength.getEvdoEcio());
+			evdoSnr = String.valueOf(signalStrength.getEvdoSnr());
+			gsmBitErrorRate = String.valueOf(signalStrength.getGsmBitErrorRate());
+
+			Log.d(TAG, "^ Signal strength changed: " + signalStrength);
+			Toast.makeText(getApplicationContext(), "Signal strength changed!  ", Toast.LENGTH_SHORT).show();
+			refreshPhoneDataList();
+		}
+
+		@Override
+		public void onCallStateChanged(final int state, final String incomingNumber) {
+			super.onCallStateChanged(state, incomingNumber);
+
+			callState = "Ismeretlen";
+			switch(state)
+			{
+			case TelephonyManager.CALL_STATE_IDLE:  
+				callState = "Tétlen"; 
+				break;
+			case TelephonyManager.CALL_STATE_RINGING:
+				callState = "Csörög (" + incomingNumber + ")"; 
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:       
+				callState = "Hívás közben"; 
+				break;
+			}
+			Log.d(TAG, "phoneState updated - incoming number - " + incomingNumber);
+			refreshNetworkDataList();
+		}
+
+		@Override
+		public void onCellLocationChanged(CellLocation location)
+		{			
+			super.onCellLocationChanged(location);
+			String locationString = location.toString();
+
+			Log.d(TAG, "onCellLocationChanged " + locationString);
+			//Toast.makeText(getApplicationContext(), "Cell location changed!  ", Toast.LENGTH_SHORT).show();
+			refreshNetworkDataList();
+		}
+
+
+		@Override
+		public void onDataConnectionStateChanged(int state)
+		{
+			super.onDataConnectionStateChanged(state);
+			Log.d(TAG, "onDataConnectionStateChanged " + state);
+			dataConnectionState = getDataState(state);
+			refreshNetworkDataList();
+		}
+
+		@Override
+		public void onDataActivity(int direction)
+		{
+			super.onDataActivity(direction);
+			Log.d(TAG, "onDataActivity " + direction);
+
+			dataDirection = getDataActivity(direction);
+			refreshNetworkDataList();
+		}
+
+		@Override
+		public void onServiceStateChanged(ServiceState serviceState)
+		{
+			super.onServiceStateChanged(serviceState);
+
+			serviceStateString = "Ismeretlen";
+			switch(serviceState.getState())
+			{
+			case ServiceState.STATE_IN_SERVICE:     
+				serviceStateString = "Üzemel"; 
+				break;
+			case ServiceState.STATE_EMERGENCY_ONLY:         
+				serviceStateString = "Csak vészhívás"; 
+				break;
+			case ServiceState.STATE_OUT_OF_SERVICE:
+				serviceStateString = "Nem mûködik"; 
+				break;
+			case ServiceState.STATE_POWER_OFF: 
+				serviceStateString = "Kikapcsolva"; 
+				break;
+			default: 
+				serviceStateString = "Ismeretlen"; 
+				break;
+			}
+			Log.d(TAG, "onServiceStateChanged " + serviceStateString);
+			refreshNetworkDataList();
+		}
+	};
+
+	private String getPhoneType(){
 		String phoneType = "Ismeretlen";
 		switch (telephonyManager.getPhoneType()){
-		case TelephonyManager.PHONE_TYPE_NONE : phoneType = "NONE";
-		break;
-		case TelephonyManager.PHONE_TYPE_GSM : phoneType = "GSM";
-		break;
-		case TelephonyManager.PHONE_TYPE_CDMA : phoneType = "CDMA";
-		break;
-		case TelephonyManager.PHONE_TYPE_SIP : phoneType = "SIP";
-		break;
+		case TelephonyManager.PHONE_TYPE_NONE : 
+			phoneType = "NONE";
+			break;
+		case TelephonyManager.PHONE_TYPE_GSM : 
+			phoneType = "GSM";
+			break;
+		case TelephonyManager.PHONE_TYPE_CDMA : 
+			phoneType = "CDMA";
+			break;
+		case TelephonyManager.PHONE_TYPE_SIP : 
+			phoneType = "SIP";
+			break;
 		}
-		String phoneNumber = telephonyManager.getLine1Number();
-		String deviceId = telephonyManager.getDeviceId();
-		String deviceSoftwareVersion = telephonyManager.getDeviceSoftwareVersion();
+		return phoneType;
+	}
 
-		String simCountryIso = telephonyManager.getSimCountryIso();
-		String simOperator = telephonyManager.getSimOperator();
-		String MCC = "";
-		String MNC = "";
-		if (simOperator != null) {
-			MCC= simOperator.substring(0, 3);
-			MNC = simOperator.substring(3);
-		}
-		String simOperatorName = telephonyManager.getSimOperatorName();
-		String simSerialNumber = telephonyManager.getSimSerialNumber();
-		String simSubscriberId = telephonyManager.getSubscriberId();
-
+	private String getSimState(){
 		String simStateString = "NA";
 		switch (telephonyManager.getSimState()) {
 		case TelephonyManager.SIM_STATE_ABSENT:
@@ -154,17 +355,30 @@ public class MainActivity extends Activity  {
 			simStateString = "Ismeretlen";
 			break;
 		}        
-		String roaming = "Nincs";
-		if (telephonyManager.isNetworkRoaming()){
-			roaming = "Van";
+		return simStateString;
+	}
+
+	private String getLAC(){
+		GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
+		String lac = "0";
+		if (cellLocation != null){
+			lac = String.format("%d", cellLocation.getLac());	
 		}
+		return lac;
+	}
 
-		String networkCountryIso = telephonyManager.getNetworkCountryIso();
-		String networkOperator = telephonyManager.getNetworkOperator();
-		String networkOperatorName = telephonyManager.getNetworkOperatorName();
+	private String getCID(){
+		GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
+		String cid = "0";
+		if (cellLocation != null){
+			cid = String.format("%d", cellLocation.getCid());	
+		}
+		return cid;
+	}
 
+	private String getNetworkType(int type){
 		String networkType = "";
-		switch (telephonyManager.getNetworkType()){
+		switch (type){
 		case TelephonyManager.NETWORK_TYPE_UNKNOWN :
 			networkType = "Ismeretlen"; 
 			break;
@@ -211,9 +425,11 @@ public class MainActivity extends Activity  {
 			networkType = "UMTS"; 
 			break;
 		} 
-
+		return networkType;
+	}
+	private String getDataActivity(int activityType){
 		String dataActivity = "";
-		switch (telephonyManager.getDataActivity ()){
+		switch (activityType){
 		case TelephonyManager.DATA_ACTIVITY_NONE :
 			dataActivity = "Nincs"; 
 			break;
@@ -230,9 +446,11 @@ public class MainActivity extends Activity  {
 			dataActivity = "Sérült kapcsolat"; 
 			break;
 		}
-
+		return dataActivity;
+	}
+	private String getDataState(int state){
 		String dataState = "";
-		switch (telephonyManager.getDataState()){
+		switch (state){
 		case TelephonyManager.DATA_CONNECTED :
 			dataState = "Kapcsolódva"; 
 			break;
@@ -246,44 +464,132 @@ public class MainActivity extends Activity  {
 			dataState = "Felfüggesztve"; 
 			break;
 		}
-
-		GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
-		String cellLocationString = "0 0";
-		if (cellLocation != null){
-			cellLocationString = cellLocation.getLac() + " " + cellLocation.getCid();
-		}
-
-		
-		addHashMapElement("Telefon típusa", phoneType);
-		addHashMapElement("Telefon szám ", phoneNumber);
-		addHashMapElement("IMEI\\ESN ", deviceId);
-		addHashMapElement(" IMEI\\SV ", deviceSoftwareVersion);
-		addHashMapElement("Ország kód ", simCountryIso);
-		addHashMapElement("MCC ", MCC);
-		addHashMapElement("MNC ", MNC);
-		addHashMapElement("Operátor ", simOperatorName);
-		addHashMapElement("SIM állapota ", simStateString);
-		addHashMapElement("SIM SN ", simSerialNumber);
-		addHashMapElement("IMSI ", simSubscriberId);
-		addHashMapElement("Roaming ", roaming);
-		addHashMapElement("Adatkapcsolat ", dataActivity);
-		addHashMapElement("Kapcsolat állapota ", dataState);
-		addHashMapElement("cellLocationString ", cellLocationString);
-		addHashMapElement("networkCountry ", networkCountryIso);
-		addHashMapElement("networkOperator ", networkOperator);
-		addHashMapElement("Operator Name ", networkOperatorName);
-		addHashMapElement("Hálózat típusa ", networkType);                
-		
+		return dataState;
 	}
-	
-	private void addHashMapElement(String key, String value){
+	private String getTelephoneNumber(){
+		return  telephonyManager.getLine1Number();
+	}
+
+	private String getRoaming(){
+		String roaming = "Nincs";
+		if (telephonyManager.isNetworkRoaming()){
+			roaming = "Van";
+		}
+		return roaming;
+	}
+
+	private String getNetworkCountry(){
+		return telephonyManager.getNetworkCountryIso().toUpperCase();
+	}
+
+	private String getNetworkOperatorName(){
+		return telephonyManager.getNetworkOperatorName();
+	}
+
+	private String getSubscriberId(){
+		return telephonyManager.getSubscriberId();	
+	}
+
+	private String getIMEI(){
+		return telephonyManager.getDeviceId();	
+	}
+
+	private String getSimSerialNumber(){
+		return telephonyManager.getSimSerialNumber();
+	}
+
+	private String getSoftwareVersion(){
+		return telephonyManager.getDeviceSoftwareVersion();
+	}
+
+	private String getMCC(){
+		String simOperator = telephonyManager.getNetworkOperator();
+		if (simOperator != null) {
+			return simOperator.substring(0, 3);
+		}
+		return null;
+	}
+
+	private String getMNC(){
+		String simOperator = telephonyManager.getNetworkOperator();
+		if (simOperator != null) {
+			return simOperator.substring(3);
+		}
+		return null;
+	}
+
+	public void refreshPhoneDataList() {
+
+		phoneDataList.clear();
+		//Phone		
+		addHashMapElement(phoneDataList, "Telefon típusa", getPhoneType());
+		addHashMapElement(phoneDataList, "Telefon szám ", getTelephoneNumber());
+		addHashMapElement(phoneDataList, "IMEI\\ESN ", getIMEI());
+		addHashMapElement(phoneDataList, "Gyártó ", Build.MANUFACTURER);
+		addHashMapElement(phoneDataList, "Modell", Build.MODEL);
+		addHashMapElement(phoneDataList, "SIM állapota ", getSimState());
+		addHashMapElement(phoneDataList, "SIM SN ", getSimSerialNumber());
+		addHashMapElement(phoneDataList, "Software version ", getSoftwareVersion());
+		addHashMapElement(phoneDataList, "IMSI ", getSubscriberId());
+		addHashMapElement(phoneDataList, "Jelerõség ", signalStrengthString);
+		addHashMapElement(phoneDataList, "Bit hiba ráta", gsmBitErrorRate);
+		addHashMapElement(phoneDataList, "CDMA EcIo", cdmaEcio);
+		addHashMapElement(phoneDataList, "EVDO dBm", evdoDbm);
+		addHashMapElement(phoneDataList, "EVDOEcIi", evdoEcio);
+		addHashMapElement(phoneDataList, "SNR", evdoSnr);
+
+		//location 
+		//sitedb
+		//provider
+		// latitude
+		// longitude
+		//altitude
+		//site bearing
+		//speed
+		// gps accuracy
+		// site latitude
+		//site longitude
+		//distance to site
+
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+
+	public void refreshNetworkDataList() {
+
+		networkDataList.clear();
+		// Network		
+		addHashMapElement(networkDataList, "Operátor ", getNetworkOperatorName());
+		addHashMapElement(networkDataList, "Hálózat típusa ", networkType);
+		addHashMapElement(networkDataList, "Hálózat állapota", networkState);
+		addHashMapElement(networkDataList, "Service state ", serviceStateString);
+		addHashMapElement(networkDataList, "Ország ", getNetworkCountry());
+		addHashMapElement(networkDataList, "MCC ", getMCC());
+		addHashMapElement(networkDataList, "MNC ", getMNC());
+		addHashMapElement(networkDataList, "LAC", getLAC());
+		addHashMapElement(networkDataList, "CellID", getCID());
+		addHashMapElement(networkDataList, "Adatkapcsolat ", dataDirection);
+		addHashMapElement(networkDataList, "Kapcsolat állapota ", dataConnectionState);
+		addHashMapElement(networkDataList, "Roaming ", getRoaming());
+		addHashMapElement(networkDataList, "Hívás állapot", callState );
+		//Neighbouring cell infos		
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+
+	private void addHashMapElement(List<HashMap<String, String>> dataList, String key, String value){
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("name", key);
 		map.put("value", value);		            
-		telephonyOverview .add(map);		
+		dataList .add(map);		
 	}
-	
-	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -305,21 +611,7 @@ public class MainActivity extends Activity  {
 			return false;			
 		}
 	}
-
-	public void onResume() {
-		super.onResume();
-
-		SharedPreferences prefs = ((DriveTestApp)getApplication()).prefs;
-
-		/*checkbox.setText(new Boolean(prefs.getBoolean("checkbox", false)).toString());
-		ringtone.setText(prefs.getString("ringtone", "<unset>"));
-		checkbox2.setText(new Boolean(prefs.getBoolean("checkbox2", false)).toString());
-		//text.setText(prefs.getString("text", "<unset>"));
-		list.setText(prefs.getString("list", "<unset>"));
-		 */
-
-	}
-
+	/*
 	public void onClick(View view) {
 		Intent intent = new Intent(this, DownloadService.class);
 		// Create a new Messenger for the communication back
@@ -343,22 +635,31 @@ public class MainActivity extends Activity  {
 			}
 
 		};
-	};
-
-	public class SpecialAdapter extends SimpleAdapter {
-		private int[] colors = new int[] { 0x30FF0000, 0x300000FF };
-
-		public SpecialAdapter(Context context, List<HashMap<String, String>> items, int resource, String[] from, int[] to) {
-			super(context, items, resource, from, to);
-		}
+	};*/
+/*
+	public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = super.getView(position, convertView, parent);
-			int colorPos = position % colors.length;
-			view.setBackgroundColor(colors[colorPos]);
-			return view;
+		public void onReceive(Context context, Intent intent) {
+			Log.d(TAG, "*** connectivity onreceive! ");
+			ConnectivityManager connectivityManager =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+			
+			if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE ) {
+				networkType = networkInfo.getSubtypeName();
+				Log.d(TAG, "connectivity network_Type: "+networkType);
+				if (networkInfo.isConnected()){
+					setConnectionState(true);
+					networkState = "Kapcsolódva";					
+					Toast.makeText(context, R.string.network_connected, Toast.LENGTH_SHORT).show();
+				} else {
+					setConnectionState(false);
+					networkState = "Nincs kapcsolat";
+					Toast.makeText(context, R.string.connection_lost, Toast.LENGTH_SHORT).show();
+				}
+				refreshNetworkDataList();
+			}			
 		}
-	}
+	};*/
 
 }
