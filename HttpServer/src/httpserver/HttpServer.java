@@ -316,6 +316,7 @@ public class HttpServer {
 			while (true) {
 				// fogadunk egy kapcsolatot, socket a vegpont
 				Socket socket = serverSocket.accept();
+				threadCount++;
 				parseClientRequest(socket);
 			}
 		} catch (Exception e) {
@@ -335,7 +336,7 @@ public class HttpServer {
 	private void parseClientRequest(Socket socket){
 		//figure out what ipaddress the client commes from, just for show!
 		InetAddress client = socket.getInetAddress();
-		//and print it to gui
+		//and print it to log
 		logger.addLine(client.getHostName() + " connected to server.\n");
 		HttpParser parser = new HttpParser(logger);
 				
@@ -343,7 +344,8 @@ public class HttpServer {
 		try {
 			//Read the http request from the client from the socket interface into a buffer.
 			parser.parseHttpHead(socket.getInputStream());
-			//Prepare a outputstream from us to the client, this will be used sending back our response (header + requested file) to the client.
+			//Prepare an outputstream from server to the client, 
+			// this will be used sending back our response (header + requested file) to the client.
 			output = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
 			System.err.println("Hiba a client socket-el: " + e.getMessage());

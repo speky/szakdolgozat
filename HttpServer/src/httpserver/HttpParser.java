@@ -10,30 +10,6 @@ import java.util.StringTokenizer;
 
 public class HttpParser {
 
-	/**
-	 * Some HTTP response status codes
-	 */
-	public static final String
-	HTTP_OK = "200 OK",
-	HTTP_PARTIALCONTENT = "206 Partial Content",
-	HTTP_RANGE_NOT_SATISFIABLE = "416 Requested Range Not Satisfiable",
-	HTTP_REDIRECT = "301 Moved Permanently",
-	HTTP_NOTMODIFIED = "304 Not Modified",
-	HTTP_FORBIDDEN = "403 Forbidden",
-	HTTP_NOTFOUND = "404 Not Found",
-	HTTP_BADREQUEST = "400 Bad Request",
-	HTTP_INTERNALERROR = "500 Internal Server Error",
-	HTTP_NOTIMPLEMENTED = "501 Not Implemented";
-
-	/**
-	 * Common mime types for dynamic content
-	 */
-	public static final String
-	MIME_PLAINTEXT = "text/plain",
-	MIME_HTML = "text/html",
-	MIME_DEFAULT_BINARY = "application/octet-stream",
-	MIME_XML = "text/xml";
-
 	private Logger logger = null;
 
 	private Properties methodProperty = new Properties();
@@ -41,27 +17,43 @@ public class HttpParser {
 
 	private String TAG = "HTTP_PARSER: ";
 	private String errorText = "";
-	
+
 	public String getErrorText(){
 		return errorText;
 	}
-	
+
 	public String getMethod(){
 		return methodProperty.getProperty("method") ;
 	}
-	
+
 	public String getVersion(){
 		return methodProperty.getProperty("version") ;
 	}
+
+	public int getMethodSize(){
+		return methodProperty.size();
+	}
 	
+	public int getHeadSize(){
+		return headerProperty.size();
+	}
+	
+	public String getHeadTag(final String tag){
+		if (headerProperty.containsKey(tag)){
+			return headerProperty.getProperty(tag) ;
+		}else{
+			return null;
+		}		
+	}
+
 	public HttpParser(Logger logger){
 		this.logger = logger;
 	}
 
 	/**
-	 * Parsethe received header and loads the data into
+	 * Parse the received header and loads the data into
 	 * java Properties' key - value pairs
-	 * NOTE: http request's body part will be ignored
+	 * NOTE: HTTP request's body part will be ignored
 	 **/
 	public boolean parseHttpHead(final InputStream input) {
 		try {      
@@ -71,76 +63,78 @@ public class HttpParser {
 			}
 
 			// Read the first 8192 bytes.  The full header should fit in here. Apache's default header limit is 8KB.
-			int bufsize = 8192;
-			byte[] buf = new byte[bufsize];
-			int rlen = input.read(buf, 0, bufsize);
-			if (rlen <= 0) {
-				logger.addLine(TAG+"The request is empty!" );
+			int bufferSize = 8192;
+			byte[] buffer = new byte[bufferSize];
+			int readedLength = input.read(buffer, 0, bufferSize);
+			if (readedLength <= 0) {
+				logger.addLine(TAG+"The http request is empty!" );
 				return false;
 			}
-
-			// Create a BufferedReader for parsing the header.
-			ByteArrayInputStream byteStream = new ByteArrayInputStream(buf, 0, rlen);
-			BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( byteStream ));
-			logger.addLine(TAG+"Server input: " + bufferedReader);
-			//Decode the header into parms and header java properties
-			parseRequest(bufferedReader);
-			//String method = pre.getProperty("method");
 			
-			//write out the header, 200 ->everything is ok
-			//construct_http_header(200, 5);
+			methodProperty.clear();
+			headerProperty.clear();
+			// Create a BufferedReader for parsing the header.
+			ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer, 0, readedLength);
+			BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(byteStream));			
+			//Decode the header into params and header java properties
+			if  (!parseRequest(bufferedReader)){
+				return false;
+			}
 			return true; 
-
-		}catch (IOException e) {
+		} catch (IOException e) {
 			logger.addLine(TAG+"Error at input parsing!" + e.getMessage() );
-		}
-		catch ( InterruptedException e )
-		{
+		} catch ( InterruptedException e ) {
 			logger.addLine(TAG+" Error at input parsing!" + e.getMessage() );
 		}
 		return false;
 	}
 
 	/**
-	 * Decodes the sent headers and loads the data into
-	 * java Properties' key - value pairs
+	 * Decodes the received headers and loads data into java Properties' key - value pairs
 	 **/
-	private  void parseRequest(final BufferedReader in) throws InterruptedException
-	{
+	private  boolean parseRequest(final BufferedReader in) throws InterruptedException	{
 		try {
 			// Read the request line
-			String inLine = in.readLine();
+			String inLine = in.readLine();			
 			if (inLine == null) {
-				return;
+				return false;
 			}
-			
-			boolean moreToken = parseMethod(inLine);
+			logger.addLine(TAG+"Server input method: "+ inLine);
+
+			if  (parseMethod(inLine)){
+				return false;
+			}
 			// If there's another token, it's protocol version, followed by HTTP headers
-			if (moreToken)
-			{
-				String line = in.readLine();
-				while (line != null && line.trim().length() > 0 )
-				{
-					int separatorPosition = line.indexOf( ':' );
-					if ( separatorPosition >= 0 ){
-						headerProperty.put( line.substring(0,separatorPosition).trim().toLowerCase(), 
-																line.substring(separatorPosition+1).trim());
-					}
-					line = in.readLine();
+			// example: Header1: value1
+			// Header2: value2						
+			String line = in.readLine();			
+			while (line != null && line.trim().length() > 0 )	{
+				logger.addLine(TAG+"Parse head "+ line);
+				int separatorPosition = line.indexOf( ':' );
+				if  (separatorPosition >= 0) {
+					String type = line.substring(0,separatorPosition).trim().toUpperCase();
+					String value = line.substring(separatorPosition+1).trim();
+					headerProperty.put(type, value);							
 				}
-			}			
-		}
-		catch ( IOException e )
-		{
-			errorText =HTTP_INTERNALERROR;
+				line = in.readLine();
+			}
+			return true;
+		}	catch (IOException e) {
+			errorText = HttpResponse.HTTP_INTERNALERROR;
 			logger.addLine("SERVER INTERNAL ERROR: IOException: " + e.getMessage());
 		}
+		return false;
 	}
 
-	private boolean parseMethod(final String inLine) throws InterruptedException{
-		StringTokenizer stringTokens = new StringTokenizer( inLine );
-		if ( !stringTokens.hasMoreTokens()){
-			errorText =HTTP_BADREQUEST;
+	/**
+	 * Tokenize input header and set method property 
+	 * example: GET /path/to/file/index.html HTTP/1.0
+	 * method: GET; uri: /path/to/file/index.html; version: HTTP/1.0
+	 **/
+	private boolean parseMethod(final String inLine) throws InterruptedException {
+		StringTokenizer stringTokens = new StringTokenizer(inLine);
+		if (!stringTokens.hasMoreTokens()) {
+			errorText = HttpResponse.HTTP_BADREQUEST;
 			logger.addLine(TAG+"Tokenized string is empty!");
 			return false;
 		}
@@ -149,40 +143,37 @@ public class HttpParser {
 
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
-			errorText =HTTP_BADREQUEST;
+			errorText = HttpResponse.HTTP_BADREQUEST;
 			return false;
 		}
 		String uri = stringTokens.nextToken();
 		uri = decodePercent(uri);
 		methodProperty.put("uri", uri);
-		
+
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
-			errorText =HTTP_BADREQUEST;
+			errorText = HttpResponse.HTTP_BADREQUEST;
 			return false;
 		}
 		String httpVersion= stringTokens.nextToken();
 		methodProperty.put("version", httpVersion);
-		
+
 		if ( stringTokens.hasMoreTokens()){
 			return true;
 		}
 		return false;
 	}
+	
 	/**
 	 * Decodes the percent encoding scheme. <br/>
-	 * For example: "an+example%20string" -> "an example string"
+	 * For example: "an+example%20string" => "an example string"
 	 */
-	private String decodePercent( String str ) throws InterruptedException
-	{
-		try
-		{
+	private String decodePercent(String str) throws InterruptedException	{
+		try	{
 			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < str.length(); ++i)
-			{
-				char c = str.charAt( i );
-				switch ( c )
-				{
+			for (int i = 0; i < str.length(); ++i) {
+				char c = str.charAt(i);
+				switch ( c ) {
 				case '+':
 					sb.append( ' ' );
 					break;
@@ -197,78 +188,10 @@ public class HttpParser {
 			}
 			return sb.toString();
 		}
-		catch( Exception e )
-		{
-			errorText =HTTP_BADREQUEST;
+		catch( Exception e ) {
+			errorText = HttpResponse.HTTP_BADREQUEST;
 			logger.addLine("BAD REQUEST: Bad percent-encoding");
 			return null;
 		}
 	}
-
-	//this method makes the HTTP header for the response
-	//the headers job is to tell the browser the result of the request
-	//among if it was successful or not.
-	/*private String construct_http_header(int return_code, int file_type) {
-		String str = "HTTP/1.0 ";
-		//you probably have seen these if you have been surfing the web a while
-		switch (return_code) {
-		case 200:
-			str = str + "200 OK";
-			break;
-		case 400:
-			str = str + "400 Bad Request";
-			break;
-		case 403:
-			str = "403 Forbidden";
-			break;
-		case 404:
-			str =  "404 Not Found";
-			break;
-		case 500:
-			str =  "500 Internal Server Error";
-			break;
-		case 501:
-			str =  "501 Not Implemented";
-			break;
-		}
-
-		str = str + "\r\n"; //other header fields,
-		str = str + "Connection: close\r\n"; //we can't handle persistent connections
-		str = str + "Server: SimpleHTTPtutorial v0\r\n"; //server name
-
-		//Construct the right Content-Type for the header.
-		//This is so the browser knows what to do with the
-		//file, you may know the browser dosen't look on the file
-		//extension, it is the servers job to let the browser know
-		//what kind of file is being transmitted. You may have experienced
-		//if the server is miss configured it may result in
-		//pictures displayed as text!
-		switch (file_type) {
-		//plenty of types for you to fill in
-		case 0:
-			break;
-		case 1:
-			str = str + "Content-Type: image/jpeg\r\n";
-			break;
-		case 2:
-			str = str + "Content-Type: image/gif\r\n";
-			break;
-		case 3:
-			str = str + "Content-Type: application/x-zip-compressed\r\n";
-			break;
-		case 4:
-			str = str + "Content-Type: image/x-icon\r\n";
-			break;
-		default:
-			str = str + "Content-Type: text/html\r\n";
-			break;
-		}
-
-		////so on and so on......
-		str = str + "\r\n"; //this marks the end of the httpheader
-		//and the start of the body
-		//ok return our newly created header!
-		logger.addLine("outpu: " + str);
-		return str;
-	}*/
 }
