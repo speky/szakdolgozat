@@ -897,20 +897,235 @@ Mobilhálózatok bemutatása
 \end_layout
 
 \begin_layout Subsection
-Mobilhálózatok fejlődése
-\end_layout
-
-\begin_layout Standard
-A hálózatok evolúciójának leírása (1G , 2G, 2.5G, 3G, LTE), a hálózatban
- résztvevő komponensek strukturális bemutatása képekkel
-\end_layout
-
-\begin_layout Subsection
 Mobilhálózatokban használt kifejezések definíciója
 \end_layout
 
 \begin_layout Standard
-Fontos hálózati komponensek, rövidítések bemutatása, leírása
+
+\series bold
+GSM 
+\series default
+(Global System for Mobile communication): az ETSI (European Telecommunications
+ Standards Institute) dolgozta ki ezt a szabványt a második generációs (2G)
+ mobil hálózati protokollok leírására.
+ A GSM sztenderd váltotta le az első generációs (1G) analóg hálózatot, és
+ egy új, digitális, teljes kétirányú kommunikációt lehetővé tevő, vonalkapcsolt
+ hálózat bevezetésével.
+ Ezt később kiegészitették azzal, hogy belevették az adat kommunikációt
+ is a szabványba, először vonalkapcsolt átvitellel, majd csomagkapcsolt
+ átvitellel: GPRS (General Packet Radio Services) és EDGE (Enhanced Data
+ rates for GSM Evolution vagy EGPRS).
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+WAP
+\series default
+ (Wireless Application Protocol): egy sztenderd technika a mobil vezetéknélküli
+ hálozatokon keresztül történő információ cserének.
+ A WAP böngésző egy webböngésző a mobil készülékekhez.
+ A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
+ az interaktiv adat szolgáltatásra.
+ Interaktivitást követelt az Internet és Web alkalmazások támogatása pl:
+ Email kezelés mobil készüléken, tőzsdei árak vagy a sporteredmények követése.
+ A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
+bilitást a WAP és más különböző hálozati technológiák között, mint a GSM
+ és a CDMA.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+GPRS 
+\series default
+(General Packet Radio Service): csomagkapcsolt szolgáltatás 2G és 3G kommunikáci
+ós rendszerekben.
+ A GPRS-t az ETSI szabványosította, napjainkban a 3GPP (3rd Generation Partnersh
+ip Project) tartja karban a szabványt.
+ A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
+ mértéke rendszert egyidejüleg használók számától függ.
+ A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége(Quality
+ of Service) biztositott a kapcsolat ideje alatt.
+ 2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
+ A 2G és GPRS technológiák kombinációját néha 2.5G-nek szokták hívni, ami
+ a 2G és a 3G mobil technológiák között helyezkedik el.
+ Mérsékelt sebességű adat átvitelt biztosít a GSM rendszerben eddig kihasználatl
+an több csatornás idő osztásos (TDMA: Time division multiple acces) technológia
+ segítségével.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+EDGE
+\series default
+ (Enhanced Data rates for GSM Evolution): másnéven EGPRS (Enhanced GPRS)
+ mobil telefon technológia, ami nagyobb adat átviteli sebességet tesz lehetővé.
+ EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.A 3GPP szabványosíto
+tta és GSM család részévé vált.
+ Kifinomult kódolási eljárások bevezétésének köszönhetően megnőtt a rádio
+ csatornánként elérhető bitráta, háromszoros kapacitás és teljesitmény beli
+ növekedést eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
+ A továbbfejlesztett EDGE kissebb késést és több mint kétszeres teljesítmény
+ növekedést biztosít.
+ A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatok fejlődése
+\end_layout
+
+\begin_layout Standard
+The first radiotelephone service was introduced in the US at the end of
+ the 1940s, and was meant to connect mobile users in cars to the public
+ fixed network.
+ In the 1960s, a new system launched by Bell Systems, called Improved Mobile
+ Telephone Service" (IMTS), brought many improvements like direct dialing
+ and higher bandwidth.
+ The first analog cellular systems were based on IMTS and developed in the
+ late 1960s and early 1970s.
+ The systems were "cellular" because coverage areas were split into smaller
+ areas or "cells", each of which is served by a low power transmitter and
+ receiver.
+\end_layout
+
+\begin_layout Standard
+First generation 1G analog system for mobile communications saw two key
+ improvements during the 1970s: the invention of the microprocessor and
+ the digitization of the control link between the mobile phone and the cell
+ site.
+ AMPS ( Advance mobile phone system ) was first launched by US which is
+ 1G mobile system.
+ It is best on FDMA technology which allows users to make voice calls within
+ one country.
+ 
+\end_layout
+
+\begin_layout Standard
+Second generation 2G digital cellular systems were first developed at the
+ end of the 1980s.
+ These systems digitized not only the control link but also the voice signal.
+ The new system provided better quality and higher capacity at lower cost
+ to consumers.
+ GSM (Global system for mobile communication) was the first commercially
+ operated digital cellular system which is based on TDMA.
+\end_layout
+
+\begin_layout Standard
+Third generation 3G systems promise faster communications services, including
+ voice, fax and Internet, anytime and anywhere with seamless global roaming.
+ ITU's IMT-2000 global standard for 3G has opened the way to enabling innovative
+ applications and services (e.g.
+ multimedia entertainment, infotainment and location-based services, among
+ others).
+ The first 3G network was deployed in Japan in 2001.
+ 2.5G networks, such as GPRS (Global Packet Radio Service) are already available
+ in some parts of Europe.
+ 3G technology supports 144 Kbps bandwidth, with high speed movement (e.g.
+ vehicles), 384 Kbps (e.g.
+ on campus) & 2 Mbps for stationary (e.g.inbuilding )
+\end_layout
+
+\begin_layout Standard
+Fourth generation At present the download speed for mode data is limited
+ to 9.6 kbit/sec which is about 6 times slower than an ISDN (Integrated services
+ digital network) fixed line connection.
+ Recently, with 504i handsets the download data rate was increased 3-fold
+ to 28.8kbps.
+ However, in actual use the data rates are usually slower, especially in
+ crowded areas, or when the network is "congested".
+ For third generation mobile (3G, FOMA) data rates are 384 kbps (download)
+ maximum, typically around 200kbps, and 64kbps upload since spring 2001.
+ Fourth generation (4G) mobile communications will have higher data transmission
+ rates than 3G.
+ 4G mobile data transmission rates are planned to be up to 20 megabits per
+ second.
+\end_layout
+
+\begin_layout Standard
+Before understanding 4G, we must know what is 3G ? 3G initiative came from
+ device manufactures, not from operators.
+ In 1996 the development was initiated by Nippon Telephone & Telegraph (NTT)
+ and Ericsson; in 1997 the Telecommunications Industry Association (TIA)
+ in the USA chose CDMA as a technology for 3G; in 1998 the European Telecommunic
+ations Standards Institute (ETSI) did the same thing; and finally, in 1998
+ wideband CDMA (W-CDMA) and cdma2000 were adopted for the Universal Mobile
+ Telecommunications System (UMTS).
+\end_layout
+
+\begin_layout Standard
+W-CDMA and CDMA 2000 are two major proposals for 3G.
+ In this CDMA the information bearing signal is multiplied with another
+ faster ate, wider bandwidth digital signal that may carry a unique orthogonal
+ code.
+ W-CDMA uses dedicated time division multiplexing (TDM) whereby channel
+ estimation information is collected from another signal stream.
+ CDMA 2000 uses common code division multiplexing (CDM) whereby channel
+ estimation information can be collected with the signal stream.
+\end_layout
+
+\begin_layout Standard
+Access Technologies (FDMA, TDMA, CDMA)
+\end_layout
+
+\begin_layout Standard
+FDMA: Frequency Division Multiple Access (FDMA) is the most common analog
+ system.
+ It is a technique whereby spectrum is divided up into frequencies and then
+ assigned to users.
+ With FDMA, only one subscriber at any given time is assigned to a channel.
+ The channel therefore is closed to other conversations until the initial
+ call is finished, or until it is handed-off to a different channel.
+ A "full-duplex" FDMA transmission requires two channels, one for transmitting
+ and the other for receiving.
+ FDMA has been used for first generation analog systems.
+\end_layout
+
+\begin_layout Standard
+TDMA: Time Division Multiple Access (TDMA) improves spectrum capacity by
+ splitting each frequency into time slots.
+ TDMA allows each user to access the entire radio frequency channel for
+ the short period of a call.
+ Other users share this same frequency channel at different time slots.
+ The base station continually switches from user to user on the channel.
+ TDMA is the dominant technology for the second generation mobile cellular
+ networks.
+\end_layout
+
+\begin_layout Standard
+CDMA: Code Division Multiple Access is based on "spread" spectrum technology.
+ Since it is suitable for encrypted transmissions, it has long been used
+ for military purposes.
+ CDMA increases spectrum capacity by allowing all users to occupy all channels
+ at the same time.
+ Transmissions are spread over the whole radio band, and each voice or data
+ call are assigned a unique code to differentiate from the other calls carried
+ over the same spectrum.
+ CDMA allows for a " soft hand-off" , which means that terminals can communicate
+ with several base stations at the same time.
+\end_layout
+
+\begin_layout Standard
+Beyond 3G In the field of mobile communication services, the 4G mobile services
+ are the advanced version of the 3G mobile communication services.
+ The 4G mobile communication services are expected to provide broadband,
+ large capacity, high speed data transmission, providing users with high
+ quality color video images, 3D graphic animation games, audio services
+ in 5.1 channels.
+ We have been researching the vision of 4G mobile communication systems,
+ services, and architectures.
+ We also have been developing the terminal protocol technology for high
+ capacity, high speed packet services, public software platform technology
+ that enables downloading application programs, multimode radio access platform
+ technology, and high quality media coding technology over mobile networks.
+\end_layout
+
+\begin_layout Standard
+Reasons To Have 4G 1.Support interactive multimedia services: teleconferencing,
+ wireless Internet, etc.
+ 2.Wider bandwidths, higher bit rates 3.Global mobility and service portability
+ 4.Low cost 5.Scalability of mobile networks 
 \end_layout
 
 \begin_layout Subsection

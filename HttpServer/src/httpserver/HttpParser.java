@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class HttpParser {
@@ -16,7 +17,7 @@ public class HttpParser {
 	private Properties headerProperty = new Properties();
 
 	private String TAG = "HTTP_PARSER: ";
-	private String errorText = "";
+	private String errorText = null;
 
 	public String getErrorText(){
 		return errorText;
@@ -33,12 +34,24 @@ public class HttpParser {
 	public int getMethodSize(){
 		return methodProperty.size();
 	}
-	
+
 	public int getHeadSize(){
 		return headerProperty.size();
 	}
+
+	public String getMethosProperty(final String tag){
+		if (methodProperty.containsKey(tag)){
+			return methodProperty.getProperty(tag) ;
+		}else{
+			return null;
+		}		
+	}
 	
-	public String getHeadTag(final String tag){
+	public Properties getHeadProperty(){
+		return headerProperty;
+	}
+	
+	public String getHeadProperty(final String tag){
 		if (headerProperty.containsKey(tag)){
 			return headerProperty.getProperty(tag) ;
 		}else{
@@ -55,34 +68,21 @@ public class HttpParser {
 	 * java Properties' key - value pairs
 	 * NOTE: HTTP request's body part will be ignored
 	 **/
-	public boolean parseHttpHead(final InputStream input) {
-		try {      
+	public boolean parseHttpHead(final Scanner input) {
+		try{
 			if ( input == null){
 				logger.addLine(TAG+"Input is empty!");
 				return false;
 			}
 
-			// Read the first 8192 bytes.  The full header should fit in here. Apache's default header limit is 8KB.
-			int bufferSize = 8192;
-			byte[] buffer = new byte[bufferSize];
-			int readedLength = input.read(buffer, 0, bufferSize);
-			if (readedLength <= 0) {
-				logger.addLine(TAG+"The http request is empty!" );
-				return false;
-			}
-			
 			methodProperty.clear();
 			headerProperty.clear();
-			// Create a BufferedReader for parsing the header.
-			ByteArrayInputStream byteStream = new ByteArrayInputStream(buffer, 0, readedLength);
-			BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(byteStream));			
+
 			//Decode the header into params and header java properties
-			if  (!parseRequest(bufferedReader)){
+			if  (!parseRequest(input)){
 				return false;
 			}
-			return true; 
-		} catch (IOException e) {
-			logger.addLine(TAG+"Error at input parsing!" + e.getMessage() );
+			return true;		
 		} catch ( InterruptedException e ) {
 			logger.addLine(TAG+" Error at input parsing!" + e.getMessage() );
 		}
@@ -92,38 +92,36 @@ public class HttpParser {
 	/**
 	 * Decodes the received headers and loads data into java Properties' key - value pairs
 	 **/
-	private  boolean parseRequest(final BufferedReader in) throws InterruptedException	{
-		try {
-			// Read the request line
-			String inLine = in.readLine();			
-			if (inLine == null) {
-				return false;
-			}
-			logger.addLine(TAG+"Server input method: "+ inLine);
+	private  boolean parseRequest(final Scanner input) throws InterruptedException	{
+		// Read the request line
+		String inLine = null;
+		if (input.hasNextLine()) {
+			inLine = input.nextLine();
+		}else {
+			return false;
+		}		
 
-			if  (parseMethod(inLine)){
-				return false;
-			}
-			// If there's another token, it's protocol version, followed by HTTP headers
-			// example: Header1: value1
-			// Header2: value2						
-			String line = in.readLine();			
-			while (line != null && line.trim().length() > 0 )	{
+		logger.addLine(TAG+"Server input method: "+ inLine);
+
+		if  (parseMethod(inLine)){
+			return false;
+		}
+		// If there's another token, it's protocol version, followed by HTTP headers
+		// example: Header1: value1
+		// Header2: value2
+		while (input.hasNextLine()) {
+			String line = input.nextLine();
+			if (line.trim().length() > 0) {
 				logger.addLine(TAG+"Parse head "+ line);
-				int separatorPosition = line.indexOf( ':' );
+				int separatorPosition = line.indexOf(':');
 				if  (separatorPosition >= 0) {
 					String type = line.substring(0,separatorPosition).trim().toUpperCase();
 					String value = line.substring(separatorPosition+1).trim();
 					headerProperty.put(type, value);							
 				}
-				line = in.readLine();
 			}
-			return true;
-		}	catch (IOException e) {
-			errorText = HttpResponse.HTTP_INTERNALERROR;
-			logger.addLine("SERVER INTERNAL ERROR: IOException: " + e.getMessage());
 		}
-		return false;
+		return true;		
 	}
 
 	/**
@@ -163,7 +161,7 @@ public class HttpParser {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Decodes the percent encoding scheme. <br/>
 	 * For example: "an+example%20string" => "an example string"

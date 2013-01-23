@@ -11,117 +11,162 @@ import java.text.DateFormat;
  * @author Specker Zsolt
  */
 
-/*
 class CPeer {
-    public Socket sock;
-    public PrintWriter pw;
-    public Scanner sc;
-    public int id, port;
-    public boolean bPong = false;
+	public Socket socket;
+	public DataOutputStream outputStream;
+	public Scanner scanner;
+	public int id;
+	public int port;
+	public HashSet<String> files;
 
-    public Set<String> files;
-
-    CPeer(Socket s, int id, int port){
-        try{
-            sock = s;
-            this.id = id;
-            this.port = port;
-            OutputStream os = sock.getOutputStream();
-            pw = new PrintWriter(new OutputStreamWriter(os) );
-            sc = new Scanner(sock.getInputStream());
-            files = new HashSet<String>();
-
-        }
-        catch(Exception e){
-            TrackerThread.logAdd("peer hiba: " + e.getMessage() + " Peer id " + id+" )");
-        }
-    }
+	CPeer(final Socket socket, final int id, final int port) {
+		try{
+			this.socket = socket;
+			this.id = id;
+			this.port = port;			
+			outputStream = new DataOutputStream(socket.getOutputStream());
+			scanner = new Scanner(socket.getInputStream());
+			files = new HashSet<String>();
+		}
+		catch(Exception e){
+			System.out.println("peer hiba: " + e.getMessage() + " Peer id " + id);
+		}
+	}
 }
 
 class CPocket {
-    public String text;
-    public int id;
-    public int hashCode;
-    public Set<CPeer> peers;
+	public String text;
+	public int id;
+	public int hashCode;
+	public Set<CPeer> peers;
 
-    CPocket(){
-        text = "";
-        id = -1;
-        hashCode = 0;
-        peers = new HashSet<CPeer> ();
-    }
+	CPocket(){
+		text = "";
+		id = -1;
+		hashCode = 0;
+		peers = new HashSet<CPeer> ();
+	}
 
-    CPocket(String text, int length, int id, int hashCode){
-        this.text = text;
-        this.id = id;
-        this.hashCode = hashCode;
-        peers = new HashSet<CPeer> ();
-    }
+	CPocket(String text, int length, int id, int hashCode){
+		this.text = text;
+		this.id = id;
+		this.hashCode = hashCode;
+		peers = new HashSet<CPeer> ();
+	}
 }
 
 class CFile {
-    public String name;
-    public  int hashId;
-    public  int count;
-    public Set<CPocket> pieces;
+	public String name;
+	public  int hashId;
+	public  int count;
+	public Set<CPocket> pieces;
 
-    CFile(){
-        name = "";
-        hashId = 0;
-        pieces = new HashSet<CPocket> ();
+	CFile(){
+		name = "";
+		hashId = 0;
+		pieces = new HashSet<CPocket> ();
 
-    }
-
-    CFile(String name, int count, int hashId){
-        this.name = name;
-        this.hashId = hashId;
-        this.count = count;
-        pieces = new HashSet<CPocket> ();
-    }
-
-    public void AddPiece(int id, int hash, CPeer peer) {
-        for (CPocket p : pieces){
-            if (p.id == id ){
-                // add peer to the existing piece
-                if (p.hashCode == hash){
-                    p.peers.add(peer);
-                    TrackerThread.logAdd("reg add peer to " + name + ":"+ id +" pocket (Peer id " + peer.id + ")");
-                    return;
-                }else
-                    TrackerThread.logAdd("reg wrong pocket data! ");
-                    return;
-            }
-        }
-
-        // uj csomag
-        TrackerThread.logAdd("reg add peer to new pocket " + name + ":"+ id +" (Peer id " + peer.id + ")");
-        CPocket p = new CPocket("", 0, id, hash);
-        pieces.add(p);
-        p.peers.add(peer);
-
-    }
-}
- */
-
-
-class TrackerThread extends Thread
-{
-	//static List<CFile> files = new ArrayList<CFile>();
-	//static ArrayList<CPeer> activePeers = new ArrayList<CPeer>();
-
-	//CPeer peer;
-
-	public TrackerThread(Socket s, int id) {
-		super();
-
-		// regiser a new peer        
-		// peer = new CPeer(s, id, 0);
-
-		//        logAdd("Add a peer, id: " + peer.id + " IP: " + s.getInetAddress());
-		start();
 	}
 
-	private void parser(){
+	CFile(String name, int count, int hashId){
+		this.name = name;
+		this.hashId = hashId;
+		this.count = count;
+		pieces = new HashSet<CPocket> ();
+	}
+
+	public void AddPiece(int id, int hash, CPeer peer) {
+		for (CPocket p : pieces){
+			if (p.id == id ){
+				// add peer to the existing piece
+				if (p.hashCode == hash){
+					p.peers.add(peer);
+					// TrackerThread.logAdd("reg add peer to " + name + ":"+ id +" pocket (Peer id " + peer.id + ")");
+					return;
+				}else
+					//TrackerThread.logAdd("reg wrong pocket data! ");
+					return;
+			}
+		}
+
+		// uj csomag
+		//  TrackerThread.logAdd("reg add peer to new pocket " + name + ":"+ id +" (Peer id " + peer.id + ")");
+		CPocket p = new CPocket("", 0, id, hash);
+		pieces.add(p);
+		p.peers.add(peer);
+
+	}
+}
+
+class TrackerThread extends Thread {
+	static List<CFile> files = new ArrayList<CFile>();
+
+	private CPeer peer = null;
+	private Logger logger = null;
+
+	public TrackerThread(Logger logger, final Socket socket, final int id) {
+		super();
+		// register a new peer        
+		peer = new CPeer(socket, id, 0);
+		this.logger = logger;
+		logger.addLine("Add a peer, id: " + peer.id + " IP: " + socket.getInetAddress());
+
+		start();
+	}
+	
+	public void run() {
+		try {   
+			while (true) {
+				if  (peer.scanner. hasNextLine()){
+					logger.addLine("Get message from client,  clientId: " + peer.id+"\n");
+					HttpParser parser = new HttpParser(logger);
+					parseClientRequest(parser);
+					sendResponse(parser);
+				}
+			}
+		} catch (Exception e) {            
+			logger.addLine("error in run() " + e.getMessage()+" (Peer id " + peer.id+" )");
+		} 
+	}
+
+	private boolean sendResponse(HttpParser parser) {
+		try {
+			HttpResponse response = new HttpResponse(logger);
+			response.PrintProperties(parser.getMethosProperty("uri"), parser.getMethod(), parser.getHeadProperty(), null);
+			
+			String errorMessage = parser.getErrorText();
+			if (errorMessage != null) {
+				String responseText = response.setResponseText(errorMessage, HttpResponse.MIME_PLAINTEXT, null);
+				sendMessageToClient(responseText);
+			}
+			
+			String responseText = response.setResponseText(HttpResponse.HTTP_OK, HttpResponse.MIME_PLAINTEXT, null);
+			sendMessageToClient(responseText);			
+			
+		}catch (Exception e){
+			logger.addLine("response error: " + e.getMessage());
+		}
+		
+		return false;
+	}
+	
+	private boolean sendMessageToClient(final String message) {
+		try {
+			peer.outputStream.writeChars(message);
+			peer.outputStream.flush();
+			return true;
+		} catch (IOException e) {
+			logger.addLine("Message sending exception: " + e.getMessage()+" (Peer id " + peer.id+" )");
+		}		
+		return false;
+	}
+	
+	private void parseClientRequest(HttpParser parser) {		
+		//Read the http request from the client from the socket interface into a buffer.
+		parser.parseHttpHead(peer.scanner);
+	}
+		
+	private void parser() {
 		/*      if (str.length() != 0){
 
              List<String> order = new ArrayList<String>();
@@ -257,23 +302,7 @@ class TrackerThread extends Thread
          }
 		 */
 	}
-
-	public void run()
-	{
-		/*try
-        {           
-            while (true) {
-              if ( sc.hasNextLine()){
-                String str = sc.nextLine();
-            }
-           }
-
-        } catch (Exception e) {
-            System.out.println("run hiba " + e.getMessage());
-            //logAdd("run hiba " + e.getMessage()+" (Peer id " + peer.id+" )");
-        }
-		 */
-	}
+	
 	/*
     private CFile AddFile(CFile file) {
         for (CFile fi : TrackerThread.files){
@@ -297,27 +326,43 @@ class TrackerThread extends Thread
 
 public class HttpServer {
 
-	private final int SERVER_PORT = 13000;
-	private final int SERVER_PORT_END = 13050;
+	private static final int SERVER_PORT = 13000;
+	private static final String TAG = "HTTP_Server: ";
 
 	private ServerSocket serverSocket = null;
 	private Logger logger = null;
-	private int threadCount;
+	private int activeConnections;
+
+	public void decreaseConnectounCount() {
+		if  (activeConnections > 0) {
+			--activeConnections;
+			logger.addLine(TAG+" decrease connections: "+ activeConnections);
+		}
+	}
+
+	public void inreaseConnectounCount() {		
+		++activeConnections;
+		logger.addLine(TAG+" increase connections: "+ activeConnections);
+	}
 
 	public void main(String[] args) {
-		threadCount = 0;
+		activeConnections = 0;
 		logger = new Logger();
 		logger.Init("");
-		try
-		{
+		try	{
 			// serverSocket a vegpont generator
 			serverSocket = new ServerSocket(SERVER_PORT);
 
 			while (true) {
-				// fogadunk egy kapcsolatot, socket a vegpont
-				Socket socket = serverSocket.accept();
-				threadCount++;
-				parseClientRequest(socket);
+				// wait for client connection
+				Socket socket = serverSocket.accept();				
+				//figure out what is the ip-address of the client
+				InetAddress client = socket.getInetAddress();
+				//and print it to log
+				logger.addLine(TAG+client.getHostName() + " connected to server.\n");
+				// start thread for handling a client
+	             new Thread(new TrackerThread(logger, socket, activeConnections));
+	             inreaseConnectounCount();
 			}
 		} catch (Exception e) {
 			System.out.println("Thread hiba: " + e.getMessage());
@@ -332,26 +377,5 @@ public class HttpServer {
 			}
 		}
 	}
-
-	private void parseClientRequest(Socket socket){
-		//figure out what ipaddress the client commes from, just for show!
-		InetAddress client = socket.getInetAddress();
-		//and print it to log
-		logger.addLine(client.getHostName() + " connected to server.\n");
-		HttpParser parser = new HttpParser(logger);
-				
-		DataOutputStream output = null;
-		try {
-			//Read the http request from the client from the socket interface into a buffer.
-			parser.parseHttpHead(socket.getInputStream());
-			//Prepare an outputstream from server to the client, 
-			// this will be used sending back our response (header + requested file) to the client.
-			output = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			System.err.println("Hiba a client socket-el: " + e.getMessage());
-		}
-		
-		// elinditunk egy szalat, ami atveszi a vegpontot...
-		//new Thread(new TrackerThread(socket, ));
-	}	
+	
 }
