@@ -972,106 +972,18 @@ tta és GSM család részévé vált.
  A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
 \end_layout
 
-\begin_layout Subsection
-Mobilhálózatok fejlődése
+\begin_layout Standard
+
+\series bold
+Hozzáférési Technológiák
 \end_layout
 
 \begin_layout Standard
-The first radiotelephone service was introduced in the US at the end of
- the 1940s, and was meant to connect mobile users in cars to the public
- fixed network.
- In the 1960s, a new system launched by Bell Systems, called Improved Mobile
- Telephone Service" (IMTS), brought many improvements like direct dialing
- and higher bandwidth.
- The first analog cellular systems were based on IMTS and developed in the
- late 1960s and early 1970s.
- The systems were "cellular" because coverage areas were split into smaller
- areas or "cells", each of which is served by a low power transmitter and
- receiver.
-\end_layout
 
-\begin_layout Standard
-First generation 1G analog system for mobile communications saw two key
- improvements during the 1970s: the invention of the microprocessor and
- the digitization of the control link between the mobile phone and the cell
- site.
- AMPS ( Advance mobile phone system ) was first launched by US which is
- 1G mobile system.
- It is best on FDMA technology which allows users to make voice calls within
- one country.
- 
-\end_layout
-
-\begin_layout Standard
-Second generation 2G digital cellular systems were first developed at the
- end of the 1980s.
- These systems digitized not only the control link but also the voice signal.
- The new system provided better quality and higher capacity at lower cost
- to consumers.
- GSM (Global system for mobile communication) was the first commercially
- operated digital cellular system which is based on TDMA.
-\end_layout
-
-\begin_layout Standard
-Third generation 3G systems promise faster communications services, including
- voice, fax and Internet, anytime and anywhere with seamless global roaming.
- ITU's IMT-2000 global standard for 3G has opened the way to enabling innovative
- applications and services (e.g.
- multimedia entertainment, infotainment and location-based services, among
- others).
- The first 3G network was deployed in Japan in 2001.
- 2.5G networks, such as GPRS (Global Packet Radio Service) are already available
- in some parts of Europe.
- 3G technology supports 144 Kbps bandwidth, with high speed movement (e.g.
- vehicles), 384 Kbps (e.g.
- on campus) & 2 Mbps for stationary (e.g.inbuilding )
-\end_layout
-
-\begin_layout Standard
-Fourth generation At present the download speed for mode data is limited
- to 9.6 kbit/sec which is about 6 times slower than an ISDN (Integrated services
- digital network) fixed line connection.
- Recently, with 504i handsets the download data rate was increased 3-fold
- to 28.8kbps.
- However, in actual use the data rates are usually slower, especially in
- crowded areas, or when the network is "congested".
- For third generation mobile (3G, FOMA) data rates are 384 kbps (download)
- maximum, typically around 200kbps, and 64kbps upload since spring 2001.
- Fourth generation (4G) mobile communications will have higher data transmission
- rates than 3G.
- 4G mobile data transmission rates are planned to be up to 20 megabits per
- second.
-\end_layout
-
-\begin_layout Standard
-Before understanding 4G, we must know what is 3G ? 3G initiative came from
- device manufactures, not from operators.
- In 1996 the development was initiated by Nippon Telephone & Telegraph (NTT)
- and Ericsson; in 1997 the Telecommunications Industry Association (TIA)
- in the USA chose CDMA as a technology for 3G; in 1998 the European Telecommunic
-ations Standards Institute (ETSI) did the same thing; and finally, in 1998
- wideband CDMA (W-CDMA) and cdma2000 were adopted for the Universal Mobile
- Telecommunications System (UMTS).
-\end_layout
-
-\begin_layout Standard
-W-CDMA and CDMA 2000 are two major proposals for 3G.
- In this CDMA the information bearing signal is multiplied with another
- faster ate, wider bandwidth digital signal that may carry a unique orthogonal
- code.
- W-CDMA uses dedicated time division multiplexing (TDM) whereby channel
- estimation information is collected from another signal stream.
- CDMA 2000 uses common code division multiplexing (CDM) whereby channel
- estimation information can be collected with the signal stream.
-\end_layout
-
-\begin_layout Standard
-Access Technologies (FDMA, TDMA, CDMA)
-\end_layout
-
-\begin_layout Standard
-FDMA: Frequency Division Multiple Access (FDMA) is the most common analog
- system.
+\series bold
+FDMA
+\series default
+: Frequency Division Multiple Access (FDMA) is the most common analog system.
  It is a technique whereby spectrum is divided up into frequencies and then
  assigned to users.
  With FDMA, only one subscriber at any given time is assigned to a channel.
@@ -1083,8 +995,12 @@ FDMA: Frequency Division Multiple Access (FDMA) is the most common analog
 \end_layout
 
 \begin_layout Standard
-TDMA: Time Division Multiple Access (TDMA) improves spectrum capacity by
- splitting each frequency into time slots.
+
+\series bold
+TDMA
+\series default
+: Time Division Multiple Access (TDMA) improves spectrum capacity by splitting
+ each frequency into time slots.
  TDMA allows each user to access the entire radio frequency channel for
  the short period of a call.
  Other users share this same frequency channel at different time slots.
@@ -1094,7 +1010,11 @@ TDMA: Time Division Multiple Access (TDMA) improves spectrum capacity by
 \end_layout
 
 \begin_layout Standard
-CDMA: Code Division Multiple Access is based on "spread" spectrum technology.
+
+\series bold
+CDMA
+\series default
+: Code Division Multiple Access is based on "spread" spectrum technology.
  Since it is suitable for encrypted transmissions, it has long been used
  for military purposes.
  CDMA increases spectrum capacity by allowing all users to occupy all channels
@@ -1106,26 +1026,111 @@ CDMA: Code Division Multiple Access is based on "spread" spectrum technology.
  with several base stations at the same time.
 \end_layout
 
-\begin_layout Standard
-Beyond 3G In the field of mobile communication services, the 4G mobile services
- are the advanced version of the 3G mobile communication services.
- The 4G mobile communication services are expected to provide broadband,
- large capacity, high speed data transmission, providing users with high
- quality color video images, 3D graphic animation games, audio services
- in 5.1 channels.
- We have been researching the vision of 4G mobile communication systems,
- services, and architectures.
- We also have been developing the terminal protocol technology for high
- capacity, high speed packet services, public software platform technology
- that enables downloading application programs, multimode radio access platform
- technology, and high quality media coding technology over mobile networks.
+\begin_layout Subsection
+Mobilhálózatok fejlődése
 \end_layout
 
 \begin_layout Standard
-Reasons To Have 4G 1.Support interactive multimedia services: teleconferencing,
- wireless Internet, etc.
- 2.Wider bandwidths, higher bit rates 3.Global mobility and service portability
- 4.Low cost 5.Scalability of mobile networks 
+Az első rádiótelefon szolgáltatás '40es végén vezették be Amerikában, ez
+ azt jelentette, hogy mobil használók autóból tudtak kapcsolódni a meglévő
+ publikus telefonhálozathoz.
+ 1960-ban új rendszert indított a Bell Systems, amit IMTS-nek (Improved
+ Mobile Telephone Service) hívtak, mely számos újítást hozott, például szélesebb
+ sávszélességet.
+ Az első analóg cellás rendszer ezen az IMTS rendszeren alapult és a 1970-es
+ évek elején fejlesztették ki.
+ A rendszert "cellás" volt, mert a lefedett területeket felosztották kisebb
+ részekre, avagy "cellákra".
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Első generáció 
+\end_layout
+
+\begin_layout Standard
+Első generációs mobil rendszer az AMPS (Advance mobile phone system), melyet
+ először az Egysült államokban vezették be.
+ Ez az egyik legjobb FDMA (Frequency Division Multiple Access) technológia,
+ mely lehetővé teszi, hogy hanghívást bonyolíthat az egész országban.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Második generáció
+\end_layout
+
+\begin_layout Standard
+2G digitális cellás rendszer, melyet az 1980-as évek végén fejlesztették
+ ki.
+ Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak.
+ GSM (Global system for mobile communication) volt az első kereskedelemben
+ működtetett digitális cellás rendszerm, mely TDMA (Time division multiple
+ acces) alapú.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Harmadik generáció
+\series default
+ 
+\end_layout
+
+\begin_layout Standard
+3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefon hálózatok
+ operátoraitol.
+ A fejlesztés 1996-ban kezdődött a Nippon Telephone & Telegraph (NTT) és
+ az Ericsson vezetésével; 1997-ben az amerikai Telecommunications Industry
+ Association (TIA) a CDMA-t választotta 3G technologiájának; 1998-ban az
+ European Telecommunications Standards Institute (ETSI) ugyan ezt tette
+ és végül a szélessávú CDMA (W-CDMA) és a cdma2000 adaptálták az UMTS-hez
+ (Universal Mobile Telecommunications System).
+ W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
+ A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
+ 2000 CDM-et (Code Division Multiplexing) eljárást használ.
+\end_layout
+
+\begin_layout Standard
+3G rendszer gyorsabb kommunikációs szolgáltatást nyújt, beleértve a hang,
+ fax és Internet szolgáltatásokat, melyek bármikor és bárhonnan elérhetőek.
+ Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk
+ pl: multimédiás szorakoztatás, információ és helymeghatározás szolgáltatások
+ elterjedését a felhasználók között.
+ Az első 3G hálózatot Japánban építették ki 2001-ben.
+ 2.5G hálózatok, mint a GPRS (Global Packet Radio Service) már elérhetőek
+ voltak Europa bizonyos országaiban.
+ 3G technológia támogatja a 144 Kbps sávszélességet nagy sebességű mozgásnál
+ (pl: járművek), 384 Kbps pl egyetemek területén és 2 Mbps-ot állóhelyzetben
+ (pl: épületen belül).
+ A maximális letöltési adatráta 384Kpbs, átlagosan 200 Kpbs és a feltöltés
+ is ráta 64 Kpbs.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Negyedik generáció 
+\end_layout
+
+\begin_layout Standard
+Napjainkban a letöltési sebesség download speed limitált 9.6 kbit/sec-ra,
+ mely 6-szor lassabb, mint egy ISDN (Integrated services digital network)
+ kapcsolat esetén.
+ Valójában ez a sebesség sokkal lassab,főleg zsúfolt helyeken, vagy ha hálózat
+ nagyon leterhelt.
+ Negyedik generációs (4G) mobil kommunikáció nagyobb adat átvitelre lesz
+ képes, mint a 3G.
+ Az adatráta tervezett mértéke 20 Mbps.
+\end_layout
+
+\begin_layout Standard
+A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
+ sebességű adat átvitelt; lehetővé teszi a jó minőségű video megjelenítést,
+ háromdimenziós animációs játék és 5.1-es hang szolgáltatást.
 \end_layout
 
 \begin_layout Subsection
