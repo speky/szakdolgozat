@@ -1,15 +1,17 @@
 package httpclient;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
+import java.util.TimeZone;
 
 class CPeer {
 	public Socket socket;
@@ -35,128 +37,134 @@ class CPeer {
 }
 
 class PeerThread implements Runnable {
-   
-    CPeer peer;
+	private CPeer peer;
 
-    public PeerThread(Socket s, int id) {
-        super();
-        // regiser a new peer
-        peer = new CPeer(s, id, 0);        
-    }
-    
-    public void run()  {
-        try  {
-             while (true) {
-              if (peer.scanner.hasNextLine()) {
-                String str = peer.scanner.nextLine();
-                if (str.length() != 0) {
-                    List<String> order = new ArrayList<String>();
-                    order = ((List<String>)Arrays.asList(str.split(" ")));
-                    // peer parancsok
-                if (order.get(0).equals("ping")){               
-                        peer.outputStream.writeChars("pong");
-                        peer.outputStream.flush();
-
-                    } else{ // hibás parancs
-                    	System.out.println("hibás parancs, bontjuk a kapcsoaltot. (Peer id " + peer.id+" )");
-                        peer.socket.close();
-                        peer.outputStream.close();
-                        peer.scanner.close();
-                    }
-                }
-              }
-           }
-        }
-        catch (Exception e) {
-            System.out.println("run hiba " + e.getMessage());            
-        }
-    
-    }
-}
-
-class OrderThread extends Thread {
-	private Scanner sc;
-
-	public OrderThread(){
-		//super();
-		sc = new Scanner(System.in);
-
+	public PeerThread(Socket s, int id) {
+		super();
+		// regiser a new peer
+		peer = new CPeer(s, id, 0);        
 	}
 
-	@Override
-	public void run(){
-		try	{
-			String line = "";
-
-			while (true){
-				if (sc.hasNextLine()) {
-					line = sc.nextLine();
-					if (line.length() != 0){
+	public void run()  {
+		try  {
+			while (true) {
+				if (peer.scanner.hasNextLine()) {
+					String str = peer.scanner.nextLine();
+					if (str.length() != 0) {
 						List<String> order = new ArrayList<String>();
-						order = ((List<String>)Arrays.asList(line.split(" ")));
-
+						order = ((List<String>)Arrays.asList(str.split(" ")));
 						// peer parancsok
-						if (order.get(0).equals("getfiles")){
-							System.out.println("getfiles parancs" );
-							try {
-								Socket s = new Socket("localhost", 13468);
-								PrintWriter pw = new PrintWriter(s.getOutputStream());
-								Scanner sc = new Scanner(s.getInputStream());
-								System.out.println("trackertol lekri a fileokat");
-								// fájlhoz tartozo peereket lekérjük
-								pw.println("getfiles");
-								pw.flush();
+						if (order.get(0).equals("ping")){
+							peer.outputStream.writeChars("pong");
+							peer.outputStream.flush();
 
-
-								String str = sc.nextLine();
-								System.out.println("a fileok: " + str);
-								System.out.println(str);
-
-								sc.close();
-								pw.close();
-								s.close();
-
-							}catch (SocketException e){
-								System.out.println("tracker reg failed, " + e.getMessage());
-							}
-						}else if (order.get(0).equals("stopserver")){
-							HttpClient.bShutDown = true;
+						} else{ // hibás parancs
+							System.out.println("hibás parancs, bontjuk a kapcsoaltot. (Peer id " + peer.id+" )");
+							peer.socket.close();
+							peer.outputStream.close();
+							peer.scanner.close();
 						}
 					}
 				}
 			}
-		} catch (Exception e) {
-			System.out.println("run hiba " + e.getMessage());
+		}
+		catch (Exception e) {
+			System.out.println("run hiba " + e.getMessage());            
 		}
 	}
 }
 
-public class HttpClient {
+class CommandThread {
+	private Scanner scanner;
+	private Socket socket;
+	private Scanner portScener ;
+	private PrintWriter pw;
 
-	static public boolean bShutDown;
-	static public int port;
+	public CommandThread(){
+		super();
+		try {
+			socket = new Socket(HttpClient.ServerAddress, HttpClient.ServerPort);
+			portScener = new Scanner(socket.getInputStream());
+			pw = new PrintWriter(socket.getOutputStream());
+			
+		}catch (UnknownHostException e) {
+			System.out.println("unknown host exception, " + e.getMessage());
+		} catch (IOException e) {
+			System.out.println("IOexception, " + e.getMessage());
+		}
+		scanner = new Scanner(System.in);
+	}
+
+	public void run() throws IOException { 
+		String command = "";
+		while (true) {
+			if  (scanner.hasNextLine()) {
+				command = scanner.nextLine();
+				if (command.length() != 0) {
+					//  parancsok feldolgozasa
+					if (command.equals("getfiles")){
+						System.out.println("getfiles parancs" );
+						sendMessageToServer("getfiles");
+						receiveMessageFromServer();
+						
+					}else if (command.equals("ping")) {
+						System.out.println("ping parancs" );
+						sendMessageToServer("PING / HTTP*/1.0");						
+						receiveMessageFromServer();
+					}
+				}
+			}
+		}
+	}
+
+	private boolean sendMessageToServer(final String command) throws IOException {
+		System.out.println("Send command to server: "+ command);
+		pw.println(command );		
+		pw.println("END" );
+		pw.flush();
+
+		StringBuffer buffer = new StringBuffer();
+		while (portScener .hasNextLine()) {
+			String str = portScener .nextLine();			
+			buffer.append(str);
+			System.out.println("Received line:" +str);
+		}
+		return true;		
+	}
+
+	private String receiveMessageFromServer() {		
+		StringBuffer buffer = new StringBuffer();
+		while (portScener .hasNextLine()) {
+			String str = portScener .nextLine();			
+			buffer.append(str);
+			System.out.println("Received line:" +str);
+		}
+		return buffer.toString();
+	}
+}
+
+public class HttpClient {
+	public static  final int ServerPort = 13000;
+	public static  final String ServerAddress = "localhost";
 
 	public static void main(String[] args) {
-		int i = 0;
-		bShutDown = false;
 		try	{
-			ServerSocket ss = new ServerSocket(13666);
-			port = ss.getLocalPort();
-
 			// keyboard input scanner
-			new Thread(new OrderThread()).start();
+			CommandThread command = new CommandThread();
+			command.run();
 
-			while (!bShutDown) {
-				// fogadunk egy kapcsolatot, s a vegpont
-				Socket s = ss.accept();
-				// elinditunk egy szalat, ami atveszi a peert
-				new Thread(new PeerThread(s, i)).start();
-				++i;
-			}
-
-			System.out.println("SHUT DOWN - nem fogad több kapcsolatot");
+			System.out.println("Client SHUT DOWN");
 		} catch (Exception e) {
 			System.out.println("thread hiba" + e.getMessage());
 		}
+	}
+
+	/**
+	 * GMT date formatter
+	 */
+	public static java.text.SimpleDateFormat gmtFormat;
+	static	{
+		gmtFormat = new java.text.SimpleDateFormat( "E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+		gmtFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
 }

@@ -68,18 +68,16 @@ public class HttpParser {
 	 * java Properties' key - value pairs
 	 * NOTE: HTTP request's body part will be ignored
 	 **/
-	public boolean parseHttpHead(final Scanner input) {
-		try{
-			if ( input == null){
+	public boolean parseHttpHead(final String input) {
+		try {
+			if ( input == null) {
 				logger.addLine(TAG+"Input is empty!");
 				return false;
 			}
-
 			methodProperty.clear();
 			headerProperty.clear();
-
 			//Decode the header into params and header java properties
-			if  (!parseRequest(input)){
+			if  (!parseRequest(input)) {
 				return false;
 			}
 			return true;		
@@ -92,25 +90,19 @@ public class HttpParser {
 	/**
 	 * Decodes the received headers and loads data into java Properties' key - value pairs
 	 **/
-	private  boolean parseRequest(final Scanner input) throws InterruptedException	{
-		// Read the request line
-		String inLine = null;
-		if (input.hasNextLine()) {
-			inLine = input.nextLine();
-		}else {
-			return false;
-		}		
-
+	private  boolean parseRequest(String inLine) throws InterruptedException	{		
 		logger.addLine(TAG+"Server input method: "+ inLine);
-
-		if  (parseMethod(inLine)){
+		StringTokenizer token= new StringTokenizer(inLine, "+");
+		
+		if  (!parseMethod(token.nextToken())) {
 			return false;
 		}
 		// If there's another token, it's protocol version, followed by HTTP headers
 		// example: Header1: value1
 		// Header2: value2
-		while (input.hasNextLine()) {
-			String line = input.nextLine();
+		
+		while (token.hasMoreTokens()) {
+			String line = token.nextToken();
 			if (line.trim().length() > 0) {
 				logger.addLine(TAG+"Parse head "+ line);
 				int separatorPosition = line.indexOf(':');
@@ -156,10 +148,7 @@ public class HttpParser {
 		String httpVersion= stringTokens.nextToken();
 		methodProperty.put("version", httpVersion);
 
-		if ( stringTokens.hasMoreTokens()){
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	/**

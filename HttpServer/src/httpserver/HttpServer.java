@@ -13,18 +13,18 @@ import java.text.DateFormat;
 
 class CPeer {
 	public Socket socket;
-	public DataOutputStream outputStream;
+	public PrintWriter printWriter;
 	public Scanner scanner;
 	public int id;
 	public int port;
 	public HashSet<String> files;
 
-	CPeer(final Socket socket, final int id, final int port) {
+	CPeer(Socket socket, final int id, final int port) {
 		try{
 			this.socket = socket;
 			this.id = id;
-			this.port = port;			
-			outputStream = new DataOutputStream(socket.getOutputStream());
+			this.port = port;
+			printWriter = new PrintWriter(socket.getOutputStream());
 			scanner = new Scanner(socket.getInputStream());
 			files = new HashSet<String>();
 		}
@@ -103,24 +103,34 @@ class TrackerThread extends Thread {
 
 	private CPeer peer = null;
 	private Logger logger = null;
+	private HttpParser parser = null;
 
-	public TrackerThread(Logger logger, final Socket socket, final int id) {
+	public TrackerThread(Logger logger, Socket socket, final int id) {
 		super();
 		// register a new peer        
 		peer = new CPeer(socket, id, 0);
 		this.logger = logger;
 		logger.addLine("Add a peer, id: " + peer.id + " IP: " + socket.getInetAddress());
-
+		parser = new HttpParser(logger);
 		start();
 	}
-	
+
 	public void run() {
 		try {   
 			while (true) {
-				if  (peer.scanner. hasNextLine()){
+				if  (peer.scanner.hasNextLine()){
 					logger.addLine("Get message from client,  clientId: " + peer.id+"\n");
-					HttpParser parser = new HttpParser(logger);
-					parseClientRequest(parser);
+					StringBuffer buffer = new StringBuffer();
+					String readedLine = peer.scanner.nextLine();
+					buffer.append(readedLine);
+					while (readedLine.compareTo("END") !=  0) {
+						//Read the request line
+						readedLine = peer.scanner.nextLine();
+						if (readedLine.compareTo("END") !=  0) {
+							buffer.append("+"+readedLine);
+						}												
+					}
+					parseClientRequest(buffer.toString());
 					sendResponse(parser);
 				}
 			}
@@ -132,40 +142,53 @@ class TrackerThread extends Thread {
 	private boolean sendResponse(HttpParser parser) {
 		try {
 			HttpResponse response = new HttpResponse(logger);
+
+			if (parser.getMethod() == null) {
+				return false;
+			}
 			response.PrintProperties(parser.getMethosProperty("uri"), parser.getMethod(), parser.getHeadProperty(), null);
-			
+
 			String errorMessage = parser.getErrorText();
 			if (errorMessage != null) {
 				String responseText = response.setResponseText(errorMessage, HttpResponse.MIME_PLAINTEXT, null);
 				sendMessageToClient(responseText);
+				return false;
 			}
-			
+
+			if (!(parser.getMethod().equals("PING") || parser.getMethod().equals("GET"))) {
+				String responseText = response.setResponseText(HttpResponse.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);
+				sendMessageToClient(responseText);
+				return false;
+			}
+
+			if (parser.getMethod().equals("PING")) {
+				String responseText = response.setResponseText("PONG", null, null);
+				System.out.println("uzenet a kliensnek");
+				sendMessageToClient(responseText);
+				return true;
+			}
+
 			String responseText = response.setResponseText(HttpResponse.HTTP_OK, HttpResponse.MIME_PLAINTEXT, null);
-			sendMessageToClient(responseText);			
-			
+			sendMessageToClient(responseText);
+			return true;
 		}catch (Exception e){
 			logger.addLine("response error: " + e.getMessage());
 		}
-		
+
 		return false;
 	}
-	
+
 	private boolean sendMessageToClient(final String message) {
-		try {
-			peer.outputStream.writeChars(message);
-			peer.outputStream.flush();
-			return true;
-		} catch (IOException e) {
-			logger.addLine("Message sending exception: " + e.getMessage()+" (Peer id " + peer.id+" )");
-		}		
-		return false;
+		peer.printWriter.println(message);
+		peer.printWriter.flush();
+		return true;
 	}
-	
-	private void parseClientRequest(HttpParser parser) {		
+
+	private void parseClientRequest(String readedLine) {		
 		//Read the http request from the client from the socket interface into a buffer.
-		parser.parseHttpHead(peer.scanner);
+		parser.parseHttpHead(readedLine);
 	}
-		
+
 	private void parser() {
 		/*      if (str.length() != 0){
 
@@ -302,7 +325,7 @@ class TrackerThread extends Thread {
          }
 		 */
 	}
-	
+
 	/*
     private CFile AddFile(CFile file) {
         for (CFile fi : TrackerThread.files){
@@ -329,23 +352,23 @@ public class HttpServer {
 	private static final int SERVER_PORT = 13000;
 	private static final String TAG = "HTTP_Server: ";
 
-	private ServerSocket serverSocket = null;
-	private Logger logger = null;
-	private int activeConnections;
+	private static ServerSocket serverSocket = null;
+	private static Logger logger = null;
+	private static int activeConnections;
 
-	public void decreaseConnectounCount() {
+	public static  void decreaseConnectounCount() {
 		if  (activeConnections > 0) {
 			--activeConnections;
 			logger.addLine(TAG+" decrease connections: "+ activeConnections);
 		}
 	}
 
-	public void inreaseConnectounCount() {		
+	public static void inreaseConnectounCount() {		
 		++activeConnections;
 		logger.addLine(TAG+" increase connections: "+ activeConnections);
 	}
 
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		activeConnections = 0;
 		logger = new Logger();
 		logger.Init("");
@@ -361,8 +384,8 @@ public class HttpServer {
 				//and print it to log
 				logger.addLine(TAG+client.getHostName() + " connected to server.\n");
 				// start thread for handling a client
-	             new Thread(new TrackerThread(logger, socket, activeConnections));
-	             inreaseConnectounCount();
+				new Thread(new TrackerThread(logger, socket, activeConnections));
+				inreaseConnectounCount();
 			}
 		} catch (Exception e) {
 			System.out.println("Thread hiba: " + e.getMessage());
@@ -377,5 +400,5 @@ public class HttpServer {
 			}
 		}
 	}
-	
+
 }

@@ -896,8 +896,156 @@ Fejlesztői dokumentáció
 Mobilhálózatok bemutatása
 \end_layout
 
+\begin_layout Standard
+Cellular concepts See also: Cellular network
+\end_layout
+
+\begin_layout Standard
+A multi-directional, cellular network antenna array In December 1947, Douglas
+ H.
+ Ring and W.
+ Rae Young, Bell Labs engineers, proposed hexagonal cells for mobile phones
+ in vehicles.[12] Philip T.
+ Porter, also of Bell Labs, proposed that the cell towers be at the corners
+ of the hexagons rather than the centers and have directional antennas that
+ would transmit/receive in three directions (see picture at right) into
+ three adjacent hexagon cells on three different frequencies.[13] At this
+ stage, the technology to implement these ideas did not exist, nor had the
+ frequencies been allocated.
+ Several years would pass before Richard H.
+ Frenkiel and Joel S.
+ Engel of Bell Labs developed the electronics to achieve this in the 1960s.
+\end_layout
+
+\begin_layout Standard
+In all these early examples, a mobile phone had to stay within the coverage
+ area serviced by one base station throughout the phone call, i.e.
+ there was no continuity of service as the phones moved through several
+ cell areas.
+ The concepts of frequency reuse and handoff, as well as a number of other
+ concepts that formed the basis of modern cell phone technology, were described
+ in the 1970s.
+ In 1970 Amos E.
+ Joel, Jr., a Bell Labs engineer,[14] invented an automatic "call handoff"
+ system to allow mobile phones to move through several cell areas during
+ a single conversation without interruption.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Handheld mobile phone
+\end_layout
+
+\begin_layout Standard
+Prior to 1973, mobile telephony was limited to phones installed in cars
+ and other vehicles.[14] Motorola and Bell Labs raced to be the first to
+ produce a handheld mobile phone.
+ That race ended on April 3, 1973 when Martin Cooper, a Motorola researcher
+ and executive, made the first mobile telephone call from handheld subscriber
+ equipment, placing a call to Dr.
+ Joel S.
+ Engel of Bell Labs.[3][4] The prototype handheld phone used by Dr.
+ Cooper weighed 2.5 pounds and measured 9 inches long, 5 inches deep and
+ 1.75 inches wide.
+ The prototype offered a talk time of just 30 minutes and took 10 hours
+ to re-charge.[5]
+\end_layout
+
+\begin_layout Standard
+John F.
+ Mitchell,[6][7][8] Motorola's chief of portable communication products
+ and Cooper's boss in 1973, played a key role in advancing the development
+ of handheld mobile telephone equipment.
+ Mitchell successfully pushed Motorola to develop wireless communication
+ products that would be small enough to use anywhere and participated in
+ the design of the cellular phone.[9][10]
+\end_layout
+
 \begin_layout Subsection
-Mobilhálózatokban használt kifejezések definíciója
+Mobilhálózatokban használt kifejezések leírása
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Hozzáférési Technológiák
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+FDMA
+\series default
+: Frequency Division Multiple Access a leggyakoribb analóg rendszer.
+ Ez a technika a spektrum frekvencia tartományokra való feldarabolásán alapszik
+ és egy frekvencia sávot allokál egy felhasználóhoz.
+ Egy csatornát egy időben csak egy előfizető használhat.
+ Egy csatorna így lezárul a beszélgetés idejére más felhasználók elől, amíg
+ le nem teszik, vagy át nem adódik a beszélgetés egy másik csatornára.
+ A "full-duplex" FDMA átvitelnek két csatornára van szüksége, egy az adatok
+ küldésére és egy másik a fogadására.
+ FDMA technikát az első generációs analóg rendszerekben használták.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+TDMA
+\series default
+: Time Division Multiple Access nagyobb kapacitásra volt képes, mert az
+ egyes frekvenciákat időszeletekre (time slot) osztotta.
+ TDMA rendszerben a felhasználók az egész frekvencia tartományt használhatták,
+ több felhasználó osztozott ugyanazon a frekvencia csatornán amiből egy-egy
+ időszeletet kaptak.
+ TDMA a második generációs mobil hálózatok domináns technológiája.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+CDMA
+\series default
+: Code Division Multiple Access szórt spektrumú technológián alapul.
+ Titkosított adat átvitelt is lehetővé tette, ezért régóta használják katonai
+ célokra.
+ CDMA megnövelte a spektrum teljesítő képességét azzal, hogy a felhasználók
+ az összes csatornát használhatják egy időben.
+ Az adások az egész hullámsávot kihasználják, és minden hang vagy adat híváshoz
+ egy egyedi kód tartozik, ami megkülönböztethetővé teszi egymástól a hívásokat.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Mobil hálózati szabványok
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+PSTN
+\series default
+ (public switched telephone network) is the network of the world's public
+ circuit-switched telephone networks.
+ It consists of telephone lines, fiber optic cables, microwave transmission
+ links, cellular networks, communications satellites, and undersea telephone
+ cables, all inter-connected by switching centers, thus allowing any telephone
+ in the world to communicate with any other.
+ Originally a network of fixed-line analog telephone systems, the PSTN is
+ now almost entirely digital in its core and includes mobile as well as
+ fixed telephones.
+\end_layout
+
+\begin_layout Standard
+The technical operation of the PSTN utilizes standards created by the ITU-T.
+ These standards allow different networks in different countries to interconnect
+ seamlessly.
+ There is also a single global address space for telephone numbers based
+ on the E.163 and E.164 standards.
+ The combination of the interconnected networks and the single numbering
+ plan make it possible for any phone in the world to dial any other phone.
 \end_layout
 
 \begin_layout Standard
@@ -920,23 +1068,6 @@ GSM
 \begin_layout Standard
 
 \series bold
-WAP
-\series default
- (Wireless Application Protocol): egy sztenderd technika a mobil vezetéknélküli
- hálozatokon keresztül történő információ cserének.
- A WAP böngésző egy webböngésző a mobil készülékekhez.
- A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
- az interaktiv adat szolgáltatásra.
- Interaktivitást követelt az Internet és Web alkalmazások támogatása pl:
- Email kezelés mobil készüléken, tőzsdei árak vagy a sporteredmények követése.
- A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
-bilitást a WAP és más különböző hálozati technológiák között, mint a GSM
- és a CDMA.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
 GPRS 
 \series default
 (General Packet Radio Service): csomagkapcsolt szolgáltatás 2G és 3G kommunikáci
@@ -944,7 +1075,7 @@ GPRS
  A GPRS-t az ETSI szabványosította, napjainkban a 3GPP (3rd Generation Partnersh
 ip Project) tartja karban a szabványt.
  A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
- mértéke rendszert egyidejüleg használók számától függ.
+ mértéke rendszert egyidejűleg használók számától függ.
  A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége(Quality
  of Service) biztositott a kapcsolat ideje alatt.
  2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
@@ -964,10 +1095,10 @@ EDGE
  mobil telefon technológia, ami nagyobb adat átviteli sebességet tesz lehetővé.
  EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.A 3GPP szabványosíto
 tta és GSM család részévé vált.
- Kifinomult kódolási eljárások bevezétésének köszönhetően megnőtt a rádio
- csatornánként elérhető bitráta, háromszoros kapacitás és teljesitmény beli
+ Kifinomult kódolási eljárások bevezetésének köszönhetően megnőtt a rádió
+ csatornánként elérhető bitráta, háromszoros kapacitás és teljesítmény beli
  növekedést eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
- A továbbfejlesztett EDGE kissebb késést és több mint kétszeres teljesítmény
+ A továbbfejlesztett EDGE kisebb késést és több mint kétszeres teljesítmény
  növekedést biztosít.
  A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
 \end_layout
@@ -975,55 +1106,246 @@ tta és GSM család részévé vált.
 \begin_layout Standard
 
 \series bold
-Hozzáférési Technológiák
+W-CDMA
+\series default
+ (Wideband Code Division Multiple Access) egy 3G mobil hálózati rádiós interfész
+ sztenderd.
+ A leggyakrabban használt tagja az Universal Mobile Telecommunications System
+ (UMTS) családnak és néha az UMTS szinonímájaként használják.
+ A DS-CDMA csatorna hozzáférési és FDD duplex módszereket alkalmazza, hogy
+ nagyobb sebességre legyen képes és több felhasználót tudjon kiszolgálni
+ a TDMA and TDD (time division duplex) rendszerekhez képest.
+ Ugyanazt a központi hálózatot hasnzálja, mint a 2G GSM hálózat.
+ 
+\end_layout
+
+\begin_layout Standard
+Code Division Multiple Access kommunikációs hálózat sok cég közremüködésével
+ jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
+ a Qualcomm dominált.
+ Qualcomm volt az első cég, akinek sikerült alkalmazható és kötséghatékony
+ megoldást találnia: ez volt a korai IS-95 rádió interface sztenderd, melyből
+ a CDMA2000 (IS-856/IS-2000) fejlődött ki.
+ CDMA2000 hálózatok széleskörben elterjedtek különösen Amerikában.
+ Azonban az eltérő követelmények és felépítés megakadályozta a globális
+ elterjedését.
+ A a meglévő rádiós interfészekkel való inkompatibilitás és a nagy költséggel
+ járó fejleszthetőség ellenére a W-CDMA egy meghatározó szabvánnyá vált.
+\end_layout
+
+\begin_layout Standard
+A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
+ vagy több pár 1.25 MHz radió csatornát.
+ Habár a W-CDMA szintén CDMA átviteli technikát alaklamaz akár a CDMA2000,
+ a W-CDMA nem egyszerüen egy széles sávú verziója a CDMA2000-nak.
+ Mérnöki szempontból a W-CDMA különböző optimalizálási lehetőséget nyújt
+ költség, kapacitás, teljesítmény,és tömörség között.
+ Jobban telepíthető Európa és Ázsia sűrün lakott városaiba.
+ Specifikációk egész halmazát tartalmazza, melyek részletesen definiálják
+ a protokolokat, hogy hogyan komunikáljanak a készülékek a tornyokkal, hogyan
+ kell modulálni a szignálokat, hogy kell az adatokat strukturálni stb.
 \end_layout
 
 \begin_layout Standard
 
 \series bold
-FDMA
+UMTS
 \series default
-: Frequency Division Multiple Access (FDMA) is the most common analog system.
- It is a technique whereby spectrum is divided up into frequencies and then
- assigned to users.
- With FDMA, only one subscriber at any given time is assigned to a channel.
- The channel therefore is closed to other conversations until the initial
- call is finished, or until it is handed-off to a different channel.
- A "full-duplex" FDMA transmission requires two channels, one for transmitting
- and the other for receiving.
- FDMA has been used for first generation analog systems.
+ (The Universal Mobile Telecommunications System) harmadik generációs mobil
+ hálózati rendszer.
+ A 3GPP (3rd Generation Partnership Project) fejlesztette ki és tartja karban.
+ W-CDMA hozzáférési technológiát használ a jobb hálózat kihasználtság és
+ sávszélesség miatt.
+ UMTS specifikál egy teljes hálózati rendszert, melybe beletartozik a hozzáférés
+i hálózat (UMTS Terrestrial Radio Access Network, UTRAN), a központi hálózat
+ (core network) és a felhasaználók SIM általi azonositása.
+ Az EDGE és a CDMA2000 ellentétben az UMTS új bázis állomást és frekvencia
+ allokáicós módszert igényel.
+\end_layout
+
+\begin_layout Standard
+Az UMTS által támogatott maximális adat átviteli ráta 42 Mbit/s, ha HSPA+
+ alkalmaznak a hálozatban és 7.2 Mbit/s HSDPA hasznélat esetén.
+ Ezek a sebességek szignifikánsan gyorsabbak , mint a GSM 9.6 kbit/s-os hibajavit
+ásos conalkapcsolt adatátvitele, vagy a CDMAOne csatornák 14.4 kbit/s rátája.
+\end_layout
+
+\begin_layout Standard
+2006 óta UMTS hálozatokat számos országban deljavították a High Speed Downlink
+ Packet Access (
+\series bold
+HSDPA
+\series default
+) technikával, melyet néha 3.5G néven emlegetnek.
+ HSDPA segítségével a letöltési sebesség elérheti a 21 Mbit/s-ot.
+ A feltöltési sebbeség javítását támogató technológia a High-Speed Uplink
+ Packet Access (
+\series bold
+HSUPA
+\series default
+).
+ Az első UMTS hálozatot 2002-ben inditották be, nagy hangsúlyt fektetve
+ az olyan mobil alkalmazásokra, mint a mobil TV és videóhívás.A nagy adat
+ átviteli sebességet gyakran Internet elérésre hasnzálják: Japánban és máshol
+ is azt tapasztalták, hogy a felhasnzálóknak nincs nagy igényük a videóhívásokra
+, és a telekom társaság által nyújtott audió/videó tartalomra is csökkent
+ az igény a nagy sebességű internet hozzáférés miatt.
 \end_layout
 
 \begin_layout Standard
 
 \series bold
-TDMA
+LTE
 \series default
-: Time Division Multiple Access (TDMA) improves spectrum capacity by splitting
- each frequency into time slots.
- TDMA allows each user to access the entire radio frequency channel for
- the short period of a call.
- Other users share this same frequency channel at different time slots.
- The base station continually switches from user to user on the channel.
- TDMA is the dominant technology for the second generation mobile cellular
- networks.
+ (long-term evolution) marketed as 4G LTE, is a standard for wireless communicat
+ion of high-speed data for mobile phones and data terminals.
+ It is based on the GSM/EDGE and UMTS/HSPA network technologies, increasing
+ the capacity and speed using a different radio interface together with
+ core network improvements.[1][2] The standard is developed by the 3GPP (3rd
+ Generation Partnership Project) and is specified in its Release 8 document
+ series, with minor enhancements described in Release 9.
+\end_layout
+
+\begin_layout Standard
+The world's first publicly available LTE service was launched by TeliaSonera
+ in Oslo and Stockholm on December 14 2009.[3] LTE is the natural upgrade
+ path for both carriers with GSM/UMTS networks and for CDMA holdouts such
+ as Verizon Wireless, who launched the first large-scale LTE network in
+ North America in 2010,[4][5] and au by KDDI in Japan have announced they
+ will migrate to LTE.
+ LTE is, therefore, anticipated to become the first truly global mobile
+ phone standard, although the use of different frequency bands in different
+ countries will mean that only multi-band phones will be able to use LTE
+ in all countries where it is supported.
+\end_layout
+
+\begin_layout Standard
+Although marketed as a 4G wireless service, LTE as specified in the 3GPP
+ Release 8 and 9 document series does not satisfy the technical requirements
+ the 3GPP consortium has adopted for its new standard generation, and which
+ were originally set forth by the ITU-R organization in its IMT-Advanced
+ specification.
+ However due to marketing pressures and the significant advancements that
+ WIMAX, HSPA+ and LTE bring to the original 3G technologies, ITU later decided
+ that LTE together with the aforementioned technologies can be called 4G
+ technologies.
+ [6] The LTE Advanced standard formally satisfies the ITU-R requirements
+ to be considered IMT-Advanced.[7] And to differentiate LTE-Advanced and
+ Wimax-Advanced from current 4G technologies, ITU has defined them as "True
+ 4G
 \end_layout
 
 \begin_layout Standard
 
 \series bold
-CDMA
+Mobil hálózat szolgáltatások, technológiák
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+SIM
 \series default
-: Code Division Multiple Access is based on "spread" spectrum technology.
- Since it is suitable for encrypted transmissions, it has long been used
- for military purposes.
- CDMA increases spectrum capacity by allowing all users to occupy all channels
- at the same time.
- Transmissions are spread over the whole radio band, and each voice or data
- call are assigned a unique code to differentiate from the other calls carried
- over the same spectrum.
- CDMA allows for a " soft hand-off" , which means that terminals can communicate
- with several base stations at the same time.
+ (Subscriber Identity Module): Az egyik fő jellemzője a GSM-nek a SIM bevezetése
+, a legtöbben SIM kárty néven ismerik.
+ A SIM egy cserélhető okos kártya, mely az előfizető információt és a telefonkön
+yvet tartalmazza.
+ Lehetővé teszi a felhasználónak, hogy információkat tároljon és egy másik
+ telefonban is fel tudja használni azokat.
+ Ezentúl lehetővé teszi, hogy szolgáltatót váltson a felhasználó a készülék
+ lecserélése nélkül, mivel csak SIM kártyát kell lecserélnie.
+ Néhány operátor blockolja ezt a lehetőséget a SIM lezárásával, ez esetben
+ a készülék csak az adott szolgáltató kártyáját fogadja el.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+WAP
+\series default
+ (Wireless Application Protocol): egy sztenderd technika a mobil vezeték
+ nélküli hálózatokon keresztül történő információ cserének.
+ A WAP böngésző egy webböngésző a mobil készülékekhez.
+ A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
+ az interaktív adat szolgáltatásra.
+ Interaktivitást követelt az Internet és Web alkalmazások támogatása pl:
+ Email kezelés mobil készüléken, tőzsdei árak vagy a sporteredmények követése.
+ A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
+bilitást a WAP és más különböző hálózati technológiák között, mint a GSM
+ és a CDMA.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Roaming
+\series default
+ egy általános kifejezés a mobil szolgáltatás kiterjesztésére oylan helyre,
+ amely különbözik a szolgáltatás regisztrált heléytől.
+ Roaming biztosítja a kapcsolatot vezeték nélküli eszköz és a hálózat között,
+ a kapcsolat elvesztése nélkül.
+ Hagyományos GSM Roaming definició szerint (cf.
+ GSM Association Permanent Reference Document AA.39) a cella felhasználó
+ képes automatikusan hívást indítani és fogadni, adatokat küldeni és fogadni,
+ vagy más szolgáltatásokhoz kapcsolódni, miközben utazik, elhagyja a hazai
+ szolgáltatás által lefedett területet.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Handover
+\series default
+ kifejezés (vagy handoff) arra a folyamatra utal, mikor egy folyamatban
+ lévő hívást, vagy adat folyamot átviszünk az egyik csatornáról a másikra.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Mobil hálózat elemei
+\end_layout
+
+\begin_layout Standard
+MS
+\end_layout
+
+\begin_layout Standard
+BSC
+\end_layout
+
+\begin_layout Standard
+RNC
+\end_layout
+
+\begin_layout Standard
+Node-b
+\end_layout
+
+\begin_layout Standard
+VLR
+\end_layout
+
+\begin_layout Standard
+HLR
+\end_layout
+
+\begin_layout Standard
+MMGW
+\end_layout
+
+\begin_layout Standard
+SGSN
+\end_layout
+
+\begin_layout Standard
+GGSN
+\end_layout
+
+\begin_layout Standard
+MSC
 \end_layout
 
 \begin_layout Subsection
@@ -1052,7 +1374,7 @@ Első generáció
 
 \begin_layout Standard
 Első generációs mobil rendszer az AMPS (Advance mobile phone system), melyet
- először az Egysült államokban vezették be.
+ először az Egyesült államokban vezették be.
  Ez az egyik legjobb FDMA (Frequency Division Multiple Access) technológia,
  mely lehetővé teszi, hogy hanghívást bonyolíthat az egész országban.
 \end_layout
@@ -1068,7 +1390,7 @@ Második generáció
  ki.
  Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak.
  GSM (Global system for mobile communication) volt az első kereskedelemben
- működtetett digitális cellás rendszerm, mely TDMA (Time division multiple
+ működtetett digitális cellás rendszer, mely TDMA (Time division multiple
  acces) alapú.
 \end_layout
 
@@ -1082,12 +1404,12 @@ Harmadik generáció
 
 \begin_layout Standard
 3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefon hálózatok
- operátoraitol.
+ operátoraitól.
  A fejlesztés 1996-ban kezdődött a Nippon Telephone & Telegraph (NTT) és
  az Ericsson vezetésével; 1997-ben az amerikai Telecommunications Industry
- Association (TIA) a CDMA-t választotta 3G technologiájának; 1998-ban az
+ Association (TIA) a CDMA-t választotta 3G technológiájának; 1998-ban az
  European Telecommunications Standards Institute (ETSI) ugyan ezt tette
- és végül a szélessávú CDMA (W-CDMA) és a cdma2000 adaptálták az UMTS-hez
+ és végül a széles sávú CDMA (W-CDMA) és a cdma2000 adaptálták az UMTS-hez
  (Universal Mobile Telecommunications System).
  W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
  A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
@@ -1140,6 +1462,276 @@ A hálózatok vizsgált adatai
 \begin_layout Standard
 A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
  értékhatárokkal
+\end_layout
+
+\begin_layout Standard
+The table below shows the data speeds achievable with each technology.
+ As can be seen, with each progression to 3G and beyond, the data rates
+ obtainable is increasing, allowing even more bandwidth intensive services
+ to be introduced.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="2">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Technológia
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adatráta
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GSM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.6Kbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GSM/GPRS 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40Kbps-144Kbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+EDGE 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+474Kbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+UMTS (WCDMA) 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+384Kbps-2Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA-One 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.6Kbps-76.8Kpbs
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 1x EV-DO 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+384Kbps – 2.4Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 1x EV-DV
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.09Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 3x
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2Mbps – 4Mbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+HSDPA 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8Mbps – 10Mbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+VSF-OFCDM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+le 100 Mbpsm, fel 20 Mbps.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Technológia és elérhető adatráták
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section

@@ -24,11 +24,7 @@ public class HttpResponse {
 
 	// Some HTTP response status codes	
 	public static final String
-	HTTP_OK = "200 OK",
-	HTTP_PARTIALCONTENT = "206 Partial Content",
-	HTTP_RANGE_NOT_SATISFIABLE = "416 Requested Range Not Satisfiable",
-	HTTP_REDIRECT = "301 Moved Permanently",
-	HTTP_NOTMODIFIED = "304 Not Modified",
+	HTTP_OK = "200 OK",	
 	HTTP_FORBIDDEN = "403 Forbidden",
 	HTTP_NOTFOUND = "404 Not Found",
 	HTTP_BADREQUEST = "400 Bad Request",
@@ -81,7 +77,7 @@ public class HttpResponse {
 		}
 		responseString.append("\r\n");
 		logger.addLine(TAG+"response text:" + responseString);
-		
+
 		return responseString.toString();
 	}
 
@@ -99,11 +95,13 @@ public class HttpResponse {
 			logger.addLine(TAG +"  Header: '" + value + "' = '" + header.getProperty(value) + "'" );
 		}
 
-		enumElements = files.propertyNames();
-		while (enumElements.hasMoreElements()) {
-			String value = (String)enumElements.nextElement();
-			logger.addLine(TAG +"  File: '" + value + "' = '" + files.getProperty(value));
-		}	
+		if ( files != null) {	
+			enumElements = files.propertyNames();
+			while (enumElements.hasMoreElements()) {
+				String value = (String)enumElements.nextElement();
+				logger.addLine(TAG +"  File: '" + value + "' = '" + files.getProperty(value));
+			}	
+		}
 	}		
 
 	private void addHeaderValue(final String name, final  String value, Properties header) {
