@@ -11,6 +11,7 @@ public class FileInstance {
 	public Set<Packet> pieces;
 
 	private Logger logger;
+	public static final int DEFAULT_SIZE = 10; 
 	
 	public FileInstance(Logger logger) {
 		this.logger = logger;

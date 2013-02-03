@@ -1,7 +1,6 @@
 package httpclient;
 
 import http.filehandler.Logger;
-import http.filehandler.Utility;
 
 import java.io.IOException;
 import java.io.PrintWriter;

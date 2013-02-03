@@ -1,13 +1,15 @@
 
 package httpserver;
 
-import http.filehandler.FileInstance;
+import http.filehandler.HttpFileHandler;
 import http.filehandler.Logger;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import java.text.DateFormat;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashSet;
+import java.util.Scanner;
 
 /**
  *
@@ -19,9 +21,8 @@ class Client {
 	public PrintWriter printWriter;
 	public Scanner scanner;
 	public int id;
-	public int port;
-	public HashSet<String> files;
-
+	public int port;	
+	
 	Client(Socket socket, final int id, final int port) {
 		try{
 			this.socket = socket;
@@ -40,16 +41,18 @@ class ServerThread extends Thread {
 	private Client client = null;
 	private Logger logger = null;
 	private HttpParser parser = null;
-	private HashSet<FileInstance> files;
-
+	
+	private HttpFileHandler fileHandler; 
+	
 	public ServerThread(Logger logger, Socket socket, final int id) {
 		super();
 		// register a new peer
 		client = new Client(socket, id, 0);
 		this.logger = logger;
+		fileHandler = new HttpFileHandler(logger);
+		fileHandler.AddFile("test.txt");
 		logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
-		parser = new HttpParser(logger);
-		files = new  HashSet<FileInstance>();
+		parser = new HttpParser(logger);		
 		start();
 	}
 
@@ -73,7 +76,7 @@ class ServerThread extends Thread {
 					if (parser.getMethod().equals("GET")){						
 						// .. fogado szál inditása
 					}else if (parser.getMethod().equals("SEND")){
-						if (isFileInSet(parser.getMethodProperty("URI"))){
+						if (fileHandler.isFileInSet(parser.getMethodProperty("URI"))){
 							// küldö szál inditása							
 						}
 					}
@@ -83,14 +86,7 @@ class ServerThread extends Thread {
 			logger.addLine("ERROR in run() " + e.getMessage()+" (client id " + client.id+" )");
 		} 
 	}
-
-	private boolean isFileInSet(final String name) {
-		for (FileInstance fi : files){
-			if (fi.name.equals(name))                
-				return true;
-		}
-		return false;
-	}
+	
 	private boolean sendResponse(HttpParser parser) {
 		try {
 			HttpResponse response = new HttpResponse(logger);
@@ -137,22 +133,6 @@ class ServerThread extends Thread {
 	private void parseClientRequest(String readedLine) {		
 		//Read the http request from the client from the socket interface into a buffer.
 		parser.parseHttpHead(readedLine);
-	}
-
-	private FileInstance AddFile(final String fileName) {
-		if (fileName == null){
-			logger.addLine("fileName is empty!");
-			return null;
-		}
-		for (FileInstance fi : files){
-			if (fi.name.equals(fileName))                
-				logger.addLine("File has already added: " + fileName);
-			return fi;
-		}
-		logger.addLine("reg new file: " + fileName);
-		FileInstance file = new FileInstance(logger, fileName);
-		files.add(file);
-		return file;
 	}
 }
 
