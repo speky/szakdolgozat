@@ -1,6 +1,7 @@
-package httpserver;
+package http.filehandler;
 
 import static org.junit.Assert.*;
+
 import java.io.File;
 
 import org.junit.AfterClass;
@@ -10,7 +11,7 @@ import org.junit.Test;
 public class LoggerTest {
     @Before
     public void setUp() {
-    	File file = new File("trackerLog.txt");
+    	File file = new File("log.txt");
     	file.delete();
     	file = new File("log.txt");
     	file.delete();     
@@ -18,7 +19,7 @@ public class LoggerTest {
     
     @AfterClass
     public static void tearDown() {
-    	File file = new File("trackerLog.txt");
+    	File file = new File("log.txt");
     	file.delete();
     	file = new File("log.txt");
     	file.delete();
@@ -27,53 +28,42 @@ public class LoggerTest {
 
 	@Test
 	public void testMakeFileInstance() {
-		Logger logger = new Logger();
-		logger.makeFileInstance("");
-		File file = new File("trackerLog.txt");
-		assertTrue(file.exists());		
+		Logger logger = new Logger("");
+		File file = new File("log.txt");
+		assertTrue(file.exists());
+		logger.closeFile();
 	}
 	
 	@Test
 	public void testMakeFileInstanceSpecifiedPath() {
-		Logger logger = new Logger();
-		logger.makeFileInstance("log.txt");
+		Logger logger = new Logger("log.txt");
 		File file = new File("log.txt");
-		assertTrue(file.exists());		
-	}
-
-	@Test
-	public void testMakeFileWriter() {
-		Logger logger = new Logger();		
-		assertFalse(logger.makeFileWriter());
-		logger.makeFileInstance("");
-		assertTrue(logger.makeFileWriter());
+		assertTrue(file.exists());
 		logger.closeFile();
 	}
-
+	
 	@Test
-	public void testInit() {
-		Logger logger = new Logger();
-		assertTrue(logger.Init(""));
-		Logger logger2 = new Logger();
-		assertTrue(logger2.Init("log.txt"));
+	public void testCreateDouble() {
+		Logger logger = new Logger("");		
+		Logger logger2 = new Logger("log1.txt");
+		File file = new File("log.txt");
+		assertTrue(file.exists());
+		file = new File("log1.txt");
+		assertTrue(file.exists());
 		logger.closeFile();
 		logger2.closeFile();		
 	}
 
 	@Test
 	public void testAddLine() {
-		Logger logger = new Logger();	
-		assertFalse(logger.addLine("logText"));
-		logger.Init("");
+		Logger logger = new Logger("");		
 		assertTrue(logger.addLine("logText"));
 		logger.closeFile();
 	}
 
 	@Test
 	public void testDeleteLogFile() {
-		Logger logger = new Logger();	
-		assertFalse(logger.deleteLogFile());
-		logger.Init("test.txt");
+		Logger logger = new Logger("test.txt");		
 		assertTrue(logger.addLine("logText"));
 		assertTrue(logger.deleteLogFile());
 	}

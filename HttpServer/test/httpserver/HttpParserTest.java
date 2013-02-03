@@ -1,10 +1,7 @@
 package httpserver;
 
-import static org.junit.Assert.*;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Scanner;
+import static org.junit.Assert.assertTrue;
+import http.filehandler.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -15,8 +12,7 @@ private static Logger logger;
 
 	@BeforeClass
 	public static void prepare() {
-		logger = new Logger();
-		logger.Init("");
+		logger = new Logger("");		
 	}
 	
 	@AfterClass
@@ -41,7 +37,7 @@ private static Logger logger;
 		parser.parseHttpHead(str);
 		assertTrue(parser.getErrorText() == null);
 		
-		str = "HEAD 	/index.html 		HTTP*/1.0 \r\n";
+		str = "HEAD 	/index.html 		HTTP*/1.0 ";
 		parser.parseHttpHead(str);
 		assertTrue(parser.getErrorText() == null);
 				
@@ -101,9 +97,8 @@ private static Logger logger;
 	@Test
 	public void testParseHttpHeadProperty() {
 		HttpParser parser = new HttpParser(logger);
-		String str = "HEAD / HTTP*/1.0 \r\n from : zsolt@gmail.com\r\n\r\n";
+		String str = "HEAD / HTTP*/1.0 + from : zsolt@gmail.com";
 		assertTrue(parser.parseHttpHead(str));
-		System.out.println(parser.getErrorText());
 		assertTrue(parser.getErrorText()==null);
 		assertTrue(parser.getHeadSize() == 1);
 		assertTrue(parser.getHeadProperty("FROM").equals("zsolt@gmail.com"));
@@ -119,9 +114,10 @@ private static Logger logger;
 	@Test
 	public void testParseHttpHeadPropertyWithFileTag() {
 		HttpParser parser = new HttpParser(logger);	
-		String str = "GET / HTTP*/1.0\r\n file1 : UDP\r\n length	:1\r\n\r\n";
+		String str = "GET / HTTP*/1.0 + file1 : UDP+ length	:1";
 		parser.parseHttpHead(str);
 		assertTrue(parser.getMethod().equals("GET") );
+		System.out.println(parser.getHeadSize()); 
 		assertTrue(parser.getHeadSize() == 2);
 		String file = parser.getHeadProperty("FILE1");
 		assertTrue(file.equals("UDP"));

@@ -1,9 +1,9 @@
 package httpserver;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import http.filehandler.Logger;
 
 import java.util.Date;
-import java.util.Properties;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,8 +14,7 @@ public class HttpResponseTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {				
-			logger = new Logger();
-			logger.Init("");		
+			logger = new Logger("");			
 	}
 
 	@AfterClass
@@ -34,7 +33,7 @@ public class HttpResponseTest {
 		HttpResponse response = new HttpResponse(logger);
 		String date ="Date: "  + response.gmtFormat.format(new Date()) + "\r\n";
 		String out = response.setResponseText(HttpResponse.HTTP_BADREQUEST, null, null);		
-		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+date+"\r\n"));
+		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+date+"END\n"));
 	}
 	
 	@Test
@@ -42,7 +41,7 @@ public class HttpResponseTest {
 		HttpResponse response = new HttpResponse(logger);
 		String date ="Date: "  + response.gmtFormat.format(new Date()) + "\r\n";
 		String out = response.setResponseText(HttpResponse.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);		
-		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+"Content-Type: " + HttpResponse.MIME_PLAINTEXT + "\r\n"+date+"\r\n"));
+		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+"Content-Type: " + HttpResponse.MIME_PLAINTEXT + "\r\n"+date+"END\n"));
 	}
 
 }

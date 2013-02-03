@@ -1,4 +1,4 @@
-package httpserver;
+package http.filehandler;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -9,14 +9,16 @@ import java.util.Date;
 
 public class Logger {
 
-	private final String LOG_FILE_NAME = "trackerLog.txt";
+	private final String LOG_FILE_NAME = "log.txt";
 	private File file = null;
 	private FileWriter fileWriter = null;
 	private String fileName = null;
 
-
-	public void makeFileInstance(final String filePath){
-		if (filePath.equals("")){
+	public String getFilePath() {
+		return fileName;
+	}
+	private void makeFileInstance(final String filePath) {
+		if (filePath.equals("")) {
 			file = new File(LOG_FILE_NAME);
 			fileName = LOG_FILE_NAME;
 		}else{
@@ -30,7 +32,7 @@ public class Logger {
 		}
 	}
 
-	public boolean makeFileWriter(){
+	private boolean makeFileWriter(){
 		try {
 			if (file != null && fileWriter == null){
 				if (!file.canWrite()){
@@ -58,19 +60,16 @@ public class Logger {
 			}
 		}
 	}
-	public boolean Init(final String filePath){
+	public Logger(final String filePath){
 
 		makeFileInstance(filePath);
 		System.out.println("Log file: " + file.getAbsolutePath());
 		if (makeFileWriter()){
 			System.out.println("Log fileWriter created");			
 		}else{
-			System.out.println("Log fileWriter  created");
-			return false;
+			System.out.println("Log fileWriter  created");			
 		}
-		return true;		
-	}		
-
+	}	
 	public boolean addLine(final String logText){
 		try{
 			if (fileWriter != null){

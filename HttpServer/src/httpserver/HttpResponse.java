@@ -1,5 +1,8 @@
 package httpserver;
 
+
+import http.filehandler.Logger;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,7 +78,7 @@ public class HttpResponse {
 				responseString.append(key + ": " + value + "\r\n");
 			}
 		}
-		responseString.append("\r\n");
+		responseString.append("END\n");
 		logger.addLine(TAG+"response text:" + responseString);
 
 		return responseString.toString();

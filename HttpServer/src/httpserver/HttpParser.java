@@ -1,12 +1,9 @@
 package httpserver;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import http.filehandler.Logger;
+import http.filehandler.Utility;
+
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class HttpParser {
@@ -24,11 +21,11 @@ public class HttpParser {
 	}
 
 	public String getMethod(){
-		return methodProperty.getProperty("method") ;
+		return methodProperty.getProperty("METHOD") ;
 	}
 
 	public String getVersion(){
-		return methodProperty.getProperty("version") ;
+		return methodProperty.getProperty("VERSION") ;
 	}
 
 	public int getMethodSize(){
@@ -39,7 +36,7 @@ public class HttpParser {
 		return headerProperty.size();
 	}
 
-	public String getMethosProperty(final String tag){
+	public String getMethodProperty(final String tag){
 		if (methodProperty.containsKey(tag)){
 			return methodProperty.getProperty(tag) ;
 		}else{
@@ -99,8 +96,7 @@ public class HttpParser {
 		}
 		// If there's another token, it's protocol version, followed by HTTP headers
 		// example: Header1: value1
-		// Header2: value2
-		
+		// Header2: value2		
 		while (token.hasMoreTokens()) {
 			String line = token.nextToken();
 			if (line.trim().length() > 0) {
@@ -129,7 +125,7 @@ public class HttpParser {
 			return false;
 		}
 		String method = stringTokens.nextToken();
-		methodProperty.put("method", method.toUpperCase());
+		methodProperty.put("METHOD", method.toUpperCase());
 
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
@@ -137,8 +133,8 @@ public class HttpParser {
 			return false;
 		}
 		String uri = stringTokens.nextToken();
-		uri = decodePercent(uri);
-		methodProperty.put("uri", uri);
+		uri = Utility.decodePercent(uri);
+		methodProperty.put("URI", uri);
 
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
@@ -146,39 +142,8 @@ public class HttpParser {
 			return false;
 		}
 		String httpVersion= stringTokens.nextToken();
-		methodProperty.put("version", httpVersion);
+		methodProperty.put("VERSION", httpVersion);
 
 		return true;
-	}
-
-	/**
-	 * Decodes the percent encoding scheme. <br/>
-	 * For example: "an+example%20string" => "an example string"
-	 */
-	private String decodePercent(String str) throws InterruptedException	{
-		try	{
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < str.length(); ++i) {
-				char c = str.charAt(i);
-				switch ( c ) {
-				case '+':
-					sb.append( ' ' );
-					break;
-				case '%':
-					sb.append((char)Integer.parseInt( str.substring(i+1, i+3), 16));
-					i += 2;
-					break;
-				default:
-					sb.append( c );
-					break;
-				}
-			}
-			return sb.toString();
-		}
-		catch( Exception e ) {
-			errorText = HttpResponse.HTTP_BADREQUEST;
-			logger.addLine("BAD REQUEST: Bad percent-encoding");
-			return null;
-		}
 	}
 }
