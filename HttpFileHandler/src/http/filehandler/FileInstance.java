@@ -5,30 +5,25 @@ import java.util.Set;
 
 public class FileInstance {
 
-	public String name;
-	public  String hashId;
-	public  int count;
-	public Set<Packet> pieces;
+	private String fileName;
+	private String hashId;
+	private int count;
+	private Set<Packet> pieces;
 
 	private Logger logger;
 	public static final int DEFAULT_SIZE = 10; 
 	
-	public FileInstance(Logger logger) {
+	public FileInstance(Logger logger, final String name) {
 		this.logger = logger;
-		name = "";
+		this.fileName = name;
 		hashId = "";
 		count = 0;
 		pieces = new HashSet<Packet> ();
 	}
 
-	public FileInstance(Logger logger, final String name) {
-		this.logger = logger;
-		this.name = name;
-		this.hashId = "";
-		this.count = count;
-		pieces = new HashSet<Packet> ();
+	public String getName() {
+		return fileName;
 	}
-
 	public boolean SplitFileToPockets(final int packetSize) {
 		return true;
 	}

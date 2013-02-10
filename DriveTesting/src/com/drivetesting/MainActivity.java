@@ -72,7 +72,6 @@ public class MainActivity extends Activity  {
 	private String dataDirection= "";
 	private String networkType= "";
 
-
 	private void startSignalLevelListener() {
 		if (telephonyManager == null){  
 			telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -593,7 +592,8 @@ public class MainActivity extends Activity  {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		switch (item.getItemId())
+		int id = item.getItemId();
+		switch (id)
 		{
 		case R.id.menu_settings:
 			startActivity(new Intent(this, PrefsActivity.class));
@@ -607,6 +607,10 @@ public class MainActivity extends Activity  {
 			startActivity(new Intent(this, OSMActivity.class));
 			return true;
 
+		case R.id.test:
+			startActivity(new Intent(this, TestActivity.class));
+			return true;
+			
 		default:
 			return false;			
 		}

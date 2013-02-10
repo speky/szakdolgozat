@@ -10,6 +10,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *
@@ -76,7 +81,7 @@ class ServerThread extends Thread {
 					if (parser.getMethod().equals("GET")){						
 						// .. fogado szál inditása
 					}else if (parser.getMethod().equals("SEND")){
-						if (fileHandler.isFileInSet(parser.getMethodProperty("URI"))){
+						if (fileHandler.IsFileInSet(parser.getMethodProperty("URI"))){
 							// küldö szál inditása							
 						}
 					}
@@ -138,7 +143,7 @@ class ServerThread extends Thread {
 
 public class HttpServer {
 
-	private static final int SERVER_PORT = 13000;
+	private static final int SERVER_PORT = 4444;
 	private static final String TAG = "HTTP_Server: ";
 
 	private static ServerSocket serverSocket = null;
@@ -189,3 +194,43 @@ public class HttpServer {
 	}
 
 }
+ /*
+public class HttpServer {
+ 
+    private static ServerSocket serverSocket;
+    private static Socket clientSocket;
+    private static InputStreamReader inputStreamReader;
+    private static BufferedReader bufferedReader;
+    private static String message;
+ 
+    public static void main(String[] args) {
+ 
+        try {
+            serverSocket = new ServerSocket(4444);  //Server socket
+ 
+        } catch (IOException e) {
+            System.out.println("Could not listen on port: 4444");
+        }
+ 
+        System.out.println("Server started. Listening to the port 4444");
+ 
+        while (true) {
+            try {
+ 
+                clientSocket = serverSocket.accept();   //accept the client connection
+                inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
+                bufferedReader = new BufferedReader(inputStreamReader); //get the client message
+                message = bufferedReader.readLine();
+ 
+                System.out.println(message);
+                inputStreamReader.close();
+                clientSocket.close();
+ 
+            } catch (IOException ex) {
+                System.out.println("Problem in message reading");
+            }
+        }
+ 
+    }
+}*/
+
