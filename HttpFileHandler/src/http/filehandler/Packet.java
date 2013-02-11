@@ -14,6 +14,6 @@ public class Packet {
 		public Packet(String text, int length, int id) {
 			this.text = text;
 			this.id = id;
-			this.hashCode = Utility.calcSHA1(text);
+			this.hashCode = Utility.calcCheckSum(text.getBytes());
 		}	
 }

@@ -37,19 +37,16 @@ public class Utility {
 		}
 	}
 	
-	public static String calcSHA1(final String text) {
-	    String sha1 = "";
+	public static String calcCheckSum(final byte[]  bytes) {	    
 	    try {
-	        MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-	        crypt.reset();
-	        crypt.update(text.getBytes("UTF-8"));
-	        sha1 = byteToHex(crypt.digest());
-	        return sha1;
+	        MessageDigest md = MessageDigest.getInstance("SHA-256");
+	        md.reset();
+	        md.update(bytes);	        
+	        byte[] mdbytes = md.digest();
+	        return byteToHex(mdbytes);
 	    }   catch(NoSuchAlgorithmException e)  {
 	        e.printStackTrace();
-	    }  catch(UnsupportedEncodingException e) {
-	        e.printStackTrace();
-	    }
+	    } 
 	    return null;
 	}
 
