@@ -767,13 +767,59 @@ A szakdolgozatom célja egy
 
 drive testing" alkalmazás megvalósítása, egy kis költségvetésű mobil egység
  segítségével.
- Nagy előnye a programnak, hogy a teszt elvégzéséhez elég egy telefon.
+ Nagy előnye a programnak a meglévő mérésekkel szemben, hogy a teszt elvégzéséhe
+zelég egy mobiltelefon készülék.
  Az Android platform lehetőséget nyújt arra, hogy az alkalmazás információkat
- gyűjtsön a telefonról, a mobil hálózatról.
+ gyűjtsön a telefonról, valamint a mobilhálózatról.
  Ezen információk segítségével egy olyan program készíthető, amely képes
- részben vagy teljesen kiváltani a fent említett eljárást.
+ részben vagy teljesen kiváltani a jelenleg használt eljárásokat.
  Segítséget nyújt a telefonhálózat problémáinak felderítésében, fejlesztendő
  területek feltérképezésében.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement l
+overhang 0in
+width "70col%"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename globalDataTraffic.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Mobil adatforgalom 2012-2017
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Kimutatások szerint egyre növekszik a mobilhálózatok adatforgalma és 2017-re
+ elérheti a havi 11,2 exabájtnyi mennyiséget.
+ A mobil készülékek fejlődésével teret hódítanak a különféle szolgáltatások,
+ mint a video telefonálás, internetes böngészés, stb.
+ melyek növelik az adatforgalmat.
+ A felhasználók gyakrabban használják ezeket a szolgáltatásokat, mint a
+ hagyományos hanghívást.
+ Így a szolgáltatóknak is alkalmazdniuk kell a megváltozott igényekhez,
+ biztositaniuk kell a nagyobb lefedettséget és megbizható, gyors adatátvitelt.
  
 \end_layout
 
@@ -897,7 +943,7 @@ Mobilhálózatok bemutatása
 \end_layout
 
 \begin_layout Standard
-Cellular concepts See also: Cellular network
+Mobil hálózat kezdete:
 \end_layout
 
 \begin_layout Standard
@@ -1027,25 +1073,16 @@ Mobil hálózati szabványok
 \series bold
 PSTN
 \series default
- (public switched telephone network) is the network of the world's public
- circuit-switched telephone networks.
- It consists of telephone lines, fiber optic cables, microwave transmission
- links, cellular networks, communications satellites, and undersea telephone
- cables, all inter-connected by switching centers, thus allowing any telephone
- in the world to communicate with any other.
- Originally a network of fixed-line analog telephone systems, the PSTN is
- now almost entirely digital in its core and includes mobile as well as
- fixed telephones.
-\end_layout
-
-\begin_layout Standard
-The technical operation of the PSTN utilizes standards created by the ITU-T.
- These standards allow different networks in different countries to interconnect
- seamlessly.
- There is also a single global address space for telephone numbers based
- on the E.163 and E.164 standards.
- The combination of the interconnected networks and the single numbering
- plan make it possible for any phone in the world to dial any other phone.
+ (Public Switched Telephone Network) nyilvános vonalkapcsolt telefon hálózat.
+ Telefon vezetékek, optikai kábelek, mikrohullámú átviteli állomások, kommunikác
+iós műholdak és tengeralatti telefon kábelekkötik össze a kapcsolási központokat
+, hogy bármely telefon készülékkel fel vehessük a kapcoslatot a világon.
+ Eredetileg a hálózat analóg, vezetékes telefon rendszer volt, PSTN majdnem
+ telejesen digitális, mobil és vezetékes telefonokat is tartalmaz.Egyetlen
+ globális címtartománya van a telefonszámoknak, melyet a E.163 és E.164 szabványok
+ irnak le.
+ Az összekapcoslt hálózatok és az egységes számozásnak köszönhetően bármely
+ telefonról hívható bármely másik készülék.
 \end_layout
 
 \begin_layout Standard
@@ -1197,42 +1234,57 @@ HSUPA
 \series bold
 LTE
 \series default
- (long-term evolution) marketed as 4G LTE, is a standard for wireless communicat
-ion of high-speed data for mobile phones and data terminals.
- It is based on the GSM/EDGE and UMTS/HSPA network technologies, increasing
- the capacity and speed using a different radio interface together with
- core network improvements.[1][2] The standard is developed by the 3GPP (3rd
- Generation Partnership Project) and is specified in its Release 8 document
- series, with minor enhancements described in Release 9.
+ (Long-Term Evolution) 4G LTE, a legújabb sztenderd a mobiltelefonok és
+ adat terminálok közötti nagy sebességű vezetéknélküli adat kommunikációra.
+ GSM/EDGE és UMTS/HSPA nhálózati technológiákon alapszik, de nagyobb kapacitást
+ és sebeséget nyújt különböző rádiós interfészek együtes alkalmazásával.
+ A világ első publikus LTE szolgáltatója a TeliaSonera Oslo-ban és Stockholm-ban
+ 2009 December 14.
+ Várhatóan az LTE lesz az első igazán globális mobil telefon sztenderd,
+ habár a országonként különböző frekvencia sávok hasnzálata miatt csak a
+ többsávos telefonok lesznek képesek kihasználni minden országban az LTE
+ szolgáltatást.
+ Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogat, az LTE
+ 326 Mbit átvételére lesz képes másodpercenként 4x4 antennával, 20 MHz széles
+ frekvenciatartományon.
 \end_layout
 
 \begin_layout Standard
-The world's first publicly available LTE service was launched by TeliaSonera
- in Oslo and Stockholm on December 14 2009.[3] LTE is the natural upgrade
- path for both carriers with GSM/UMTS networks and for CDMA holdouts such
- as Verizon Wireless, who launched the first large-scale LTE network in
- North America in 2010,[4][5] and au by KDDI in Japan have announced they
- will migrate to LTE.
- LTE is, therefore, anticipated to become the first truly global mobile
- phone standard, although the use of different frequency bands in different
- countries will mean that only multi-band phones will be able to use LTE
- in all countries where it is supported.
+The LTE standard only supports packet switching with its all-IP network.
+ Voice calls in GSM, UMTS and CDMA2000 are circuit switched, so with the
+ adoption of LTE, carriers will have to re-engineer their voice call network.[24]
+ Three different approaches sprang up:
 \end_layout
 
 \begin_layout Standard
-Although marketed as a 4G wireless service, LTE as specified in the 3GPP
- Release 8 and 9 document series does not satisfy the technical requirements
- the 3GPP consortium has adopted for its new standard generation, and which
- were originally set forth by the ITU-R organization in its IMT-Advanced
- specification.
- However due to marketing pressures and the significant advancements that
- WIMAX, HSPA+ and LTE bring to the original 3G technologies, ITU later decided
- that LTE together with the aforementioned technologies can be called 4G
- technologies.
- [6] The LTE Advanced standard formally satisfies the ITU-R requirements
- to be considered IMT-Advanced.[7] And to differentiate LTE-Advanced and
- Wimax-Advanced from current 4G technologies, ITU has defined them as "True
- 4G
+VoLTE (Voice Over LTE): This approach is based on the IP Multimedia Subsystem
+ (IMS) network, with specific profiles for control and media planes of voice
+ service on LTE defined by GSMA in PRD IR.92.
+ This approach results in the voice service (control and media planes) being
+ delivered as data flows within the LTE data bearer.
+ This means that there is no dependency on (or ultimately, requirement for)
+ the legacy Circuit Switch voice network to be maintained.
+ CSFB (Circuit Switched Fallback): In this approach, LTE just provides data
+ services, and when a voice call is to be initiated or received, it will
+ fall back to the CS domain.
+ When using this solution, operators just need to upgrade the MSC instead
+ of deploying the IMS, and therefore, can provide services quickly.
+ However, the disadvantage is longer call setup delay.
+ SVLTE (Simultaneous Voice and LTE): In this approach, the handset works
+ simultaneously in the LTE and CS modes, with the LTE mode providing data
+ services and the CS mode providing the voice service.
+ This is a solution solely based on the handset, which does not have special
+ requirements on the network and does not require the deployment of IMS
+ either.
+ The disadvantage of this solution is that the phone can become expensive
+ with high power consumption.
+\end_layout
+
+\begin_layout Standard
+Enhanced voice quality To ensure compatibility, 3GPP demands at least AMR-NB
+ codec (narrow band), but the recommended speech codec for VoLTE is Adaptive
+ Multi-Rate Wideband, also known as HD Voice.
+ This codec is mandated in 3GPP networks that support 16 kHz samplin
 \end_layout
 
 \begin_layout Standard
