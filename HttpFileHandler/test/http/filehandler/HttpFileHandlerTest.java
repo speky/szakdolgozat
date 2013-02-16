@@ -52,4 +52,21 @@ public class HttpFileHandlerTest {
 		assertTrue(fileHandler.getNumberOfFiles() == 1);	
 	}
 	
+	@Test
+	public void testGetFileInstance() {
+		HttpFileHandler fileHandler = new HttpFileHandler(logger);		
+		assertFalse(fileHandler.IsFileInSet("test.txt"));
+		assertNull(fileHandler.getFileInstance("test.txt"));
+		fileHandler.AddFile("test.txt");
+		assertTrue(fileHandler.IsFileInSet("test.txt"));
+		FileInstance fi = fileHandler.getFileInstance("test.txt");
+		assertNotNull(fi);
+		fi.SplitFileToPockets(FileInstance.DEFAULT_SIZE);
+		assertTrue(fi.getPocketSize() == 3);
+		fi.SplitFileToPockets(100);
+		assertTrue(fi.getPocketSize() == 1);
+		assertTrue(fileHandler.getNumberOfFiles() == 1);	
+	}
+	
+	
 }

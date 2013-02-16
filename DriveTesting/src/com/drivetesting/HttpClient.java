@@ -1,5 +1,7 @@
 package com.drivetesting;
 
+import http.filehandler.Logger;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -21,20 +23,22 @@ import android.widget.Toast;
 public class HttpClient implements Runnable {
 	private final int ServerPort = 4444;
 	private  final String ServerAddress ="94.21.107.84";//192.168.0.2";//"10.0.2.2";
-
+	private Logger logger;
 	private Context context;
 	final static Handler handler = new Handler();
 
 	private boolean isRunning;
 	private Socket socket;
 	private Scanner portScanner;
-	private PrintWriter pw;	
+	private PrintWriter pw;
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
 
 	public  HttpClient (Context context) {
 			this.context = context;			
-			isRunning = true;		
+			isRunning = true;
+			logger = new Logger("");
+			logger.addLine("test");
 	}
 
 	public void run() {

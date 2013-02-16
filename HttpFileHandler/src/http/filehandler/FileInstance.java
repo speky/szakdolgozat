@@ -28,10 +28,14 @@ public class FileInstance {
 		pieces = new HashSet<Packet> ();
 	}
 
+	public Set<Packet> getPieces() {
+		return pieces;
+	}
+
 	public String getName() {
 		return fileName;
 	}
-
+	
 	public String getCheckSum() {		
 		return hashId;
 	}
@@ -42,7 +46,7 @@ public class FileInstance {
 
 	public boolean SplitFileToPockets(int packetSize) {
 		File file = new File(fileName);
-		
+		pieces.clear();
 		if (file.canRead()){								    
 			// Create the byte array to hold the data
 			int length = (int) file.length();
@@ -52,7 +56,7 @@ public class FileInstance {
 				return false;
 			}
 			hashId = Utility.calcCheckSum(bytes);
-			if (PocketizeTheFile(bytes, packetSize, length) == false){				
+			if (PocketizeTheFile(bytes, packetSize, length) == false) {				
 				return false;
 			}			
 		}else {

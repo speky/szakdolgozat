@@ -170,7 +170,7 @@ public class HttpServer {
 
 			while (true) {
 				// wait for client connection
-				Socket socket = serverSocket.accept();				
+				Socket socket = serverSocket.accept();	
 				//figure out what is the ip-address of the client
 				InetAddress client = socket.getInetAddress();
 				//and print it to log

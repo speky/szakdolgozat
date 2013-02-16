@@ -48,9 +48,18 @@ public class HttpFileHandler {
 		
 		logger.addLine(TAG+"reg new file: " + fileName);
 		FileInstance file = new FileInstance(logger, fileName);
-		fileSet.add(file);
-		file.SplitFileToPockets(FileInstance.DEFAULT_SIZE);		
+		fileSet.add(file);				
 		return file;
 	}
-
+		
+	public FileInstance getFileInstance(final String fileName) {
+				
+		for (FileInstance fi : fileSet){
+			if (fi.getName().equals(fileName)){                
+				return fi;
+			}		
+		}
+		logger.addLine("File does not exist!, name: "+fileName);
+		return null;
+	}
 }
