@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class FileInstance {
@@ -14,7 +16,7 @@ public class FileInstance {
 	private String fileName;
 	private String hashId;
 	private int count;
-	private Set<Packet> pieces;
+	private List<Packet> pieces;
 
 	private Logger logger;
 	private final String TAG = "FileInstance: "; 
@@ -25,10 +27,10 @@ public class FileInstance {
 		this.fileName = name;
 		hashId = "";
 		count = 0;
-		pieces = new HashSet<Packet> ();
+		pieces = new ArrayList<Packet>();
 	}
 
-	public Set<Packet> getPieces() {
+	public List<Packet> getPieces() {
 		return pieces;
 	}
 
