@@ -46,19 +46,19 @@ public class FileInstance {
 		return pieces.size();
 	}
 
-	public boolean SplitFileToPockets(int packetSize) {
+	public boolean splitFileToPockets(int packetSize) {
 		File file = new File(fileName);
 		pieces.clear();
 		if (file.canRead()){								    
 			// Create the byte array to hold the data
 			int length = (int) file.length();
 			byte[] bytes = new byte[length];
-			if (ReadWholeFile(bytes, file) == false) {
+			if (readWholeFile(bytes, file) == false) {
 				logger.addLine(TAG+"problem occured while reading a file, file name:"+fileName);
 				return false;
 			}
 			hashId = Utility.calcCheckSum(bytes);
-			if (PocketizeTheFile(bytes, packetSize, length) == false) {				
+			if (pocketizeTheFile(bytes, packetSize, length) == false) {				
 				return false;
 			}			
 		}else {
@@ -67,14 +67,14 @@ public class FileInstance {
 		return false;
 	}
 
-	private boolean PocketizeTheFile(byte[] bytes, int packetSize, final int length) {
+	private boolean pocketizeTheFile(byte[] bytes, int packetSize, final int length) {
 		try{				
 			int begin = 0;
 			while (begin < length) {
 				if (begin+packetSize >= length) {
 					packetSize = length - begin;
 				}					
-				AddPiece(count++,  new String(Arrays.copyOfRange(bytes, begin, begin+packetSize)));
+				addPacket(count++,  new String(Arrays.copyOfRange(bytes, begin, begin+packetSize)));
 				begin += packetSize;
 			}
 			return true;
@@ -84,7 +84,7 @@ public class FileInstance {
 		}
 		return false;
 	}
-	private boolean ReadWholeFile(byte[] bytes, final File inputFile) {
+	private boolean readWholeFile(byte[] bytes, final File inputFile) {
 		try{ 
 			// Read in the bytes
 			InputStream is = new FileInputStream(inputFile);
@@ -103,17 +103,18 @@ public class FileInstance {
 		}	
 		return false;
 	}
-
-	private void AddPiece(int id, String text) {
+	
+	public boolean addPacket(int id, String text) {
 		for (Packet p : pieces) {
 			if (p.id == id) {
 				logger.addLine("pocket id is already in use!, id:" + id);
-				return;
+				return false;
 			}
 		}		
 		logger.addLine("New packet added, id: "+id);
 		Packet p = new Packet(text, text.length(), id);
 		pieces.add(p);
+		return true;
 	}
 
 

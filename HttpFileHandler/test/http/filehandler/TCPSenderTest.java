@@ -32,7 +32,7 @@ public class TCPSenderTest {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
-		} catch (IOException e) {			
+		} catch (IOException e) {	
 			e.printStackTrace();
 		}
 
@@ -87,10 +87,12 @@ public class TCPSenderTest {
 
         sender.setReceiverParameters(42, "1.1.1.1");
         FileInstance file =  new FileInstance(logger, "test.txt");
-        file.SplitFileToPockets(30);
+        file.splitFileToPockets(30);
         sender.setFile(file);
         Assert.assertTrue("Message sent successfully", sender.call()==1);
-        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nTEXT: 123456789asdfghjkyxcvbnm\nEND_PACKET\r\nEND\r\n");
+        String message = "123456789asdfghjkyxcvbnm";
+        String hash = Utility.calcCheckSum(message.getBytes());
+        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\r\n");
         String out = byteArrayOutputStream.toString(); 
         Assert.assertTrue(out.equals(testString));
 	}
@@ -114,12 +116,20 @@ public class TCPSenderTest {
 
         sender.setReceiverParameters(42, "1.1.1.1");
         FileInstance file =  new FileInstance(logger, "test.txt");
-        file.SplitFileToPockets(10);
+        file.splitFileToPockets(10);
         sender.setFile(file);
         Assert.assertTrue("Message sent successfully", sender.call()==3);
-        StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nTEXT: 123456789a\nEND_PACKET\r\n");
-        testString.append("POST test.txt HTTP*/1.0\nID: 1\nTEXT: sdfghjkyxc\nEND_PACKET\r\n");
-        testString.append("POST test.txt HTTP*/1.0\nID: 2\nTEXT: vbnm\nEND_PACKET\r\n");        
+        String message = "123456789a";        
+        StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        		"\nTEXT: "+message+"\nEND_PACKET\r\n");
+        
+        message =  "sdfghjkyxc";
+        testString.append("POST test.txt HTTP*/1.0\nID: 1\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        		"\nTEXT: "+message+"\nEND_PACKET\r\n");
+        
+        message = "vbnm";
+        testString.append("POST test.txt HTTP*/1.0\nID: 2\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        		"\nTEXT: "+message+"\nEND_PACKET\r\n");        
         testString.append("END\r\n");
         
         String out = byteArrayOutputStream.toString(); 

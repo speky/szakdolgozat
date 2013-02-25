@@ -2,19 +2,14 @@
 package httpserver;
 
 import http.filehandler.HttpFileHandler;
+import http.filehandler.HttpParser;
 import http.filehandler.Logger;
 
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  *
@@ -55,7 +50,7 @@ class ServerThread extends Thread {
 		client = new Client(socket, id, 0);
 		this.logger = logger;
 		fileHandler = new HttpFileHandler(logger);
-		fileHandler.AddFile("test.txt");
+		fileHandler.addFile("test.txt");
 		logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
 		parser = new HttpParser(logger);		
 		start();
@@ -81,7 +76,7 @@ class ServerThread extends Thread {
 					if (parser.getMethod().equals("GET")){						
 						// .. fogado szál inditása
 					}else if (parser.getMethod().equals("SEND")){
-						if (fileHandler.IsFileInSet(parser.getMethodProperty("URI"))){
+						if (fileHandler.isFileInSet(parser.getMethodProperty("URI"))){
 							// küldö szál inditása							
 						}
 					}
@@ -108,7 +103,7 @@ class ServerThread extends Thread {
 			}
 
 			if (!(parser.getMethod().equals("PING") || parser.getMethod().equals("GET"))) {
-				String responseText = response.setResponseText(HttpResponse.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);
+				String responseText = response.setResponseText(HttpParser.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);
 				sendMessageToClient(responseText);
 				return false;
 			}
@@ -120,7 +115,7 @@ class ServerThread extends Thread {
 				return true;
 			}
 
-			String responseText = response.setResponseText(HttpResponse.HTTP_OK, HttpResponse.MIME_PLAINTEXT, null);
+			String responseText = response.setResponseText(HttpParser.HTTP_OK, HttpResponse.MIME_PLAINTEXT, null);
 			sendMessageToClient(responseText);
 			return true;
 		}catch (Exception e){
@@ -137,7 +132,7 @@ class ServerThread extends Thread {
 
 	private void parseClientRequest(String readedLine) {		
 		//Read the http request from the client from the socket interface into a buffer.
-		parser.parseHttpHead(readedLine);
+		parser.parseHttpMessage(readedLine);
 	}
 }
 

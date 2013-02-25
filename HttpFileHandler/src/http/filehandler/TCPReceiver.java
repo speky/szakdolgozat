@@ -7,19 +7,23 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
+import javax.rmi.CORBA.Util;
+
 
 class TCPReceiver implements Callable {
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;
 	private ServerSocket serverSocket = null;
-	private int serverPort = 0;	
+	private int serverPort = 0;
+	private HttpParser parser = null;
 
 	public TCPReceiver(Logger logger, final int id) {
 		super();
 		this.id = id;
 		this.logger = logger;
 		logger.addLine("TCP receiver, id: " + id);
+		parser = new HttpParser(logger);
 	}
 
 	public void setSenderParameters(final int port) {
@@ -54,10 +58,9 @@ class TCPReceiver implements Callable {
 			Socket socket = serverSocket.accept();
 			//figure out what is the ip-address of the client
 			InetAddress client = socket.getInetAddress();
-			//and print it to log
 			logger.addLine(client + " connected to server.\n");			
-
 			return readPackets(socket);
+			
 		} catch (Exception e) {            
 			logger.addLine("ERROR in run() " + e.getMessage());
 		} 
@@ -69,30 +72,49 @@ class TCPReceiver implements Callable {
 		try {
 			scanner = new Scanner(socket.getInputStream());
 		} catch (IOException e) {
-			// 
-			e.printStackTrace();
+			logger.addLine("ERROR while create scanner: " + e.getMessage());
 		}
 		StringBuffer buffer = new StringBuffer();
 		int receivedPacket = 0;
 		boolean reading = true;
 		while (reading && scanner.hasNextLine()) {							
 			String readedLine = scanner.nextLine();
-			buffer.append(readedLine);
-			if (readedLine.compareTo("END_PACKET") ==  0) {
-				makePacket(buffer.toString());
+			buffer.append(readedLine+"+");
+			if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
+				if (makePacket(buffer.toString())){
+					logger.addLine("Create packet, id: " + receivedPacket);
+					receivedPacket++;
+				}
 				buffer.delete(0, buffer.length());
-				receivedPacket++;
 			}else if (readedLine.compareTo("END") ==  0) {
 				reading = false;
-			}
-			logger.addLine("Send message,  sendertId: " + id);
+				logger.addLine("End message received");
+			}			
 		}
 		return receivedPacket;
 	}
 
-	private void makePacket(String string) {
+	private boolean makePacket(String message) {
+		if (parser.parseHttpMessage(message)==false){
+			logger.addLine("Problem occured while parsing message! message: " +message);
+			return false;
+		}
 
-
+		if (fileInstance == null) {
+			fileInstance = new FileInstance(logger, parser.getMethodProperty("URI"));
+		}
+		
+		String text = parser.getHeadProperty("TEXT");
+		String calcedHash = Utility.calcCheckSum(text.getBytes());
+		if (parser.getHeadProperty("HASH") == null || !parser.getHeadProperty("HASH").equals(calcedHash)) {
+			return false;
+		}
+		
+		if (fileInstance.addPacket(Integer.parseInt(parser.getHeadProperty("ID")), text) == false) {
+			logger.addLine("Problem occured while add new package!");
+			return false;
+		}		
+		return true;
 	}
 }
 

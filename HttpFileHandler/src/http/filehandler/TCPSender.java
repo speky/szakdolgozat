@@ -19,7 +19,9 @@ class TCPSender  implements Callable {
 	private PrintWriter printerWriter = null;
 	private int serverPort = 0;
 	private String serverAddress = "";
-
+	
+	public static final String END_PACKET = "END_PACKET";
+	
 	public TCPSender(Logger logger, final int id) {
 		super();
 		this.id = id;
@@ -54,16 +56,9 @@ class TCPSender  implements Callable {
 
 	public Integer call() {
 		try {			
-			if (serverAddress == null || serverPort == 0) {
-				logger.addLine("TCP sender, id: " + id+ " unknown receiver!");
+			if (checkPrerequisite() == false) {
 				return 0;
 			}
-
-			if (fileInstance == null || fileInstance.getPocketSize() == 0) {
-				logger.addLine("TCP sender, id: " + id+ " invalid file!");
-				return 0;
-			}
-			
 			printerWriter = new PrintWriter(socket.getOutputStream());			
 			logger.addLine("Send message,  sendertId: " + id);			
 
@@ -73,21 +68,34 @@ class TCPSender  implements Callable {
 			}
 			printerWriter.println("END");
 			printerWriter.flush();
-
 			return packetList.size();
+			
 		} catch (Exception e) {            
 			logger.addLine("ERROR in run() " + e.getMessage());
 		} 
 		return 0;
 	}
 
+	private boolean checkPrerequisite() {
+		if (serverAddress == null || serverPort == 0 || socket == null) {
+			logger.addLine("TCP sender, id: " + id+ " unknown receiver!");
+			return false;
+		}
+
+		if (fileInstance == null || fileInstance.getPocketSize() == 0) {
+			logger.addLine("TCP sender, id: " + id+ " invalid file!");
+			return false;
+		}
+		return true;
+	}
+
 	private void sendMessage(final String file, final int id, final String hash, final String message) {	
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("POST "+ fileInstance.getName()+" HTTP*/1.0\n");
 		buffer.append("ID: "+ id+"\n");
-		//buffer.append("HASH: "+ hash +"\n");
+		buffer.append("HASH: "+ hash +"\n");
 		buffer.append("TEXT: "+ message +"\n");
-		buffer.append("END_PACKET");
+		buffer.append(END_PACKET);
 		printerWriter.println(buffer);
 		printerWriter.flush();
 	}

@@ -28,42 +28,42 @@ public class HttpFileHandlerTest {
 	@Test
 	public void testAddOneFile() {
 		HttpFileHandler fileHandler = new HttpFileHandler(logger);
-		fileHandler.AddFile("");
+		fileHandler.addFile("");
 		assertTrue(fileHandler.getNumberOfFiles() == 0);
-		fileHandler.AddFile("test.txt");
+		fileHandler.addFile("test.txt");
 		assertTrue(fileHandler.getNumberOfFiles() == 1);		
 	}
 	
 	@Test
 	public void testAddOneFileTwice() {
 		HttpFileHandler fileHandler = new HttpFileHandler(logger);		
-		fileHandler.AddFile("test.txt");
+		fileHandler.addFile("test.txt");
 		assertTrue(fileHandler.getNumberOfFiles() == 1);		
-		fileHandler.AddFile("test.txt");
+		fileHandler.addFile("test.txt");
 		assertTrue(fileHandler.getNumberOfFiles() == 1);
 	}
 	
 	@Test
 	public void testCheckFileExistance() {
 		HttpFileHandler fileHandler = new HttpFileHandler(logger);		
-		assertFalse(fileHandler.IsFileInSet("test.txt"));
-		fileHandler.AddFile("test.txt");
-		assertTrue(fileHandler.IsFileInSet("test.txt"));
+		assertFalse(fileHandler.isFileInSet("test.txt"));
+		fileHandler.addFile("test.txt");
+		assertTrue(fileHandler.isFileInSet("test.txt"));
 		assertTrue(fileHandler.getNumberOfFiles() == 1);	
 	}
 	
 	@Test
 	public void testGetFileInstance() {
 		HttpFileHandler fileHandler = new HttpFileHandler(logger);		
-		assertFalse(fileHandler.IsFileInSet("test.txt"));
+		assertFalse(fileHandler.isFileInSet("test.txt"));
 		assertNull(fileHandler.getFileInstance("test.txt"));
-		fileHandler.AddFile("test.txt");
-		assertTrue(fileHandler.IsFileInSet("test.txt"));
+		fileHandler.addFile("test.txt");
+		assertTrue(fileHandler.isFileInSet("test.txt"));
 		FileInstance fi = fileHandler.getFileInstance("test.txt");
 		assertNotNull(fi);
-		fi.SplitFileToPockets(FileInstance.DEFAULT_SIZE);
+		fi.splitFileToPockets(FileInstance.DEFAULT_SIZE);
 		assertTrue(fi.getPocketSize() == 3);
-		fi.SplitFileToPockets(100);
+		fi.splitFileToPockets(100);
 		assertTrue(fi.getPocketSize() == 1);
 		assertTrue(fileHandler.getNumberOfFiles() == 1);	
 	}

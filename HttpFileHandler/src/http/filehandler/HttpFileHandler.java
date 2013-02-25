@@ -18,7 +18,7 @@ public class HttpFileHandler {
 		return fileSet.size();
 	}
 	
-	public boolean IsFileInSet(final String name) {
+	public boolean isFileInSet(final String name) {
 		for (FileInstance fi : fileSet){
 			if (fi.getName().equals(name))                
 				return true;
@@ -26,22 +26,22 @@ public class HttpFileHandler {
 		return false;
 	}
 	
-	public boolean CheckFileExistance(final String path){
+	public boolean checkFileExistance(final String path){
 		File file = new File(path);
 		return file.exists();
 	}
 	
-	public FileInstance AddFile(final String fileName) {
+	public FileInstance addFile(final String fileName) {
 		if (fileName == null || fileName.equals("")) {
 			logger.addLine("fileName is empty!");
 			return null;
 		}
-		if (IsFileInSet(fileName)) {
+		if (isFileInSet(fileName)) {
 			logger.addLine("fileName has already added!");
 			return null;
 		}
 		
-		if (!CheckFileExistance(fileName)) {
+		if (!checkFileExistance(fileName)) {
 			logger.addLine("fileName has not been existed!");
 			return null;
 		}

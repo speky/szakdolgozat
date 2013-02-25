@@ -1,12 +1,18 @@
-package httpserver;
-
-import http.filehandler.Logger;
-import http.filehandler.Utility;
+package http.filehandler;
 
 import java.util.Properties;
 import java.util.StringTokenizer;
 
 public class HttpParser {
+
+	// Some HTTP response status codes	
+	public static final String
+	HTTP_OK = "200 OK",	
+	HTTP_FORBIDDEN = "403 Forbidden",
+	HTTP_NOTFOUND = "404 Not Found",
+	HTTP_BADREQUEST = "400 Bad Request",
+	HTTP_INTERNALERROR = "500 Internal Server Error",
+	HTTP_NOTIMPLEMENTED = "501 Not Implemented";
 
 	private Logger logger = null;
 
@@ -65,7 +71,7 @@ public class HttpParser {
 	 * java Properties' key - value pairs
 	 * NOTE: HTTP request's body part will be ignored
 	 **/
-	public boolean parseHttpHead(final String input) {
+	public boolean parseHttpMessage(final String input) {
 		try {
 			if ( input == null) {
 				logger.addLine(TAG+"Input is empty!");
@@ -120,7 +126,7 @@ public class HttpParser {
 	private boolean parseMethod(final String inLine) throws InterruptedException {
 		StringTokenizer stringTokens = new StringTokenizer(inLine);
 		if (!stringTokens.hasMoreTokens()) {
-			errorText = HttpResponse.HTTP_BADREQUEST;
+			errorText = HTTP_BADREQUEST;
 			logger.addLine(TAG+"Tokenized string is empty!");
 			return false;
 		}
@@ -129,7 +135,7 @@ public class HttpParser {
 
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
-			errorText = HttpResponse.HTTP_BADREQUEST;
+			errorText = HTTP_BADREQUEST;
 			return false;
 		}
 		String uri = stringTokens.nextToken();
@@ -138,7 +144,7 @@ public class HttpParser {
 
 		if ( !stringTokens.hasMoreTokens()){
 			logger.addLine(TAG+"Tokenized string is too short!");
-			errorText = HttpResponse.HTTP_BADREQUEST;
+			errorText = HTTP_BADREQUEST;
 			return false;
 		}
 		String httpVersion= stringTokens.nextToken();

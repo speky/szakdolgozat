@@ -1,6 +1,7 @@
 package httpserver;
 
 import static org.junit.Assert.assertTrue;
+import http.filehandler.HttpParser;
 import http.filehandler.Logger;
 
 import java.util.Date;
@@ -32,16 +33,16 @@ public class HttpResponseTest {
 	public void setTextWithErrorParameter() {		
 		HttpResponse response = new HttpResponse(logger);
 		String date ="Date: "  + response.gmtFormat.format(new Date()) + "\r\n";
-		String out = response.setResponseText(HttpResponse.HTTP_BADREQUEST, null, null);		
-		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+date+"END\n"));
+		String out = response.setResponseText(HttpParser.HTTP_BADREQUEST, null, null);		
+		assertTrue(out.equals("HTTP*/1.0 "+ HttpParser.HTTP_BADREQUEST+" \r\n"+date+"END\n"));
 	}
 	
 	@Test
 	public void setTextWithMimeParameter() {
 		HttpResponse response = new HttpResponse(logger);
 		String date ="Date: "  + response.gmtFormat.format(new Date()) + "\r\n";
-		String out = response.setResponseText(HttpResponse.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);		
-		assertTrue(out.equals("HTTP*/1.0 "+ HttpResponse.HTTP_BADREQUEST+" \r\n"+"Content-Type: " + HttpResponse.MIME_PLAINTEXT + "\r\n"+date+"END\n"));
+		String out = response.setResponseText(HttpParser.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);		
+		assertTrue(out.equals("HTTP*/1.0 "+ HttpParser.HTTP_BADREQUEST+" \r\n"+"Content-Type: " + HttpResponse.MIME_PLAINTEXT + "\r\n"+date+"END\n"));
 	}
 
 }

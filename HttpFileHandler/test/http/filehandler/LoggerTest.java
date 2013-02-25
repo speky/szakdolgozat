@@ -63,7 +63,7 @@ public class LoggerTest {
 
 	@Test
 	public void testDeleteLogFile() {
-		Logger logger = new Logger("test.txt");		
+		Logger logger = new Logger("test1.txt");		
 		assertTrue(logger.addLine("logText"));
 		assertTrue(logger.deleteLogFile());
 	}

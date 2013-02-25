@@ -1,38 +1,17 @@
 package httpserver;
 
 
+import http.filehandler.HttpParser;
 import http.filehandler.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 public class HttpResponse {
-
-	// Some HTTP response status codes	
-	public static final String
-	HTTP_OK = "200 OK",	
-	HTTP_FORBIDDEN = "403 Forbidden",
-	HTTP_NOTFOUND = "404 Not Found",
-	HTTP_BADREQUEST = "400 Bad Request",
-	HTTP_INTERNALERROR = "500 Internal Server Error",
-	HTTP_NOTIMPLEMENTED = "501 Not Implemented";
 
 	/**
 	 * Common mime types for dynamic content
@@ -123,7 +102,7 @@ public class HttpResponse {
 
 		File file = new File(ROOT_DIR, fileName);
 		if  (!file.exists()) {
-			setResponseText(HTTP_NOTFOUND, MIME_PLAINTEXT, null);
+			setResponseText(HttpParser.HTTP_NOTFOUND, MIME_PLAINTEXT, null);
 			logger.addLine("File doesn't exist! " + fileName);
 		}
 
@@ -133,7 +112,7 @@ public class HttpResponse {
 		if  (file.canRead()) {		
 			fileLength = file.length();			
 		}else {
-			setResponseText(HTTP_FORBIDDEN, MIME_PLAINTEXT, null);
+			setResponseText(HttpParser.HTTP_FORBIDDEN, MIME_PLAINTEXT, null);
 		}
 	}
 
