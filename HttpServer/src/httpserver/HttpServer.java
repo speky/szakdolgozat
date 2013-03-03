@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -40,9 +41,12 @@ class Client {
 class ServerThread extends Thread {	
 	private Client client = null;
 	private Logger logger = null;
-	private HttpParser parser = null;
-	
-	private HttpFileHandler fileHandler; 
+	private HttpParser parser = null;	
+	private HttpFileHandler fileHandler = null;
+	private Properties HeaderProperty = null;
+	private final int FirstPort = 5000;
+	private final int MaxPort = 5050;
+	private int portOffset = 0;
 	
 	public ServerThread(Logger logger, Socket socket, final int id) {
 		super();
@@ -52,7 +56,8 @@ class ServerThread extends Thread {
 		fileHandler = new HttpFileHandler(logger);
 		fileHandler.addFile("test.txt");
 		logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
-		parser = new HttpParser(logger);		
+		parser = new HttpParser(logger);
+		HeaderProperty = new Properties();
 		start();
 	}
 
@@ -72,14 +77,14 @@ class ServerThread extends Thread {
 						}			
 					}
 					parseClientRequest(buffer.toString());
-					sendResponse(parser);
+					int nextPort = getNextPort();
+					HeaderProperty.put("PORT", nextPort);
+					sendResponse();
 					if (parser.getMethod().equals("GET")){						
-						// .. fogado szál inditása
-					}else if (parser.getMethod().equals("SEND")){
-						if (fileHandler.isFileInSet(parser.getMethodProperty("URI"))){
-							// küldö szál inditása							
-						}
+						makeFileHandlingThread(nextPort);
+						
 					}
+						
 				}
 			}
 		} catch (Exception e) {            
@@ -87,10 +92,24 @@ class ServerThread extends Thread {
 		} 
 	}
 	
-	private boolean sendResponse(HttpParser parser) {
+	private int getNextPort() {
+		int nextPort = FirstPort+portOffset;
+		portOffset++;
+		if (nextPort > MaxPort) {
+			nextPort = FirstPort;
+			portOffset = 0;
+		}
+		return nextPort;
+	}
+	
+	private void  makeFileHandlingThread(int port) {
+		
+	}
+	
+	private boolean sendResponse() {
 		try {
 			HttpResponse response = new HttpResponse(logger);
-			if (parser.getMethod() == null) {
+			if (parser == null || parser.getMethod() == null) {
 				return false;
 			}
 			response.PrintProperties(parser.getMethodProperty("uri"), parser.getMethod(), parser.getHeadProperty(), null);
@@ -115,7 +134,7 @@ class ServerThread extends Thread {
 				return true;
 			}
 
-			String responseText = response.setResponseText(HttpParser.HTTP_OK, HttpResponse.MIME_PLAINTEXT, null);
+			String responseText = response.setResponseText(HttpParser.HTTP_OK, HttpResponse.MIME_PLAINTEXT, HeaderProperty);
 			sendMessageToClient(responseText);
 			return true;
 		}catch (Exception e){
@@ -189,43 +208,4 @@ public class HttpServer {
 	}
 
 }
- /*
-public class HttpServer {
- 
-    private static ServerSocket serverSocket;
-    private static Socket clientSocket;
-    private static InputStreamReader inputStreamReader;
-    private static BufferedReader bufferedReader;
-    private static String message;
- 
-    public static void main(String[] args) {
- 
-        try {
-            serverSocket = new ServerSocket(4444);  //Server socket
- 
-        } catch (IOException e) {
-            System.out.println("Could not listen on port: 4444");
-        }
- 
-        System.out.println("Server started. Listening to the port 4444");
- 
-        while (true) {
-            try {
- 
-                clientSocket = serverSocket.accept();   //accept the client connection
-                inputStreamReader = new InputStreamReader(clientSocket.getInputStream());
-                bufferedReader = new BufferedReader(inputStreamReader); //get the client message
-                message = bufferedReader.readLine();
- 
-                System.out.println(message);
-                inputStreamReader.close();
-                clientSocket.close();
- 
-            } catch (IOException ex) {
-                System.out.println("Problem in message reading");
-            }
-        }
- 
-    }
-}*/
 
