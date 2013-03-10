@@ -11,7 +11,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-class UDPSender extends Thread {
+public class UDPSender extends Thread {
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;

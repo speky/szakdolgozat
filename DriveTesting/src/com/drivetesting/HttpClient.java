@@ -1,6 +1,9 @@
 package com.drivetesting;
 
+import http.filehandler.FileInstance;
 import http.filehandler.Logger;
+import http.filehandler.TCPReceiver;
+import http.filehandler.TCPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,11 +12,18 @@ import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.content.Context;
 import android.os.Handler;
@@ -22,11 +32,14 @@ import android.widget.Toast;
 
 public class HttpClient implements Runnable {
 	private final int ServerPort = 4444;
-	private  final String ServerAddress ="94.21.107.84";//192.168.0.2";//"10.0.2.2";
+	private  final String ServerAddress ="10.0.2.2";//94.21.107.84";//192.168.0.2";//"10.0.2.2";
 	private Logger logger;
 	private Context context;
 	final static Handler handler = new Handler();
-
+	private ExecutorService pool = null;
+	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
+	private int threadCount = 0;
+	static final int MAX_THREAD = 10;
 	private boolean isRunning;
 	private Socket socket;
 	private Scanner portScanner;
@@ -35,10 +48,11 @@ public class HttpClient implements Runnable {
 	private Properties headerProperty = new Properties();
 
 	public  HttpClient (Context context) {
-			this.context = context;			
-			isRunning = true;
-			logger = new Logger("");
-			logger.addLine("test");
+		this.context = context;			
+		isRunning = true;
+		logger = new Logger("");
+		logger.addLine("test");
+		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
 
 	public void run() {
@@ -47,7 +61,7 @@ public class HttpClient implements Runnable {
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 			while (isRunning) {
-				pingCommand();
+				makeNewThread();
 				handler.post(new Runnable() {
 					@Override public void run() {
 						hint(context, "new client connected");
@@ -58,27 +72,30 @@ public class HttpClient implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
 	public String getLocalIpAddress() {
-	    try {
-	        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-	            NetworkInterface intf = en.nextElement();
-	            for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-	                InetAddress inetAddress = enumIpAddr.nextElement();
-	                if (!inetAddress.isLoopbackAddress()) {
-	                	String name = inetAddress.getHostAddress().toString();
-	                    return name;
-	                }
-	            }
-	        }
-	    } catch (SocketException ex) {
-	        Log.e("ex getLocalIpAddress", ex.toString());
-	    }
-	    return null;
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						String name = inetAddress.getHostAddress().toString();
+						return name;
+					}
+				}
+			}
+		} catch (SocketException ex) {
+			Log.e("ex getLocalIpAddress", ex.toString());
+		}
+		return null;
 	}
+
 	private static void hint(final Context mycontext, final String s) {
 		Toast toast=Toast.makeText(mycontext, s, Toast.LENGTH_SHORT);
 		toast.show();
 	}
+
 	public void pingCommand() {
 		try {
 			System.out.println("ping parancs" );
@@ -88,6 +105,36 @@ public class HttpClient implements Runnable {
 				System.out.println("good answer from server, text:");
 			}
 
+		}catch (IOException ex) {
+			System.out.println("Exception: "+ex.getMessage());
+		}
+	}
+
+	public void makeNewThread() {
+		try {
+			System.out.println("ping makeNewThread" );
+			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nPORT: 1234\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");						
+			receiveMessageFromServer();
+			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
+				System.out.println("good answer from server, text:");
+			}
+			{
+				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
+				receiver.setSenderParameters(1234);
+				Future<Integer> future = pool.submit(receiver);
+				threadSet.add(future);
+			}
+			for (Future<Integer> future : threadSet) {
+				try {
+					logger.addLine("A thread ended, value: " + future.get());
+					System.out.println("value: "+ future.get());			
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}catch (IOException ex) {
 			System.out.println("Exception: "+ex.getMessage());
 		}

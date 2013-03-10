@@ -32,7 +32,7 @@ public class FileInstanceTest {
 		FileInstance fileInstance = new FileInstance(logger, "test.txt");		
 		assertTrue(fileInstance.getName().equals("test.txt"));
 	}
-
+	
 	@Test
 	public void testFileInstanceSplitting() {
 		FileInstance fileInstance = new FileInstance(logger, "test.txt");		

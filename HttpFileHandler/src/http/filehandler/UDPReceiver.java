@@ -5,8 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-
-class UDPReceiver extends Thread {
+public class UDPReceiver extends Thread {
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;

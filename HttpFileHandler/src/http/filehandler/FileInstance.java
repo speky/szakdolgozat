@@ -58,6 +58,9 @@ public class FileInstance {
 				return false;
 			}
 			hashId = Utility.calcCheckSum(bytes);
+			if (packetSize == 0){
+				packetSize = DEFAULT_SIZE;
+			}
 			if (pocketizeTheFile(bytes, packetSize, length) == false) {				
 				return false;
 			}			

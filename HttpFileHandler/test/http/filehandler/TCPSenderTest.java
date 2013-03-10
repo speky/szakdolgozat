@@ -1,7 +1,6 @@
 package http.filehandler;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +8,6 @@ import java.net.Socket;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

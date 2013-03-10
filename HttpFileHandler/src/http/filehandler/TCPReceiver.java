@@ -7,10 +7,8 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
-import javax.rmi.CORBA.Util;
 
-
-class TCPReceiver implements Callable {
+public class TCPReceiver implements Callable<Integer> {
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;
