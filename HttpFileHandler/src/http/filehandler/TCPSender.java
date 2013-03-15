@@ -2,16 +2,12 @@ package http.filehandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
-class TCPSender  implements Callable {	
+public class TCPSender  implements Callable<Integer> {	
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;
