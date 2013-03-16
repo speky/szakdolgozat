@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 public class HttpClient implements Runnable {
 	private final int ServerPort = 4444;
-	private  final String ServerAddress ="10.0.2.2";//94.21.107.84";//192.168.0.2";//"10.0.2.2";
+	private  final String ServerAddress ="10.0.2.2";//92.249.224.209";//192.168.0.2";//"10.0.2.2";
 	private Logger logger;
 	private Context context;
 	final static Handler handler = new Handler();
@@ -72,7 +72,7 @@ public class HttpClient implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
+	   
 	public String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -112,15 +112,17 @@ public class HttpClient implements Runnable {
 
 	public void makeNewThread() {
 		try {
-			System.out.println("ping makeNewThread" );
-			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nPORT: 1234\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");						
+			System.out.println("makeNewThread" );
+			System.out.println("IP: " +getLocalIpAddress());
+			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nPORT: 4445\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");						
 			receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}
 			{
 				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
-				receiver.setSenderParameters(1234);
+				receiver.setSenderParameters(4445);
+				
 				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			}
@@ -150,16 +152,14 @@ public class HttpClient implements Runnable {
 
 	private void receiveMessageFromServer() {		
 		StringBuffer buffer = new StringBuffer();
-		while (portScanner.hasNextLine()) {
-			System.out.println("Get message from server");
+		while (portScanner.hasNextLine()) {			
 			String readedLine = portScanner.nextLine();
-			buffer.append(readedLine);
-			while (readedLine.compareTo("END") !=  0) {
-				readedLine = portScanner.nextLine();
-				if (readedLine.compareTo("END") !=  0) {
-					buffer.append("+"+readedLine);
-				}			
+			if (readedLine.compareTo("END") !=  0) {
+				buffer.append("+"+readedLine);
+			}else{
+				break;
 			}
+				
 		}		
 		parseServerAnswer(buffer.toString());
 	}

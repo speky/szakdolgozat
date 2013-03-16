@@ -64,6 +64,7 @@ private static Logger logger;
 		parser.parseHttpMessage(str);
 		assertTrue(parser.getMethodSize() == 3);
 		assertTrue(parser.getMethod().equals("HEAD"));
+		assertTrue(parser.getMethodProperty("URI").equals("index.html"));
 	}
 	
 	@Test
@@ -106,7 +107,7 @@ private static Logger logger;
 		assertTrue(parser.getHeadProperty("from") == null);
 				
 		str = "HEAD /index.html HTTP*/1.0\r\n";
-		parser.parseHttpMessage(str);
+		parser.parseHttpMessage(str);		
 		assertTrue(parser.getHeadSize() == 0);
 		assertTrue(parser.getHeadProperty("from") == null);
 		assertTrue(parser.getHeadProperty("FROM") == null);

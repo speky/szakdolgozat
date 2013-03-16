@@ -31,14 +31,17 @@ public class TCPReceiver implements Callable<Integer> {
 	}
 
 	protected ServerSocket createSocket() {
-		ServerSocket socket;
-		try {
-			socket = new ServerSocket(serverPort);
+		ServerSocket socket = null;
+			try {
+				socket = new ServerSocket(serverPort);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {            
+					logger.addLine("ERROR in run() " + e.getMessage());
+			} 
 			return socket;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+
 	}
 
 	public Integer call() {
@@ -48,10 +51,10 @@ public class TCPReceiver implements Callable<Integer> {
 				return 0;
 			}
 
-			if (fileInstance == null || fileInstance.getPocketSize() == 0) {
+			/*if (fileInstance == null || fileInstance.getPocketSize() == 0) {
 				logger.addLine("TCP sender, id: " + id+ " invalid file!");
 				return 0;
-			}
+			}*/
 
 			Socket socket = serverSocket.accept();
 			//figure out what is the ip-address of the client

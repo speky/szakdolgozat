@@ -16,7 +16,9 @@ public class Utility {
 			for (int i = 0; i < str.length(); ++i) {
 				char c = str.charAt(i);
 				switch ( c ) {
-				case '+':
+				case '/':
+					break;
+				case '+':				
 					sb.append( ' ' );
 					break;
 				case '%':

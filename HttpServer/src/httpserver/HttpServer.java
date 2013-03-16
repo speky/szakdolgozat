@@ -136,7 +136,7 @@ class ServerThread extends Thread {
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				TCPSender sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				sender.setReceiverParameters(port, client.socket.getInetAddress().getHostAddress());
+				sender.setReceiverParameters(port, "10.0.2.15");//client.socket.getInetAddress().getHostAddress());
 				Future<Integer> future = pool.submit(sender);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
