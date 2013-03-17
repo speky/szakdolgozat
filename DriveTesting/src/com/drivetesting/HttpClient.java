@@ -115,8 +115,7 @@ public class HttpClient implements Runnable {
 		try {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
-			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 44450\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");						
-			receiveMessageFromServer();
+			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 44450\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}
@@ -124,7 +123,6 @@ public class HttpClient implements Runnable {
 			{
 				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
 				receiver.setSenderParameters(44450);
-
 				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			}
