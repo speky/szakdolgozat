@@ -54,8 +54,8 @@ class ServerThread extends Thread {
 	private HttpParser parser = null;	
 	private HttpFileHandler fileHandler = null;
 	private Properties HeaderProperty = null;
-	private final int FirstPort = 5000;
-	private final int MaxPort = 5050;
+	private final int FirstPort = 50000;
+	private final int MaxPort = 50500;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
