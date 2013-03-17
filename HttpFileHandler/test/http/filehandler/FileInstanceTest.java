@@ -37,7 +37,7 @@ public class FileInstanceTest {
 	public void testFileInstanceSplitting() {
 		FileInstance fileInstance = new FileInstance(logger, "test.txt");		
 		assertTrue(fileInstance.getName().equals("test.txt"));
-		fileInstance.splitFileToPockets(FileInstance.DEFAULT_SIZE);
+		fileInstance.splitFileToPockets(10);
 		assertTrue(fileInstance.getPocketSize() == 3);
 	}
 

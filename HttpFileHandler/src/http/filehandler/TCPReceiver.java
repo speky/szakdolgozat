@@ -107,9 +107,9 @@ public class TCPReceiver implements Callable<Integer> {
 		
 		String text = parser.getHeadProperty("TEXT");
 		String calcedHash = Utility.calcCheckSum(text.getBytes());
-		if (parser.getHeadProperty("HASH") == null || !parser.getHeadProperty("HASH").equals(calcedHash)) {
+		/*if (parser.getHeadProperty("HASH") == null || !parser.getHeadProperty("HASH").equals(calcedHash)) {
 			return false;
-		}
+		}*/
 		
 		if (fileInstance.addPacket(Integer.parseInt(parser.getHeadProperty("ID")), text) == false) {
 			logger.addLine("Problem occured while add new package!");

@@ -54,8 +54,8 @@ class ServerThread extends Thread {
 	private HttpParser parser = null;	
 	private HttpFileHandler fileHandler = null;
 	private Properties HeaderProperty = null;
-	private final int FirstPort = 50000;
-	private final int MaxPort = 50500;
+	private final int FirstPort = 4445;
+	private final int MaxPort = 5050;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
@@ -126,17 +126,20 @@ class ServerThread extends Thread {
 			logger.addLine("Error: Invalid port number!");
 			return;
 		}
-		FileInstance file = new FileInstance(logger, parser.getMethodProperty("URI"));
+		
+		
+		String filePath = System.getProperty("user.dir") + "\\asset\\" + parser.getMethodProperty("URI"); 
+		FileInstance file = new FileInstance(logger, filePath);
 		String packetSize = parser.getHeadProperty("PACKET_SIZE");
 		if (packetSize == null){
-			packetSize = "0";
+			packetSize = "100000";
 		}
 		file.splitFileToPockets(Integer.parseInt(packetSize));
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				TCPSender sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				sender.setReceiverParameters(port, "10.0.2.15");//client.socket.getInetAddress().getHostAddress());
+				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
 				Future<Integer> future = pool.submit(sender);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){

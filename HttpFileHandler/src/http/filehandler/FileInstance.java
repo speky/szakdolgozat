@@ -20,7 +20,7 @@ public class FileInstance {
 
 	private Logger logger;
 	private final String TAG = "FileInstance: "; 
-	public static final int DEFAULT_SIZE = 10; 
+	public static final int DEFAULT_SIZE = 1000; 
 
 	public FileInstance(Logger logger, final String name) {
 		this.logger = logger;

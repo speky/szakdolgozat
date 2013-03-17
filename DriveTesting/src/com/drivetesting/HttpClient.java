@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 public class HttpClient implements Runnable {
 	private final int ServerPort = 4444;
-	private  final String ServerAddress ="10.0.2.15";//92.249.224.209";//192.168.0.2";//"10.0.2.2";
+	private  final String ServerAddress ="192.168.0.100";//"92.249.224.209";//192.168.0.2";//"10.0.2.2";
 	private Logger logger;
 	private Context context;
 	final static Handler handler = new Handler();
@@ -57,6 +57,7 @@ public class HttpClient implements Runnable {
 
 	public void run() {
 		try {
+			String ip = getLocalIpAddress();
 			socket = new Socket(ServerAddress, ServerPort);
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
@@ -115,21 +116,22 @@ public class HttpClient implements Runnable {
 		try {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
-			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 44450\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
+			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 4445\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}
 
 			{
 				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
-				receiver.setSenderParameters(44450);
+				receiver.setSenderParameters(4445);
 				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			}
 			for (Future<Integer> future : threadSet) {
 				try {
-					logger.addLine("A thread ended, value: " + future.get());
-					System.out.println("value: "+ future.get());			
+					int value = future.get();
+					logger.addLine("A thread ended, value: " + value);
+					System.out.println("value: "+ value);			
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
