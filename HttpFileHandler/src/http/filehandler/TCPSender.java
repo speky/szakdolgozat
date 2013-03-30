@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -13,6 +14,8 @@ public class TCPSender  implements Callable<Integer> {
 	private FileInstance fileInstance = null;
 	private Socket socket = null;
 	private PrintWriter printerWriter = null;
+	private AckHandler ackHandler = null;
+	private HashSet<Integer> ackList = new HashSet<Integer>();
 	private int serverPort = 0;
 	private String serverAddress = "";
 	
@@ -23,6 +26,7 @@ public class TCPSender  implements Callable<Integer> {
 		this.id = id;
 		this.logger = logger;
 		logger.addLine("TCP sender, id: " + id);
+		ackHandler = new AckHandler(logger);
 	}
 
 	public void setReceiverParameters(final int port, final String address) {
@@ -55,6 +59,7 @@ public class TCPSender  implements Callable<Integer> {
 			if (checkPrerequisite() == false) {
 				return 0;
 			}
+			ackHandler.startAckReceiver(fileInstance.getName(), socket, ackList);
 			printerWriter = new PrintWriter(socket.getOutputStream());			
 			logger.addLine("Send message,  sendertId: " + id);			
 
@@ -64,6 +69,8 @@ public class TCPSender  implements Callable<Integer> {
 			}
 			printerWriter.println("END");
 			printerWriter.flush();
+			Thread.sleep(100);
+			ackHandler.stopScaning();
 			return packetList.size();
 			
 		} catch (Exception e) {            

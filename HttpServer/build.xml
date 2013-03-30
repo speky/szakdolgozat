@@ -1,0 +1,24 @@
+<project>
+
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="bin/httpserver"/>
+        <javac srcdir="src/httpserver" destdir="bin/httpserver"/>
+    </target>
+
+    <target name="jar">
+        <jar destfile="HttpServer.jar" basedir="bin/httpserver">
+            <manifest>
+                <attribute name="Main-Class" value="httpserver.HttpServer"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="HttpServer.jar" fork="true"/>
+    </target>
+
+</project>

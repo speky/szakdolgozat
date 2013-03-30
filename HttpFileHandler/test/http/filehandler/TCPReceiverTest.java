@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -62,14 +63,17 @@ public class TCPReceiverTest {
         String hash = Utility.calcCheckSum(message.getBytes());
         String str = new String("POST wtf.txt HTTP*/1.0\nID: 0\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\n");
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(str.getBytes());
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			when(socket.getInputStream()).thenReturn(inputStream);
+			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
         TCPReceiver sender = new TCPReceiver(logger, 0);
-        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);     
+        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+        Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 	
 	@Test
@@ -79,14 +83,17 @@ public class TCPReceiverTest {
         String hash = Utility.calcCheckSum(message.getBytes());
         String str = new String("POST wtf.txt HTTP*/1.0\nID: 0\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\nEND\n");
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(str.getBytes());
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			when(socket.getInputStream()).thenReturn(inputStream);
+			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
         TCPReceiver sender = new TCPReceiver(logger, 0);
-        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);     
+        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+        Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 	
 	@Test
@@ -97,14 +104,17 @@ public class TCPReceiverTest {
         String str = new String("POST wtf.txt HTTP*/1.0\nID: 0\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+
         		"\nPOST wtf.txt HTTP*/1.0\nID: 0\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\nEND\n");
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(str.getBytes());
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			when(socket.getInputStream()).thenReturn(inputStream);
+			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
         TCPReceiver sender = new TCPReceiver(logger, 0);
-        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);     
+        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+        Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 	
 	@Test
@@ -115,13 +125,17 @@ public class TCPReceiverTest {
         String str = new String("POST wtf.txt HTTP*/1.0\nID: 0\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+
         		"\nPOST wtf.txt HTTP*/1.0\nID: 1\nHASH: "+ hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\nEND\n");
         final ByteArrayInputStream inputStream = new ByteArrayInputStream(str.getBytes());
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
 			when(socket.getInputStream()).thenReturn(inputStream);
+			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
         TCPReceiver sender = new TCPReceiver(logger, 0);
-        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==2);     
+        Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==2);
+        Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n" +
+        																												 "POST wtf.txt HTTP*/1.0\nACK: 1\nEND\n"));
 	}
 }

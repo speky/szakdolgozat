@@ -1,7 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
  
-  <item android:id="@+id/menu_settings"  android:title="@string/menu_settings" />
-  <item android:id="@+id/menu_export" android:title="@string/menu_export"></item>
-  <item android:id="@+id/menu_map" android:title="@string/menu_map"></item>
-  <item android:id="@+id/test"  android:title="@string/menu_test"></item>
+  <item android:id="@+id/menu_settings"  android:title="menu_settings"   android:icon="@android:drawable/ic_menu_save"
+             android:showAsAction="always" />
+  <item android:id="@+id/menu_export" android:title="menu_export"    android:icon="@android:drawable/ic_menu_save"
+               android:showAsAction="always" ></item>
+  
+  <item android:id="@+id/menu_map" android:title="@string/menu_map" android:icon="@android:drawable/ic_menu_save"></item>
+  <item android:id="@+id/test"  android:title="@string/menu_test" android:icon="@android:drawable/ic_menu_save"></item>
 </menu>

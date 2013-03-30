@@ -62,7 +62,7 @@ public class HttpFileHandlerTest {
 		FileInstance fi = fileHandler.getFileInstance("test.txt");
 		assertNotNull(fi);
 		fi.splitFileToPockets(FileInstance.DEFAULT_SIZE);
-		assertTrue(fi.getPocketSize() == 3);
+		assertTrue(fi.getPocketSize() == 1);
 		fi.splitFileToPockets(100);
 		assertTrue(fi.getPocketSize() == 1);
 		assertTrue(fileHandler.getNumberOfFiles() == 1);	

@@ -2269,6 +2269,67 @@ Unit teszt
 unit tesztek és tesztek lefedettségének leírása (whitebox)
 \end_layout
 
+\begin_layout Standard
+Android test suites are based on JUnit.
+ You can use plain JUnit to test a class that doesn't call the Android API,
+ or Android's JUnit extensions to test Android components.
+ 
+\end_layout
+
+\begin_layout Standard
+You can use the JUnit TestCase class to do unit testing on a class that
+ doesn't call Android APIs.
+ TestCase is also the base class for 
+\series bold
+AndroidTestCase
+\series default
+, which you can use to test Android-dependent objects.
+ Besides providing the JUnit framework, AndroidTestCase offers Android-specific
+ setup, teardown, and helper methods.
+\end_layout
+
+\begin_layout Standard
+You use the JUnit Assert class to display test results.
+ The assert methods compare values you expect from a test to the actual
+ results and throw an exception if the comparison fails.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Instrumentation
+\end_layout
+
+\begin_layout Standard
+Android instrumentation is a set of control methods or "hooks" in the Android
+ system.
+ These hooks control an Android component independently of its normal lifecycle.
+ They also control how Android loads applications.Normally, an Android component
+ runs in a lifecycle determined by the system.
+ For example, an Activity object's lifecycle starts when the Activity is
+ activated by an Intent.
+ The object's onCreate() method is called, followed by onResume().
+ When the user starts another application, the onPause() method is called.
+ If the Activity code calls the finish() method, the onDestroy() method
+ is called.
+ The Android framework API does not provide a way for your code to invoke
+ these callback methods directly, but you can do so using instrumentation.
+\end_layout
+
+\begin_layout Standard
+You use the 
+\series bold
+ApplicationTestCase 
+\series default
+test case class to test the setup and teardown of Application objects.
+ These objects maintain the global state of information that applies to
+ all the components in an application package.
+ The test case can be useful in verifying that the <application> element
+ in the manifest file is correctly set up.
+ Note, however, that this test case does not allow you to control testing
+ of the components within your application package.
+\end_layout
+
 \begin_layout Subsection
 Rendszer teszt
 \end_layout

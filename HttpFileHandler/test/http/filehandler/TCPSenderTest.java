@@ -2,6 +2,7 @@ package http.filehandler;
 
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -27,9 +28,11 @@ public class TCPSenderTest {
 	@Test
 	public void testTCPSenderWithoutAnyParameter() {
         final Socket socket = mock(Socket.class);
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();        
+        
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
+			
 		} catch (IOException e) {	
 			e.printStackTrace();
 		}
@@ -70,8 +73,10 @@ public class TCPSenderTest {
 	public void testTCPSendAFileInOnePacket() {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("asd".getBytes());        
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
+			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -99,8 +104,10 @@ public class TCPSenderTest {
 	public void testTCPSendAFileInThreePacket() {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("asd".getBytes());
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
+			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
@@ -133,5 +140,4 @@ public class TCPSenderTest {
         String out = byteArrayOutputStream.toString(); 
         Assert.assertTrue(out.equals(testString.toString()));
 	}
-
 }

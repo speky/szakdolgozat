@@ -72,6 +72,14 @@ public class MainActivity extends Activity  {
 	private String dataDirection= "";
 	private String networkType= "";
 
+	public List<HashMap<String, String>> getPhoneData() {
+		return phoneDataList;  
+	}
+	
+	public List<HashMap<String, String>> getNetworkData() {
+		return networkDataList;  
+	}
+	
 	private void startSignalLevelListener() {
 		if (telephonyManager == null){  
 			telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
