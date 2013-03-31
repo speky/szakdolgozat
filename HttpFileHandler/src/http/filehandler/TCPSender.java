@@ -69,14 +69,17 @@ public class TCPSender  implements Callable<Integer> {
 			}
 			printerWriter.println("END");
 			printerWriter.flush();
-			Thread.sleep(100);
+			Thread.sleep(1000);
 			ackHandler.stopScaning();
-			return packetList.size();
+			int ackSize = ackList.size();
+			logger.addLine("Received ACK message: "+ackSize);
+			
+			return packetList.size()-ackSize;
 			
 		} catch (Exception e) {            
 			logger.addLine("ERROR in run() " + e.getMessage());
 		} 
-		return 0;
+		return -1;
 	}
 
 	private boolean checkPrerequisite() {

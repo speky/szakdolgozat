@@ -8,10 +8,12 @@ import http.filehandler.Logger;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
@@ -21,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.FileHandler;
 
 /**
  *
@@ -62,17 +65,19 @@ class ServerThread extends Thread {
 	private int threadCount = 0;
 	static final int MAX_THREAD = 10;
 
+
 	public ServerThread(Logger logger, Socket socket, final int id) {
 		super();
-		// register a new peer
-		client = new Client(socket, id, 0);
+
 		this.logger = logger;
+		client = new Client(socket, id, 0);
 		fileHandler = new HttpFileHandler(logger);
 		fileHandler.addFile("test.txt");
 		logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
 		parser = new HttpParser(logger);
 		HeaderProperty = new Properties();
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
+
 		start();
 	}
 
@@ -121,25 +126,38 @@ class ServerThread extends Thread {
 		return nextPort;
 	}
 
+	private FileInstance checkPacketSize(String uri, String packet) {		 
+		FileInstance file = HttpServer.fileList.get(uri);
+		if (file == null) {
+			logger.addLine("Error: File does not exist!, name: "+uri);
+			return null;
+		}
+		int packetSize = FileInstance.DEFAULT_SIZE;
+		if (packet != null ){
+			packetSize = Integer.parseInt(packet);
+		}		
+		if (FileInstance.DEFAULT_SIZE != packetSize){
+			file.splitFileToPockets(packetSize);
+		}		
+		return file;
+	}
+
 	private void  makeFileHandlingThread(int port) {
 		if (port == 0) {
 			logger.addLine("Error: Invalid port number!");
 			return;
 		}
-		
-		
-		String filePath = System.getProperty("user.dir") + "\\asset\\" + parser.getMethodProperty("URI"); 
-		FileInstance file = new FileInstance(logger, filePath);
-		String packetSize = parser.getHeadProperty("PACKET_SIZE");
-		if (packetSize == null){
-			packetSize = "100000";
+
+		FileInstance file = checkPacketSize(parser.getMethodProperty("URI"), parser.getHeadProperty("PACKET_SIZE"));
+		if (file == null) {
+			return;
 		}
-		file.splitFileToPockets(Integer.parseInt(packetSize));
+
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				TCPSender sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
+				sender.setReceiverParameters(port, "10.0.2.15");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
 				Future<Integer> future = pool.submit(sender);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -160,7 +178,7 @@ class ServerThread extends Thread {
 				return;
 			}
 		}
-		
+
 		for (Future<Integer> future : threadSet) {
 			try {
 				logger.addLine("A thread ended, value: " + future.get());
@@ -231,6 +249,31 @@ public class HttpServer {
 	private static Logger logger = null;
 	private static int activeConnections;
 
+	public static HashMap<String, FileInstance> fileList = new HashMap<String, FileInstance> ();
+
+	private static void makeFileList() {
+		File filePath = new File(System.getProperty("user.dir") + "\\asset");		
+		File[] listOfFiles = filePath.listFiles();
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				String fileName = file.getName();
+				int i = fileName.lastIndexOf('.');
+				String extension = null; 
+				if (i > 0) {
+					extension = fileName.substring(i+1);
+				}
+				if (extension != null && extension.equals("bin")){
+
+					System.out.println("File readed, " + fileName);
+					FileInstance fileInst = new FileInstance(logger, filePath+"\\"+fileName);		
+					fileInst.splitFileToPockets(FileInstance.DEFAULT_SIZE);
+					fileList.put(fileName, fileInst);
+				}
+			}
+		}
+
+	}
+
 	public static  void decreaseConnectounCount() {
 		if  (activeConnections > 0) {
 			--activeConnections;
@@ -248,7 +291,7 @@ public class HttpServer {
 		logger = new Logger("");		
 		try	{
 			serverSocket = new ServerSocket(SERVER_PORT);
-
+			makeFileList();
 			while (true) {
 				// wait for client connection
 				Socket socket = serverSocket.accept();	

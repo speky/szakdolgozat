@@ -73,7 +73,8 @@ public class TCPSenderTest {
 	public void testTCPSendAFileInOnePacket() {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("asd".getBytes());        
+        String ackMessage = "POST test.txt HTTP*/1.0\n ACK: 0\nEND\n";
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());        
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
@@ -92,7 +93,7 @@ public class TCPSenderTest {
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPockets(30);
         sender.setFile(file);
-        Assert.assertTrue("Message sent successfully", sender.call()==1);
+        Assert.assertTrue("Message sent successfully", sender.call()==0);
         String message = "123456789asdfghjkyxcvbnm";
         String hash = Utility.calcCheckSum(message.getBytes());
         String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\r\n");
@@ -104,7 +105,8 @@ public class TCPSenderTest {
 	public void testTCPSendAFileInThreePacket() {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("asd".getBytes());
+        String ackMessage = "POST test.txt HTTP*/1.0\nACK: 0\nEND\nPOST test.txt HTTP*/1.0\nACK: 1\nEND\nPOST test.txt HTTP*/1.0\nACK: 2\nEND\n";
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
@@ -123,7 +125,7 @@ public class TCPSenderTest {
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPockets(10);
         sender.setFile(file);
-        Assert.assertTrue("Message sent successfully", sender.call()==3);
+        Assert.assertTrue("Message sent successfully", sender.call()==0);
         String message = "123456789a";        
         StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(message.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");

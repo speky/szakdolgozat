@@ -20,7 +20,7 @@ public class FileInstance {
 
 	private Logger logger;
 	private final String TAG = "FileInstance: "; 
-	public static final int DEFAULT_SIZE = 1000; 
+	public static final int DEFAULT_SIZE = 10000; 
 
 	public FileInstance(Logger logger, final String name) {
 		this.logger = logger;
@@ -57,7 +57,8 @@ public class FileInstance {
 				logger.addLine(TAG+"problem occured while reading a file, file name:"+fileName);
 				return false;
 			}
-			hashId = Utility.calcCheckSum(bytes);
+			
+			hashId = "0";//Utility.calcCheckSum(bytes);
 			if (packetSize == 0){
 				packetSize = DEFAULT_SIZE;
 			}
@@ -76,7 +77,7 @@ public class FileInstance {
 			while (begin < length) {
 				if (begin+packetSize >= length) {
 					packetSize = length - begin;
-				}					
+				}								
 				addPacket(count++,  new String(Arrays.copyOfRange(bytes, begin, begin+packetSize)));
 				begin += packetSize;
 			}
@@ -108,12 +109,12 @@ public class FileInstance {
 	}
 	
 	public boolean addPacket(int id, String text) {
-		for (Packet p : pieces) {
+		/*for (Packet p : pieces) {
 			if (p.id == id) {
 				logger.addLine("pocket id is already in use!, id:" + id);
 				return false;
 			}
-		}		
+		}*/
 		logger.addLine("New packet added, id: "+id);
 		Packet p = new Packet(text, text.length(), id);
 		pieces.add(p);

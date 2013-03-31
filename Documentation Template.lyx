@@ -1361,43 +1361,44 @@ Mobil hálózat elemei
 \end_layout
 
 \begin_layout Standard
-MS
+MS - Mobile Station azaz maga a mobil készülék, amivel a felhasználó hívást
+ kezdeményezhet és fogadhat.
 \end_layout
 
 \begin_layout Standard
-BSC
+BSC - Base Station Controller
 \end_layout
 
 \begin_layout Standard
-RNC
+RNC - Radio Network Controller
 \end_layout
 
 \begin_layout Standard
-Node-b
+Node-b 
 \end_layout
 
 \begin_layout Standard
-VLR
+VLR - Visitor Location Register
 \end_layout
 
 \begin_layout Standard
-HLR
+HLR - Home Location Register
 \end_layout
 
 \begin_layout Standard
-MMGW
+M-MGW - Mobile Media Gateway
 \end_layout
 
 \begin_layout Standard
-SGSN
+SGSN - 
 \end_layout
 
 \begin_layout Standard
-GGSN
+GGSN - 
 \end_layout
 
 \begin_layout Standard
-MSC
+MSC - Mobil Softswitch Controller
 \end_layout
 
 \begin_layout Subsection
