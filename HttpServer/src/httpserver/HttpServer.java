@@ -57,8 +57,8 @@ class ServerThread extends Thread {
 	private HttpParser parser = null;	
 	private HttpFileHandler fileHandler = null;
 	private Properties HeaderProperty = null;
-	private final int FirstPort = 4445;
-	private final int MaxPort = 5050;
+	private final int FirstPort = 5555;
+	private final int MaxPort = 6000;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
@@ -157,7 +157,7 @@ class ServerThread extends Thread {
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				TCPSender sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				sender.setReceiverParameters(port, "10.0.2.15");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
+				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
 				Future<Integer> future = pool.submit(sender);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -263,7 +263,6 @@ public class HttpServer {
 					extension = fileName.substring(i+1);
 				}
 				if (extension != null && extension.equals("bin")){
-
 					System.out.println("File readed, " + fileName);
 					FileInstance fileInst = new FileInstance(logger, filePath+"\\"+fileName);		
 					fileInst.splitFileToPockets(FileInstance.DEFAULT_SIZE);
@@ -271,7 +270,6 @@ public class HttpServer {
 				}
 			}
 		}
-
 	}
 
 	public static  void decreaseConnectounCount() {

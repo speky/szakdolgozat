@@ -17,7 +17,7 @@ public class FileInstance {
 	private String hashId;
 	private int count;
 	private List<Packet> pieces;
-
+	private HashSet<Integer> packetIdList = new HashSet<Integer>();
 	private Logger logger;
 	private final String TAG = "FileInstance: "; 
 	public static final int DEFAULT_SIZE = 10000; 
@@ -108,13 +108,12 @@ public class FileInstance {
 		return false;
 	}
 	
-	public boolean addPacket(int id, String text) {
-		/*for (Packet p : pieces) {
-			if (p.id == id) {
-				logger.addLine("pocket id is already in use!, id:" + id);
-				return false;
-			}
-		}*/
+	public boolean addPacket(int id, String text) {		
+		if (packetIdList.contains(id) == true) {
+			logger.addLine("pocket id is already in use!, id:" + id);
+			return false;
+		}
+		packetIdList.add(id);
 		logger.addLine("New packet added, id: "+id);
 		Packet p = new Packet(text, text.length(), id);
 		pieces.add(p);

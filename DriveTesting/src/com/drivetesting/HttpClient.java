@@ -26,7 +26,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,12 +49,13 @@ public class HttpClient implements Runnable {
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
 
-	public  HttpClient (Context context) {
+	public  HttpClient (Context context, Handler handler) {
 		this.context = context;			
 		isRunning = true;
 		logger = new Logger("");
 		logger.addLine("test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
+		
 	}
 
 	public void run() {
@@ -62,12 +65,15 @@ public class HttpClient implements Runnable {
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 
+		      Message m = new Message();
+              Bundle b = new Bundle();
+              b.putInt("what", 5); // for example
+              m.setData(b);
+              handler.sendMessage(m);
+
+
 			while (isRunning) {
-				makeNewThread();
-				handler.post(new Runnable() {
-					@Override public void run() {
-						hint(context, "new client connected");
-					}});
+				makeNewThread();				
 				isRunning = false;
 			}
 		}catch (Exception e){
@@ -75,6 +81,11 @@ public class HttpClient implements Runnable {
 		}
 	}
 
+	/*private static void hint(final Context mycontext, final String s) {
+		Toast toast=Toast.makeText(mycontext, s, Toast.LENGTH_SHORT);
+		toast.show();
+	}
+	*/
 	public String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -91,11 +102,6 @@ public class HttpClient implements Runnable {
 			Log.e("ex getLocalIpAddress", ex.toString());
 		}
 		return null;
-	}
-
-	private static void hint(final Context mycontext, final String s) {
-		Toast toast=Toast.makeText(mycontext, s, Toast.LENGTH_SHORT);
-		toast.show();
 	}
 
 	public void pingCommand() {
@@ -116,14 +122,14 @@ public class HttpClient implements Runnable {
 		try {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
-			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 4445\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
+			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}
 
 			{
 				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
-				receiver.setSenderParameters(4445);
+				receiver.setSenderParameters(5555);
 				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			}
@@ -134,8 +140,7 @@ public class HttpClient implements Runnable {
 					System.out.println("value: "+ value);			
 				} catch (ExecutionException e) {
 					e.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} catch (InterruptedException e) {					
 					e.printStackTrace();
 				}
 			}

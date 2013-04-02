@@ -43,7 +43,7 @@ public class TCPSenderTest {
                 return socket;
             }
         };
-        Assert.assertTrue("Message sent successfully", sender.call()==0);
+        Assert.assertTrue("Message sent successfully", sender.call()==-1);
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 	
@@ -65,7 +65,7 @@ public class TCPSenderTest {
         };
 
         sender.setReceiverParameters(42, "1.1.1.1");
-        Assert.assertTrue("Message sent successfully", sender.call()==0);
+        Assert.assertTrue("Message sent successfully", sender.call()==-1);
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 

@@ -50,7 +50,8 @@ public class TCPReceiver implements Callable<Integer> {
 		try {			
 			if (serverPort == 0) {
 				logger.addLine("TCP sender, id: " + id+ " unknown receiver!");
-				return 0;
+				System.out.println("Wrong server port!");
+				return -1;
 			}
 
 			/*if (fileInstance == null || fileInstance.getPocketSize() == 0) {
@@ -67,7 +68,7 @@ public class TCPReceiver implements Callable<Integer> {
 		} catch (Exception e) {            
 			logger.addLine("ERROR in run() " + e.getMessage());
 		} 
-		return 0;
+		return -1;
 	}
 
 	public Integer readPackets(Socket socket) {
@@ -86,6 +87,7 @@ public class TCPReceiver implements Callable<Integer> {
 			if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
 				if (makePacket(buffer.toString())){
 					logger.addLine("Create packet, id: " + receivedPacket);
+					//System.out.println("Create packet, id: " + receivedPacket);
 					try {
 						if (parser.getHeadProperty("ID") != null){
 							int id = Integer.parseInt(parser.getHeadProperty("ID"));

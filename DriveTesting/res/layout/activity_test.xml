@@ -3,12 +3,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Protocol Type" />
+
+    <RadioGroup
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RadioButton
+            android:id="@+id/type_tcp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTypeChoosed"
+            android:text="TCP" />
+
+        <RadioButton
+            android:id="@+id/type_udp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTypeChoosed"
+            android:text="UDP" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Direction" />
+
+    <RadioGroup
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RadioButton
+            android:id="@+id/dir_dl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDirectionChoosed"
+            android:text="Download" />
+
+        <RadioButton
+            android:id="@+id/dir_ul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDirectionChoosed"
+            android:text="Upload" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/bt_startTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="StartTestClick"
+        android:onClick="onStartTestClick"
         android:text="StartTest" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="out" />
+
+    <EditText
+        android:id="@+id/editOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:ems="10"
+        android:inputType="number" />
 
 </LinearLayout>

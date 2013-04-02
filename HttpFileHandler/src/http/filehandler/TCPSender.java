@@ -56,8 +56,8 @@ public class TCPSender  implements Callable<Integer> {
 
 	public Integer call() {
 		try {			
-			if (checkPrerequisite() == false) {
-				return 0;
+			if (checkPrerequisite() == false) {					
+				return -1;
 			}
 			ackHandler.startAckReceiver(fileInstance.getName(), socket, ackList);
 			printerWriter = new PrintWriter(socket.getOutputStream());			
@@ -69,10 +69,12 @@ public class TCPSender  implements Callable<Integer> {
 			}
 			printerWriter.println("END");
 			printerWriter.flush();
+			System.out.println("File Sending ended!");
 			Thread.sleep(1000);
 			ackHandler.stopScaning();
 			int ackSize = ackList.size();
 			logger.addLine("Received ACK message: "+ackSize);
+			System.out.println("Received ACK message: "+ackSize);
 			
 			return packetList.size()-ackSize;
 			
@@ -85,11 +87,13 @@ public class TCPSender  implements Callable<Integer> {
 	private boolean checkPrerequisite() {
 		if (serverAddress == null || serverPort == 0 || socket == null) {
 			logger.addLine("TCP sender, id: " + id+ " unknown receiver!");
+			System.out.println("connection problem!");
 			return false;
 		}
 
 		if (fileInstance == null || fileInstance.getPocketSize() == 0) {
 			logger.addLine("TCP sender, id: " + id+ " invalid file!");
+			System.out.println("Problem with fileInstance!");
 			return false;
 		}
 		return true;
