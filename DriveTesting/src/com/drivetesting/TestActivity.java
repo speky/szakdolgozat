@@ -1,10 +1,14 @@
 package com.drivetesting;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.RadioButton;
@@ -13,19 +17,30 @@ import android.widget.TextView;
 public class TestActivity extends Activity {
 	private HttpClient httpClient = null; 
 	private Context context = null;
-	private Handler handler = null;
+	private Handler handler = new Handler(Looper.getMainLooper()) { 
+		@Override 
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			((TextView)findViewById(R.id.editOut)).setText(msg.toString());		    	
+		} 
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
+		
+		ActionBar actionBar = getActionBar();	
+		actionBar.setDisplayShowHomeEnabled(false) ;
+		actionBar.setTitle("Test");
+		
 		setContentView(R.layout.activity_test);
 		context = this;
-		handler = new Handler() { 
-			@Override 
-			public void handleMessage(Message msg) {
-				((TextView)findViewById(R.id.editOut)).setText(msg.toString());		    	
-			} 
-		};
+		
+		/*int uid = getApplication().getApplicationInfo().uid;
+		uid = android.os.Process.myUid();
+		long txApp = TrafficStats.getUidTxBytes(uid);
+		long rxApp = TrafficStats.getUidRxBytes(uid);
+		*/
 		
 		httpClient = new HttpClient(context, handler);
 	}

@@ -4,21 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Messenger;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -28,7 +23,6 @@ import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -129,6 +123,11 @@ public class MainActivity extends Activity  {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		ActionBar actionBar = getActionBar();	
+		actionBar.setDisplayShowHomeEnabled(false) ;
+		actionBar.setTitle("Main"); 
+		
 		networkStateChangedFilter = new IntentFilter();
 		networkStateChangedFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
@@ -146,7 +145,7 @@ public class MainActivity extends Activity  {
 		    }
 		};
 		
-		setContentView(R.layout.main);
+		setContentView(R.layout.main_tab);
 
 		context = this;		
 		phoneStateListener = new CustomPhoneStateListener();

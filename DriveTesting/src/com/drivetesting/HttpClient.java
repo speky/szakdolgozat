@@ -25,11 +25,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class HttpClient implements Runnable {
@@ -37,7 +40,6 @@ public class HttpClient implements Runnable {
 	private  final String ServerAddress ="192.168.0.100";//"92.249.224.209";//192.168.0.2";//"10.0.2.2";
 	private Logger logger;
 	private Context context;
-	final static Handler handler = new Handler();
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
@@ -49,43 +51,81 @@ public class HttpClient implements Runnable {
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
 
+	private Handler handler = null;
+	private long mStartRX = 0;
+	private long mStartTX = 0;
+
 	public  HttpClient (Context context, Handler handler) {
-		this.context = context;			
+		this.context = context;
+		this.handler = handler; 
 		isRunning = true;
 		logger = new Logger("");
 		logger.addLine("test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
-		
+
 	}
 
 	public void run() {
 		try {
 			String ip = getLocalIpAddress();
-			socket = new Socket(ServerAddress, ServerPort);
+			System.out.println(ip);
+
+			/*socket = new Socket(ServerAddress, ServerPort);
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
+*/
+			Message m = handler.obtainMessage(5, "ize");
+			m.sendToTarget();
+			/*new Message();			
+			Bundle b = new Bundle();
+			b.putInt("what", 5); // for example
+			m.setData(b);
+			handler.sendMessage(m);*/
 
-		      Message m = new Message();
-              Bundle b = new Bundle();
-              b.putInt("what", 5); // for example
-              m.setData(b);
-              handler.sendMessage(m);
-
+			mStartRX = TrafficStats.getTotalRxBytes();
+			mStartTX = TrafficStats.getTotalTxBytes();
+			
+			
+						
+		//	if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
+				
+			/*} else {
+				mHandler.postDelayed(mRunnable, 1000);
+			}
 
 			while (isRunning) {
 				makeNewThread();				
 				isRunning = false;
 			}
+
+			m = new Message();
+			b = new Bundle();
+			b.putInt("end", 5);
+			m.setData(b);
+			handler.sendMessage(m);
+*/
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 
+
+	private final Runnable mRunnable = new Runnable() {
+		public void run() {
+			
+			long rxBytes = TrafficStats.getTotalRxBytes()- mStartRX;
+			System.out.println(Long.toString(rxBytes));
+			long txBytes = TrafficStats.getTotalTxBytes()- mStartTX;
+			System.out.println(Long.toString(txBytes));
+			handler.postDelayed(mRunnable, 1000);
+		}
+	};
+
 	/*private static void hint(final Context mycontext, final String s) {
 		Toast toast=Toast.makeText(mycontext, s, Toast.LENGTH_SHORT);
 		toast.show();
 	}
-	*/
+	 */
 	public String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {

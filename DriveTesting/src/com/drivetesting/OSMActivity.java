@@ -15,6 +15,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -52,6 +53,10 @@ public class OSMActivity extends Activity implements LocationListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_osm);
 
+		ActionBar actionBar = getActionBar();	
+		actionBar.setDisplayShowHomeEnabled(false) ;
+		actionBar.setTitle("Map");
+		
 		locationText = (TextView)this.findViewById(R.id.locationInfo);
 		mapView = (MapView) findViewById(R.id.mapView);
 		//mapView.setTileSource(TileSourceFactory.MAPNIK);
