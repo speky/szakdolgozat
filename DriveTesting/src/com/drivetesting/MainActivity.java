@@ -528,7 +528,7 @@ public class MainActivity extends Activity  {
 
 		phoneDataList.clear();
 		//Phone		
-		addHashMapElement(phoneDataList, "Telefon típusa", getPhoneType());
+		addHashMapElement(phoneDataList, "Phone Type", getPhoneType());
 		addHashMapElement(phoneDataList, "Telefon szám ", getTelephoneNumber());
 		addHashMapElement(phoneDataList, "IMEI\\ESN ", getIMEI());
 		addHashMapElement(phoneDataList, "Gyártó ", Build.MANUFACTURER);
