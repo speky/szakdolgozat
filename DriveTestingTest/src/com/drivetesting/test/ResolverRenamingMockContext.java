@@ -12,22 +12,10 @@ import android.test.mock.MockContext;
 
 
 public class ResolverRenamingMockContext extends IsolatedContext {
-
-    /**
-     * The renaming prefix.
-     */
     private static final String PREFIX = "test.";
 
+   private static final MockContentResolver RESOLVER = new MockContentResolver();
 
-    /**
-     * The resolver.
-     */
-    private static final MockContentResolver RESOLVER = new MockContentResolver();
-
-    /**
-     * Constructor.
-     * @param context 
-     */
     public ResolverRenamingMockContext(Context context) {
         super(RESOLVER, new DelegatedMockContext(context));
     }
@@ -40,10 +28,6 @@ public class ResolverRenamingMockContext extends IsolatedContext {
         RESOLVER.addProvider(name, provider);
     }
 
-    /**
-     * The DelegatedMockContext.
-     *
-     */
     private static class DelegatedMockContext extends MockContext {
 
         private Context mDelegatedContext;

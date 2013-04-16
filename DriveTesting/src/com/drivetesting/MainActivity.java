@@ -51,7 +51,7 @@ public class MainActivity extends Activity  {
 	private SimpleAdapter phoneDataAdapter = null;
 	private SimpleAdapter networkDataAdapter = null;
 	private  boolean isNetworkConnected = false;
-		
+
 	//dynamically changed variable
 	private String signalStrengthString = "99";
 	private String cdmaEcio = "-1";
@@ -66,14 +66,33 @@ public class MainActivity extends Activity  {
 	private String dataDirection= "";
 	private String networkType= "";
 
+	private static final int MIN_BATTERY_LEVEL = 20;
+	private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	        String action = intent.getAction(); 
+	        if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+	            int level = intent.getIntExtra("level", 0);
+	            int scale = intent.getIntExtra("scale", 100);
+	            int plugged = intent.getIntExtra("plugged", 0);
+
+	            if(plugged == 0){
+	                if((level * 100 / scale) < MIN_BATTERY_LEVEL){
+	                    // do something...
+	                }
+	            }
+	        }
+	    }
+	};
+	
 	public List<HashMap<String, String>> getPhoneData() {
 		return phoneDataList;  
 	}
-	
+
 	public List<HashMap<String, String>> getNetworkData() {
 		return networkDataList;  
 	}
-	
+
 	private void startSignalLevelListener() {
 		if (telephonyManager == null){  
 			telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -91,7 +110,11 @@ public class MainActivity extends Activity  {
 	private void stopListening(){
 		if (telephonyManager == null){  
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);	
-		}       
+		}
+		
+		if (connectivityBroadcastReceiver != null) {
+			unregisterReceiver(connectivityBroadcastReceiver);
+		}
 	}
 
 	private String getSignalLevelString(int level) {
@@ -123,38 +146,38 @@ public class MainActivity extends Activity  {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		ActionBar actionBar = getActionBar();	
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Main"); 
-		
+
 		networkStateChangedFilter = new IntentFilter();
 		networkStateChangedFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
 		connectivityBroadcastReceiver = new BroadcastReceiver() {
-		    @Override
-		    public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			    NetworkInfo info = ((ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-			    String mTypeName = info.getTypeName();
-			    networkType = info.getSubtypeName();
-			    Log.i(TAG, "*** Network Type: " + mTypeName 
-					+ ", subtype: " + networkType);
-			    //updateScreen();
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+					NetworkInfo info = ((ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+					String mTypeName = info.getTypeName();
+					networkType = info.getSubtypeName();
+					Log.i(TAG, "*** Network Type: " + mTypeName 
+							+ ", subtype: " + networkType);
+					//updateScreen();
+				}
 			}
-		    }
 		};
-		
+
 		setContentView(R.layout.main_tab);
 
 		context = this;		
 		phoneStateListener = new CustomPhoneStateListener();
 		startSignalLevelListener();
-		
+
 		// Registers BroadcastReceiver to track network connection changes.
 		//connectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();		
 		//this.registerReceiver(connectivityBroadcastReceiver, filter);
-	
+
 		// fill in the grid_item layout			
 		phoneDataAdapter = new SimpleAdapter(this, phoneDataList, R.layout.grid, from, to);
 		networkDataAdapter = new SimpleAdapter(this, networkDataList, R.layout.grid, from, to);		
@@ -174,24 +197,23 @@ public class MainActivity extends Activity  {
 	@Override
 	protected void onPause() {
 		Log.d(TAG, "onPause");
-		super.onPause();
-		if (connectivityBroadcastReceiver != null) {
-			unregisterReceiver(connectivityBroadcastReceiver);
-		}
-		
+		super.onPause();		
 		// Unregister the listener with the telephony manager
 		stopListening();
+		unregisterReceiver(batteryInfoReceiver);
 	}
 
 	@Override
 	protected void onResume() {
-		Log.d(TAG, "onREsume ");
+		Log.d(TAG, "onResume ");
 		super.onResume();
-	
+
 		registerReceiver(connectivityBroadcastReceiver, networkStateChangedFilter);
 		// Register the listener with the telephony manager
 		startSignalLevelListener();
 
+		 registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); 
+		
 		/*SharedPreferences prefs = ((DriveTestApp)getApplication()).prefs;
 		checkbox.setText(new Boolean(prefs.getBoolean("checkbox", false)).toString());
 		ringtone.setText(prefs.getString("ringtone", "<unset>"));
@@ -204,7 +226,9 @@ public class MainActivity extends Activity  {
 	@Override
 	protected void onDestroy(){
 		Log.d(TAG, "onDestroy ");
-		super.onDestroy();		
+		super.onDestroy();
+		// Unregister the listener with the telephony manager
+		stopListening();
 	}
 
 	private class CustomPhoneStateListener extends PhoneStateListener{
@@ -377,62 +401,11 @@ public class MainActivity extends Activity  {
 		GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
 		String cid = "0";
 		if (cellLocation != null){
-			cid = String.format("%d", cellLocation.getCid());	
+			cid = String.format("%d", cellLocation.getCid()& 0xffff);	
 		}
 		return cid;
 	}
 
-	private String getNetworkType(int type){
-		String networkType = "";
-		switch (type){
-		case TelephonyManager.NETWORK_TYPE_UNKNOWN :
-			networkType = "Ismeretlen"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_CDMA:
-			networkType = "CDMA"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_EDGE :
-			networkType = "EDGE"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_EHRPD:
-			networkType = "EHRPD"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_EVDO_0:
-			networkType = "EVDO_0"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_EVDO_A:
-			networkType = "EVDO_A"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_EVDO_B:
-			networkType = "EVDO_B"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_GPRS: 
-			networkType = "GPRS"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_HSDPA: 
-			networkType = "GPRS"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_HSPA:
-			networkType = "HSPA"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_HSUPA:
-			networkType = "HSUPA"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_IDEN:
-			networkType = "iDen"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_LTE:
-			networkType = "LTE"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_1xRTT:
-			networkType = "1xRTT"; 
-			break;
-		case TelephonyManager.NETWORK_TYPE_UMTS:
-			networkType = "UMTS"; 
-			break;
-		} 
-		return networkType;
-	}
 	private String getDataActivity(int activityType){
 		String dataActivity = "";
 		switch (activityType){
@@ -617,11 +590,13 @@ public class MainActivity extends Activity  {
 		case R.id.test:
 			startActivity(new Intent(this, TestActivity.class));
 			return true;
-			
+
 		default:
 			return false;			
 		}
 	}
+	
+	
 	/*
 	public void onClick(View view) {
 		Intent intent = new Intent(this, DownloadService.class);
@@ -647,7 +622,7 @@ public class MainActivity extends Activity  {
 
 		};
 	};*/
-/*
+	/*
 	public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
 		@Override
@@ -655,7 +630,7 @@ public class MainActivity extends Activity  {
 			Log.d(TAG, "*** connectivity onreceive! ");
 			ConnectivityManager connectivityManager =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-			
+
 			if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE ) {
 				networkType = networkInfo.getSubtypeName();
 				Log.d(TAG, "connectivity network_Type: "+networkType);

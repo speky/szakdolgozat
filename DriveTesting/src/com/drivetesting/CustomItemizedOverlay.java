@@ -11,11 +11,11 @@ import org.osmdroid.views.overlay.OverlayItem;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
  
-public class MyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
+public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
   
  private ArrayList<OverlayItem> overlayItemList = new ArrayList<OverlayItem>();
  
- public MyItemizedOverlay(Drawable pDefaultMarker,   ResourceProxy pResourceProxy) {
+ public CustomItemizedOverlay(Drawable pDefaultMarker,   ResourceProxy pResourceProxy) {
 	super(pDefaultMarker, pResourceProxy);	 
  }
   

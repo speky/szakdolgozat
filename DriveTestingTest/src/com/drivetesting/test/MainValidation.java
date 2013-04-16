@@ -16,7 +16,6 @@ public class MainValidation extends ActivityInstrumentationTestCase2<MainActivit
 
 	public MainValidation() {
 		super(MainActivity.class);
-
 	}
 
 	@Override  
