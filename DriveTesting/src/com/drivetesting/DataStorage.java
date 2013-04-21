@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.R.string;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,73 +16,67 @@ public class DataStorage {
 	
 	static final  String TAG = "DataStorage"; 
 	
-	public static final String DB_NAME  = "position_data_db"; 
+	public static final String DB_NAME  = "drive_test_db"; 
 	public static final int DB_VERSION = 1;
-	public static final String DB_TABLE  = "position";
+	public static final String DB_TABLE  = "test_data";
 	public static final String C_ID = "id";
 	public static final String C_TIME = "time";
 	public static final String C_POSITION = "positions";
+	public static final String C_SIGNAL = "rssi";
 	
-	Context context;
-	DbHelper dbHelper;
-	SQLiteDatabase db;
-	
+	private Context context;
+	private DbHelper dbHelper;
+	private SQLiteDatabase db;
+	private int size = 0;
 	
 	public DataStorage(Context context){
 		this.context = context;
-		dbHelper = new DbHelper();
+		dbHelper = new DbHelper(context);
+		db = dbHelper.getWritableDatabase();
+		size = 0;
 	}
 	
-	public void insert (String pos ){
-		ContentValues values = new ContentValues();		
-		values.put(C_ID, 2);				
-		values.put(C_TIME, new Date().getTime() );
+	public void insert (String pos, String date, String signalStrength){
+		ContentValues values = new ContentValues();
+		size++;
+		values.put(C_ID, size);
+		values.put(C_TIME,  date);
 		values.put(C_POSITION, pos);
-		
-		db = dbHelper.getWritableDatabase();
+		values.put(C_SIGNAL, signalStrength);
+				
 		db.insert(DB_TABLE, null, values);
 	}
 	
-	public Cursor querry ( ){
-		db = dbHelper.getWritableDatabase();
-		List<dbData> list = new ArrayList<dbData>();
+	public String[] querry ( ){
+		db = dbHelper.getWritableDatabase();				
+		Cursor query = db.query(DB_TABLE, null, null, null, null, null, null);//C_TIME +" DESC");
+		List<DbData> dataList = new ArrayList<DbData>();
+        while (query.moveToNext()) {
+            DbData line= new DbData();
+            line.id = query.getString(query.getColumnIndexOrThrow(C_ID));
+            dataList.add(line);
+        }
+        query.close();
+        return dataList.toArray(new String[0]);
 		
-		return  db.query(DB_TABLE, null, null, null, null, null, C_TIME +" DESC");
-		
-	}
+	}	
 	
-	
-	class dbData{
-		
-		private int id;
-		private String position;
-		
-		public int getId() {
-			return id;
-		}
-		public void setId(int id) {
-			this.id = id;
-		}
-		public String getPosition() {
-			return position;
-		}
-		public void setPosition(String position) {
-			this.position = position;
-		}
-		
-		
+	class DbData{		
+		public String id;
+		public String position;
+		public String time;
+		public String signalStrength;
 	}
 	
 	class DbHelper extends SQLiteOpenHelper{
 
-		public DbHelper() {
-			super(context, DB_NAME, null, DB_VERSION);
-			
+		public DbHelper(Context context) {
+			super(context, DB_NAME, null, DB_VERSION);			
 		}
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			String sql = String.format("create table %s (%s int primary key, %s varchar(100), %s varchar(100))", DB_TABLE , C_ID, C_TIME, C_POSITION );
+			String sql = String.format("create table %s (%s int primary key, %s varchar(100), %s varchar(100), %s varchar(100))", DB_TABLE , C_ID, C_TIME, C_POSITION , C_SIGNAL);
 			Log.d(TAG, "onCreate Sql:"+sql);
 			db.execSQL(sql);
 		}
