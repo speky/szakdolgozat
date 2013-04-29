@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
  
-    <item android:id="@+id/test"  
+    <item android:id="@+id/menu_main"  
+      android:title="@string/menu_main" 
+      android:icon="@drawable/mobil" 
+      android:showAsAction="ifRoom|withText" />
+    
+    <item android:id="@+id/menu_test"  
       android:title="@string/menu_test" 
       android:icon="@drawable/test" 
       android:showAsAction="ifRoom|withText" />

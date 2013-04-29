@@ -18,6 +18,7 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -29,6 +30,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -210,6 +213,40 @@ public class OSMActivity extends Activity implements LocationListener {
 		myLocationOverlay.disableCompass();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		menu.findItem(R.id.menu_map).setVisible(false);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		int id = item.getItemId();
+		switch (id)
+		{
+		case R.id.menu_settings:
+			startActivity(new Intent(this, PrefsActivity.class));
+			return true;
+
+		case R.id.menu_export:
+			startActivity(new Intent(this, ExportActivity.class));
+			return true;
+
+		case R.id.menu_main:
+			startActivity(new Intent(this, MainActivity.class));
+			return true;
+
+		case R.id.menu_test:
+			startActivity(new Intent(this, TestActivity.class));
+			return true;
+
+		default:
+			return false;			
+		}
+	}
+	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener = new OnItemGestureListener<OverlayItem>() {
 
 		@Override
@@ -280,5 +317,6 @@ public class OSMActivity extends Activity implements LocationListener {
 			//return super.onSingleTapUp(event, mapView);
 			return true;
 		}
+		
 	}
 }

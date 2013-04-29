@@ -33,14 +33,15 @@ public class DataStorageTest extends AndroidTestCase {
 	public void testStoreOneItem() throws Exception {
 		Calendar c = Calendar.getInstance(); 
 		Date date = c.getTime();
-		db.insert("lat long", date.toString(), "1");
-		assertEquals(1, db.querry().length);
+		db.insert("lat", "ma", "10");
+		//db.insert("lat long", date.toString(), "1");
+		assertEquals(1, db.querry().size());
 	}
 
 	public void testStoreTwoItem() throws Exception {
 		Calendar c = Calendar.getInstance(); 
 		Date date = c.getTime();
 		db.insert("lat long", date.toString(), "2");
-		assertEquals(2, db.querry().length); 
+		assertEquals(2, db.querry().size()); 
 	}
 }

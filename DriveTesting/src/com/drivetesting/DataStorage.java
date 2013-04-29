@@ -16,9 +16,9 @@ public class DataStorage {
 	
 	static final  String TAG = "DataStorage"; 
 	
-	public static final String DB_NAME  = "drive_test_db"; 
+	public static final String DB_NAME  = "drive_test_db1"; 
 	public static final int DB_VERSION = 1;
-	public static final String DB_TABLE  = "test_data";
+	public static final String DB_TABLE  = "test_dat";
 	public static final String C_ID = "id";
 	public static final String C_TIME = "time";
 	public static final String C_POSITION = "positions";
@@ -37,27 +37,33 @@ public class DataStorage {
 	}
 	
 	public void insert (String pos, String date, String signalStrength){
-		ContentValues values = new ContentValues();
-		size++;
-		values.put(C_ID, size);
+		ContentValues values = new ContentValues();		
+		values.put(C_ID,  ++size);
 		values.put(C_TIME,  date);
 		values.put(C_POSITION, pos);
 		values.put(C_SIGNAL, signalStrength);
-				
+						
 		db.insert(DB_TABLE, null, values);
+			    
+        //String sql =   "INSERT INTO "+DB_TABLE+ "("+ C_TIME+", "+C_POSITION+", "+C_SIGNAL+") VALUES("+ date+", "+pos+", "+signalStrength +")" ;       
+        //db.execSQL(sql);
 	}
 	
-	public String[] querry ( ){
+	public List<DbData> querry ( ){
 		db = dbHelper.getWritableDatabase();				
-		Cursor query = db.query(DB_TABLE, null, null, null, null, null, null);//C_TIME +" DESC");
+		//Cursor query = db.query(DB_TABLE, null, null, null, null, null, null);//C_TIME +" DESC");
+		 Cursor query = db.rawQuery("SELECT * FROM "+DB_TABLE , null);//WHERE TRIM(name) = '"+name.trim()+"
 		List<DbData> dataList = new ArrayList<DbData>();
         while (query.moveToNext()) {
             DbData line= new DbData();
             line.id = query.getString(query.getColumnIndexOrThrow(C_ID));
+            line.position = query.getString(query.getColumnIndexOrThrow(C_POSITION));
+            line.time = query.getString(query.getColumnIndexOrThrow(C_TIME));
+            line.signalStrength = query.getString(query.getColumnIndexOrThrow(C_SIGNAL));
             dataList.add(line);
         }
-        query.close();
-        return dataList.toArray(new String[0]);
+        query.close();        
+        return dataList;
 		
 	}	
 	
@@ -76,7 +82,7 @@ public class DataStorage {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			String sql = String.format("create table %s (%s int primary key, %s varchar(100), %s varchar(100), %s varchar(100))", DB_TABLE , C_ID, C_TIME, C_POSITION , C_SIGNAL);
+			String sql = String.format("create table %s (%s int primary key, %s varchar(200), %s varchar(100), %s varchar(100))", DB_TABLE , C_ID, C_TIME, C_POSITION , C_SIGNAL);
 			Log.d(TAG, "onCreate Sql:"+sql);
 			db.execSQL(sql);
 		}

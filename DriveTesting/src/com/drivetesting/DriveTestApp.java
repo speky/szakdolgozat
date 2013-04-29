@@ -10,8 +10,13 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	static final String TAG = "DriveTesting";
 
-	DataStorage dataStorage;
-	SharedPreferences prefs;
+	private DataStorage dataStorage;
+	private SharedPreferences prefs;	
+	private String serverIp;
+	
+	public String getServerIp() {
+		return serverIp;
+	}
 	
 	@Override
 	public void onCreate() {
@@ -19,16 +24,24 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(this);
-
+		
+		serverIp= prefs.getString("serverIp", "0.0.0.0");
+		
 		dataStorage = new DataStorage(this);
 		Log.d(TAG, "App created");
 	}
 
+	
 
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
 		Log.d(TAG, "On Change preferences: "+ key);
+        if (key.equals("serverIp")) {
+            //Preference connectionPref = findPreference(key);
+        	Log.d(TAG, "Server IP changed");
+        }
+
 	}
 
 }

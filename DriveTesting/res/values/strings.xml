@@ -19,6 +19,7 @@
     <string name="title_activity_osm">OSMActivity</string>
     <string name="menu_map">Map</string>
     <string name="menu_test">Test</string>
+    <string name="menu_main">Main</string>
     <string name="unit_dbm">dBm</string>
     <string name="network_connected">Hálózati kapcoslat aktív!</string>
     <string name="connection_lost">Nincs hálózati kapcsolat </string>

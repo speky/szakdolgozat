@@ -70,6 +70,7 @@ public class HttpClient implements Runnable {
 			String ip = getLocalIpAddress();
 			System.out.println(ip);
 
+						
 			/*socket = new Socket(ServerAddress, ServerPort);
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());

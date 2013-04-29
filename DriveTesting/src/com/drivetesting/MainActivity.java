@@ -566,6 +566,7 @@ public class MainActivity extends Activity  {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);
+		menu.findItem(R.id.menu_main).setVisible(false);
 		return true;
 	}
 
@@ -587,7 +588,7 @@ public class MainActivity extends Activity  {
 			startActivity(new Intent(this, OSMActivity.class));
 			return true;
 
-		case R.id.test:
+		case R.id.menu_test:
 			startActivity(new Intent(this, TestActivity.class));
 			return true;
 

@@ -1,6 +1,13 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory android:title="Simple Preferences">
+    <EditTextPreference
+      android:key="serverIp"
+      android:title="Server IP address"
+      android:summary="Click to pop up a field for entry"
+      android:dialogTitle="ServerIp address"
+      android:defaultValue="192.168.0.100"
+    />
     <CheckBoxPreference
       android:key="checkbox"
       android:title="Checkbox Preference"
