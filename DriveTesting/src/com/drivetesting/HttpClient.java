@@ -174,6 +174,7 @@ public class HttpClient implements Runnable {
 				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			}
+			
 			for (Future<Integer> future : threadSet) {
 				try {
 					int value = future.get();

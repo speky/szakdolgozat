@@ -1,36 +1,41 @@
 package com.drivetesting;
 
+import java.util.Random;
+
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 public class UpdateService extends Service {
 
 	static final String TAG = "UpdateService";
-	
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(TAG, "StartCommand");
-		return super.onStartCommand(intent, flags, startId);
-	}
-	
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Log.d(TAG, "Create");
-	}
+
+	private final IBinder mBinder = new MyBinder();
+	private int num = -1;
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.d(TAG, "Destroy");
+	public int onStartCommand(Intent intent, int flags, int startId) {
+
+		Random random = new Random();
+		num =random.nextInt(20);
 		
+		return Service.START_NOT_STICKY;
 	}
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		
-		return null;
+		return mBinder;
 	}
+
+	public class MyBinder extends Binder {
+		UpdateService getService() {
+			return UpdateService.this;
+		}
+	}
+
+	public int getNum() {
+		return num;
+	}
+
 }

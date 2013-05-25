@@ -14,6 +14,7 @@ public class TCPReceiver implements Callable<Integer> {
 	private FileInstance fileInstance = null;
 	private ServerSocket serverSocket = null;
 	private int serverPort = 0;
+	private int receivedPacket = 0;
 	private HttpParser parser = null;
 	private AckHandler ackHandler = null;
 
@@ -46,6 +47,10 @@ public class TCPReceiver implements Callable<Integer> {
 
 	}
 
+	public int getReceivedPacket(){
+		return receivedPacket;
+	}
+	
 	public Integer call() {
 		try {			
 			if (serverPort == 0) {
@@ -79,7 +84,7 @@ public class TCPReceiver implements Callable<Integer> {
 			logger.addLine("ERROR while create scanner: " + e.getMessage());
 		}
 		StringBuffer buffer = new StringBuffer();
-		int receivedPacket = 0;
+		receivedPacket = 0;
 		boolean reading = true;
 		while (reading && scanner.hasNextLine()) {							
 			String readedLine = scanner.nextLine();

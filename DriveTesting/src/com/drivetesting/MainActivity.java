@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.CellLocation;
+import android.telephony.NeighboringCellInfo;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -68,23 +69,23 @@ public class MainActivity extends Activity  {
 
 	private static final int MIN_BATTERY_LEVEL = 20;
 	private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	        String action = intent.getAction(); 
-	        if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-	            int level = intent.getIntExtra("level", 0);
-	            int scale = intent.getIntExtra("scale", 100);
-	            int plugged = intent.getIntExtra("plugged", 0);
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction(); 
+			if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+				int level = intent.getIntExtra("level", 0);
+				int scale = intent.getIntExtra("scale", 100);
+				int plugged = intent.getIntExtra("plugged", 0);
 
-	            if(plugged == 0){
-	                if((level * 100 / scale) < MIN_BATTERY_LEVEL){
-	                    // do something...
-	                }
-	            }
-	        }
-	    }
+				if(plugged == 0){
+					if((level * 100 / scale) < MIN_BATTERY_LEVEL){
+						// do something...
+					}
+				}
+			}
+		}
 	};
-	
+
 	public List<HashMap<String, String>> getPhoneData() {
 		return phoneDataList;  
 	}
@@ -111,7 +112,7 @@ public class MainActivity extends Activity  {
 		if (telephonyManager == null){  
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);	
 		}
-		
+
 		if (connectivityBroadcastReceiver != null) {
 			unregisterReceiver(connectivityBroadcastReceiver);
 		}
@@ -156,14 +157,22 @@ public class MainActivity extends Activity  {
 
 		connectivityBroadcastReceiver = new BroadcastReceiver() {
 			@Override
-			public void onReceive(Context context, Intent intent) {
+			public void onReceive(Context context, Intent intent) {				
 				if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-					NetworkInfo info = ((ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-					String mTypeName = info.getTypeName();
-					networkType = info.getSubtypeName();
-					Log.i(TAG, "*** Network Type: " + mTypeName 
-							+ ", subtype: " + networkType);
-					//updateScreen();
+					NetworkInfo networkInfo = ((ConnectivityManager)context.getSystemService(CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+					setConnectionState(false);
+					networkState = "Nincs kapcsolat";
+					networkType = "No network";
+					if (networkInfo != null && (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE ||
+							networkInfo.getType() == ConnectivityManager.TYPE_WIFI)) {
+						networkType = networkInfo.getSubtypeName();
+						Log.d(TAG, "connectivity network_Type: "+networkType);
+						if (networkInfo.isConnected()) {
+							setConnectionState(true);
+							networkState = "Kapcsolódva";
+						}
+					}
+					refreshNetworkDataList();
 				}
 			}
 		};
@@ -196,11 +205,11 @@ public class MainActivity extends Activity  {
 
 	@Override
 	protected void onPause() {
-		Log.d(TAG, "onPause");
-		super.onPause();		
+		Log.d(TAG, "onPause");		
 		// Unregister the listener with the telephony manager
 		stopListening();
 		unregisterReceiver(batteryInfoReceiver);
+		super.onPause();	
 	}
 
 	@Override
@@ -212,8 +221,8 @@ public class MainActivity extends Activity  {
 		// Register the listener with the telephony manager
 		startSignalLevelListener();
 
-		 registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); 
-		
+		registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); 
+
 		/*SharedPreferences prefs = ((DriveTestApp)getApplication()).prefs;
 		checkbox.setText(new Boolean(prefs.getBoolean("checkbox", false)).toString());
 		ringtone.setText(prefs.getString("ringtone", "<unset>"));
@@ -227,8 +236,7 @@ public class MainActivity extends Activity  {
 	protected void onDestroy(){
 		Log.d(TAG, "onDestroy ");
 		super.onDestroy();
-		// Unregister the listener with the telephony manager
-		stopListening();
+
 	}
 
 	private class CustomPhoneStateListener extends PhoneStateListener{
@@ -551,7 +559,21 @@ public class MainActivity extends Activity  {
 		addHashMapElement(networkDataList, "Kapcsolat állapota ", dataConnectionState);
 		addHashMapElement(networkDataList, "Roaming ", getRoaming());
 		addHashMapElement(networkDataList, "Hívás állapot", callState );
-		//Neighbouring cell infos		
+		List<NeighboringCellInfo> NeighboringList = telephonyManager.getNeighboringCellInfo();
+		addHashMapElement(networkDataList, "Neighboring List", "Lac : Cid : RSSI");
+		for(int i=0; i < NeighboringList.size(); i++){
+			String dBm;
+			int rssi = NeighboringList.get(i).getRssi();
+			if (rssi == NeighboringCellInfo.UNKNOWN_RSSI) {
+				dBm = "Unknown RSSI";
+			}else{
+				dBm = String.valueOf(-113 + 2 * rssi) + " dBm";
+			}
+			String neighboring = String.valueOf(NeighboringList.get(i).getLac()) +" : "+ String.valueOf(NeighboringList.get(i).getCid()) +" : "
+									+ dBm +"\n";
+			addHashMapElement(networkDataList, "", neighboring);
+		}
+
 		networkDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
 	}
@@ -596,8 +618,18 @@ public class MainActivity extends Activity  {
 			return false;			
 		}
 	}
-	
-	
+
+	public class IncomingReceiver extends BroadcastReceiver{
+		 
+	    @Override
+	    public void onReceive(Context context, Intent intent) {
+	 
+	        if (intent.getAction().equals(GPSService.CUSTOM_INTENT)) {
+	                System.out.println("*****GOT THE INTENT********");
+	 
+	        }
+	    }
+	}
 	/*
 	public void onClick(View view) {
 		Intent intent = new Intent(this, DownloadService.class);
@@ -622,31 +654,6 @@ public class MainActivity extends Activity  {
 			}
 
 		};
-	};*/
-	/*
-	public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.d(TAG, "*** connectivity onreceive! ");
-			ConnectivityManager connectivityManager =  (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-			if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE ) {
-				networkType = networkInfo.getSubtypeName();
-				Log.d(TAG, "connectivity network_Type: "+networkType);
-				if (networkInfo.isConnected()){
-					setConnectionState(true);
-					networkState = "Kapcsolódva";					
-					Toast.makeText(context, R.string.network_connected, Toast.LENGTH_SHORT).show();
-				} else {
-					setConnectionState(false);
-					networkState = "Nincs kapcsolat";
-					Toast.makeText(context, R.string.connection_lost, Toast.LENGTH_SHORT).show();
-				}
-				refreshNetworkDataList();
-			}			
-		}
 	};*/
 
 }
