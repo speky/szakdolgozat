@@ -63,13 +63,15 @@ public class AckHandler {
 		}
 
 		public void run() {
+			
+			Scanner scanner = null;
 			try {
 				if (socket == null) {
 					logger.addLine("Error AckReceiver: socket is null!!!");
 					System.out.println("Error AckReceiver: socket is null!!!");
 					return;					
 				}
-				Scanner scanner = new Scanner(socket.getInputStream());
+				scanner = new Scanner(socket.getInputStream());
 				HttpParser parser = new HttpParser(logger);
 				StringBuffer buffer = new StringBuffer();
 				System.out.println("ack thread started");
@@ -96,6 +98,11 @@ public class AckHandler {
 			} catch (IOException e) {
 				logger.addLine("Error in AckHandler: "+e.getMessage());
 				e.printStackTrace();
+			}
+			finally {
+				if (scanner != null) {
+					scanner.close();
+				}
 			}
 		}
 	}
