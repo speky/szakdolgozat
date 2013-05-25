@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import org.junit.AfterClass;
@@ -147,8 +146,7 @@ public class AckHandlerTest {
 	}
 
 	@Test
-	public void testAckSend() {
-		final Socket socket = mock(Socket.class);
+	public void testAckSend() {		
 		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
 		AckHandler handler = new AckHandler (logger);           

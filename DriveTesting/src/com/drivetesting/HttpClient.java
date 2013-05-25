@@ -1,9 +1,7 @@
 package com.drivetesting;
 
-import http.filehandler.FileInstance;
 import http.filehandler.Logger;
 import http.filehandler.TCPReceiver;
-import http.filehandler.TCPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,21 +17,16 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.TrafficStats;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class HttpClient implements Runnable {
 	private final int ServerPort = 4444;
@@ -43,8 +36,7 @@ public class HttpClient implements Runnable {
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
-	static final int MAX_THREAD = 10;
-	private boolean isRunning;
+	static final int MAX_THREAD = 10;	
 	private Socket socket;
 	private Scanner portScanner;
 	private PrintWriter pw;
@@ -57,25 +49,22 @@ public class HttpClient implements Runnable {
 
 	public  HttpClient (Context context, Handler handler) {
 		this.context = context;
-		this.handler = handler; 
-		isRunning = true;
+		this.handler = handler;		
 		logger = new Logger("");
 		logger.addLine("test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
-
 	}
 
 	public void run() {
 		try {
 			String ip = getLocalIpAddress();
 			System.out.println(ip);
-
 						
-			/*socket = new Socket(ServerAddress, ServerPort);
+			socket = new Socket(ServerAddress, ServerPort);
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
-*/
-			Message m = handler.obtainMessage(5, "ize");
+
+		/*	Message m = handler.obtainMessage(5, "ize");
 			m.sendToTarget();
 			/*new Message();			
 			Bundle b = new Bundle();
@@ -121,12 +110,7 @@ public class HttpClient implements Runnable {
 			handler.postDelayed(mRunnable, 1000);
 		}
 	};
-
-	/*private static void hint(final Context mycontext, final String s) {
-		Toast toast=Toast.makeText(mycontext, s, Toast.LENGTH_SHORT);
-		toast.show();
-	}
-	 */
+	
 	public String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -163,7 +147,8 @@ public class HttpClient implements Runnable {
 		try {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
-			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					receiveMessageFromServer();
+			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}

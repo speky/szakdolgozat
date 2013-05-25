@@ -78,6 +78,7 @@ public class TCPReceiver implements Callable<Integer> {
 		} catch (IOException e) {
 			logger.addLine("ERROR while create scanner: " + e.getMessage());
 		}
+		
 		StringBuffer buffer = new StringBuffer();
 		int receivedPacket = 0;
 		boolean reading = true;
@@ -105,6 +106,7 @@ public class TCPReceiver implements Callable<Integer> {
 				logger.addLine("End message received");
 			}			
 		}
+		scanner.close();
 		return receivedPacket;
 	}
 

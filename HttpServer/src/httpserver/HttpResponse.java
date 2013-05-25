@@ -19,8 +19,6 @@ public class HttpResponse {
 	public static final String	MIME_PLAINTEXT = "text/plain";
 	public static final String MIME_DEFAULT_BINARY = "application/octet-stream";
 
-	private static final int BufferSize = 16 * 1024;
-
 	private static final String TAG = "HTTP_RESPONSE: ";
 	private static String ROOT_DIR = "c:\\";
 
@@ -86,10 +84,6 @@ public class HttpResponse {
 		}
 	}		
 
-	private void addHeaderValue(final String name, final  String value, Properties header) {
-		header.put(name, value);
-	}
-
 	/**
 	 * Serves file from RootDir
 	 * Uses only URI, ignores all headers and HTTP parameters.
@@ -106,12 +100,7 @@ public class HttpResponse {
 			logger.addLine("File doesn't exist! " + fileName);
 		}
 
-		String mime = MIME_DEFAULT_BINARY;
-
-		long fileLength = 0;		
-		if  (file.canRead()) {		
-			fileLength = file.length();			
-		}else {
+		if  (!file.canRead()) {
 			setResponseText(HttpParser.HTTP_FORBIDDEN, MIME_PLAINTEXT, null);
 		}
 	}
