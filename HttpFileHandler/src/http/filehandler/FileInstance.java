@@ -43,7 +43,7 @@ public class FileInstance {
 		return pieces.size();
 	}
 
-	public boolean splitFileToPockets(int packetSize) {
+	public boolean splitFileToPackets(int packetSize) {
 		File file = new File(fileName);
 		pieces.clear();
 		if (file.canRead()){								    
@@ -59,7 +59,7 @@ public class FileInstance {
 			if (packetSize == 0){
 				packetSize = DEFAULT_SIZE;
 			}
-			if (pocketizeTheFile(bytes, packetSize, length) == false) {				
+			if (packetizeTheFile(bytes, packetSize, length) == false) {				
 				return false;
 			}			
 		}else {
@@ -68,7 +68,7 @@ public class FileInstance {
 		return false;
 	}
 
-	private boolean pocketizeTheFile(byte[] bytes, int packetSize, final int length) {
+	private boolean packetizeTheFile(byte[] bytes, int packetSize, final int length) {
 		try{				
 			int begin = 0;
 			while (begin < length) {

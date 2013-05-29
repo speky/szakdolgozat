@@ -61,9 +61,9 @@ public class HttpFileHandlerTest {
 		assertTrue(fileHandler.isFileInSet("test.txt"));
 		FileInstance fi = fileHandler.getFileInstance("test.txt");
 		assertNotNull(fi);
-		fi.splitFileToPockets(FileInstance.DEFAULT_SIZE);
+		fi.splitFileToPackets(FileInstance.DEFAULT_SIZE);
 		assertTrue(fi.getPocketSize() == 1);
-		fi.splitFileToPockets(100);
+		fi.splitFileToPackets(100);
 		assertTrue(fi.getPocketSize() == 1);
 		assertTrue(fileHandler.getNumberOfFiles() == 1);	
 	}

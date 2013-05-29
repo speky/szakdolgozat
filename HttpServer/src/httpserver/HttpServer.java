@@ -102,8 +102,7 @@ class ServerThread extends Thread {
 						if (parser.getHeadProperty("MODE").equals("DL")){
 							nextPort = getNextPort();
 							HeaderProperty.put("PORT", Integer.toString(nextPort));
-						}
-						sendResponse();
+						}						
 						makeFileHandlingThread(nextPort);						
 					}else{
 						sendResponse();
@@ -130,40 +129,49 @@ class ServerThread extends Thread {
 		if (file == null) {
 			logger.addLine("Error: File does not exist!, name: "+uri);
 			return null;
-		}
+		}		
 		int packetSize = FileInstance.DEFAULT_SIZE;
 		if (packet != null ){
 			packetSize = Integer.parseInt(packet);
 		}		
 		if (FileInstance.DEFAULT_SIZE != packetSize){
-			file.splitFileToPockets(packetSize);
+			file.splitFileToPackets(packetSize);
 		}		
 		return file;
 	}
 
-	private void  makeFileHandlingThread(int port) {
+	private boolean makeFileHandlingThread(int port) {
+		boolean retValue = true;
 		if (port == 0) {
 			logger.addLine("Error: Invalid port number!");
-			return;
+			retValue = false;
 		}
-
+				
 		FileInstance file = checkPacketSize(parser.getMethodProperty("URI"), parser.getHeadProperty("PACKET_SIZE"));
 		if (file == null) {
-			return;
+			parser.setErrorText("File does not exist!");
+			retValue = false;
 		}
-
+		sendResponse();
+		
+		if (retValue == false)	{
+			return false;
+		}
+		
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				TCPSender sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");//client.socket.getInetAddress().getHostAddress());
+				String str = client.socket.getInetAddress().getHostAddress();
+				System.out.println(str);
+				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");
 				Future<Integer> future = pool.submit(sender);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPSender(logger, 1 ));
 			}else {
 				logger.addLine("ERROR: wrong connction parameter received!");
-				return;
+				return false;
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -174,7 +182,7 @@ class ServerThread extends Thread {
 				//new Thread(new UDPRecever(logger, 1 ));
 			}else {
 				logger.addLine("ERROR: wrong mode parameter received!");		
-				return;
+				return false;
 			}
 		}
 
@@ -189,6 +197,7 @@ class ServerThread extends Thread {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 
 	private boolean sendResponse() {
@@ -261,10 +270,10 @@ public class HttpServer {
 				if (i > 0) {
 					extension = fileName.substring(i+1);
 				}
-				if (extension != null && extension.equals("bin")){
+				if (extension != null && (extension.equals("bin")|| extension.equals("txt"))){
 					System.out.println("File readed, " + fileName);
 					FileInstance fileInst = new FileInstance(logger, filePath+"\\"+fileName);		
-					fileInst.splitFileToPockets(FileInstance.DEFAULT_SIZE);
+					fileInst.splitFileToPackets(FileInstance.DEFAULT_SIZE);
 					fileList.put(fileName, fileInst);
 				}
 			}

@@ -23,7 +23,7 @@ public class FileInstanceTest {
 	public void testFileInstanceInvalidFileName() {
 		FileInstance fileInstance = new FileInstance(logger, "test1.txt");		
 		assertTrue(fileInstance.getName().equals("test1.txt"));
-		fileInstance.splitFileToPockets(FileInstance.DEFAULT_SIZE);
+		fileInstance.splitFileToPackets(FileInstance.DEFAULT_SIZE);
 		assertTrue(fileInstance.getPocketSize() == 0);
 	}
 
@@ -37,7 +37,7 @@ public class FileInstanceTest {
 	public void testFileInstanceSplitting() {
 		FileInstance fileInstance = new FileInstance(logger, "test.txt");		
 		assertTrue(fileInstance.getName().equals("test.txt"));
-		fileInstance.splitFileToPockets(10);
+		fileInstance.splitFileToPackets(10);
 		assertTrue(fileInstance.getPocketSize() == 3);
 	}
 
@@ -45,8 +45,8 @@ public class FileInstanceTest {
 	public void testFileInstanceSplitting5MBfile() {
 		FileInstance fileInstance = new FileInstance(logger, "5MB.bin");		
 		assertTrue(fileInstance.getName().equals("5MB.bin"));
-		fileInstance.splitFileToPockets(1024);		
-		assertTrue(fileInstance.getPocketSize() == 5120);
+		fileInstance.splitFileToPackets(1024);		
+		assertTrue(fileInstance.getPocketSize() == 4883);
 		assertTrue(fileInstance.getCheckSum().equals("0"));
 	}
 	

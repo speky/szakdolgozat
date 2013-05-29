@@ -12,6 +12,7 @@ public class AckHandler {
 
 	private AckReceiver receiver = null;
 	private Logger logger = null;
+	private final String TAG = "AckReceiver: ";
 	
 	public AckHandler(Logger logger){
 		this.logger = logger;
@@ -34,7 +35,7 @@ public class AckHandler {
 	
 	public void sendAckMessage(OutputStream stream, String fileName, int id){
 		PrintWriter printerWriter = new PrintWriter(stream);			
-		logger.addLine("Send message,  sendertId: " + id);
+		logger.addLine(TAG +"Send message,  sendertId: " + id);
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("POST "+ fileName+" HTTP*/1.0\n");
 		buffer.append("ACK: "+ id+"\n");
@@ -67,15 +68,13 @@ public class AckHandler {
 			Scanner scanner = null;
 			try {
 				if (socket == null) {
-					logger.addLine("Error AckReceiver: socket is null!!!");
-					System.out.println("Error AckReceiver: socket is null!!!");
+					logger.addLine(TAG +"Error AckReceiver: socket is null!!!");					
 					return;					
 				}
 				scanner = new Scanner(socket.getInputStream());
 				HttpParser parser = new HttpParser(logger);
-				StringBuffer buffer = new StringBuffer();
-				System.out.println("ack thread started");
-				logger.addLine("Ack thread started,  fileName: "+ fileName);
+				StringBuffer buffer = new StringBuffer();				
+				logger.addLine(TAG +"Ack thread started,  fileName: "+ fileName);
 				while (isScanStopped != true) {
 					if (scanner.hasNextLine()){
 						String readedLine = scanner.nextLine();
@@ -84,7 +83,7 @@ public class AckHandler {
 							parser.parseHttpMessage(buffer.toString());
 							String packetId = parser.getHeadProperty("ACK");
 							if (packetId != null &&
-									parser.getMethodProperty("URI") != null && parser.getMethodProperty("URI").equals(fileName)){
+									parser.getMethodProperty("URI") != null && parser.getMethodProperty("URI").equals(fileName)) {
 								int id = Integer.parseInt(packetId); 
 								ackList.add(id);
 							}
@@ -93,10 +92,10 @@ public class AckHandler {
 					}
 				}
 			} catch (SocketException e) {
-				logger.addLine("Error in AckHandler: "+e.getMessage());
+				logger.addLine(TAG+"Error in AckHandler: "+e.getMessage());
 				e.printStackTrace();
 			} catch (IOException e) {
-				logger.addLine("Error in AckHandler: "+e.getMessage());
+				logger.addLine(TAG+"Error in AckHandler: "+e.getMessage());
 				e.printStackTrace();
 			}
 			finally {

@@ -27,13 +27,20 @@ public class LoggerTest {
     }
 
 	@Test
-	public void testMakeFileInstance() {
+	public void testMakeFileInstanceWithNullString() {
 		Logger logger = new Logger("");
+		File file = new File("log.txt");
+		assertTrue(!file.exists());
+		logger.closeFile();
+	}
+	
+	@Test
+	public void testMakeFileInstanceWithDefaultName() {
+		Logger logger = new Logger(Logger.LOG_FILE_NAME);
 		File file = new File("log.txt");
 		assertTrue(file.exists());
 		logger.closeFile();
 	}
-	
 	@Test
 	public void testMakeFileInstanceSpecifiedPath() {
 		Logger logger = new Logger("log.txt");
@@ -44,7 +51,7 @@ public class LoggerTest {
 	
 	@Test
 	public void testCreateDouble() {
-		Logger logger = new Logger("");		
+		Logger logger = new Logger(Logger.LOG_FILE_NAME);		
 		Logger logger2 = new Logger("log1.txt");
 		File file = new File("log.txt");
 		assertTrue(file.exists());

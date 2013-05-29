@@ -91,12 +91,12 @@ public class TCPSenderTest {
 
         sender.setReceiverParameters(42, "1.1.1.1");
         FileInstance file =  new FileInstance(logger, "test.txt");
-        file.splitFileToPockets(30);
+        file.splitFileToPackets(30);
         sender.setFile(file);
         Assert.assertTrue("Message sent successfully", sender.call()==0);
         String message = "123456789asdfghjkyxcvbnm";
         String hash = Utility.calcCheckSum(message.getBytes());
-        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\r\n");
+        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\n\r\n");
         String out = byteArrayOutputStream.toString(); 
         Assert.assertTrue(out.equals(testString));
 	}
@@ -123,7 +123,7 @@ public class TCPSenderTest {
 
         sender.setReceiverParameters(42, "1.1.1.1");
         FileInstance file =  new FileInstance(logger, "test.txt");
-        file.splitFileToPockets(10);
+        file.splitFileToPackets(10);
         sender.setFile(file);
         Assert.assertTrue("Message sent successfully", sender.call()==0);
         String message = "123456789a";        
@@ -137,7 +137,7 @@ public class TCPSenderTest {
         message = "vbnm";
         testString.append("POST test.txt HTTP*/1.0\nID: 2\nHASH: "+Utility.calcCheckSum(message.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");        
-        testString.append("END\r\n");
+        testString.append("END\n\r\n");
         
         String out = byteArrayOutputStream.toString(); 
         Assert.assertTrue(out.equals(testString.toString()));

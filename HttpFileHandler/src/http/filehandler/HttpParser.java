@@ -26,6 +26,10 @@ public class HttpParser {
 		return errorText;
 	}
 
+	public void setErrorText(final String errorMessage){
+		errorText = errorMessage;
+	}
+	
 	public String getMethod(){
 		return methodProperty.getProperty("METHOD") ;
 	}

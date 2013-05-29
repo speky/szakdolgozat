@@ -42,7 +42,7 @@ public class HttpFileHandler {
 		}
 		
 		if (!checkFileExistance(fileName)) {
-			logger.addLine("fileName has not been existed!");
+			logger.addLine("file : "+fileName +" has not been existed!");
 			return null;
 		}
 		

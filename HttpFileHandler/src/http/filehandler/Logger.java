@@ -9,22 +9,18 @@ import java.util.Date;
 
 public class Logger {
 
-	private final String LOG_FILE_NAME = "log.txt";
+	public static final String LOG_FILE_NAME = "log.txt";
 	private File file = null;
 	private FileWriter fileWriter = null;
 	private String fileName = null;
-
+	private boolean writeOnConsole = false; 
+	
 	public String getFilePath() {
 		return fileName;
 	}
 	private void makeFileInstance(final String filePath) {
-		if (filePath.equals("")) {
-			file = new File(LOG_FILE_NAME);
-			fileName = LOG_FILE_NAME;
-		}else{
-			file = new File(filePath);
-			fileName = filePath;
-		}	
+		file = new File(filePath);
+		fileName = filePath;
 		try {
 			file.createNewFile();
 		} catch (IOException e) {
@@ -42,7 +38,7 @@ public class Logger {
 					}
 				}
 				fileWriter = new FileWriter(file);
-				
+
 				return true;
 			}
 		} catch (IOException e) {		
@@ -50,7 +46,7 @@ public class Logger {
 		}
 		return false;
 	}
-	
+
 	public void closeFile(){
 		if (fileWriter != null){
 			try {
@@ -61,20 +57,26 @@ public class Logger {
 		}
 	}
 	public Logger(final String filePath){
-
-		makeFileInstance(filePath);
-		System.out.println("Log file: " + file.getAbsolutePath());
-		if (makeFileWriter()){
-			System.out.println("Log fileWriter created");			
+		if (filePath.equals("")) {
+			writeOnConsole = true;
 		}else{
-			System.out.println("Log fileWriter  created");			
+			makeFileInstance(filePath);
+			System.out.println("Log file: " + file.getAbsolutePath());
+			if (makeFileWriter()){
+				System.out.println("Log fileWriter created");			
+			}else{
+				System.out.println("Log fileWriter  created");			
+			}
 		}
 	}	
 	public boolean addLine(final String logText){
 		try{
-			if (fileWriter != null){
-				Date date = Calendar.getInstance().getTime();
-				DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM); 
+			Date date = Calendar.getInstance().getTime();
+			DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
+			if (writeOnConsole == true) {
+				System.out.print( dateFormat.format(date) +": "+ logText + "\n");
+				return true;
+			}else  if (fileWriter != null){				 
 				fileWriter.append( dateFormat.format(date) +": "+ logText + "\n");
 				fileWriter.flush();
 				return true;

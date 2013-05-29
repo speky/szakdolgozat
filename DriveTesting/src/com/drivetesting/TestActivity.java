@@ -37,7 +37,8 @@ public class TestActivity extends Activity {
 		@Override 
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			((TextView)findViewById(R.id.editOut)).setText(msg.toString());		    	
+			int packet = msg.getData().getInt("packet");
+			((TextView)findViewById(R.id.editOut)).setText(Integer.toString(packet));		    	
 		} 
 	};
 
@@ -73,8 +74,7 @@ public class TestActivity extends Activity {
 	}
 
 	public void onStartTestClick(View view) {
-		//new Thread(httpClient).start();
-		//new Thread(((DriveTestApp)getApplication()).test).start();
+		new Thread(httpClient).start();		
 	}
 
 	public void onDirectionChoosed(View view) {

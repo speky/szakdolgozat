@@ -18,42 +18,49 @@ public class TCPSender  implements Callable<Integer> {
 	private HashSet<Integer> ackList = new HashSet<Integer>();
 	private int serverPort = 0;
 	private String serverAddress = "";
-	
+	private final String TAG = "TCPSender: ";
 	public static final String END_PACKET = "END_PACKET";
+	private boolean running = true;
 	
 	public TCPSender(Logger logger, final int id) {
 		super();
 		this.id = id;
 		this.logger = logger;
-		logger.addLine("TCP sender, id: " + id);
+		logger.addLine(TAG+ "Created, id: " + id);
 		ackHandler = new AckHandler(logger);
 	}
 
 	public void setReceiverParameters(final int port, final String address) {
 		serverAddress = address;
 		serverPort = port;
-		logger.addLine("TCP sender, id: " + id+ " address: " + serverAddress + " port: " + serverPort);
+		logger.addLine(TAG+"Iid: " + id+ " address: " + serverAddress + " port: " + serverPort);
 		socket = createSocket();
 	}
 
 	protected Socket createSocket() {
 		try {
 			Socket socket = new Socket(serverAddress, serverPort);
-			logger.addLine("TCP Sender, Create new socket");
+			logger.addLine(TAG+" Create new socket");
 			return socket;
 		} catch (UnknownHostException e) {
-			logger.addLine("ERROR in run() " + e.getMessage());			
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
 		} catch (IOException e) {
-			logger.addLine("ERROR in run() " + e.getMessage());
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		}
 		return null;
 	}
 
 	public void setFile(final FileInstance instance) {
 		fileInstance = instance;
-		logger.addLine("TCP sender, id: " + id+ " fileName: " + instance.getName());
+		logger.addLine(TAG+"Id: " + id+ " fileName: " + instance.getName());
 	}
 
+	public void stop() {
+		logger.addLine(TAG+"Sending and ack receiver stopped!");
+		ackHandler.stopScaning();
+		running = false;
+	}
+	
 	public Integer call() {
 		try {			
 			if (checkPrerequisite() == false) {					
@@ -61,39 +68,38 @@ public class TCPSender  implements Callable<Integer> {
 			}
 			ackHandler.startAckReceiver(fileInstance.getName(), socket, ackList);
 			printerWriter = new PrintWriter(socket.getOutputStream());			
-			logger.addLine("Send message,  sendertId: " + id);			
+			logger.addLine(TAG+"Send message,  sendertId: " + id);			
 
 			List<Packet> packetList = fileInstance.getPieces();
-			for (Packet packet : packetList) {
+			int packetSize = packetList.size();
+			for (int i=0; i < packetSize && running; ++i) {
+				Packet packet = packetList.get(i);
 				sendMessage(fileInstance.getName(), packet.id, packet.hashCode, packet.text);
 			}
-			printerWriter.println("END");
-			printerWriter.flush();
-			System.out.println("File Sending ended!");
+			printerWriter.println("END\n");
+			printerWriter.flush();			
+			logger.addLine(TAG+"File Sending ended!");
+			// wait for the last sent ACK message
 			Thread.sleep(1000);
 			ackHandler.stopScaning();
 			int ackSize = ackList.size();
-			logger.addLine("Received ACK message: "+ackSize);
-			System.out.println("Received ACK message: "+ackSize);
-			
+			logger.addLine(TAG+"Received ACK message: "+ackSize);
+						
 			return packetList.size()-ackSize;
-			
 		} catch (Exception e) {            
-			logger.addLine("ERROR in run() " + e.getMessage());
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		} 
 		return -1;
 	}
 
 	private boolean checkPrerequisite() {
 		if (serverAddress == null || serverPort == 0 || socket == null) {
-			logger.addLine("TCP sender, id: " + id+ " unknown receiver!");
-			System.out.println("connection problem!");
+			logger.addLine(TAG+"Id: " + id+ " Connection problem!");			
 			return false;
 		}
 
 		if (fileInstance == null || fileInstance.getPocketSize() == 0) {
-			logger.addLine("TCP sender, id: " + id+ " invalid file!");
-			System.out.println("Problem with fileInstance!");
+			logger.addLine(TAG+"Id: " + id+ " invalid file!");			
 			return false;
 		}
 		return true;

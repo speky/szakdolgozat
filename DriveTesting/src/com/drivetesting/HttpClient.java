@@ -17,13 +17,18 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.drivetesting.DriveTestApp.ReportTask;
+
 import android.content.Context;
 import android.net.TrafficStats;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -42,10 +47,26 @@ public class HttpClient implements Runnable {
 	private PrintWriter pw;
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
-
+	private TCPReceiver receiver = null;
 	private Handler handler = null;
 	private long mStartRX = 0;
 	private long mStartTX = 0;
+
+	private ReportTask task = new ReportTask();
+
+	class ReportTask extends TimerTask {
+		public void run() {
+
+			int packet = getReceivedPackets();
+			System.out.println("** Packet: "+ packet);	
+
+			Message m = new Message();			
+			Bundle b = new Bundle();
+			b.putInt("packet", packet); 
+			m.setData(b);
+			handler.sendMessage(m);
+		}
+	}
 
 	public  HttpClient (Context context, Handler handler) {
 		this.context = context;
@@ -59,12 +80,12 @@ public class HttpClient implements Runnable {
 		try {
 			String ip = getLocalIpAddress();
 			System.out.println(ip);
-						
+
 			socket = new Socket(ServerAddress, ServerPort);
 			portScanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 
-		/*	Message m = handler.obtainMessage(5, "ize");
+			/*	Message m = handler.obtainMessage(5, "ize");
 			m.sendToTarget();
 			/*new Message();			
 			Bundle b = new Bundle();
@@ -74,26 +95,24 @@ public class HttpClient implements Runnable {
 
 			mStartRX = TrafficStats.getTotalRxBytes();
 			mStartTX = TrafficStats.getTotalTxBytes();
-			
-			
-						
-		//	if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
-				
-			/*} else {
+
+
+
+			/*	if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
+
+			} else {
 				mHandler.postDelayed(mRunnable, 1000);
 			}
+			 */
 
-			while (isRunning) {
-				makeNewThread();				
-				isRunning = false;
-			}
+			makeNewThread();				
 
-			m = new Message();
+			/*			m = new Message();
 			b = new Bundle();
 			b.putInt("end", 5);
 			m.setData(b);
 			handler.sendMessage(m);
-*/
+			 */
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -102,7 +121,7 @@ public class HttpClient implements Runnable {
 
 	private final Runnable mRunnable = new Runnable() {
 		public void run() {
-			
+
 			long rxBytes = TrafficStats.getTotalRxBytes()- mStartRX;
 			System.out.println(Long.toString(rxBytes));
 			long txBytes = TrafficStats.getTotalTxBytes()- mStartTX;
@@ -110,8 +129,8 @@ public class HttpClient implements Runnable {
 			handler.postDelayed(mRunnable, 1000);
 		}
 	};
-	
-	public String getLocalIpAddress() {
+
+	private String getLocalIpAddress() {
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = en.nextElement();
@@ -127,6 +146,13 @@ public class HttpClient implements Runnable {
 			Log.e("ex getLocalIpAddress", ex.toString());
 		}
 		return null;
+	}
+
+	public int getReceivedPackets() {
+		if (receiver != null) {
+			return receiver.getReceivedPacket();
+		}
+		return 0;
 	}
 
 	public void pingCommand() {
@@ -148,23 +174,40 @@ public class HttpClient implements Runnable {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
 			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			
+			receiver = new TCPReceiver(logger, threadCount++);				
+			receiver.setSenderParameters(5555);
+			Future<Integer> future = pool.submit(receiver);
+			threadSet.add(future);
+			
 			receiveMessageFromServer();
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")){
 				System.out.println("good answer from server, text:");
 			}
 
-			{
-				TCPReceiver receiver = new TCPReceiver(logger, threadCount++);				
-				receiver.setSenderParameters(5555);
-				Future<Integer> future = pool.submit(receiver);
-				threadSet.add(future);
-			}
-			
-			for (Future<Integer> future : threadSet) {
+			//Declare the timer
+			Timer timer = new Timer();
+			//Set the schedule function and rate
+			timer.scheduleAtFixedRate(
+					task,
+					//Set how long before to start calling the TimerTask (in milliseconds)
+					10,
+					//Set the amount of time between each execution (in milliseconds)
+					1000);
+
+
+			for (Future<Integer> futureInst : threadSet) {
 				try {
-					int value = future.get();
+					int value = futureInst.get();
 					logger.addLine("A thread ended, value: " + value);
-					System.out.println("value: "+ value);			
+					System.out.println("value: "+ value);	
+
+					timer.cancel();
+					Message m = new Message();			
+					Bundle b = new Bundle();
+					b.putInt("packet", getReceivedPackets()); 
+					m.setData(b);
+					handler.sendMessage(m);
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {					

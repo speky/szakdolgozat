@@ -43,7 +43,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		startService(service);
 
 		//Declare the timer
-		Timer t = new Timer();
+		/*Timer t = new Timer();
 		//Set the schedule function and rate
 		t.scheduleAtFixedRate(
 				task,
@@ -51,7 +51,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 				10,
 				//Set the amount of time between each execution (in milliseconds)
 				1000);
-
+*/
 
 	}
 
