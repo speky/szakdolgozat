@@ -52,6 +52,7 @@ public class HttpClient implements Runnable {
 	private long mStartRX = 0;
 	private long mStartTX = 0;
 
+	private final String TAG = "HttpClient: ";
 	private ReportTask task = new ReportTask();
 
 	class ReportTask extends TimerTask {
@@ -72,7 +73,7 @@ public class HttpClient implements Runnable {
 		this.context = context;
 		this.handler = handler;		
 		logger = new Logger("");
-		logger.addLine("test");
+		logger.addLine(TAG+"test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
 
@@ -105,7 +106,7 @@ public class HttpClient implements Runnable {
 			}
 			 */
 
-			makeNewThread();				
+			makeNewThread();
 
 			/*			m = new Message();
 			b = new Bundle();
@@ -115,13 +116,13 @@ public class HttpClient implements Runnable {
 			 */
 		}catch (Exception e){
 			e.printStackTrace();
+			pool.shutdownNow();
 		}
+		
 	}
-
 
 	private final Runnable mRunnable = new Runnable() {
 		public void run() {
-
 			long rxBytes = TrafficStats.getTotalRxBytes()- mStartRX;
 			System.out.println(Long.toString(rxBytes));
 			long txBytes = TrafficStats.getTotalTxBytes()- mStartTX;
@@ -163,17 +164,27 @@ public class HttpClient implements Runnable {
 			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("PONG")){
 				System.out.println("good answer from server, text:");
 			}
-
 		}catch (IOException ex) {
 			System.out.println("Exception: "+ex.getMessage());
 		}
 	}
 
+	public void stop() {
+		logger.addLine(TAG+ "");
+		try {
+			sendMessageToServer("STOP /5MB.bin Http*/1.0\n PORT: 5555\nDATE:2013.12.12\nCONNECTION: STOP\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		receiver.stop();
+		pool.shutdownNow();
+	}
+	
 	public void makeNewThread() {
 		try {
 			System.out.println("makeNewThread" );
 			System.out.println("IP: " +getLocalIpAddress());
-			sendMessageToServer("GET /5MB.bin HTTP* /1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nPORT: 5555\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
 			
 			receiver = new TCPReceiver(logger, threadCount++);				
 			receiver.setSenderParameters(5555);
@@ -199,24 +210,33 @@ public class HttpClient implements Runnable {
 			for (Future<Integer> futureInst : threadSet) {
 				try {
 					int value = futureInst.get();
-					logger.addLine("A thread ended, value: " + value);
-					System.out.println("value: "+ value);	
-
+					logger.addLine(TAG+"A thread ended, value: " + value);
+					System.out.println("value: "+ value);					
 					timer.cancel();
+					
 					Message m = new Message();			
 					Bundle b = new Bundle();
-					b.putInt("packet", getReceivedPackets()); 
-					m.setData(b);
+					
+					if (value == -1) {
+						b.putString("error", receiver.getErrorMEssage());
+					} else {
+						b.putInt("packet", getReceivedPackets());
+					}
+					m.setData(b);					
 					handler.sendMessage(m);
 				} catch (ExecutionException e) {
 					e.printStackTrace();
+					pool.shutdownNow();
 				} catch (InterruptedException e) {					
 					e.printStackTrace();
+					pool.shutdownNow();
 				}
 			}
 		}catch (IOException ex) {
 			System.out.println("Exception: "+ex.getMessage());
+			pool.shutdownNow();
 		}
+		
 	}
 
 	private boolean sendMessageToServer(final String command) throws IOException {

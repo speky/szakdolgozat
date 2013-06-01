@@ -37,11 +37,14 @@ public class TestActivity extends Activity {
 		@Override 
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			int packet = msg.getData().getInt("packet");
-			((TextView)findViewById(R.id.editOut)).setText(Integer.toString(packet));		    	
+			if (msg.getData().get("packet") != null){
+				int packet = 	msg.getData().getInt("packet");
+				((TextView)findViewById(R.id.editOut)).setText(Integer.toString(packet));
+			}else if (msg.getData().get("error") != null){
+				((TextView)findViewById(R.id.editOut)).setText(msg.getData().getString("error") );
+			}
 		} 
 	};
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		

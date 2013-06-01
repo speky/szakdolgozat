@@ -1,19 +1,21 @@
 package http.filehandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 
 
 public class TCPReceiver implements Callable<Integer> {
 	private Logger logger = null;	
 	private int id = 0;
-	private List<PacketDescriptor> packetList = new ArrayList<PacketDescriptor>();
+	private HashSet<Integer> packetIds = new HashSet<Integer>();
 	private String fileName = null;
 	private ServerSocket serverSocket = null;
 	private int serverPort = 0;
@@ -21,17 +23,24 @@ public class TCPReceiver implements Callable<Integer> {
 	private HttpParser parser = null;
 	private AckHandler ackHandler = null;
 	private boolean reading = true;
-	private final String TAG = "TCPReceiver: ";
+	private String errorMessage = null;
+	
+	private final String TAG = "TCPReceiver: "+id;
+	private final int SOCKET_TIMEOUT = 1000; //in milisec
 	
 	public TCPReceiver(Logger logger, final int id) {
 		super();
 		this.id = id;
 		this.logger = logger;
-		logger.addLine(TAG+" id: " + id);
+		logger.addLine(TAG+" TCP receiver created id: " + id);
 		ackHandler = new AckHandler(logger);
 		parser = new HttpParser(logger);
 	}
 
+	public String getErrorMEssage() {
+		return errorMessage;
+	}
+	
 	public void setSenderParameters(final int port) {
 		serverPort = port;
 		logger.addLine(TAG+" id: " + id+ " port: " + serverPort);
@@ -42,9 +51,9 @@ public class TCPReceiver implements Callable<Integer> {
 		ServerSocket socket = null;
 		try {
 			socket = new ServerSocket(serverPort);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {            
+			socket.setSoTimeout(SOCKET_TIMEOUT);
+		} catch (Exception e) {
+			errorMessage = "Server socket creation problem";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		} 
 		return socket;
@@ -55,76 +64,133 @@ public class TCPReceiver implements Callable<Integer> {
 	}
 	
 	public Integer call() {
+		int packet = 0;
 		try {			
 			if (serverPort == 0) {
-				logger.addLine(TAG+"Invalid server port!");
+				errorMessage = "Invalid server port!";
+				logger.addLine(TAG+errorMessage );				
 				return -1;
 			}
 
 			Socket socket = serverSocket.accept();
 			//figure out what is the ip-address of the client
 			InetAddress client = socket.getInetAddress();
-			logger.addLine(TAG+client + " connected to server.\n");			
-			return readPackets(socket);
-
-		} catch (Exception e) {            
+			logger.addLine(TAG+client + " connected to server.\n");
+			socket.setSoTimeout(0);
+			packet = readPackets(socket);
+			socket.close();			
+		}
+		catch (SocketException e) {            
+			errorMessage = "Socket closed while it is waiting for invoming connection.";
+			logger.addLine(TAG+errorMessage);			
+			packet = -1;
+		}
+		catch (SocketTimeoutException e) {            
+			errorMessage = "Socket timed out, no connection received.";
+			logger.addLine(TAG+"Error: "+errorMessage);
+			packet = -1;
+		}
+		catch (Exception e) {
+			 errorMessage = "Some kinf of error occured!";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			packet = -1;
 		} 
-		return -1;
+		finally{
+			try {
+				if (!serverSocket.isClosed()) {
+					logger.addLine(TAG+"Close server socket");
+					serverSocket.close();
+				}
+			} catch (IOException e) {
+				errorMessage = "Cannot close server socket!";
+				logger.addLine(TAG+ errorMessage);
+				e.printStackTrace();
+			}
+		}
+		return packet;
 	}
 
 	public void stop() {
 		logger.addLine(TAG+"Receiving stopped!");
 		reading = false;
+		if (serverSocket != null) {
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				errorMessage = "Cannot close server socket!";
+				logger.addLine(TAG+ errorMessage);
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public Integer readPackets(Socket socket) {
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(socket.getInputStream());
+		BufferedReader reader = null;
+		try {		
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			logger.addLine(TAG+"ERROR while create scanner: " + e.getMessage());
-		}
-		
+			logger.addLine(TAG+"ERROR while create reader: " + e.getMessage());
+			errorMessage = "cannot create BufferedReader";
+		}		
 		StringBuffer buffer = new StringBuffer();
-		receivedPackets = 0;		
-		while (reading && scanner.hasNextLine()) {							
-			String readedLine = scanner.nextLine();			
-			buffer.append(readedLine+"+");
-			if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
-				if (makePacket(buffer.toString())) {
-					logger.addLine(TAG+"Create packet, id: " + receivedPackets);					
-					try {
-						if (parser.getHeadProperty("ID") != null){
-							int id = Integer.parseInt(parser.getHeadProperty("ID"));
-							ackHandler.sendAckMessage(socket.getOutputStream(), fileName, id);
+		receivedPackets = 0;
+		String readedLine = null;
+		try {
+			while (reading && (readedLine = reader.readLine()) != null) {							
+				buffer.append(readedLine+"+");
+				if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
+					if (makePacket(buffer.toString())) {
+						logger.addLine(TAG+"Create packet, id: " + receivedPackets);					
+						try {
+							if (parser.getHeadProperty("ID") != null){
+								int id = Integer.parseInt(parser.getHeadProperty("ID"));
+								ackHandler.sendAckMessage(socket.getOutputStream(), fileName, id);
+							}
+						}catch (IOException e) {
+							logger.addLine(TAG+"Error: ack handler received invalid Id!");
+							e.printStackTrace();
 						}
-					}catch (IOException e) {
-						logger.addLine(TAG+"Error: ack handler received invalid Id!");
-						e.printStackTrace();
+						++receivedPackets;
 					}
-					++receivedPackets;
-				}
-				buffer.delete(0, buffer.length());
-			}else if (readedLine.compareTo("END") ==  0) {
-				reading = false;
-				logger.addLine(TAG+"End message received");
-			}			
+					buffer.delete(0, buffer.length());
+					readedLine = null;
+				}else if (readedLine.compareTo("END") ==  0) {
+					reading = false;
+					logger.addLine(TAG+"End message received");
+				}			
+			}
+		} catch (NumberFormatException e) {
+			logger.addLine(TAG+e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.addLine(TAG+e.getMessage());
+			e.printStackTrace();
 		}
-		scanner.close();
+		finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					logger.addLine(TAG+e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}	
 		return receivedPackets;
 	}
 
 	private boolean makePacket(String message) {
 		if (parser.parseHttpMessage(message)==false) {
-			logger.addLine(TAG+"Problem occured while parsing message! message: " +message);
+			errorMessage = "Problem occured while parsing message! message: " +message;
+			logger.addLine(TAG+errorMessage);
 			return false;
 		}
 
 		if (fileName== null) {
 			fileName = parser.getMethodProperty("URI");
 		}else if (!fileName.equals(parser.getMethodProperty("URI"))){
-			logger.addLine(TAG+"Packet what received is belong to another file! fileName: "+parser.getMethodProperty("URI"));
+			errorMessage = "Packet what received is belong to another file! fileName: "+parser.getMethodProperty("URI");
+			logger.addLine(TAG+errorMessage);
 			return false; 
 		}
 
@@ -134,32 +200,23 @@ public class TCPReceiver implements Callable<Integer> {
 		if (parser.getHeadProperty("HASH") != null ) {
 			origHash = parser.getHeadProperty("HASH");		
 			if (!origHash .equals(calcedHash)) {
-		
-				logger.addLine(TAG+"hash is invalid! calced: "+calcedHash + " original:"+origHash);
+				errorMessage = "hash is invalid! calced: "+calcedHash + " original:"+origHash;
+				logger.addLine(TAG+errorMessage);
 				return false;
 			}
 		}else{
-			logger.addLine(TAG+"original hash is invalid!");
-			return false;
+			errorMessage = "Original hash is invalid!";
+			logger.addLine(TAG+errorMessage);			
 		}
-
-		/*PacketDescriptor packet = new PacketDescriptor();
-		packet.fileName = fileName;
-		packet.packetId = Integer.parseInt(parser.getHeadProperty("ID"));
-		packet.hashId = calcedHash;
-		packet.origHahId = origHash;
 		
-		packetList.add(packet);
-			*/
+		if (parser.getHeadProperty("ID") != null){
+			packetIds.add(Integer.parseInt(parser.getHeadProperty("ID")));
+		}else{
+			errorMessage = "Packet's id is invalid!";
+			logger.addLine(TAG+errorMessage);
+		}
+		
 		return true;
 	}
-}
-
-class PacketDescriptor {	
-	public  int packetId;
-	public  String hashId;
-	public String origHahId;	
-	public String fileName;	
-		
 }
 

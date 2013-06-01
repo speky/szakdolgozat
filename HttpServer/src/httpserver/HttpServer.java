@@ -63,7 +63,7 @@ class ServerThread extends Thread {
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
 	static final int MAX_THREAD = 10;
-
+	private TCPSender sender = null; 
 
 	public ServerThread(Logger logger, Socket socket, final int id) {
 		super();
@@ -104,6 +104,10 @@ class ServerThread extends Thread {
 							HeaderProperty.put("PORT", Integer.toString(nextPort));
 						}						
 						makeFileHandlingThread(nextPort);						
+					}else if (parser.getMethod().equals("STOP")){
+						if (sender != null){
+							sender.stop();
+						}
 					}else{
 						sendResponse();
 					}	
@@ -144,12 +148,20 @@ class ServerThread extends Thread {
 		boolean retValue = true;
 		if (port == 0) {
 			logger.addLine("Error: Invalid port number!");
+			parser.setErrorText("Invalid port number");
 			retValue = false;
 		}
 				
 		FileInstance file = checkPacketSize(parser.getMethodProperty("URI"), parser.getHeadProperty("PACKET_SIZE"));
 		if (file == null) {
 			parser.setErrorText("File does not exist!");
+			retValue = false;
+		}
+		
+		if (!parser.getHeadProperty("MODE").equals("DL") && !parser.getHeadProperty("MODE").equals("UL") ||
+			 !parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
+			logger.addLine("ERROR: wrong connction parameter received!");
+			parser.setErrorText("Wrong connction parameter received");
 			retValue = false;
 		}
 		sendResponse();
@@ -160,18 +172,16 @@ class ServerThread extends Thread {
 		
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				TCPSender sender = new TCPSender(logger, threadCount++);				
+				sender = new TCPSender(logger, threadCount++);				
 				sender.setFile(file);
-				String str = client.socket.getInetAddress().getHostAddress();
-				System.out.println(str);
-				sender.setReceiverParameters(port, "192.168.0.101");//"10.158.243.47");//10.0.2.15");
-				Future<Integer> future = pool.submit(sender);
-				threadSet.add(future);
+				String clientAddress = client.socket.getInetAddress().getHostAddress();
+				logger.addLine("ClientAddress: "+clientAddress);
+				if (sender.setReceiverParameters(port, clientAddress )) {//"10.0.2.15");
+					Future<Integer> future = pool.submit(sender);
+					threadSet.add(future);
+				}
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPSender(logger, 1 ));
-			}else {
-				logger.addLine("ERROR: wrong connction parameter received!");
-				return false;
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -180,20 +190,21 @@ class ServerThread extends Thread {
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPRecever(logger, 1 ));
-			}else {
-				logger.addLine("ERROR: wrong mode parameter received!");		
-				return false;
 			}
 		}
 
 		for (Future<Integer> future : threadSet) {
 			try {
-				logger.addLine("A thread ended, value: " + future.get());
-				System.out.println("value: "+ future.get());			
+				int value = future.get();
+				logger.addLine("A thread ended, value: " + value);
+				if (value != 0) {
+					logger.addLine("Problem:" + sender.getErrorMessage());
+				}
 			} catch (ExecutionException e) {
+				logger.addLine(e.getMessage());
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				logger.addLine(e.getMessage());
 				e.printStackTrace();
 			}
 		}
