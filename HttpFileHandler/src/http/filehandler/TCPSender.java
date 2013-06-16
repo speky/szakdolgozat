@@ -2,6 +2,7 @@ package http.filehandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -17,19 +18,17 @@ public class TCPSender  implements Callable<Integer> {
 	private PrintWriter printerWriter = null;
 	private AckHandler ackHandler = null;
 	private HashSet<Integer> ackList = new HashSet<Integer>();
-	private int serverPort = 0;
-	private String serverAddress = "";
 	private boolean running = true;
 	private String errorMessage = null;
+	private ICallback callback = null;
 	private final String TAG = "TCPSender: ";	
-	private final int SOCKET_TIMEOUT = 300; //in milisec
-	private final int REPEAT_SOCKET_CONNECTION= 3;
 	private final int ACK_WAITING = 5000; //in milisec	
 	
 	public static final String END_PACKET = "END_PACKET";	
 	
-	public TCPSender(Logger logger, final int id) {
+	public TCPSender(Logger logger, final int id, ICallback callback) {
 		super();
+		this.callback = callback; 
 		this.id = id;
 		this.logger = logger;
 		logger.addLine(TAG+ "Created, id: " + id);
@@ -40,36 +39,13 @@ public class TCPSender  implements Callable<Integer> {
 		return errorMessage;
 	}
 	
-	public boolean setReceiverParameters(final int port, final String address) {
-		serverAddress = address;
-		serverPort = port;
-		logger.addLine(TAG+"Iid: " + id+ " address: " + serverAddress + " port: " + serverPort);
-		int repeatId = 0;
-		do {
-		 socket = createSocket();
-		 ++repeatId;
-		}while (socket== null && REPEAT_SOCKET_CONNECTION > repeatId);
-		
-		if (socket == null){
+	public boolean setSocket(Socket socket) {		
+		if (socket == null) {
 			return false;
-		}		
-		return true;
-	}
-
-	protected Socket createSocket() {
-		try {
-			Socket socket = new Socket();
-			socket.connect(new InetSocketAddress(serverAddress, serverPort), SOCKET_TIMEOUT);
-			logger.addLine(TAG+" Create new socket");
-			return socket;
-		} catch (UnknownHostException e) {
-			errorMessage = "Socket creatin problem";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
-		} catch (IOException e) {
-			errorMessage = "Socket creatin problem";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		}
-		return null;
+		logger.addLine(TAG+"Iid: " + id+ " address: " + socket.getInetAddress().getHostAddress()+ " port: " + socket.getPort());
+		this.socket = socket;
+		return true;
 	}
 
 	public void setFile(final FileInstance instance) {
@@ -83,6 +59,8 @@ public class TCPSender  implements Callable<Integer> {
 		running = false;
 		try {
 			socket.close();
+			callback.setNumOfReceivedPackets(-1);
+			callback.setNumOfSentPackets(-1);
 		} catch (IOException e) {
 			errorMessage = "Socket cannot stopped!";
 			logger.addLine(TAG+errorMessage);
@@ -93,7 +71,9 @@ public class TCPSender  implements Callable<Integer> {
 	public Integer call() {
 		int packetDiff= 0;
 		try {			
-			if (checkPrerequisite() == false) {					
+			if (checkPrerequisite() == false) {
+				callback.setNumOfReceivedPackets(-1);
+				callback.setNumOfSentPackets(-1);
 				return -1;
 			}
 			ackHandler.startAckReceiver(fileInstance.getName(), socket, ackList);
@@ -102,23 +82,29 @@ public class TCPSender  implements Callable<Integer> {
 
 			List<Packet> packetList = fileInstance.getPieces();
 			int packetSize = packetList.size();
-			for (int i=0; i < packetSize && running; ++i) {
+			for (int i = 0; i < packetSize && running; ++i) {
 				Packet packet = packetList.get(i);
 				sendMessage(fileInstance.getName(), packet.id, packet.hashCode, packet.text);
 			}
 			printerWriter.println("END\n");
 			printerWriter.flush();
 			logger.addLine(TAG+"File Sending ended!");
-			// wait for the last sent ACK message
-			Thread.sleep(ACK_WAITING);
-			ackHandler.stopScaning();
 			int ackSize = ackList.size();
+			if (ackSize < packetSize) {
+				// wait for the last sent ACK message
+				Thread.sleep(ACK_WAITING);
+			}
+			ackSize = ackList.size();
+			ackHandler.stopScaning();
 			logger.addLine(TAG+"Received ACK message: "+ackSize);			
 			packetDiff = packetList.size()-ackSize;
+			callback.setNumOfReceivedPackets(ackSize);
+			callback.setNumOfSentPackets(packetList.size());
 		} catch (Exception e) {
 			errorMessage = "Error occured in sending packets";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
-			packetDiff = -1;
+			callback.setNumOfReceivedPackets(-1);
+			callback.setNumOfSentPackets(-1);
 		} 
 		finally{
 			try {
@@ -136,7 +122,7 @@ public class TCPSender  implements Callable<Integer> {
 	}
 
 	private boolean checkPrerequisite() {
-		if (serverAddress == null || serverPort == 0 || socket == null) {
+		if (socket == null) {
 			logger.addLine(TAG+"Id: " + id+ " Connection problem!");			
 			return false;
 		}
@@ -148,14 +134,19 @@ public class TCPSender  implements Callable<Integer> {
 		return true;
 	}
 
-	private void sendMessage(final String file, final int id, final String hash, final String message) {	
+	private void sendMessage(final String file, final int id, final String hash, final String message) {		
+		if (printerWriter == null) {
+			return;
+		}
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("POST "+ fileInstance.getName()+" HTTP*/1.0\n");
 		buffer.append("ID: "+ id+"\n");
 		buffer.append("HASH: "+ hash +"\n");
 		buffer.append("TEXT: "+ message +"\n");
 		buffer.append(END_PACKET);
+		
 		printerWriter.println(buffer);
 		printerWriter.flush();
+		
 	}
 }

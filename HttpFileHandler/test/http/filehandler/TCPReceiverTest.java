@@ -13,19 +13,29 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TCPReceiverTest {
+public class TCPReceiverTest implements ICallback{
 	private static Logger logger;
 
 	@BeforeClass
 	public static void prepare() {
-		logger = new Logger("");		
+		logger = new Logger("");
 	}
-
+	
 	@AfterClass
-	public static void tearDown() {		
+	public static void tearDown() {
 		logger.deleteLogFile();
 	}
 
+	@Override
+	public int setNumOfReceivedPackets(int packets) {	
+		return packets;
+	}
+
+	@Override
+	public int setNumOfSentPackets(int packets) {
+		return packets;
+	}
+	
 	@Test
 	public void testTCPReceiverWithoutAnyInput() {
 		final Socket socket = mock(Socket.class);
@@ -37,8 +47,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==0);        
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==0);        
 	}
 
 	@Test
@@ -52,8 +63,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==0);     
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==0);     
 	}
 
 	@Test
@@ -71,8 +83,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 
@@ -91,8 +104,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 
@@ -112,8 +126,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==2);
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==2);
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\nPOST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 
@@ -133,8 +148,9 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==2);
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==2);
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n" +
 				"POST wtf.txt HTTP*/1.0\nACK: 1\nEND\n"));
 	}
@@ -157,11 +173,13 @@ public class TCPReceiverTest {
 			e.printStackTrace();
 		}
 
-		TCPReceiver sender = new TCPReceiver(logger, 0);
-		Assert.assertTrue("Message sent successfully", sender.readPackets(socket)==1);
+		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		receiver.setSocket(socket);
+		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST 5MB.bin HTTP*/1.0\nACK: 0\nEND\n"));
 	}
 
+	
 	/*@Test
 	public void testTCPReceiverAllPacketFrom5mbFile() {
 		final Socket socket = mock(Socket.class);

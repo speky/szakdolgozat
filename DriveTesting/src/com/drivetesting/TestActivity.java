@@ -1,8 +1,14 @@
 package com.drivetesting;
 
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.http.conn.util.InetAddressUtils;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,6 +17,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,20 +26,22 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class TestActivity extends Activity {
-	private HttpClient httpClient = null; 
 	private Context context = null;
 	private RadioGroup directionGroup;
+	private ProgressBar progressBar;
 	private int directionGroupIndex;
 	private final String DIRECTION_GROUP = "DirectionGroup";
 	private SharedPreferences sharedPreferences;
 	private NotificationManager notificationManager;
-
+	private HttpBroadcastReceiver receiver;
+	
 	private Handler handler = new Handler(Looper.getMainLooper()) { 
 		@Override 
 		public void handleMessage(Message msg) {
@@ -68,18 +77,28 @@ public class TestActivity extends Activity {
 		long txApp = TrafficStats.getUidTxBytes(uid);
 		long rxApp = TrafficStats.getUidRxBytes(uid);
 		 */
-
+		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
+		progressBar.setVisibility(ProgressBar.INVISIBLE);
+		
+		IntentFilter filter = new IntentFilter(HttpBroadcastReceiver.ACTION_RESP);
+		filter.addCategory(Intent.CATEGORY_DEFAULT);
+		receiver = new HttpBroadcastReceiver();
+		registerReceiver(receiver, filter);
+		
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-		httpClient = new HttpClient(context, handler);
-
-
 	}
-
+	 
 	public void onStartTestClick(View view) {
-		new Thread(httpClient).start();		
+		((DriveTestApp)getApplication()).startHttpClientService();
+		progressBar.setVisibility(ProgressBar.VISIBLE);
 	}
 
+	public void onStopTestClick(View view) {
+		((DriveTestApp)getApplication()).stopHttpClientService();
+		progressBar.setVisibility(ProgressBar.INVISIBLE);
+	}
+	
 	public void onDirectionChoosed(View view) {
 		// Is the button now checked?
 		boolean checked = ((RadioButton) view).isChecked();

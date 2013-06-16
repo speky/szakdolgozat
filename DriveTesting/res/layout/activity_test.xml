@@ -10,11 +10,10 @@
         android:layout_height="wrap_content"
         android:text="Protocol Type" />
 
-    <RadioGroup
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RadioGroup        
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" 
+        android:orientation="horizontal" 
         android:id="@+id/type_group">
 
         <RadioButton
@@ -39,12 +38,18 @@
         android:layout_height="wrap_content"
         android:text="Direction" />
 
-    <RadioGroup
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <RadioGroup        
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" 
+        android:orientation="horizontal" 
         android:id="@+id/dir_group">
+
+        <RadioButton
+            android:id="@+id/dir_ul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDirectionChoosed"
+            android:text="Upload" />
 
         <RadioButton
             android:id="@+id/dir_dl"
@@ -53,29 +58,49 @@
             android:onClick="onDirectionChoosed"
             android:checked="true"
             android:text="Download" />
-
-        <RadioButton
-            android:id="@+id/dir_ul"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onDirectionChoosed"
-            android:text="Upload" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/bt_startTest"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onStartTestClick"
-        android:text="StartTest" />
+       <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
 
+     <ProgressBar
+         android:id="@+id/progressBar"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_marginRight="21dp"
+         android:layout_toLeftOf="@+id/button1" />
+
+     <Button
+         android:id="@+id/button1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_alignParentTop="true"
+         android:layout_marginRight="15dp"
+         android:onClick="onStopTestClick"
+         android:text="Stop Test" />
+
+     <Button
+         android:id="@+id/bt_startTest"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentTop="true"
+         android:layout_marginLeft="14dp"
+         android:onClick="onStartTestClick"
+         android:text="StartTest" />
+    
+    </RelativeLayout>
+    
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="out" />
-
-    <EditText
+        
+     <EditText
         android:id="@+id/editOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,4 +108,5 @@
         android:ems="10"
         android:inputType="number" />
 
+  
 </LinearLayout>

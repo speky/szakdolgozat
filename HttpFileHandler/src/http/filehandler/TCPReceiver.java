@@ -11,25 +11,23 @@ import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 
-
 public class TCPReceiver implements Callable<Integer> {
 	private Logger logger = null;	
 	private int id = 0;
 	private HashSet<Integer> packetIds = new HashSet<Integer>();
 	private String fileName = null;
-	private ServerSocket serverSocket = null;
-	private int serverPort = 0;
 	private int receivedPackets = 0;
 	private HttpParser parser = null;
 	private AckHandler ackHandler = null;
 	private boolean reading = true;
 	private String errorMessage = null;
-	
+	private ICallback callback = null;	
 	private final String TAG = "TCPReceiver: "+id;
-	private final int SOCKET_TIMEOUT = 1000; //in milisec
+	private Socket socket = null;	
 	
-	public TCPReceiver(Logger logger, final int id) {
+	public TCPReceiver(Logger logger, final int id, ICallback callback) {
 		super();
+		this.callback = callback;
 		this.id = id;
 		this.logger = logger;
 		logger.addLine(TAG+" TCP receiver created id: " + id);
@@ -41,22 +39,8 @@ public class TCPReceiver implements Callable<Integer> {
 		return errorMessage;
 	}
 	
-	public void setSenderParameters(final int port) {
-		serverPort = port;
-		logger.addLine(TAG+" id: " + id+ " port: " + serverPort);
-		serverSocket = createSocket();
-	}
-
-	protected ServerSocket createSocket() {
-		ServerSocket socket = null;
-		try {
-			socket = new ServerSocket(serverPort);
-			socket.setSoTimeout(SOCKET_TIMEOUT);
-		} catch (Exception e) {
-			errorMessage = "Server socket creation problem";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
-		} 
-		return socket;
+	public void setSocket(Socket socket) {
+		this.socket  = socket;
 	}
 
 	public int getReceivedPacket(){
@@ -66,71 +50,62 @@ public class TCPReceiver implements Callable<Integer> {
 	public Integer call() {
 		int packet = 0;
 		try {			
-			if (serverPort == 0) {
-				errorMessage = "Invalid server port!";
-				logger.addLine(TAG+errorMessage );				
+			if (socket == null) {
+				errorMessage = "Invalid socket!";
+				logger.addLine(TAG+errorMessage );
+				callback.setNumOfReceivedPackets(-1);
+				callback.setNumOfSentPackets(-1);
 				return -1;
-			}
-
-			Socket socket = serverSocket.accept();
-			//figure out what is the ip-address of the client
-			InetAddress client = socket.getInetAddress();
-			logger.addLine(TAG+client + " connected to server.\n");
-			socket.setSoTimeout(0);
-			packet = readPackets(socket);
+			}						
+			packet = readPackets();
 			socket.close();			
-		}
-		catch (SocketException e) {            
-			errorMessage = "Socket closed while it is waiting for invoming connection.";
-			logger.addLine(TAG+errorMessage);			
-			packet = -1;
-		}
-		catch (SocketTimeoutException e) {            
-			errorMessage = "Socket timed out, no connection received.";
-			logger.addLine(TAG+"Error: "+errorMessage);
-			packet = -1;
-		}
+		}		
 		catch (Exception e) {
 			 errorMessage = "Some kinf of error occured!";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			callback.setNumOfReceivedPackets(-1);
+			callback.setNumOfSentPackets(-1);
 			packet = -1;
 		} 
 		finally{
 			try {
-				if (!serverSocket.isClosed()) {
-					logger.addLine(TAG+"Close server socket");
-					serverSocket.close();
+				if (!socket.isClosed()) {
+					logger.addLine(TAG+"Close socket");
+					socket.close();
 				}
 			} catch (IOException e) {
-				errorMessage = "Cannot close server socket!";
+				errorMessage = "Cannot close socket!";
 				logger.addLine(TAG+ errorMessage);
 				e.printStackTrace();
 			}
 		}
+		callback.setNumOfReceivedPackets(packet);
+		callback.setNumOfSentPackets(packet);
 		return packet;
 	}
 
 	public void stop() {
 		logger.addLine(TAG+"Receiving stopped!");
 		reading = false;
-		if (serverSocket != null) {
+		if (socket != null) {
 			try {
-				serverSocket.close();
+				socket.close();
 			} catch (IOException e) {
-				errorMessage = "Cannot close server socket!";
+				errorMessage = "Cannot close socket!";
 				logger.addLine(TAG+ errorMessage);
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public Integer readPackets(Socket socket) {
+	public Integer readPackets() {
 		BufferedReader reader = null;
-		try {		
+		try {
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
 			logger.addLine(TAG+"ERROR while create reader: " + e.getMessage());
 			errorMessage = "cannot create BufferedReader";
+			return 0;
 		}		
 		StringBuffer buffer = new StringBuffer();
 		receivedPackets = 0;
@@ -142,7 +117,7 @@ public class TCPReceiver implements Callable<Integer> {
 					if (makePacket(buffer.toString())) {
 						logger.addLine(TAG+"Create packet, id: " + receivedPackets);					
 						try {
-							if (parser.getHeadProperty("ID") != null){
+							if (parser.getHeadProperty("ID") != null) {
 								int id = Integer.parseInt(parser.getHeadProperty("ID"));
 								ackHandler.sendAckMessage(socket.getOutputStream(), fileName, id);
 							}
@@ -180,7 +155,7 @@ public class TCPReceiver implements Callable<Integer> {
 	}
 
 	private boolean makePacket(String message) {
-		if (parser.parseHttpMessage(message)==false) {
+		if (parser.parseHttpMessage(message) == false) {
 			errorMessage = "Problem occured while parsing message! message: " +message;
 			logger.addLine(TAG+errorMessage);
 			return false;
@@ -188,7 +163,7 @@ public class TCPReceiver implements Callable<Integer> {
 
 		if (fileName== null) {
 			fileName = parser.getMethodProperty("URI");
-		}else if (!fileName.equals(parser.getMethodProperty("URI"))){
+		}else if (!fileName.equals(parser.getMethodProperty("URI"))) {
 			errorMessage = "Packet what received is belong to another file! fileName: "+parser.getMethodProperty("URI");
 			logger.addLine(TAG+errorMessage);
 			return false; 
@@ -209,7 +184,7 @@ public class TCPReceiver implements Callable<Integer> {
 			logger.addLine(TAG+errorMessage);			
 		}
 		
-		if (parser.getHeadProperty("ID") != null){
+		if (parser.getHeadProperty("ID") != null) {
 			packetIds.add(Integer.parseInt(parser.getHeadProperty("ID")));
 		}else{
 			errorMessage = "Packet's id is invalid!";

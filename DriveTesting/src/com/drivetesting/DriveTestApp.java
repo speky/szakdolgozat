@@ -1,11 +1,19 @@
 package com.drivetesting;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.http.conn.util.InetAddressUtils;
+
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
@@ -25,6 +33,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private Context context = null;
 
 	private ReportTask task = new ReportTask(); 
+	private HttpBroadcastReceiver receiver;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -42,6 +52,11 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		Intent service = new Intent(context, GPSService.class);
 		startService(service);
 
+		IntentFilter filter = new IntentFilter(HttpBroadcastReceiver.ACTION_RESP);
+		filter.addCategory(Intent.CATEGORY_DEFAULT);
+		receiver = new HttpBroadcastReceiver();
+		registerReceiver(receiver, filter);
+		
 		//Declare the timer
 		/*Timer t = new Timer();
 		//Set the schedule function and rate
@@ -51,14 +66,54 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 				10,
 				//Set the amount of time between each execution (in milliseconds)
 				1000);
-*/
+		 */
 
 	}
 
+	
+	 public String getIPAddress(boolean useIPv4) {
+	        try {
+	            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+	            for (NetworkInterface intf : interfaces) {
+	                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+	                for (InetAddress addr : addrs) {
+	                    if (!addr.isLoopbackAddress()) {
+	                        String sAddr = addr.getHostAddress().toUpperCase();
+	                        boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr); 
+	                        if (useIPv4) {
+	                            if (isIPv4) 
+	                                return sAddr;
+	                        } else {
+	                            if (!isIPv4) {
+	                                int delim = sAddr.indexOf('%'); // drop ip6 port suffix
+	                            return delim<0 ? sAddr : sAddr.substring(0, delim);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    } catch (Exception ex) { } // for now eat exceptions
+	    return "";
+	}
+
+	public boolean startHttpClientService() {		
+		Intent httpIntent = new Intent(this, HttpClient.class);
+		httpIntent.putExtra(HttpClient.PARAM_OWN_IP, getIPAddress(true));		
+		startService(httpIntent);
+		return true;
+	}
+
+	public boolean stopHttpClientService() {
+		Intent httpIntent = new Intent(this, HttpClient.class);		
+		stopService(httpIntent);
+		return true;
+	}
+	
 	public void setGpsService(boolean isRun) {
 		isGpsServiceRun = true;
 	}
-	public void activeGpsActivity(){
+	
+	public void activeGpsActivity() {
 		++activeGpsActivity;
 	}
 
@@ -87,4 +142,6 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			System.out.println("timer update");
 		}
 	}
+
+
 }

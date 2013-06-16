@@ -2,24 +2,24 @@
 package httpserver;
 
 import http.filehandler.FileInstance;
-import http.filehandler.HttpFileHandler;
 import http.filehandler.HttpParser;
+import http.filehandler.ICallback;
 import http.filehandler.Logger;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,84 +29,102 @@ import java.util.concurrent.Future;
  * @author Specker Zsolt
  */
 
-class Client {
-	public Socket socket;
-	public PrintWriter printWriter;
-	public Scanner scanner;
-	public int id;
-	public int port;	
+class ServerThread extends Thread implements ICallback{	
+	private static final int MAX_THREAD = 10;
+	private static final String TAG = "ServerThread id: ";
 
-	Client(Socket socket, final int id, final int port) {
-		try{
-			this.socket = socket;
-			this.id = id;
-			this.port = port;
-			printWriter = new PrintWriter(socket.getOutputStream());
-			scanner = new Scanner(socket.getInputStream());			
-		}
-		catch(Exception e){
-			System.out.println("peer hiba: " + e.getMessage() + " Peer id " + id);
-		}
-	}
-}
-
-class ServerThread extends Thread {	
-	private Client client = null;
-	private Logger logger = null;
-	private HttpParser parser = null;	
-	private HttpFileHandler fileHandler = null;
-	private Properties HeaderProperty = null;
 	private final int FirstPort = 5555;
 	private final int MaxPort = 6000;
+	private final int SOCKET_TIMEOUT = 10000; //in milisec
+	private final int REPEAT_SOCKET_CONNECTION= 3;
+
+	private int id = -1;
+	private Logger logger = null;
+	private HttpParser parser = null;	
+	private Properties HeaderProperty = null;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
-	static final int MAX_THREAD = 10;
-	private TCPSender sender = null; 
+
+	private TCPSender sender = null;
+	private TCPReceiver receiver = null;
+	private String errorMessage = null;
+	private Socket commandSocket = null;
+	private Scanner scanner = null;	
+	private Socket testSocket = null;
+	private ServerSocket serverSocket = null;
+	private PrintWriter printWriter;
 
 	public ServerThread(Logger logger, Socket socket, final int id) {
 		super();
-
 		this.logger = logger;
-		client = new Client(socket, id, 0);
-		fileHandler = new HttpFileHandler(logger);
-		fileHandler.addFile("test.txt");
-		logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
+		this.id = id;
+		logger.addLine("Start new ServerThread, id: " + id + " IP: " + socket.getInetAddress().getHostAddress());
 		parser = new HttpParser(logger);
 		HeaderProperty = new Properties();
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
-
+		commandSocket = socket;
+		try {
+			scanner = new Scanner( commandSocket.getInputStream());
+			printWriter = new PrintWriter(commandSocket.getOutputStream());
+		} catch (IOException e) {
+			logger.addLine(TAG + id +"Error at scanner creation: "+e.getMessage());
+			e.printStackTrace();
+		}
+		// the thread start itself 
 		start();
+	}	
+
+	protected int createSocket() {		
+		int port = -1;
+		try {
+			port = getNextFreePort();
+			serverSocket = new ServerSocket(port);
+			// set timer for the accept
+			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+
+		} catch (Exception e) {
+			errorMessage = "Server socket creation problem";
+			logger.addLine(TAG+id+" ERROR in run() " + e.getMessage());
+			return -1;
+		}
+		return port;
 	}
 
 	public void run() {
 		try {   
 			while (true) {
-				if  (client.scanner.hasNextLine()){
-					logger.addLine("Get message from client,  clientId: " + client.id+"\n");
+				if  (scanner.hasNextLine()){
+					logger.addLine(TAG+id+" Get message from client");
 					StringBuffer buffer = new StringBuffer();
-					String readedLine = client.scanner.nextLine();
+					String readedLine = scanner.nextLine();
 					buffer.append(readedLine);
 					while (readedLine.compareTo("END") !=  0) {
 						//Read the request line
-						readedLine = client.scanner.nextLine();
+						readedLine = scanner.nextLine();
 						if (readedLine.compareTo("END") !=  0) {
 							buffer.append("+"+readedLine);
 						}			
 					}
 					parseClientRequest(buffer.toString());
 
-					int nextPort = 0;
-					if (parser.getMethod().equals("GET")){						
-						if (parser.getHeadProperty("MODE").equals("DL")){
-							nextPort = getNextPort();
-							HeaderProperty.put("PORT", Integer.toString(nextPort));
-						}						
-						makeFileHandlingThread(nextPort);						
-					}else if (parser.getMethod().equals("STOP")){
-						if (sender != null){
+					if (parser.getMethod().equals("GET")) {		
+						//if (parser.getHeadProperty("MODE").equals("DL")) {
+						int port = 0;
+						do {
+							port = createSocket();							
+							HeaderProperty.put("PORT", Integer.toString(port));
+						} while (port == -1);
+
+						makeFileHandlingThread(port);
+
+					} else if (parser.getMethod().equals("STOP")) {
+						if (sender != null) {
 							sender.stop();
+						}
+						if (receiver != null) {
+							receiver.stop();
 						}
 					}else{
 						sendResponse();
@@ -114,13 +132,13 @@ class ServerThread extends Thread {
 				}
 			}
 		} catch (Exception e) {            
-			logger.addLine("ERROR in run() " + e.getMessage()+" (client id " + client.id+" )");
+			logger.addLine("ERROR in run() " + e.getMessage()+" ( id: " + id+" )");
 		} 
 	}
 
-	private int getNextPort() {
+	private int getNextFreePort() {
 		int nextPort = FirstPort+portOffset;
-		portOffset++;
+		++portOffset;
 		if (nextPort > MaxPort) {
 			nextPort = FirstPort;
 			portOffset = 0;
@@ -138,7 +156,7 @@ class ServerThread extends Thread {
 		if (packet != null ){
 			packetSize = Integer.parseInt(packet);
 		}		
-		if (FileInstance.DEFAULT_SIZE != packetSize){
+		if (FileInstance.DEFAULT_SIZE != packetSize) {
 			file.splitFileToPackets(packetSize);
 		}		
 		return file;
@@ -146,37 +164,50 @@ class ServerThread extends Thread {
 
 	private boolean makeFileHandlingThread(int port) {
 		boolean retValue = true;
-		if (port == 0) {
+		if (port <= 0) {
 			logger.addLine("Error: Invalid port number!");
 			parser.setErrorText("Invalid port number");
 			retValue = false;
 		}
-				
+
 		FileInstance file = checkPacketSize(parser.getMethodProperty("URI"), parser.getHeadProperty("PACKET_SIZE"));
 		if (file == null) {
 			parser.setErrorText("File does not exist!");
 			retValue = false;
 		}
-		
+
 		if (!parser.getHeadProperty("MODE").equals("DL") && !parser.getHeadProperty("MODE").equals("UL") ||
-			 !parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
+				!parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
 			logger.addLine("ERROR: wrong connction parameter received!");
 			parser.setErrorText("Wrong connction parameter received");
 			retValue = false;
 		}
 		sendResponse();
-		
+
 		if (retValue == false)	{
 			return false;
 		}
-		
+
+		try {
+			testSocket = serverSocket.accept();
+			serverSocket.setSoTimeout(0);
+		} catch (SocketException e) {
+			logger.addLine(TAG+e.getMessage());			
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			logger.addLine(TAG+e.getMessage());
+			e.printStackTrace();
+		}
+		//figure out what is the ip address of the client
+		InetAddress client = testSocket.getInetAddress();
+		logger.addLine(TAG +id+" client:  "+client + " connected to server.\n");
+
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				sender = new TCPSender(logger, threadCount++);				
+				sender = new TCPSender(logger, ++threadCount, this);				
 				sender.setFile(file);
-				String clientAddress = client.socket.getInetAddress().getHostAddress();
-				logger.addLine("ClientAddress: "+clientAddress);
-				if (sender.setReceiverParameters(port, clientAddress )) {//"10.0.2.15");
+				if (sender.setSocket(testSocket)) {
 					Future<Integer> future = pool.submit(sender);
 					threadSet.add(future);
 				}
@@ -184,30 +215,16 @@ class ServerThread extends Thread {
 				//new Thread(new UDPSender(logger, 1 ));
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
-			if (parser.getHeadProperty("CONNECTION").equals("UDP")){
-				Callable<Integer> callable = new TCPReceiver(logger, threadCount++);
-				Future<Integer> future = pool.submit(callable);
+			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
+				receiver = new TCPReceiver(logger, ++threadCount, this);
+				receiver.setSocket(testSocket);
+				Future<Integer> future = pool.submit(receiver);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPRecever(logger, 1 ));
 			}
 		}
 
-		for (Future<Integer> future : threadSet) {
-			try {
-				int value = future.get();
-				logger.addLine("A thread ended, value: " + value);
-				if (value != 0) {
-					logger.addLine("Problem:" + sender.getErrorMessage());
-				}
-			} catch (ExecutionException e) {
-				logger.addLine(e.getMessage());
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				logger.addLine(e.getMessage());
-				e.printStackTrace();
-			}
-		}
 		return true;
 	}
 
@@ -248,14 +265,24 @@ class ServerThread extends Thread {
 	}
 
 	private boolean sendMessageToClient(final String message) {
-		client.printWriter.println(message);
-		client.printWriter.flush();
+		printWriter.println(message);
+		printWriter.flush();
 		return true;
 	}
 
 	private void parseClientRequest(String readedLine) {		
 		//Read the http request from the client from the socket interface into a buffer.
 		parser.parseHttpMessage(readedLine);
+	}
+
+	@Override
+	public int setNumOfReceivedPackets(int packets) {
+		return packets;
+	}
+
+	@Override
+	public int setNumOfSentPackets(int packets) {	
+		return packets;
 	}
 }
 
@@ -271,7 +298,7 @@ public class HttpServer {
 	public static HashMap<String, FileInstance> fileList = new HashMap<String, FileInstance> ();
 
 	private static void makeFileList() {
-		File filePath = new File(System.getProperty("user.dir") + "\\asset");		
+		File filePath = new File(System.getProperty("user.dir") + "\\asset");
 		File[] listOfFiles = filePath.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {

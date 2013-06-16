@@ -5,14 +5,16 @@ import static org.mockito.Mockito.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TCPSenderTest {
+public class TCPSenderTest implements ICallback{
 	private static Logger logger;
 	
 	@BeforeClass
@@ -24,6 +26,17 @@ public class TCPSenderTest {
 	public static void tearDown() {		
 		logger.deleteLogFile();
 	}
+	
+	@Override
+	public int setNumOfReceivedPackets(int packets) {	
+		return packets;
+	}
+
+	@Override
+	public int setNumOfSentPackets(int packets) {
+		return packets;
+	}
+
 
 	@Test
 	public void testTCPSenderWithoutAnyParameter() {
@@ -37,34 +50,33 @@ public class TCPSenderTest {
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0) {
-            @Override
-            protected Socket createSocket() {
-                return socket;
-            }
-        };
+        TCPSender sender = new TCPSender(logger, 0, this); 
         Assert.assertTrue(sender.call()==-1);
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 	
 	@Test
 	public void testTCPSenderWithSocketParameter() {
-        final Socket socket = mock(Socket.class);
+        final Socket socket = mock(Socket.class);        
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        InetAddress inetAddr = null;
+		try {
+			inetAddr = InetAddress.getByName("127.0.0.1");
+		} catch (UnknownHostException e1) {		
+			e1.printStackTrace();
+		}
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
+			when(socket.getInetAddress()).thenReturn(inetAddr);
+			when(socket.getPort()).thenReturn(42);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0) {
-            @Override
-            protected Socket createSocket() {
-                return socket;
-            }
-        };
+        TCPSender sender = new TCPSender(logger, 0, this);
 
-        sender.setReceiverParameters(42, "1.1.1.1");
+        Assert.assertTrue(sender.setSocket(null) == false);
+        Assert.assertTrue(sender.setSocket(socket) == true);
         Assert.assertTrue("Message sent successfully", sender.call()==-1);
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
@@ -75,21 +87,24 @@ public class TCPSenderTest {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         String ackMessage = "POST test.txt HTTP*/1.0\n ACK: 0\nEND\n";
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());        
+        InetAddress inetAddr = null;
+		try {
+			inetAddr = InetAddress.getByName("127.0.0.1");
+		} catch (UnknownHostException e1) {		
+			e1.printStackTrace();
+		}
         try {
-			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
+        	when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
+			when(socket.getInetAddress()).thenReturn(inetAddr);
+			when(socket.getPort()).thenReturn(42);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0) {
-            @Override
-            protected Socket createSocket() {
-                return socket;
-            }
-        };
+        TCPSender sender = new TCPSender(logger, 0, this);
 
-        sender.setReceiverParameters(42, "1.1.1.1");
+        sender.setSocket(socket);
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPackets(30);
         sender.setFile(file);
@@ -107,21 +122,24 @@ public class TCPSenderTest {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         String ackMessage = "POST test.txt HTTP*/1.0\nACK: 0\nEND\nPOST test.txt HTTP*/1.0\nACK: 1\nEND\nPOST test.txt HTTP*/1.0\nACK: 2\nEND\n";
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());
-        try {
+        InetAddress inetAddr = null;
+		try {
+			inetAddr = InetAddress.getByName("127.0.0.1");
+		} catch (UnknownHostException e1) {		
+			e1.printStackTrace();
+		}
+        try {			
+			when(socket.getInetAddress()).thenReturn(inetAddr);
+			when(socket.getPort()).thenReturn(42);
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 			when(socket.getInputStream()).thenReturn(byteArrayInputStream);
 		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0) {
-            @Override
-            protected Socket createSocket() {
-                return socket;
-            }
-        };
+        TCPSender sender = new TCPSender(logger, 0, this);
 
-        sender.setReceiverParameters(42, "1.1.1.1");
+        sender.setSocket(socket);
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPackets(10);
         sender.setFile(file);
