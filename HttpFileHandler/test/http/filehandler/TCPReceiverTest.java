@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TCPReceiverTest implements ICallback{
+public class TCPReceiverTest{
 	private static Logger logger;
 
 	@BeforeClass
@@ -24,16 +24,6 @@ public class TCPReceiverTest implements ICallback{
 	@AfterClass
 	public static void tearDown() {
 		logger.deleteLogFile();
-	}
-
-	@Override
-	public int setNumOfReceivedPackets(int packets) {	
-		return packets;
-	}
-
-	@Override
-	public int setNumOfSentPackets(int packets) {
-		return packets;
 	}
 	
 	@Test
@@ -47,9 +37,11 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==0);        
+		receiver.readPackets();
+		Assert.assertTrue(receiver.getReceivedPacket() == 0);
+		Assert.assertTrue(receiver.getSentPacket() == 0);
 	}
 
 	@Test
@@ -63,9 +55,11 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==0);     
+		receiver.readPackets();
+		Assert.assertTrue(receiver.getReceivedPacket() == 0);
+		Assert.assertTrue(receiver.getSentPacket() == 0);
 	}
 
 	@Test
@@ -83,10 +77,12 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
+		receiver.readPackets();
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
+		Assert.assertTrue(receiver.getReceivedPacket() == 1);
+		Assert.assertTrue(receiver.getSentPacket() == 1);
 	}
 
 	@Test
@@ -104,10 +100,12 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
+		receiver.readPackets();
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
+		Assert.assertTrue(receiver.getReceivedPacket() == 1);
+		Assert.assertTrue(receiver.getSentPacket() == 1);
 	}
 
 	@Test
@@ -126,10 +124,12 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==2);
+		receiver.readPackets();
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\nPOST wtf.txt HTTP*/1.0\nACK: 0\nEND\n"));
+		Assert.assertTrue(receiver.getReceivedPacket() == 2);
+		Assert.assertTrue(receiver.getSentPacket() == 2);
 	}
 
 	@Test
@@ -148,11 +148,13 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==2);
+		receiver.readPackets();
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST wtf.txt HTTP*/1.0\nACK: 0\nEND\n" +
 				"POST wtf.txt HTTP*/1.0\nACK: 1\nEND\n"));
+		Assert.assertTrue(receiver.getReceivedPacket() == 2);
+		Assert.assertTrue(receiver.getSentPacket() == 2);
 	}
 
 	@Test
@@ -173,10 +175,12 @@ public class TCPReceiverTest implements ICallback{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, 0, this);
+		TCPReceiver receiver = new TCPReceiver(logger, 0);
 		receiver.setSocket(socket);
-		Assert.assertTrue("Message sent successfully", receiver.readPackets()==1);
+		receiver.readPackets();
 		Assert.assertTrue(byteArrayOutputStream.toString().equals("POST 5MB.bin HTTP*/1.0\nACK: 0\nEND\n"));
+		Assert.assertTrue(receiver.getReceivedPacket() == 1);
+		Assert.assertTrue(receiver.getSentPacket() == 1);
 	}
 
 	

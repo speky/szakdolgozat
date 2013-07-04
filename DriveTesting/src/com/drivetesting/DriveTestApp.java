@@ -1,49 +1,73 @@
 package com.drivetesting;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
+import java.util.ArrayList;
 import java.util.TimerTask;
 
-import org.apache.http.conn.util.InetAddressUtils;
-
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
-public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener {
+public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, Subject{
 
 	static final String TAG = "DriveTesting";
 
 	private DataStorage dataStorage;
 	private SharedPreferences prefs;	
-	private String serverIp;	
-
+	
 	private boolean isGpsServiceRun = false;
 	private int activeGpsActivity = 0;
 	private Context context = null;
 
-	private ReportTask task = new ReportTask(); 
-	private HttpBroadcastReceiver receiver;
+	private ReportTask task = new ReportTask();
+	private boolean isTestRunning = false;
 
+	private ArrayList<Observer> observers;
+	private String message = "";
+	private int action = 0;
+	
+	Handler handler = new Handler() 
+    { 
+        @Override 
+        public void handleMessage(Message msg) { 
+        	if ( msg.getData().containsKey("error")) {
+        		message = msg.getData().getString("error");        		
+            	stopHttpClientService();
+            	action = 0;
+            	Log.d(TAG, message);
+            } 
+            
+            if ( msg.getData().containsKey("packet")) {
+            	message = msg.getData().getString("packet");
+            	action = 1;
+            	Log.d(TAG, "get data" + message);
+            } 
+            
+            if ( msg.getData().containsKey("end")) {
+            	message = msg.getData().getString("end");            	
+            	action = 0;
+            	Log.d(TAG, message);            	
+            }
+            notifyObservers();
+            super.handleMessage(msg); 
+        } 
+    };
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		observers = new ArrayList();
+		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		prefs.registerOnSharedPreferenceChangeListener(this);
-
-		serverIp= prefs.getString("serverIp", "0.0.0.0");
-
+		
 		dataStorage = new DataStorage(this);
 		Log.d(TAG, "App created");
 
@@ -51,12 +75,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		context = getApplicationContext();
 		Intent service = new Intent(context, GPSService.class);
 		startService(service);
-
-		IntentFilter filter = new IntentFilter(HttpBroadcastReceiver.ACTION_RESP);
-		filter.addCategory(Intent.CATEGORY_DEFAULT);
-		receiver = new HttpBroadcastReceiver();
-		registerReceiver(receiver, filter);
-		
+			
 		//Declare the timer
 		/*Timer t = new Timer();
 		//Set the schedule function and rate
@@ -70,35 +89,13 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	}
 
-	
-	 public String getIPAddress(boolean useIPv4) {
-	        try {
-	            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-	            for (NetworkInterface intf : interfaces) {
-	                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-	                for (InetAddress addr : addrs) {
-	                    if (!addr.isLoopbackAddress()) {
-	                        String sAddr = addr.getHostAddress().toUpperCase();
-	                        boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr); 
-	                        if (useIPv4) {
-	                            if (isIPv4) 
-	                                return sAddr;
-	                        } else {
-	                            if (!isIPv4) {
-	                                int delim = sAddr.indexOf('%'); // drop ip6 port suffix
-	                            return delim<0 ? sAddr : sAddr.substring(0, delim);
-	                        }
-	                    }
-	                }
-	            }
-	        }
-	    } catch (Exception ex) { } // for now eat exceptions
-	    return "";
-	}
-
 	public boolean startHttpClientService() {		
 		Intent httpIntent = new Intent(this, HttpClient.class);
-		httpIntent.putExtra(HttpClient.PARAM_OWN_IP, getIPAddress(true));		
+		if (handler != null) {
+			httpIntent.putExtra("handler", new Messenger(handler));						
+		}
+		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
+		isTestRunning = true;
 		startService(httpIntent);
 		return true;
 	}
@@ -106,7 +103,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public boolean stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpClient.class);		
 		stopService(httpIntent);
+		isTestRunning = false;
 		return true;
+	}
+	
+	public boolean isTestRunning() {
+		return isTestRunning ;
 	}
 	
 	public void setGpsService(boolean isRun) {
@@ -119,10 +121,6 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	public void deactiveGspActivity() {
 		--activeGpsActivity;
-	}
-
-	public String getServerIp() {
-		return serverIp;
 	}
 
 	@Override
@@ -141,6 +139,27 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 			System.out.println("timer update");
 		}
+	}
+
+	@Override
+	public void registerObserver(Observer observer) {
+		observers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(Observer observer) {
+		int index = observers.indexOf(observer);
+		if (index > 0 ) {
+			observers.remove(index);
+		}
+	}
+
+	@Override
+	public void notifyObservers() {
+		for (int i = 0; i < observers.size(); i++) {
+            Observer observer = (Observer)observers.get(i);
+            observer.update(action, message);
+        }		
 	}
 
 

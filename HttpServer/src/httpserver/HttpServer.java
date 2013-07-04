@@ -3,10 +3,11 @@ package httpserver;
 
 import http.filehandler.FileInstance;
 import http.filehandler.HttpParser;
-import http.filehandler.ICallback;
 import http.filehandler.Logger;
+import http.filehandler.PacketStructure;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +16,13 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,7 +32,7 @@ import java.util.concurrent.Future;
  * @author Specker Zsolt
  */
 
-class ServerThread extends Thread implements ICallback{	
+class ServerThread extends Thread{	
 	private static final int MAX_THREAD = 10;
 	private static final String TAG = "ServerThread id: ";
 
@@ -44,7 +47,7 @@ class ServerThread extends Thread implements ICallback{
 	private Properties HeaderProperty = null;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
-	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
+	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
 	private int threadCount = 0;
 
 	private TCPSender sender = null;
@@ -191,7 +194,12 @@ class ServerThread extends Thread implements ICallback{
 		try {
 			testSocket = serverSocket.accept();
 			serverSocket.setSoTimeout(0);
-		} catch (SocketException e) {
+		}
+		catch (SocketTimeoutException e) {
+			logger.addLine(TAG+e.getMessage());
+			e.printStackTrace();
+		}
+		catch (SocketException e) {
 			logger.addLine(TAG+e.getMessage());			
 			e.printStackTrace();
 		}
@@ -199,16 +207,17 @@ class ServerThread extends Thread implements ICallback{
 			logger.addLine(TAG+e.getMessage());
 			e.printStackTrace();
 		}
+		
 		//figure out what is the ip address of the client
 		InetAddress client = testSocket.getInetAddress();
 		logger.addLine(TAG +id+" client:  "+client + " connected to server.\n");
 
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				sender = new TCPSender(logger, ++threadCount, this);				
+				sender = new TCPSender(logger, ++threadCount);				
 				sender.setFile(file);
 				if (sender.setSocket(testSocket)) {
-					Future<Integer> future = pool.submit(sender);
+					Future<PacketStructure> future = pool.submit(sender);
 					threadSet.add(future);
 				}
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -216,9 +225,9 @@ class ServerThread extends Thread implements ICallback{
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				receiver = new TCPReceiver(logger, ++threadCount, this);
+				receiver = new TCPReceiver(logger, ++threadCount);
 				receiver.setSocket(testSocket);
-				Future<Integer> future = pool.submit(receiver);
+				Future<PacketStructure> future = pool.submit(receiver);
 				threadSet.add(future);
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPRecever(logger, 1 ));
@@ -273,16 +282,6 @@ class ServerThread extends Thread implements ICallback{
 	private void parseClientRequest(String readedLine) {		
 		//Read the http request from the client from the socket interface into a buffer.
 		parser.parseHttpMessage(readedLine);
-	}
-
-	@Override
-	public int setNumOfReceivedPackets(int packets) {
-		return packets;
-	}
-
-	@Override
-	public int setNumOfSentPackets(int packets) {	
-		return packets;
 	}
 }
 

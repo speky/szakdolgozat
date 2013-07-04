@@ -13,14 +13,14 @@ public class AckHandler {
 	private AckReceiver receiver = null;
 	private Logger logger = null;
 	private final String TAG = "AckReceiver: ";
-	
+		
 	public AckHandler(Logger logger){
-		this.logger = logger;
+		this.logger = logger;		
 	}
 	
-	public boolean startAckReceiver(String fileName, Socket socket, HashSet<Integer> set) {
+	public boolean startAckReceiver(ICallback callback, String fileName, Socket socket, HashSet<Integer> set) {
 		if (receiver == null){
-			receiver = new AckReceiver(fileName, logger, socket, set);
+			receiver = new AckReceiver(callback, fileName, logger, socket, set);
 			receiver.start();
 			return true;
 		}
@@ -50,12 +50,14 @@ public class AckHandler {
 		private Socket socket = null;
 		private boolean isScanStopped = false;	
 		private HashSet<Integer> ackList = null; 
+		private ICallback callback = null;
 		
-		public AckReceiver(String fileName, Logger logger, Socket socket, HashSet<Integer> set) {
+		public AckReceiver(ICallback callback, String fileName, Logger logger, Socket socket, HashSet<Integer> set) {
 			super();
 			this.fileName = fileName;
 			this.logger = logger;
 			this.socket =  socket;
+			this.callback = callback;
 			ackList = set;
 		}
 
@@ -86,6 +88,9 @@ public class AckHandler {
 									parser.getMethodProperty("URI") != null && parser.getMethodProperty("URI").equals(fileName)) {
 								int id = Integer.parseInt(packetId); 
 								ackList.add(id);
+								if ( callback != null) {
+									callback.receiveAckMessages();
+								}
 							}
 							buffer.delete(0, buffer.length());
 						}

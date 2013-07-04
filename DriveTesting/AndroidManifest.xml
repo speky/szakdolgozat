@@ -25,12 +25,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"  
-        android:uiOptions="splitActionBarWhenNarrow"
+        android:uiOptions="splitActionBarWhenNarrow"        
         >
 	        
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_drive_test" >
+            android:label="@string/title_activity_drive_test" 
+            android:screenOrientation="portrait">
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,11 +41,14 @@
         </activity>
         <activity
             android:name=".PrefsActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ExportActivity" >
+        <activity android:name=".ExportActivity"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".TestActivity" >
+        <activity android:name=".TestActivity"
+            android:screenOrientation="portrait" >
         </activity>
         
         <service android:name=".UpdateService" >
@@ -53,7 +58,8 @@
 
         <activity
             android:name=".OSMActivity"
-            android:label="@string/title_activity_osm" >
+            android:label="@string/title_activity_osm" 
+            android:screenOrientation="portrait">            
         </activity>
     </application>
 

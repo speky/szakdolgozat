@@ -1,7 +1,7 @@
 package com.drivetesting;
 
-import http.filehandler.ICallback;
 import http.filehandler.Logger;
+import http.filehandler.PacketStructure;
 import http.filehandler.TCPReceiver;
 
 import java.io.IOException;
@@ -26,22 +26,31 @@ import java.util.concurrent.Future;
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.TrafficStats;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.util.Log;
+import android.os.Process;
 
-public class HttpClient extends IntentService implements ICallback {
+public class HttpClient extends IntentService {
 	public static final int MAX_THREAD = 10;
 	public static final String PARAM_OWN_IP = "own_ip";
 	public static final String PARAM_OUT_MSG = "out_msg";
-	private static final int SOCKET_TIMEOUT = 5000;
-	
+	public static final String PARAM_PACKET = "packet";
+	private static final int SOCKET_TIMEOUT = 3000;
+
+	private static final double BYTE_TO_KILOBIT = 0.0078125;
+	private static final double KILOBIT_TO_MEGABIT = 0.0009765625;
+
 	private final String TAG = "HttpClient: ";
 	private final int ServerPort = 4444;
-	private  final String serverAddress = "94.21.221.22";//"192.168.0.100"
-	
+	private  String serverAddress = null;
 	private Logger logger;
 	private ExecutorService pool = null;
-	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
+	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
 	private int threadCount = 0;
 	private Socket socket;
 	private Scanner scanner;
@@ -49,42 +58,68 @@ public class HttpClient extends IntentService implements ICallback {
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
 	private TCPReceiver receiver = null;
-	private long mStartRX = 0;
-	private long mStartTX = 0;
-	private String ownIp = "";	
-	private ReportTask task = new ReportTask();
-	private int serverPort;
-	private String errorMessage = null;
 	
+	private ReportTask task = new ReportTask();	
+	private String errorMessage = null;
+	private Messenger messenger = null;
+	
+	private long previousRxBytes = 0;
+	private long previousTxBytes = 0;
+	private long time = 0;
+	private SpeedInfo downloadSpeed;
+	private SpeedInfo uploadSpeed;
+	
+	// This is the object that receives interactions from clients.  
+    private final IBinder mBinder = new LocalBinder();
+
+    /**
+     * Class for clients to access.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with
+     * IPC.
+     */
+    public class LocalBinder extends Binder {
+    	HttpClient getService() {
+            return HttpClient.this;
+        }
+    }
+    
 	class ReportTask extends TimerTask {
 		public void run() {
 			int packet = getReceivedPackets();
-			System.out.println("** Packet: "+ packet);	
-
-			Message m = new Message();			
-			Bundle b = new Bundle();
-			b.putInt("packet", packet); 
-			m.setData(b);
-			//handler.sendMessage(m);
+			int sentPacket = getSentPackets();
+			calcSpeed();
+			logger.addLine("** Packet: "+ packet + " sent: "+sentPacket);	
+			sendMessage("packet", /*"Packet: "+Integer.toString(packet)+ " sent: "+Integer.toString(sentPacket) +*/
+				downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString());
 		}
 	}
 
-	public  HttpClient () {
+	private void sendMessage(final String key, final String value) {
+		if (messenger != null) {
+			Message m = Message.obtain();			
+			Bundle b = new Bundle();
+			b.putString(key, value); 
+			m.setData(b);
+			try {
+				Log.d("Client", key + " "+ value);
+				messenger.send(m);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public  HttpClient() {
 		super("HttpClientIntentService");				
 		logger = new Logger("");
 		logger.addLine(TAG+"test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
-
-	@Override
-	public int setNumOfReceivedPackets(int packets) {
-		return 0;
-	}
-
-	@Override
-	public int setNumOfSentPackets(int packets) {
-		return 0;
-	}
+	    
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
 	
 	protected Socket createSocket(int port) {
 		try {
@@ -93,79 +128,96 @@ public class HttpClient extends IntentService implements ICallback {
 			logger.addLine(TAG+" Create new socket");
 			return socket;
 		} catch (UnknownHostException e) {
-			errorMessage  = "Socket creatin problem";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
-		} catch (IOException e) {
-			errorMessage = "Socket creatin problem";
+			errorMessage  = "Test socket creating problem";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			sendMessage("error", errorMessage);			
+		} catch (IOException e) {
+			errorMessage = "Test socket creating problem (I/O)";
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			sendMessage("error", errorMessage);			
 		}
 		return null;
 	}
-	
+
+	private void calcSpeed() {
+		int i = android.os.Process.myUid();
+		int j = getApplication().getApplicationInfo().uid;
+		
+		long rxBytes = TrafficStats.getMobileRxBytes() - previousRxBytes; //getUidRxBytes(android.os.Process.myUid()) - previousRxBytes;
+		System.out.println("Rx bytes: "+Long.toString(rxBytes));
+		long txBytes = TrafficStats.getUidTxBytes(android.os.Process.myUid()) - previousTxBytes;
+		System.out.println("Tx bytes: "+Long.toString(txBytes));
+
+		long currentTime =  System.currentTimeMillis();
+		long ellapsedTime = currentTime - time;
+		time = currentTime;
+
+		downloadSpeed = calculate(ellapsedTime, rxBytes);
+		uploadSpeed = calculate(ellapsedTime, txBytes);
+
+		previousTxBytes = txBytes;
+		previousRxBytes = rxBytes;			
+	}
+
+	/**
+	 * 1 byte = 0.0078125 kilobits
+	 * 1 kilobits = 0.0009765625 megabit
+	 * 
+	 * @param time in miliseconds
+	 * @param bytes number of bytes downloaded/uploaded
+	 * @return SpeedInfo containing current speed
+	 */
+	private SpeedInfo calculate(final long time, final long bytes){
+		SpeedInfo info = new SpeedInfo();
+		if (time == 0) {
+			return info;
+		}
+		info.bps = (bytes / (time / 1000.0) );
+		info.kilobits  = info.bps  * BYTE_TO_KILOBIT;
+		info.megabits = info.kilobits * KILOBIT_TO_MEGABIT;
+		
+		return info;
+	}
+
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		ownIp   = intent.getStringExtra(PARAM_OWN_IP);		
+		messenger = (Messenger) intent.getExtras().get("handler"); 		
 		//String resultTxt = msg + " " + DateFormat.format("MM/dd/yy h:mmaa", System.currentTimeMillis());
 
+		serverAddress = (String)intent.getExtras().get("serverIp");
+		if (serverAddress == null || serverAddress.equals("0.0.0.0")) {
+			sendMessage("error", "Error: Invalid server address!");
+			System.out.println("Invalid server address!");
+		}
+		
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 
-			/*	Message m = handler.obtainMessage(5, "ize");
-			m.sendToTarget();
-			/*new Message();			
-			Bundle b = new Bundle();
-			b.putInt("what", 5); // for example
-			m.setData(b);
-			handler.sendMessage(m);*/
-
-			mStartRX = TrafficStats.getTotalRxBytes();
-			mStartTX = TrafficStats.getTotalTxBytes();
-
-			/*	if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
-
-			} else {
-				mHandler.postDelayed(mRunnable, 1000);
+			previousRxBytes = TrafficStats.getMobileRxBytes();//(android.os.Process.myUid());
+			previousTxBytes = TrafficStats.getUidTxBytes(android.os.Process.myUid());
+			time =System.currentTimeMillis();
+			
+			if (previousTxBytes  == TrafficStats.UNSUPPORTED || previousTxBytes == TrafficStats.UNSUPPORTED) {
+				System.out.println("Traffic stat not supported! ");
 			}
-			 */
 
 			makeNewThread();
 
-			/*			m = new Message();
-			b = new Bundle();
-			b.putInt("end", 5);
-			m.setData(b);
-			handler.sendMessage(m);
-			 */
-			
-			Intent broadcastIntent = new Intent();
-			broadcastIntent.setAction(HttpBroadcastReceiver.ACTION_RESP);
-			broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-			broadcastIntent.putExtra(PARAM_OUT_MSG,  "blabal");
-			sendBroadcast(broadcastIntent);			
 		}catch (Exception e) {
 			e.printStackTrace();
+			sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+ ServerPort );
 			pool.shutdownNow();
 		}
 	}
-
-	private final Runnable mRunnable = new Runnable() {
-		public void run() {
-			long rxBytes = TrafficStats.getTotalRxBytes()- mStartRX;
-			System.out.println(Long.toString(rxBytes));
-			long txBytes = TrafficStats.getTotalTxBytes()- mStartTX;
-			System.out.println(Long.toString(txBytes));
-			//handler.postDelayed(mRunnable, 1000);
-		}
-	};
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		stop();
 	}
-	
+
 	public int getReceivedPackets() {
 		if (receiver != null) {
 			return receiver.getReceivedPacket();
@@ -173,17 +225,11 @@ public class HttpClient extends IntentService implements ICallback {
 		return 0;
 	}
 
-	public void pingCommand() {
-		try {
-			System.out.println("ping parancs" );
-			sendMessageToServer("PING / HTTP*/1.0");						
-			receiveMessageFromServer();
-			if (answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("PONG")){
-				System.out.println("good answer from server, text:");
-			}
-		}catch (IOException ex) {
-			System.out.println("Exception: "+ex.getMessage());
+	public int getSentPackets() {
+		if (receiver != null) {
+			return receiver.getSentPacket();
 		}
+		return 0;
 	}
 
 	public void stop() {
@@ -194,32 +240,40 @@ public class HttpClient extends IntentService implements ICallback {
 			e.printStackTrace();
 		}
 		logger.addLine(TAG+ "stop threads");
+
 		if (receiver != null) {
 			receiver.stop();
-		}
+		}		
 		pool.shutdownNow();
 	}
 
 	public void makeNewThread() {
 		try {
 			logger.addLine(TAG+"makeNewThread" );			
-			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			sendMessageToServer("GET /test.txt HTTP*/1.0\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
 
 			receiveMessageFromServer();
 			int testPort = Integer.parseInt(headerProperty.getProperty("PORT")); 
 			if (!answerProperty.getProperty("CODE").equals("200") && answerProperty.getProperty("TEXT").equals("OK")) {
 				logger.addLine(TAG+ "Bad answer from server, text:"+answerProperty.getProperty("TEXT"));
+				sendMessage("error", "Server reject the test: "+ answerProperty.getProperty("TEXT"));				
 			}
 			logger.addLine(TAG+ "good answer from server");
+
+			Socket socket = createSocket(testPort);
+			if (socket == null) {
+				sendMessage("error", "Could not connect to server! test port: "+ testPort);
+				return;
+			}
 			
-			receiver = new TCPReceiver(logger, ++threadCount, this);
-			receiver.setSocket(createSocket(testPort));
-			Future<Integer> future = pool.submit(receiver);
+		calcSpeed();
+			receiver = new TCPReceiver(logger, ++threadCount);
+			receiver.setSocket(socket);
+			Future<PacketStructure> future = pool.submit(receiver);
 			threadSet.add(future);
-			
 
 			//Declare the timer
-			Timer timer = new Timer();
+/*			Timer timer = new Timer();
 			//Set the schedule function and rate
 			timer.scheduleAtFixedRate(
 					task,
@@ -227,33 +281,32 @@ public class HttpClient extends IntentService implements ICallback {
 					10,
 					//Set the amount of time between each execution (in milliseconds)
 					1000);
-
-			for (Future<Integer> futureInst : threadSet) {
+*/
+			for (Future<PacketStructure> futureInst : threadSet) {
 				try {
-					int value = futureInst.get();
+					PacketStructure value = futureInst.get();
 					logger.addLine(TAG+"A thread ended, value: " + value);										
-					timer.cancel();
-
-					Message m = new Message();			
-					Bundle b = new Bundle();
-
-					if (value == -1) {
-						b.putString("error", receiver.getErrorMEssage());
+				//	timer.cancel();
+					calcSpeed();
+					if (value.sentPackets == -1 || value.receivedPackets == -1) {
+						sendMessage("error", "Error: " + receiver.getErrorMessage());
 					} else {
-						b.putInt("packet", getReceivedPackets());
-					}
-					m.setData(b);					
-					//handler.sendMessage(m);
+						sendMessage("end", "Test end, received packets: "+ getReceivedPackets());
+					}						
 				} catch (ExecutionException e) {
 					e.printStackTrace();
+					sendMessage("error", "Error: "+e.getMessage());					
 					pool.shutdownNow();
 				} catch (InterruptedException e) {					
 					e.printStackTrace();
+					sendMessage("error", "Error: "+e.getMessage());					
 					pool.shutdownNow();
 				}
 			}
 		}catch (IOException ex) {
-			logger.addLine(TAG+"Exception: "+ex.getMessage());
+			String errorMessage = "Error: "+ex.getMessage();
+			logger.addLine(TAG+errorMessage );
+			sendMessage("error", errorMessage );			
 			pool.shutdownNow();
 		}
 	}
@@ -283,7 +336,9 @@ public class HttpClient extends IntentService implements ICallback {
 				break;
 			}
 		}		
-		parseServerAnswer(buffer.toString());
+		if (parseServerAnswer(buffer.toString()) == false) {
+			sendMessage("error", "Error: Server message parsing problem. Message: " + buffer.toString());
+		}
 	}
 
 	private boolean parseServerAnswer(final String answer) {
@@ -343,6 +398,20 @@ public class HttpClient extends IntentService implements ICallback {
 	static	{
 		gmtFormat = new java.text.SimpleDateFormat( "E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
 		gmtFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+	}
+
+	private static class SpeedInfo{
+		public double kilobits=0;
+		public double megabits=0;
+		public double bps=0;
+
+		public String getSpeedString() {
+			if (megabits > 1.0) {
+				return "speed: "+ Double.toString(bps)+ " bps" +" Current speed: " + Double.toString(megabits)+ " Mbit/s";
+			} else {
+				return "speed: "+ Double.toString(bps)+ " bps" +" Current speed: " + Double.toString(kilobits) + " Kbit/s";
+			}		
+		}
 	}
 
 }

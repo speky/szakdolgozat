@@ -11,31 +11,30 @@ import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 
-public class TCPReceiver implements Callable<Integer> {
+public class TCPReceiver implements Callable<PacketStructure>{
 	private Logger logger = null;	
 	private int id = 0;
 	private HashSet<Integer> packetIds = new HashSet<Integer>();
-	private String fileName = null;
-	private int receivedPackets = 0;
+	private String fileName = null;	
 	private HttpParser parser = null;
 	private AckHandler ackHandler = null;
 	private boolean reading = true;
-	private String errorMessage = null;
-	private ICallback callback = null;	
-	private final String TAG = "TCPReceiver: "+id;
-	private Socket socket = null;	
+	private String errorMessage = null;		
+	private final String TAG = "TCPReceiver: "+ id;
+	private Socket socket = null;
+	private PacketStructure packetStrucutre;
 	
-	public TCPReceiver(Logger logger, final int id, ICallback callback) {
-		super();
-		this.callback = callback;
+	public TCPReceiver(Logger logger, int id) {
+		super();		
 		this.id = id;
 		this.logger = logger;
 		logger.addLine(TAG+" TCP receiver created id: " + id);
 		ackHandler = new AckHandler(logger);
 		parser = new HttpParser(logger);
+		packetStrucutre = new PacketStructure();
 	}
 
-	public String getErrorMEssage() {
+	final public String getErrorMessage() {
 		return errorMessage;
 	}
 	
@@ -43,29 +42,30 @@ public class TCPReceiver implements Callable<Integer> {
 		this.socket  = socket;
 	}
 
-	public int getReceivedPacket(){
-		return receivedPackets;
+	final public int getSentPacket(){
+		return packetStrucutre.sentPackets;
 	}
 	
-	public Integer call() {
-		int packet = 0;
+	final public int getReceivedPacket(){
+		return packetStrucutre.receivedPackets;
+	}
+	
+	public PacketStructure call() {		
 		try {			
 			if (socket == null) {
 				errorMessage = "Invalid socket!";
 				logger.addLine(TAG+errorMessage );
-				callback.setNumOfReceivedPackets(-1);
-				callback.setNumOfSentPackets(-1);
-				return -1;
+				packetStrucutre.receivedPackets = -1;
+				return packetStrucutre;
 			}						
-			packet = readPackets();
-			socket.close();			
+			readPackets();
+			socket.close();
 		}		
 		catch (Exception e) {
 			 errorMessage = "Some kinf of error occured!";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
-			callback.setNumOfReceivedPackets(-1);
-			callback.setNumOfSentPackets(-1);
-			packet = -1;
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
+			packetStrucutre.receivedPackets = -1;
+			return packetStrucutre;
 		} 
 		finally{
 			try {
@@ -78,18 +78,16 @@ public class TCPReceiver implements Callable<Integer> {
 				logger.addLine(TAG+ errorMessage);
 				e.printStackTrace();
 			}
-		}
-		callback.setNumOfReceivedPackets(packet);
-		callback.setNumOfSentPackets(packet);
-		return packet;
+		}		
+		return packetStrucutre;
 	}
 
 	public void stop() {
 		logger.addLine(TAG+"Receiving stopped!");
 		reading = false;
 		if (socket != null) {
-			try {
-				socket.close();
+			try {				
+				socket.close();				
 			} catch (IOException e) {
 				errorMessage = "Cannot close socket!";
 				logger.addLine(TAG+ errorMessage);
@@ -98,50 +96,55 @@ public class TCPReceiver implements Callable<Integer> {
 		}
 	}
 	
-	public Integer readPackets() {
+	public void readPackets() {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (IOException e) {
-			logger.addLine(TAG+"ERROR while create reader: " + e.getMessage());
 			errorMessage = "cannot create BufferedReader";
-			return 0;
+			logger.addLine(TAG+"ERROR while create reader: " + errorMessage );			
+			packetStrucutre.receivedPackets = -1;
+			return;
 		}		
 		StringBuffer buffer = new StringBuffer();
-		receivedPackets = 0;
+		packetStrucutre.receivedPackets = 0;
+		packetStrucutre.sentPackets = 0;
 		String readedLine = null;
 		try {
 			while (reading && (readedLine = reader.readLine()) != null) {							
 				buffer.append(readedLine+"+");
 				if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
 					if (makePacket(buffer.toString())) {
-						logger.addLine(TAG+"Create packet, id: " + receivedPackets);					
+						logger.addLine(TAG+"Create packet, id: " + packetStrucutre.receivedPackets);					
 						try {
 							if (parser.getHeadProperty("ID") != null) {
 								int id = Integer.parseInt(parser.getHeadProperty("ID"));
-								ackHandler.sendAckMessage(socket.getOutputStream(), fileName, id);
+								if (ackHandler  != null ) {
+									ackHandler.sendAckMessage(socket.getOutputStream(), fileName, id);
+									++packetStrucutre.sentPackets;
+								}
 							}
 						}catch (IOException e) {
 							logger.addLine(TAG+"Error: ack handler received invalid Id!");
 							e.printStackTrace();
 						}
-						++receivedPackets;
+						++packetStrucutre.receivedPackets;
 					}
 					buffer.delete(0, buffer.length());
 					readedLine = null;
 				}else if (readedLine.compareTo("END") ==  0) {
 					reading = false;
 					logger.addLine(TAG+"End message received");
-				}			
+				}
 			}
 		} catch (NumberFormatException e) {
-			logger.addLine(TAG+e.getMessage());
-			e.printStackTrace();
+			logger.addLine(TAG+e.getMessage());			
+			e.printStackTrace();			
 		} catch (IOException e) {
-			logger.addLine(TAG+e.getMessage());
-			e.printStackTrace();
+			logger.addLine(TAG+e.getMessage());			
+			e.printStackTrace();			
 		}
-		finally {
+		finally {			
 			if (reader != null) {
 				try {
 					reader.close();
@@ -150,8 +153,7 @@ public class TCPReceiver implements Callable<Integer> {
 					e.printStackTrace();
 				}
 			}
-		}	
-		return receivedPackets;
+		}		
 	}
 
 	private boolean makePacket(String message) {

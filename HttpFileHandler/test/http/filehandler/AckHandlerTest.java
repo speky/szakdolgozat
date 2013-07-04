@@ -41,7 +41,7 @@ public class AckHandlerTest {
 
 		HashSet<Integer> set = new HashSet<Integer> ();
 		AckHandler handler = new AckHandler(logger);
-		handler.startAckReceiver("fileName", socket, set);
+		handler.startAckReceiver(null, "fileName", socket, set);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -64,7 +64,7 @@ public class AckHandlerTest {
 
 		HashSet<Integer> set = new HashSet<Integer> ();
 		AckHandler handler = new AckHandler(logger);
-		handler.startAckReceiver("fileName", socket, set);
+		handler.startAckReceiver(null, "fileName", socket, set);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -87,7 +87,7 @@ public class AckHandlerTest {
 
 		HashSet<Integer> set = new HashSet<Integer> ();
 		AckHandler handler = new AckHandler(logger);
-		handler.startAckReceiver("fileName", socket, set);
+		handler.startAckReceiver(null, "fileName", socket, set);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -110,7 +110,7 @@ public class AckHandlerTest {
 
 		HashSet<Integer> set = new HashSet<Integer> ();
 		AckHandler handler = new AckHandler(logger);
-		handler.startAckReceiver("fileName", socket, set);
+		handler.startAckReceiver(null, "fileName", socket, set);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -133,7 +133,7 @@ public class AckHandlerTest {
 
 		HashSet<Integer> set = new HashSet<Integer> ();
 		AckHandler handler = new AckHandler(logger);
-		handler.startAckReceiver("fileName", socket, set);
+		handler.startAckReceiver(null, "fileName", socket, set);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {

@@ -14,7 +14,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TCPSenderTest implements ICallback{
+public class TCPSenderTest {
 	private static Logger logger;
 	
 	@BeforeClass
@@ -27,17 +27,6 @@ public class TCPSenderTest implements ICallback{
 		logger.deleteLogFile();
 	}
 	
-	@Override
-	public int setNumOfReceivedPackets(int packets) {	
-		return packets;
-	}
-
-	@Override
-	public int setNumOfSentPackets(int packets) {
-		return packets;
-	}
-
-
 	@Test
 	public void testTCPSenderWithoutAnyParameter() {
         final Socket socket = mock(Socket.class);
@@ -50,8 +39,10 @@ public class TCPSenderTest implements ICallback{
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, this); 
-        Assert.assertTrue(sender.call()==-1);
+        TCPSender sender = new TCPSender(logger, 0);
+        PacketStructure packetStructure = new PacketStructure();
+        packetStructure.receivedPackets = -1;        
+        Assert.assertTrue(packetStructure.equals(sender.call()));
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 	
@@ -73,11 +64,13 @@ public class TCPSenderTest implements ICallback{
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, this);
+        TCPSender sender = new TCPSender(logger, 0);
 
         Assert.assertTrue(sender.setSocket(null) == false);
         Assert.assertTrue(sender.setSocket(socket) == true);
-        Assert.assertTrue("Message sent successfully", sender.call()==-1);
+        PacketStructure packetStructure = new PacketStructure();
+        packetStructure.receivedPackets = -1;
+        Assert.assertTrue(packetStructure.equals(sender.call()));
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 
@@ -102,13 +95,16 @@ public class TCPSenderTest implements ICallback{
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, this);
+        TCPSender sender = new TCPSender(logger, 0);
 
         sender.setSocket(socket);
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPackets(30);
         sender.setFile(file);
-        Assert.assertTrue("Message sent successfully", sender.call()==0);
+        PacketStructure packetStructure = new PacketStructure();
+        packetStructure.receivedPackets = 1;
+        packetStructure.sentPackets = 1;
+        Assert.assertTrue(packetStructure.equals(sender.call()));
         String message = "123456789asdfghjkyxcvbnm";
         String hash = Utility.calcCheckSum(message.getBytes());
         String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\n\r\n");
@@ -137,13 +133,16 @@ public class TCPSenderTest implements ICallback{
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, this);
+        TCPSender sender = new TCPSender(logger, 0);
 
         sender.setSocket(socket);
         FileInstance file =  new FileInstance(logger, "test.txt");
         file.splitFileToPackets(10);
         sender.setFile(file);
-        Assert.assertTrue("Message sent successfully", sender.call()==0);
+        PacketStructure packetStructure = new PacketStructure();
+        packetStructure.receivedPackets = 3;
+        packetStructure.sentPackets = 3;
+        Assert.assertTrue(packetStructure.equals(sender.call()));
         String message = "123456789a";        
         StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(message.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");

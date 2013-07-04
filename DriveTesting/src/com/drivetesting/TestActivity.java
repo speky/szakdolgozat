@@ -1,38 +1,30 @@
 package com.drivetesting;
 
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.apache.http.conn.util.InetAddressUtils;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
+import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class TestActivity extends Activity {
+public class TestActivity extends Activity implements Observer {
+	protected static final String TAG = "TestActivity: ";
 	private Context context = null;
 	private RadioGroup directionGroup;
 	private ProgressBar progressBar;
@@ -40,21 +32,10 @@ public class TestActivity extends Activity {
 	private final String DIRECTION_GROUP = "DirectionGroup";
 	private SharedPreferences sharedPreferences;
 	private NotificationManager notificationManager;
-	private HttpBroadcastReceiver receiver;
-	
-	private Handler handler = new Handler(Looper.getMainLooper()) { 
-		@Override 
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if (msg.getData().get("packet") != null){
-				int packet = 	msg.getData().getInt("packet");
-				((TextView)findViewById(R.id.editOut)).setText(Integer.toString(packet));
-			}else if (msg.getData().get("error") != null){
-				((TextView)findViewById(R.id.editOut)).setText(msg.getData().getString("error") );
-			}
-		} 
-	};
-
+	private EditText text;
+	private StringBuilder textOut;
+	private boolean progressbarVisible = false;
+	    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
@@ -62,11 +43,9 @@ public class TestActivity extends Activity {
 		ActionBar actionBar = getActionBar();	
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Test");
-
+				
 		setContentView(R.layout.activity_test);
 		context = this;
-
-		String valiable=((DriveTestApp)getApplication()).getServerIp();
 
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 
@@ -77,26 +56,36 @@ public class TestActivity extends Activity {
 		long txApp = TrafficStats.getUidTxBytes(uid);
 		long rxApp = TrafficStats.getUidRxBytes(uid);
 		 */
+		textOut = new StringBuilder();
+		text = ((EditText)findViewById(R.id.editOutput));
+		text.setText("") ;
+    	
 		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 		
-		IntentFilter filter = new IntentFilter(HttpBroadcastReceiver.ACTION_RESP);
-		filter.addCategory(Intent.CATEGORY_DEFAULT);
-		receiver = new HttpBroadcastReceiver();
-		registerReceiver(receiver, filter);
+		//doBindService();
 		
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
 	}
 	 
 	public void onStartTestClick(View view) {
 		((DriveTestApp)getApplication()).startHttpClientService();
 		progressBar.setVisibility(ProgressBar.VISIBLE);
+	
 	}
-
+		
 	public void onStopTestClick(View view) {
 		((DriveTestApp)getApplication()).stopHttpClientService();
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
+	}
+
+	public void onClearClick(View view) {
+		text.setText(" ".toCharArray(), 0, 1);
+		textOut.delete(0, textOut.length());
+	}
+	
+	public void onSaveClick(View view) {
+		
 	}
 	
 	public void onDirectionChoosed(View view) {
@@ -135,7 +124,7 @@ public class TestActivity extends Activity {
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
+		super.onDestroy();		
 		notificationManager.cancel("Drive Test Notification", 0);//R.string.local_service_started);
 	}
 
@@ -149,6 +138,12 @@ public class TestActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		load();
+		if (((DriveTestApp)getApplication()).isTestRunning()) {
+			progressBar.setVisibility(ProgressBar.VISIBLE);
+		} else {
+			progressBar.setVisibility(ProgressBar.INVISIBLE);
+		}
+		text.setText(textOut) ;
 	}
 
 	private void save() {
@@ -221,6 +216,20 @@ public class TestActivity extends Activity {
 		// We use a layout id because it is a unique number. We use it later to
 		// cancel.
 		notificationManager.notify(R.string.local_service_started, notification);*/
+	}
+
+	@Override
+	public void update(int action, String str) {		
+		textOut.insert(0, str+"\n\n");
+    	text.setText(textOut) ;
+    	if (action == 1) {
+    		progressBar.setVisibility(ProgressBar.VISIBLE);
+    		progressbarVisible = true;
+    	}  	else {
+    		progressBar.setVisibility(ProgressBar.INVISIBLE);
+    		progressbarVisible = false;
+    	}
+		
 	}
 
 }

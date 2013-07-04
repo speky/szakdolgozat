@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:text="Protocol Type" />
 
-    <RadioGroup        
+    <RadioGroup
+        android:id="@+id/type_group"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" 
-        android:id="@+id/type_group">
+        android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/type_tcp"
@@ -27,8 +27,8 @@
             android:id="@+id/type_udp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onTypeChoosed"
             android:checked="true"
+            android:onClick="onTypeChoosed"
             android:text="UDP" />
     </RadioGroup>
 
@@ -38,11 +38,11 @@
         android:layout_height="wrap_content"
         android:text="Direction" />
 
-    <RadioGroup        
+    <RadioGroup
+        android:id="@+id/dir_group"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" 
-        android:id="@+id/dir_group">
+        android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/dir_ul"
@@ -55,58 +55,89 @@
             android:id="@+id/dir_dl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onDirectionChoosed"
             android:checked="true"
+            android:onClick="onDirectionChoosed"
             android:text="Download" />
     </RadioGroup>
 
-       <RelativeLayout
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-     <ProgressBar
-         android:id="@+id/progressBar"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentTop="true"
-         android:layout_marginRight="21dp"
-         android:layout_toLeftOf="@+id/button1" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="21dp"
+            android:layout_toLeftOf="@+id/button1" />
 
-     <Button
-         android:id="@+id/button1"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentRight="true"
-         android:layout_alignParentTop="true"
-         android:layout_marginRight="15dp"
-         android:onClick="onStopTestClick"
-         android:text="Stop Test" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="15dp"
+            android:onClick="onStopTestClick"
+            android:text="Stop Test" />
 
-     <Button
-         android:id="@+id/bt_startTest"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentLeft="true"
-         android:layout_alignParentTop="true"
-         android:layout_marginLeft="14dp"
-         android:onClick="onStartTestClick"
-         android:text="StartTest" />
-    
+        <Button
+            android:id="@+id/bt_startTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="14dp"
+            android:onClick="onStartTestClick"
+            android:text="StartTest" />
     </RelativeLayout>
-    
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="out" />
-        
-     <EditText
-        android:id="@+id/editOut"
+
+    <EditText
+        android:id="@+id/editOutput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.80"
         android:clickable="false"
         android:ems="10"
-        android:inputType="number" />
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="top"
+        android:inputType="textMultiLine"        
+        android:linksClickable="false"
+        android:scrollbars="vertical"    
+        android:isScrollContainer="true"
+         />
 
-  
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="72dp"
+            android:onClick="onSaveClick"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/buttonClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="52dp"
+            android:layout_toRightOf="@+id/buttonSave"
+            android:onClick="onClearClick"
+            android:text="Clear" />
+
+    </RelativeLayout>
 </LinearLayout>

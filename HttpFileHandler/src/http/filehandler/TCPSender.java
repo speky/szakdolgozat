@@ -2,15 +2,17 @@ package http.filehandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class TCPSender  implements Callable<Integer> {	
+
+interface ICallback {
+	public void receiveAckMessages() ;
+}
+
+public class TCPSender implements Callable<PacketStructure>, ICallback{	
 	private Logger logger = null;	
 	private int id = 0;
 	private FileInstance fileInstance = null;
@@ -20,21 +22,27 @@ public class TCPSender  implements Callable<Integer> {
 	private HashSet<Integer> ackList = new HashSet<Integer>();
 	private boolean running = true;
 	private String errorMessage = null;
-	private ICallback callback = null;
 	private final String TAG = "TCPSender: ";	
 	private final int ACK_WAITING = 5000; //in milisec	
-	
+	private PacketStructure packetStructure;
 	public static final String END_PACKET = "END_PACKET";	
 	
-	public TCPSender(Logger logger, final int id, ICallback callback) {
-		super();
-		this.callback = callback; 
+	public TCPSender(Logger logger, final int id) {
+		super();		
 		this.id = id;
 		this.logger = logger;
 		logger.addLine(TAG+ "Created, id: " + id);
 		ackHandler = new AckHandler(logger);
+		packetStructure = new PacketStructure();
 	}
 
+	@Override
+	public void receiveAckMessages() {
+		if (packetStructure != null ) {
+			++packetStructure.receivedPackets;
+		}
+	}
+	
 	public String getErrorMessage() {
 		return errorMessage;
 	}
@@ -56,35 +64,38 @@ public class TCPSender  implements Callable<Integer> {
 	public void stop() {
 		logger.addLine(TAG+"Sending and ack receiver stopped!");
 		ackHandler.stopScaning();
+		ackHandler = null;
+		packetStructure = null;
 		running = false;
 		try {
-			socket.close();
-			callback.setNumOfReceivedPackets(-1);
-			callback.setNumOfSentPackets(-1);
+			socket.close();			
 		} catch (IOException e) {
 			errorMessage = "Socket cannot stopped!";
+			packetStructure.receivedPackets = -1;
 			logger.addLine(TAG+errorMessage);
 			e.printStackTrace();
 		}
 	}
 	
-	public Integer call() {
-		int packetDiff= 0;
+	public PacketStructure call() {		
 		try {			
 			if (checkPrerequisite() == false) {
-				callback.setNumOfReceivedPackets(-1);
-				callback.setNumOfSentPackets(-1);
-				return -1;
+				packetStructure.receivedPackets = -1;
+				return packetStructure;
 			}
-			ackHandler.startAckReceiver(fileInstance.getName(), socket, ackList);
+			ackHandler.startAckReceiver(this, fileInstance.getName(), socket, ackList);
 			printerWriter = new PrintWriter(socket.getOutputStream());			
 			logger.addLine(TAG+"Send message,  sendertId: " + id);			
 
+			packetStructure.sentPackets = 0;
+			packetStructure.receivedPackets = 0;
+			
 			List<Packet> packetList = fileInstance.getPieces();
 			int packetSize = packetList.size();
 			for (int i = 0; i < packetSize && running; ++i) {
 				Packet packet = packetList.get(i);
 				sendMessage(fileInstance.getName(), packet.id, packet.hashCode, packet.text);
+				++packetStructure.sentPackets;
 			}
 			printerWriter.println("END\n");
 			printerWriter.flush();
@@ -94,31 +105,32 @@ public class TCPSender  implements Callable<Integer> {
 				// wait for the last sent ACK message
 				Thread.sleep(ACK_WAITING);
 			}
-			ackSize = ackList.size();
+			
+			packetStructure.receivedPackets = ackList.size();
+			packetStructure.sentPackets = packetList.size();
+			
 			ackHandler.stopScaning();
-			logger.addLine(TAG+"Received ACK message: "+ackSize);			
-			packetDiff = packetList.size()-ackSize;
-			callback.setNumOfReceivedPackets(ackSize);
-			callback.setNumOfSentPackets(packetList.size());
+			logger.addLine(TAG+"Received ACK message: "+packetStructure.receivedPackets);
 		} catch (Exception e) {
 			errorMessage = "Error occured in sending packets";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
-			callback.setNumOfReceivedPackets(-1);
-			callback.setNumOfSentPackets(-1);
-		} 
+			packetStructure.sentPackets = -1;
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
+		}
 		finally{
 			try {
+				ackHandler.stopScaning();
+				ackHandler = null;				
 				if (socket != null) {
 					socket.close();
 				}
-				ackHandler.stopScaning();
 			} catch (IOException e) {
 				errorMessage = "Socket cannot stopped!";
+				packetStructure.sentPackets = -1;
 				logger.addLine(TAG+errorMessage);
 				e.printStackTrace();
 			}
 		}
-		return packetDiff;
+		return packetStructure;
 	}
 
 	private boolean checkPrerequisite() {
@@ -147,6 +159,6 @@ public class TCPSender  implements Callable<Integer> {
 		
 		printerWriter.println(buffer);
 		printerWriter.flush();
-		
 	}
+	
 }
