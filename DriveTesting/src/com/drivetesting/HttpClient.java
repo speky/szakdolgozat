@@ -26,14 +26,11 @@ import java.util.concurrent.Future;
 import android.app.IntentService;
 import android.content.Intent;
 import android.net.TrafficStats;
-import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.os.Process;
 
 public class HttpClient extends IntentService {
 	public static final int MAX_THREAD = 10;
@@ -69,20 +66,6 @@ public class HttpClient extends IntentService {
 	private SpeedInfo downloadSpeed;
 	private SpeedInfo uploadSpeed;
 	
-	// This is the object that receives interactions from clients.  
-    private final IBinder mBinder = new LocalBinder();
-
-    /**
-     * Class for clients to access.  Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with
-     * IPC.
-     */
-    public class LocalBinder extends Binder {
-    	HttpClient getService() {
-            return HttpClient.this;
-        }
-    }
-    
 	class ReportTask extends TimerTask {
 		public void run() {
 			int packet = getReceivedPackets();
@@ -116,12 +99,7 @@ public class HttpClient extends IntentService {
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
 	    
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-	
-	protected Socket createSocket(int port) {
+    protected Socket createSocket(int port) {
 		try {
 			Socket socket = new Socket();			
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);
@@ -250,7 +228,7 @@ public class HttpClient extends IntentService {
 	public void makeNewThread() {
 		try {
 			logger.addLine(TAG+"makeNewThread" );			
-			sendMessageToServer("GET /test.txt HTTP*/1.0\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
 
 			receiveMessageFromServer();
 			int testPort = Integer.parseInt(headerProperty.getProperty("PORT")); 
@@ -266,14 +244,15 @@ public class HttpClient extends IntentService {
 				return;
 			}
 			
-		calcSpeed();
+			calcSpeed();
+			
 			receiver = new TCPReceiver(logger, ++threadCount);
 			receiver.setSocket(socket);
 			Future<PacketStructure> future = pool.submit(receiver);
 			threadSet.add(future);
 
 			//Declare the timer
-/*			Timer timer = new Timer();
+			Timer timer = new Timer();
 			//Set the schedule function and rate
 			timer.scheduleAtFixedRate(
 					task,
@@ -281,12 +260,12 @@ public class HttpClient extends IntentService {
 					10,
 					//Set the amount of time between each execution (in milliseconds)
 					1000);
-*/
+
 			for (Future<PacketStructure> futureInst : threadSet) {
 				try {
 					PacketStructure value = futureInst.get();
 					logger.addLine(TAG+"A thread ended, value: " + value);										
-				//	timer.cancel();
+					timer.cancel();
 					calcSpeed();
 					if (value.sentPackets == -1 || value.receivedPackets == -1) {
 						sendMessage("error", "Error: " + receiver.getErrorMessage());

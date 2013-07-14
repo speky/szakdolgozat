@@ -6,7 +6,7 @@
       android:title="Server IP address"
       android:summary="Click to pop up a field for entry"
       android:dialogTitle="ServerIp address"
-      android:defaultValue="178.164.131.210"
+      android:defaultValue="84.236.62.55"
     />
     <CheckBoxPreference
       android:key="checkbox"

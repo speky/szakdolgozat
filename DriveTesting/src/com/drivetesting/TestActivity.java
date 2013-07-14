@@ -63,8 +63,6 @@ public class TestActivity extends Activity implements Observer {
 		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 		
-		//doBindService();
-		
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
 	 
@@ -131,12 +129,14 @@ public class TestActivity extends Activity implements Observer {
 	@Override
 	public void onPause() {
 		super.onPause();
+		((DriveTestApp)getApplication()).removeObserver(this);
 		save();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		((DriveTestApp)getApplication()).registerObserver(this);		
 		load();
 		if (((DriveTestApp)getApplication()).isTestRunning()) {
 			progressBar.setVisibility(ProgressBar.VISIBLE);

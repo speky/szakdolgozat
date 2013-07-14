@@ -64,8 +64,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public void onCreate() {
 		super.onCreate();
 
-		observers = new ArrayList();
+		observers = new ArrayList<Observer>();
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 		prefs.registerOnSharedPreferenceChangeListener(this);
 		
 		dataStorage = new DataStorage(this);
