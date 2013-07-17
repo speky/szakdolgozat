@@ -1,42 +1,41 @@
 
 package http.filehandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.io.InputStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Callable;
 
 public class TCPReceiver implements Callable<PacketStructure>{
 	private Logger logger = null;	
-	private int id = 0;
-	private HashSet<Integer> packetIds = new HashSet<Integer>();
-	private String fileName = null;	
-	private HttpParser parser = null;
-	private AckHandler ackHandler = null;
+	private String id = "0";		
+	private ReportHandler reportHandler = null;
 	private boolean reading = true;
 	private String errorMessage = null;		
 	private final String TAG = "TCPReceiver: "+ id;
 	private Socket socket = null;
 	private PacketStructure packetStrucutre;
+	private int reportInterval = 0;
+	private Timer timer = null;
+	int totalReadedBytes = 0;
 	
-	public TCPReceiver(Logger logger, int id) {
+	public TCPReceiver(Logger logger, String id) {
 		super();		
 		this.id = id;
 		this.logger = logger;
 		logger.addLine(TAG+" TCP receiver created id: " + id);
-		ackHandler = new AckHandler(logger);
-		parser = new HttpParser(logger);
+		reportHandler = new ReportHandler(logger);		
 		packetStrucutre = new PacketStructure();
 	}
 
 	final public String getErrorMessage() {
 		return errorMessage;
+	}
+	
+	public void setReportInterval(int milisec) {
+		reportInterval = milisec;
 	}
 	
 	public void setSocket(Socket socket) {
@@ -58,7 +57,25 @@ public class TCPReceiver implements Callable<PacketStructure>{
 				logger.addLine(TAG+errorMessage );
 				packetStrucutre.receivedPackets = -1;
 				return packetStrucutre;
-			}						
+			}
+			
+			if (reportInterval > 0) {
+				timer = new Timer();
+				timer.scheduleAtFixedRate(new TimerTask() {
+					  @Override
+					  public void run() {
+						  if (reportHandler  != null ) {
+								try {
+									reportHandler.sendReportMessage(socket.getOutputStream(), id, totalReadedBytes);
+								} catch (IOException e) {
+									logger.addLine(TAG+ "send report problem");
+									e.printStackTrace();
+								}
+						  }
+					  }
+					}, reportInterval, reportInterval);
+			}
+			
 			readPackets();
 			socket.close();
 		}		
@@ -69,11 +86,15 @@ public class TCPReceiver implements Callable<PacketStructure>{
 			return packetStrucutre;
 		} 
 		finally{
+			if (timer != null) {
+				timer.cancel();
+			}
 			try {
 				if (!socket.isClosed()) {
 					logger.addLine(TAG+"Close socket");
 					socket.close();
-				}
+				}				
+				
 			} catch (IOException e) {
 				errorMessage = "Cannot close socket!";
 				logger.addLine(TAG+ errorMessage);
@@ -86,6 +107,10 @@ public class TCPReceiver implements Callable<PacketStructure>{
 	public void stop() {
 		logger.addLine(TAG+"Receiving stopped!");
 		reading = false;
+		if (timer != null) {
+			timer.cancel();
+		}
+		
 		if (socket != null) {
 			try {				
 				socket.close();				
@@ -98,22 +123,32 @@ public class TCPReceiver implements Callable<PacketStructure>{
 	}
 	
 	public void readPackets() {
-		BufferedReader reader = null;
+		InputStream inputStream = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			inputStream = socket.getInputStream();
 		} catch (IOException e) {
-			errorMessage = "cannot create BufferedReader";
-			logger.addLine(TAG+"ERROR while create reader: " + errorMessage );			
-			packetStrucutre.receivedPackets = -1;
-			return;
-		}		
-		StringBuffer buffer = new StringBuffer();
+			logger.addLine(TAG + e.getMessage());			
+			e.printStackTrace();
+		}
+		int size = 2000;
+		byte[] byteBuffer = new byte[size];
 		packetStrucutre.receivedPackets = 0;
 		packetStrucutre.sentPackets = 0;
-		String readedLine = null;
+		
+		//socket.setReceiveBufferSize(1024);//1KB
+		//logger.addLine(TAG + "rec buff size: "+ socket.getReceiveBufferSize());
+		
+		int readedBytes = 0;
+		int byteLimit = 0;
+		
 		try {
-			while (reading && (readedLine = reader.readLine()) != null) {							
-				buffer.append(readedLine+"+");
+			while (reading /*&& (byteLimit > 0 && totalReadedBytes < byteLimit) */) {
+				readedBytes = inputStream.read(byteBuffer);
+				totalReadedBytes += readedBytes;
+				packetStrucutre.receivedPackets = totalReadedBytes;
+				logger.addLine(TAG+"Readed Bytes: "+readedBytes);
+				
+				/*buffer.append(readedLine+"+");
 				if (readedLine.compareTo(TCPSender.END_PACKET) ==  0) {
 					if (makePacket(buffer.toString())) {
 						logger.addLine(TAG+"Create packet, id: " + packetStrucutre.receivedPackets);					
@@ -136,19 +171,17 @@ public class TCPReceiver implements Callable<PacketStructure>{
 				}else if (readedLine.compareTo("END") ==  0) {
 					reading = false;
 					logger.addLine(TAG+"End message received");
-				}
-			}
-		} catch (NumberFormatException e) {
-			logger.addLine(TAG+e.getMessage());			
-			e.printStackTrace();			
+				}*/
+			}					
 		} catch (IOException e) {
 			logger.addLine(TAG+e.getMessage());			
 			e.printStackTrace();			
 		}
-		finally {			
-			if (reader != null) {
-				try {
-					reader.close();
+		finally {
+			byteBuffer = null;
+			if (inputStream != null) {
+				try {					
+					inputStream.close();
 				} catch (IOException e) {
 					logger.addLine(TAG+e.getMessage());
 					e.printStackTrace();
@@ -156,7 +189,7 @@ public class TCPReceiver implements Callable<PacketStructure>{
 			}
 		}		
 	}
-
+/* it will be useful for another measurement..
 	private boolean makePacket(String message) {
 		if (parser.parseHttpMessage(message) == false) {
 			errorMessage = "Problem occured while parsing message! message: " +message;
@@ -196,5 +229,6 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		
 		return true;
 	}
+	*/
 }
 

@@ -83,7 +83,7 @@ class ServerThread extends Thread{
 		int port = -1;
 		try {
 			port = getNextFreePort();
-			serverSocket = new ServerSocket(port);
+			serverSocket = new ServerSocket(port);			
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 
@@ -214,8 +214,8 @@ class ServerThread extends Thread{
 
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				sender = new TCPSender(logger, ++threadCount);				
-				sender.setFile(file);
+				int bufferSize = 5000;
+				sender = new TCPSender(logger, ++threadCount, bufferSize);
 				if (sender.setSocket(testSocket)) {
 					Future<PacketStructure> future = pool.submit(sender);
 					threadSet.add(future);
@@ -225,7 +225,7 @@ class ServerThread extends Thread{
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				receiver = new TCPReceiver(logger, ++threadCount);
+				receiver = new TCPReceiver(logger, Integer.toString(++threadCount));
 				receiver.setSocket(testSocket);
 				Future<PacketStructure> future = pool.submit(receiver);
 				threadSet.add(future);

@@ -246,7 +246,7 @@ public class HttpClient extends IntentService {
 			
 			calcSpeed();
 			
-			receiver = new TCPReceiver(logger, ++threadCount);
+			receiver = new TCPReceiver(logger, Integer.toString(++threadCount));
 			receiver.setSocket(socket);
 			Future<PacketStructure> future = pool.submit(receiver);
 			threadSet.add(future);

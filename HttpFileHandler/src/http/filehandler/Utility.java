@@ -3,11 +3,12 @@ package http.filehandler;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.Random;
 
 public class Utility {
 	
 	/**
-	 * Decodes the percent encoding scheme. <br/>
+	 * Decodes the percent encoding scheme
 	 * For example: "an+example%20string" => "an example string"
 	 */
 	public static String decodePercent(String str) {
@@ -35,6 +36,22 @@ public class Utility {
 		catch( Exception e ) {			
 			System.out.println("BAD REQUEST: Bad percent-encoding");
 			return null;
+		}
+	}
+	
+	public static void fillStringBuffer(byte[] buffer, final int size) {
+		if (buffer == null) {
+			return;
+		}
+		
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+		char[] charSet = alphabet.toCharArray();
+				
+		// fill buffer with random characters
+		for (int i = 0; i < size; ++i) {
+			Random r =  new Random();
+			int index = r.nextInt(charSet.length);
+			buffer[i] = (byte) charSet[index];
 		}
 	}
 	
