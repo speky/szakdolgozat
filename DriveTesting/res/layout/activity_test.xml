@@ -8,7 +8,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Protocol Type" />
+        android:text="@string/protocol" />
 
     <RadioGroup
         android:id="@+id/type_group"
@@ -21,22 +21,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onTypeChoosed"
-            android:text="TCP" />
+            android:checked="true"
+            android:text="@string/tcp" />
 
         <RadioButton
             android:id="@+id/type_udp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
+            android:layout_height="wrap_content"            
             android:onClick="onTypeChoosed"
-            android:text="UDP" />
+            android:text="@string/udp" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Direction" />
+        android:text="@string/direction" />
 
     <RadioGroup
         android:id="@+id/dir_group"
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onDirectionChoosed"
-            android:text="Upload" />
+            android:text="@string/upload" />
 
         <RadioButton
             android:id="@+id/dir_dl"
@@ -57,7 +57,8 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:onClick="onDirectionChoosed"
-            android:text="Download" />
+            android:text="@string/download" />
+
     </RadioGroup>
 
     <RelativeLayout
@@ -69,8 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="21dp"
-            android:layout_toLeftOf="@+id/button1" />
+            android:layout_centerInParent="true"
+             />
 
         <Button
             android:id="@+id/button1"
@@ -78,26 +79,24 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="15dp"
             android:onClick="onStopTestClick"
-            android:text="Stop Test" />
+            android:text="@string/stop" />
 
         <Button
             android:id="@+id/bt_startTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="14dp"
+            android:layout_alignParentTop="true"            
             android:onClick="onStartTestClick"
-            android:text="StartTest" />
+            android:text="@string/start" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="out" />
+        />
 
     <EditText
         android:id="@+id/editOutput"
@@ -123,21 +122,19 @@
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="72dp"
+            android:layout_alignParentLeft="true"
             android:onClick="onSaveClick"
-            android:text="Save" />
+            android:text="@string/save" />
 
         <Button
             android:id="@+id/buttonClear"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content"            
+            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="52dp"
-            android:layout_toRightOf="@+id/buttonSave"
             android:onClick="onClearClick"
-            android:text="Clear" />
+            android:text="@string/clean" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -30,20 +30,24 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.util.Log;
 
 public class HttpClient extends IntentService {
 	public static final int MAX_THREAD = 10;
-	public static final String PARAM_OWN_IP = "own_ip";
-	public static final String PARAM_OUT_MSG = "out_msg";
-	public static final String PARAM_PACKET = "packet";
 	private static final int SOCKET_TIMEOUT = 3000;
 
 	private static final double BYTE_TO_KILOBIT = 0.0078125;
 	private static final double KILOBIT_TO_MEGABIT = 0.0009765625;
 
+	private final int UDP = 0;
+	private final int TCP = 1;
+	private final int UPLOAD = 0;
+	private final int DOWNLOAD = 1;
+	
 	private final String TAG = "HttpClient: ";
 	private final int ServerPort = 4444;
+
 	private  String serverAddress = null;
 	private Logger logger;
 	private ExecutorService pool = null;
@@ -60,20 +64,27 @@ public class HttpClient extends IntentService {
 	private String errorMessage = null;
 	private Messenger messenger = null;
 	
-	private long previousRxBytes = 0;
-	private long previousTxBytes = 0;
+	private int type = 0;
+	private int direction = 0;
+	
+	private int reportPeriod = 1000;
+	
+	private long receivedBytes = 0;
+	private long sentBytes = 0;
+	private long previousReceivedBytes = 0;
+	private long previousSentBytes = 0;
 	private long time = 0;
 	private SpeedInfo downloadSpeed;
 	private SpeedInfo uploadSpeed;
 	
 	class ReportTask extends TimerTask {
 		public void run() {
-			int packet = getReceivedPackets();
-			int sentPacket = getSentPackets();
+			receivedBytes = getReceivedPackets() - previousReceivedBytes;
+			sentBytes = getSentPackets() - previousSentBytes;
 			calcSpeed();
-			logger.addLine("** Packet: "+ packet + " sent: "+sentPacket);	
-			sendMessage("packet", /*"Packet: "+Integer.toString(packet)+ " sent: "+Integer.toString(sentPacket) +*/
-				downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString());
+			logger.addLine("** ReceivedBytes: "+ receivedBytes + " sent: "+ sentBytes);	
+			sendMessage("packet", "Packet: "+ Long.toString(receivedBytes)+ " sent: "+ Long.toString(sentBytes) +
+						downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString()+"\n");
 		}
 	}
 
@@ -118,23 +129,16 @@ public class HttpClient extends IntentService {
 	}
 
 	private void calcSpeed() {
-		int i = android.os.Process.myUid();
-		int j = getApplication().getApplicationInfo().uid;
 		
-		long rxBytes = TrafficStats.getMobileRxBytes() - previousRxBytes; //getUidRxBytes(android.os.Process.myUid()) - previousRxBytes;
-		System.out.println("Rx bytes: "+Long.toString(rxBytes));
-		long txBytes = TrafficStats.getUidTxBytes(android.os.Process.myUid()) - previousTxBytes;
-		System.out.println("Tx bytes: "+Long.toString(txBytes));
-
 		long currentTime =  System.currentTimeMillis();
 		long ellapsedTime = currentTime - time;
 		time = currentTime;
 
-		downloadSpeed = calculate(ellapsedTime, rxBytes);
-		uploadSpeed = calculate(ellapsedTime, txBytes);
+		downloadSpeed = calculate(ellapsedTime, receivedBytes);
+		uploadSpeed = calculate(ellapsedTime, sentBytes);
 
-		previousTxBytes = txBytes;
-		previousRxBytes = rxBytes;			
+		previousReceivedBytes = receivedBytes;
+		previousSentBytes = sentBytes;			
 	}
 
 	/**
@@ -168,19 +172,27 @@ public class HttpClient extends IntentService {
 			System.out.println("Invalid server address!");
 		}
 		
+		type = Integer.parseInt((String)intent.getExtras().get("type"));
+		if (type != UDP && type != TCP) {
+			sendMessage("error", "Error: Invalid protocol type!");
+			System.out.println("Invalid protocol type!");
+		}
+		
+		direction = Integer.parseInt((String)intent.getExtras().get("direction"));
+		if (direction != DOWNLOAD && direction != UPLOAD) {
+			sendMessage("error", "Error: Invalid direction!");
+			System.out.println("Invalid direction!");
+		}
+		
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 
-			previousRxBytes = TrafficStats.getMobileRxBytes();//(android.os.Process.myUid());
-			previousTxBytes = TrafficStats.getUidTxBytes(android.os.Process.myUid());
-			time =System.currentTimeMillis();
-			
-			if (previousTxBytes  == TrafficStats.UNSUPPORTED || previousTxBytes == TrafficStats.UNSUPPORTED) {
-				System.out.println("Traffic stat not supported! ");
-			}
-
+			previousReceivedBytes = 0;
+			previousSentBytes = 0;
+			time = System.currentTimeMillis();
+						
 			makeNewThread();
 
 		}catch (Exception e) {
@@ -227,8 +239,23 @@ public class HttpClient extends IntentService {
 
 	public void makeNewThread() {
 		try {
-			logger.addLine(TAG+"makeNewThread" );			
-			sendMessageToServer("GET /5MB.bin HTTP*/1.0\nDATE: 2013.03.03\nMODE: DL\n CONNECTION: TCP\n");					
+			logger.addLine(TAG+"makeNewThread" );
+			
+			int bufferSize = 5*1024*1024;
+			
+			if (type == TCP) {
+				if (direction == DOWNLOAD) {
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: TCP\n");
+				} else {
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\n");
+				}
+			}else {
+				if (direction == DOWNLOAD) {
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: UDP\n");
+				} else {
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: UDP\n");
+				}
+			}					
 
 			receiveMessageFromServer();
 			int testPort = Integer.parseInt(headerProperty.getProperty("PORT")); 
@@ -236,8 +263,7 @@ public class HttpClient extends IntentService {
 				logger.addLine(TAG+ "Bad answer from server, text:"+answerProperty.getProperty("TEXT"));
 				sendMessage("error", "Server reject the test: "+ answerProperty.getProperty("TEXT"));				
 			}
-			logger.addLine(TAG+ "good answer from server");
-
+			
 			Socket socket = createSocket(testPort);
 			if (socket == null) {
 				sendMessage("error", "Could not connect to server! test port: "+ testPort);
@@ -259,7 +285,7 @@ public class HttpClient extends IntentService {
 					//Set how long before to start calling the TimerTask (in milliseconds)
 					10,
 					//Set the amount of time between each execution (in milliseconds)
-					1000);
+					reportPeriod);
 
 			for (Future<PacketStructure> futureInst : threadSet) {
 				try {

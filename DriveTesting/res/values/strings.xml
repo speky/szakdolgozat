@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string name="app_name">DriveTesting</string>
     <string name="hello_world">Hello world!</string>
@@ -25,5 +25,16 @@
     <string name="connection_lost">Nincs hálózati kapcsolat </string>
     <string name="phone_header">Telefon adatai</string>
     <string name="network_header">Hálózat adatai</string>
+    <string name="upload">Upload</string>
+    <string name="download">Download</string>
+    <string name="tcp">TCP</string>
+    <string name="udp">UDP</string>
+    <string name="protocol">Protocol Type</string>
+    <string name="direction">Direction</string>
+    <string name="start">Start Test</string>
+    <string name="stop">Stop Test</string>
+    <string name="clean">Clear Text</string>
+    <string name="save">Save</string>    
+    
 
 </resources>

@@ -24,18 +24,25 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class TestActivity extends Activity implements Observer {
-	protected static final String TAG = "TestActivity: ";
-	private Context context = null;
-	private RadioGroup directionGroup;
-	private ProgressBar progressBar;
-	private int directionGroupIndex;
+	
+	private final String TAG = "TestActivity: ";
 	private final String DIRECTION_GROUP = "DirectionGroup";
+	private final String TYPE_GROUP = "TypeGroup";
+					
+	private RadioGroup directionGroup = null;
+	private int directionGroupIndex = 0;	
+	private RadioGroup typeGroup = null;
+	private int typeGroupIndex = 0;
+
+	private EditText text = null;
+	
+	private ProgressBar progressBar = null;
+	
 	private SharedPreferences sharedPreferences;
-	private NotificationManager notificationManager;
-	private EditText text;
-	private StringBuilder textOut;
-	private boolean progressbarVisible = false;
-	    
+	private NotificationManager notificationManager = null;
+	
+	private DriveTestApp application = ((DriveTestApp)getApplication());
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
@@ -45,18 +52,15 @@ public class TestActivity extends Activity implements Observer {
 		actionBar.setTitle("Test");
 				
 		setContentView(R.layout.activity_test);
-		context = this;
 
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 
 		directionGroup = (RadioGroup)findViewById(R.id.dir_group);
 		directionGroupIndex = directionGroup.getCheckedRadioButtonId();		
-		/*int uid = getApplication().getApplicationInfo().uid;
-		uid = android.os.Process.myUid();
-		long txApp = TrafficStats.getUidTxBytes(uid);
-		long rxApp = TrafficStats.getUidRxBytes(uid);
-		 */
-		textOut = new StringBuilder();
+
+		typeGroup = (RadioGroup)findViewById(R.id.type_group);
+		typeGroupIndex = typeGroup.getCheckedRadioButtonId();
+		
 		text = ((EditText)findViewById(R.id.editOutput));
 		text.setText("") ;
     	
@@ -67,19 +71,18 @@ public class TestActivity extends Activity implements Observer {
 	}
 	 
 	public void onStartTestClick(View view) {
-		((DriveTestApp)getApplication()).startHttpClientService();
-		progressBar.setVisibility(ProgressBar.VISIBLE);
-	
+		application.startHttpClientService(directionGroupIndex, typeGroupIndex);
+		progressBar.setVisibility(ProgressBar.VISIBLE);	
 	}
 		
 	public void onStopTestClick(View view) {
-		((DriveTestApp)getApplication()).stopHttpClientService();
+		application.stopHttpClientService();
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 	}
 
 	public void onClearClick(View view) {
 		text.setText(" ".toCharArray(), 0, 1);
-		textOut.delete(0, textOut.length());
+		application.clearTestMessage();
 	}
 	
 	public void onSaveClick(View view) {
@@ -90,34 +93,12 @@ public class TestActivity extends Activity implements Observer {
 		// Is the button now checked?
 		boolean checked = ((RadioButton) view).isChecked();
 		directionGroupIndex = directionGroup.getCheckedRadioButtonId();
-		// Check which radio button was clicked
-		switch(view.getId()) {
-		case R.id.dir_dl:
-			if (checked)
-				// 
-				break;
-		case R.id.dir_ul:
-			if (checked)
-				// 
-				break;
-		}
 	}
 
 	public void onTypeChoosed(View view) {
 		// Is the button now checked?
-		boolean checked = ((RadioButton) view).isChecked();
-
-		// Check which radio button was clicked
-		switch(view.getId()) {
-		case R.id.type_tcp:
-			if (checked)
-				// 
-				break;
-		case R.id.type_udp:
-			if (checked)
-				// 
-				break;
-		}
+		boolean checked = ((RadioButton) view).isChecked();		
+		typeGroupIndex = typeGroup.getCheckedRadioButtonId();
 	}
 
 	@Override
@@ -129,27 +110,31 @@ public class TestActivity extends Activity implements Observer {
 	@Override
 	public void onPause() {
 		super.onPause();
-		((DriveTestApp)getApplication()).removeObserver(this);
+		application.removeObserver(this);
 		save();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		((DriveTestApp)getApplication()).registerObserver(this);		
+		application.registerObserver(this);	
+		
 		load();
-		if (((DriveTestApp)getApplication()).isTestRunning()) {
+		
+		text.setText(application.getTestMessage());
+		
+		if (application.isTestRunning()) {
 			progressBar.setVisibility(ProgressBar.VISIBLE);
 		} else {
 			progressBar.setVisibility(ProgressBar.INVISIBLE);
 		}
-		text.setText(textOut) ;
 	}
 
 	private void save() {
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPreferences.edit();	    
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
+		editor.putInt(TYPE_GROUP, typeGroupIndex);
 		editor.commit();
 		Toast.makeText(this, "Save", Toast.LENGTH_LONG).show();
 	}
@@ -157,6 +142,12 @@ public class TestActivity extends Activity implements Observer {
 	private void load() {	    	    
 		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
 		directionGroup.check(directionGroupIndex);
+
+		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_group);
+		typeGroup.check(typeGroupIndex);
+		
+		
+		
 		Toast.makeText(this, "Load", Toast.LENGTH_LONG).show();		
 	}
 
@@ -219,15 +210,12 @@ public class TestActivity extends Activity implements Observer {
 	}
 
 	@Override
-	public void update(int action, String str) {		
-		textOut.insert(0, str+"\n\n");
-    	text.setText(textOut) ;
+	public void update(int action, String str) {
+    	text.setText(str) ;
     	if (action == 1) {
-    		progressBar.setVisibility(ProgressBar.VISIBLE);
-    		progressbarVisible = true;
+    		progressBar.setVisibility(ProgressBar.VISIBLE);    		
     	}  	else {
-    		progressBar.setVisibility(ProgressBar.INVISIBLE);
-    		progressbarVisible = false;
+    		progressBar.setVisibility(ProgressBar.INVISIBLE);    		
     	}
 		
 	}

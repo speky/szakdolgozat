@@ -8,8 +8,6 @@ import http.filehandler.PacketStructure;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 
-
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -22,7 +20,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -39,7 +36,7 @@ class ServerThread extends Thread{
 	private final int FirstPort = 5555;
 	private final int MaxPort = 6000;
 	private final int SOCKET_TIMEOUT = 10000; //in milisec
-	private final int REPEAT_SOCKET_CONNECTION= 3;
+	private final int REPEAT_SOCKET_CONNECTION = 3;
 
 	private int id = -1;
 	private Logger logger = null;
@@ -113,7 +110,6 @@ class ServerThread extends Thread{
 					parseClientRequest(buffer.toString());
 
 					if (parser.getMethod().equals("GET")) {		
-						//if (parser.getHeadProperty("MODE").equals("DL")) {
 						int port = 0;
 						do {
 							port = createSocket();							
@@ -149,21 +145,6 @@ class ServerThread extends Thread{
 		return nextPort;
 	}
 
-	private FileInstance checkPacketSize(String uri, String packet) {		 
-		FileInstance file = HttpServer.fileList.get(uri);
-		if (file == null) {
-			logger.addLine("Error: File does not exist!, name: "+uri);
-			return null;
-		}		
-		int packetSize = FileInstance.DEFAULT_SIZE;
-		if (packet != null ){
-			packetSize = Integer.parseInt(packet);
-		}		
-		if (FileInstance.DEFAULT_SIZE != packetSize) {
-			file.splitFileToPackets(packetSize);
-		}		
-		return file;
-	}
 
 	private boolean makeFileHandlingThread(int port) {
 		boolean retValue = true;
@@ -172,13 +153,7 @@ class ServerThread extends Thread{
 			parser.setErrorText("Invalid port number");
 			retValue = false;
 		}
-
-		FileInstance file = checkPacketSize(parser.getMethodProperty("URI"), parser.getHeadProperty("PACKET_SIZE"));
-		if (file == null) {
-			parser.setErrorText("File does not exist!");
-			retValue = false;
-		}
-
+		
 		if (!parser.getHeadProperty("MODE").equals("DL") && !parser.getHeadProperty("MODE").equals("UL") ||
 				!parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
 			logger.addLine("ERROR: wrong connction parameter received!");
@@ -208,7 +183,7 @@ class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 		
-		//figure out what is the ip address of the client
+		//figure out what is the IP address of the client
 		InetAddress client = testSocket.getInetAddress();
 		logger.addLine(TAG +id+" client:  "+client + " connected to server.\n");
 
@@ -294,29 +269,7 @@ public class HttpServer {
 	private static Logger logger = null;
 	private static int activeConnections;
 
-	public static HashMap<String, FileInstance> fileList = new HashMap<String, FileInstance> ();
-
-	private static void makeFileList() {
-		File filePath = new File(System.getProperty("user.dir") + "\\asset");
-		File[] listOfFiles = filePath.listFiles();
-		for (File file : listOfFiles) {
-			if (file.isFile()) {
-				String fileName = file.getName();
-				int i = fileName.lastIndexOf('.');
-				String extension = null; 
-				if (i > 0) {
-					extension = fileName.substring(i+1);
-				}
-				if (extension != null && (extension.equals("bin")|| extension.equals("txt"))){
-					System.out.println("File readed, " + fileName);
-					FileInstance fileInst = new FileInstance(logger, filePath+"\\"+fileName);		
-					fileInst.splitFileToPackets(FileInstance.DEFAULT_SIZE);
-					fileList.put(fileName, fileInst);
-				}
-			}
-		}
-	}
-
+	
 	public static  void decreaseConnectounCount() {
 		if  (activeConnections > 0) {
 			--activeConnections;
@@ -333,8 +286,7 @@ public class HttpServer {
 		activeConnections = 0;
 		logger = new Logger("");		
 		try	{
-			serverSocket = new ServerSocket(SERVER_PORT);
-			makeFileList();
+			serverSocket = new ServerSocket(SERVER_PORT);			
 			while (true) {
 				// wait for client connection
 				Socket socket = serverSocket.accept();	

@@ -30,30 +30,30 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private boolean isTestRunning = false;
 
 	private ArrayList<Observer> observers;
-	private String message = "";
+	private StringBuilder message = new StringBuilder();
 	private int action = 0;
 	
 	Handler handler = new Handler() 
     { 
         @Override 
-        public void handleMessage(Message msg) { 
+        public void handleMessage(Message msg) {
         	if ( msg.getData().containsKey("error")) {
-        		message = msg.getData().getString("error");        		
+        		message.append(msg.getData().getString("error")+"\n");        		
             	stopHttpClientService();
             	action = 0;
-            	Log.d(TAG, message);
-            } 
+            	Log.d(TAG, message.toString());
+            }
             
             if ( msg.getData().containsKey("packet")) {
-            	message = msg.getData().getString("packet");
+            	message.append(msg.getData().getString("packet")+"\n");
             	action = 1;
-            	Log.d(TAG, "get data" + message);
+            	Log.d(TAG, "get data" + message.toString());
             } 
             
             if ( msg.getData().containsKey("end")) {
-            	message = msg.getData().getString("end");            	
+            	message.append(msg.getData().getString("end")+"\n");      	
             	action = 0;
-            	Log.d(TAG, message);            	
+            	Log.d(TAG, message.toString());
             }
             notifyObservers();
             super.handleMessage(msg); 
@@ -90,12 +90,14 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	}
 
-	public boolean startHttpClientService() {		
+	public boolean startHttpClientService(int direction, int type) {		
 		Intent httpIntent = new Intent(this, HttpClient.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
 		}
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
+		httpIntent.putExtra("direction", direction);
+		httpIntent.putExtra("type", type);
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;
@@ -105,6 +107,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		Intent httpIntent = new Intent(this, HttpClient.class);		
 		stopService(httpIntent);
 		isTestRunning = false;
+		clearTestMessage();
 		return true;
 	}
 	
@@ -124,6 +127,14 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		--activeGpsActivity;
 	}
 
+	public String getTestMessage() {
+		return message.toString();
+	}
+	
+	public void clearTestMessage() {
+		message.delete(0, message.length());
+	}
+	
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
@@ -159,7 +170,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public void notifyObservers() {
 		for (int i = 0; i < observers.size(); i++) {
             Observer observer = (Observer)observers.get(i);
-            observer.update(action, message);
+            observer.update(action, message.toString());
         }		
 	}
 
