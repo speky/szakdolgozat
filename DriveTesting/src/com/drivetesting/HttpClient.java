@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
@@ -35,15 +36,10 @@ import android.util.Log;
 
 public class HttpClient extends IntentService {
 	public static final int MAX_THREAD = 10;
-	private static final int SOCKET_TIMEOUT = 3000;
+	private static final int SOCKET_TIMEOUT = 1000;
 
 	private static final double BYTE_TO_KILOBIT = 0.0078125;
 	private static final double KILOBIT_TO_MEGABIT = 0.0009765625;
-
-	private final int UDP = 0;
-	private final int TCP = 1;
-	private final int UPLOAD = 0;
-	private final int DOWNLOAD = 1;
 	
 	private final String TAG = "HttpClient: ";
 	private final int ServerPort = 4444;
@@ -82,9 +78,10 @@ public class HttpClient extends IntentService {
 			receivedBytes = getReceivedPackets() - previousReceivedBytes;
 			sentBytes = getSentPackets() - previousSentBytes;
 			calcSpeed();
-			logger.addLine("** ReceivedBytes: "+ receivedBytes + " sent: "+ sentBytes);	
-			sendMessage("packet", "Packet: "+ Long.toString(receivedBytes)+ " sent: "+ Long.toString(sentBytes) +
-						downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString()+"\n");
+			logger.addLine("** ReceivedBytes: "+ receivedBytes + " sent: "+ sentBytes);
+			
+			sendMessage("packet", "Time: " + Calendar.getInstance().getTime() +" Packet: "+ Long.toString(receivedBytes)+ " sent: "+ Long.toString(sentBytes)/* +
+						downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString()*/+"\n");
 		}
 	}
 
@@ -172,14 +169,15 @@ public class HttpClient extends IntentService {
 			System.out.println("Invalid server address!");
 		}
 		
-		type = Integer.parseInt((String)intent.getExtras().get("type"));
-		if (type != UDP && type != TCP) {
+		type= (Integer)intent.getExtras().get("type");
+		
+		if (type != DriveTestApp.UDP && type != DriveTestApp.TCP) {
 			sendMessage("error", "Error: Invalid protocol type!");
 			System.out.println("Invalid protocol type!");
 		}
 		
-		direction = Integer.parseInt((String)intent.getExtras().get("direction"));
-		if (direction != DOWNLOAD && direction != UPLOAD) {
+		direction = (Integer)intent.getExtras().get("direction");
+		if (direction != DriveTestApp.DOWNLOAD && direction != DriveTestApp.UPLOAD) {
 			sendMessage("error", "Error: Invalid direction!");
 			System.out.println("Invalid direction!");
 		}
@@ -242,15 +240,15 @@ public class HttpClient extends IntentService {
 			logger.addLine(TAG+"makeNewThread" );
 			
 			int bufferSize = 5*1024*1024;
-			
-			if (type == TCP) {
-				if (direction == DOWNLOAD) {
+			int reportTime = 1000; //1 sec
+			if (type == DriveTestApp.TCP) {
+				if (direction == DriveTestApp.DOWNLOAD) {
 					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: TCP\n");
 				} else {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\n");
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\nREPORTPERIOD: " + reportTime +"\n");
 				}
 			}else {
-				if (direction == DOWNLOAD) {
+				if (direction == DriveTestApp.DOWNLOAD) {
 					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: UDP\n");
 				} else {
 					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: UDP\n");

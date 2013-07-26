@@ -1,7 +1,6 @@
 
 package httpserver;
 
-import http.filehandler.FileInstance;
 import http.filehandler.HttpParser;
 import http.filehandler.Logger;
 import http.filehandler.PacketStructure;
@@ -15,7 +14,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
@@ -183,13 +181,14 @@ class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 		
-		//figure out what is the IP address of the client
-		InetAddress client = testSocket.getInetAddress();
-		logger.addLine(TAG +id+" client:  "+client + " connected to server.\n");
-
+		
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				int bufferSize = 5000;
+				int bufferSize = 8000; // 8kb
+				String bufferString = parser.getHeadProperty("URI");
+				if (bufferString != null) {
+					bufferSize = Integer.parseInt(bufferString); 
+				}
 				sender = new TCPSender(logger, ++threadCount, bufferSize);
 				if (sender.setSocket(testSocket)) {
 					Future<PacketStructure> future = pool.submit(sender);
@@ -201,9 +200,16 @@ class ServerThread extends Thread{
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				receiver = new TCPReceiver(logger, Integer.toString(++threadCount));
-				receiver.setSocket(testSocket);
-				Future<PacketStructure> future = pool.submit(receiver);
-				threadSet.add(future);
+								
+				String timer = parser.getHeadProperty("REPORTPERIOD");
+				if (timer != null) {
+					receiver.setReportInterval(Integer.parseInt(timer)); 
+				}
+				if (receiver.setSocket(testSocket)) {
+					Future<PacketStructure> future = pool.submit(receiver);
+					threadSet.add(future);
+				}
+				
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPRecever(logger, 1 ));
 			}

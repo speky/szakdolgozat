@@ -7,6 +7,23 @@
       android:summary="Click to pop up a field for entry"
       android:dialogTitle="ServerIp address"
       android:defaultValue="84.236.62.55"
+      android:inputType="phone"
+    />
+    <EditTextPreference
+      android:key="bufferSize"
+      android:title="Buffer Size"
+      android:summary="Click to pop up a field for entry"
+      android:dialogTitle="Sender buffer Size"
+      android:defaultValue="1000"
+      android:inputType="number"
+    />
+    <EditTextPreference
+      android:key="reportPeriod"
+      android:title="ReportPeriod"
+      android:summary="Click to pop up a field for entry"
+      android:dialogTitle="Test report Period"
+      android:defaultValue="1000"
+      android:inputType="number"
     />
     <CheckBoxPreference
       android:key="checkbox"

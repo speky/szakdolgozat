@@ -56,7 +56,7 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 		if (socket == null) {
 			return false;
 		}
-		logger.addLine(TAG+"Iid: " + id+ " address: " + socket.getInetAddress().getHostAddress()+ " port: " + socket.getPort());
+		logger.addLine(TAG+"Id: " + id+ " address: " + socket.getInetAddress().getHostAddress()+ " port: " + socket.getPort());
 		this.socket = socket;
 		return true;
 	}

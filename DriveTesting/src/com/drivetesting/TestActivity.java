@@ -41,12 +41,14 @@ public class TestActivity extends Activity implements Observer {
 	private SharedPreferences sharedPreferences;
 	private NotificationManager notificationManager = null;
 	
-	private DriveTestApp application = ((DriveTestApp)getApplication());
+	private DriveTestApp application = null;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {		
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		application = ((DriveTestApp)getApplication());
+		
 		ActionBar actionBar = getActionBar();	
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Test");
@@ -71,7 +73,9 @@ public class TestActivity extends Activity implements Observer {
 	}
 	 
 	public void onStartTestClick(View view) {
-		application.startHttpClientService(directionGroupIndex, typeGroupIndex);
+		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
+		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;
+		application.startHttpClientService(direction, type);
 		progressBar.setVisibility(ProgressBar.VISIBLE);	
 	}
 		
@@ -92,13 +96,17 @@ public class TestActivity extends Activity implements Observer {
 	public void onDirectionChoosed(View view) {
 		// Is the button now checked?
 		boolean checked = ((RadioButton) view).isChecked();
-		directionGroupIndex = directionGroup.getCheckedRadioButtonId();
+		if (checked) {
+			directionGroupIndex = directionGroup.getCheckedRadioButtonId();
+		}
 	}
 
 	public void onTypeChoosed(View view) {
 		// Is the button now checked?
-		boolean checked = ((RadioButton) view).isChecked();		
-		typeGroupIndex = typeGroup.getCheckedRadioButtonId();
+		boolean checked = ((RadioButton) view).isChecked();
+		if (checked) {
+			typeGroupIndex = typeGroup.getCheckedRadioButtonId();
+		}
 	}
 
 	@Override
@@ -145,8 +153,6 @@ public class TestActivity extends Activity implements Observer {
 
 		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_group);
 		typeGroup.check(typeGroupIndex);
-		
-		
 		
 		Toast.makeText(this, "Load", Toast.LENGTH_LONG).show();		
 	}

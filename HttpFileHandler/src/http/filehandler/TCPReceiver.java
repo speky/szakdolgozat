@@ -38,8 +38,13 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		reportInterval = milisec;
 	}
 	
-	public void setSocket(Socket socket) {
-		this.socket  = socket;
+	public boolean setSocket(Socket socket) {		
+		if (socket == null) {
+			return false;
+		}
+		logger.addLine(TAG+"Id: " + id+ " address: " + socket.getInetAddress().getHostAddress()+ " port: " + socket.getPort());
+		this.socket = socket;
+		return true;
 	}
 
 	final public int getSentPacket(){

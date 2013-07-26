@@ -2,7 +2,10 @@ package com.drivetesting;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +22,11 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	static final String TAG = "DriveTesting";
 
+	public static final int UDP = 0;
+	public static final int TCP = 1;
+	public static final int UPLOAD = 0;
+	public static final int DOWNLOAD = 1;
+	
 	private DataStorage dataStorage;
 	private SharedPreferences prefs;	
 	
@@ -37,9 +45,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
     { 
         @Override 
         public void handleMessage(Message msg) {
-        	if ( msg.getData().containsKey("error")) {
-        		message.append(msg.getData().getString("error")+"\n");        		
-            	stopHttpClientService();
+        	if ( msg.getData().containsKey("error")) {        		
+        		stopHttpClientService();
+        		message.append(msg.getData().getString("error") +"\n");
             	action = 0;
             	Log.d(TAG, message.toString());
             }
@@ -98,6 +106,10 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);
+		
+		String buff = prefs.getString("bufferSize", "1000");
+		httpIntent.putExtra("bufferSize", buff);
+		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;
@@ -135,13 +147,32 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		message.delete(0, message.length());
 	}
 	
+	private static final Pattern IP_ADDRESS = Pattern.compile(
+        "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
+        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
+        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+        + "|[1-9][0-9]|[0-9]))");
+	
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
 		Log.d(TAG, "On Change preferences: "+ key);
 		if (key.equals("serverIp")) {
-			//Preference connectionPref = findPreference(key);
-			Log.d(TAG, "Server IP changed");
+			/*Matcher matcher = IP_ADDRESS.matcher(pref.getString("serverIp", null));
+			if (matcher.matches()) {
+			*/
+			    // ip is correct
+				Log.d(TAG, "Server IP has changed");
+			/*	
+			}else {
+				Log.d(TAG, "Server IP is wrong");
+				final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setTitle("Invalid Input");
+                builder.setMessage("It is not a valid IP address!");
+                builder.setPositiveButton("Ok", null);
+                builder.show();
+			}*/
+			
 		}
 
 	}
