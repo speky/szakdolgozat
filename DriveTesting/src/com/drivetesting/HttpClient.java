@@ -62,8 +62,8 @@ public class HttpClient extends IntentService {
 	
 	private int type = 0;
 	private int direction = 0;
-	
-	private int reportPeriod = 1000;
+	private int bufferSize = 0;
+	private int reportPeriod = 0;
 	
 	private long receivedBytes = 0;
 	private long sentBytes = 0;
@@ -182,6 +182,9 @@ public class HttpClient extends IntentService {
 			System.out.println("Invalid direction!");
 		}
 		
+		bufferSize = Integer.parseInt((String)intent.getExtras().get("bufferSize"));
+		reportPeriod = Integer.parseInt((String)intent.getExtras().get("reportPeriod"));
+		
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
@@ -239,13 +242,11 @@ public class HttpClient extends IntentService {
 		try {
 			logger.addLine(TAG+"makeNewThread" );
 			
-			int bufferSize = 5*1024*1024;
-			int reportTime = 1000; //1 sec
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: TCP\n");
 				} else {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\nREPORTPERIOD: " + reportTime +"\n");
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\nREPORTPERIOD: " + reportPeriod +"\n");
 				}
 			}else {
 				if (direction == DriveTestApp.DOWNLOAD) {

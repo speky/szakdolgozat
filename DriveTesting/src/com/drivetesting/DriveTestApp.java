@@ -106,10 +106,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);
-		
-		String buff = prefs.getString("bufferSize", "1000");
-		httpIntent.putExtra("bufferSize", buff);
-		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
+				
+		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "100"));
+		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "100"));
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;

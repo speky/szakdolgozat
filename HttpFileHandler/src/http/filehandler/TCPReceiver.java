@@ -147,7 +147,7 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		int byteLimit = 0;
 		
 		try {
-			while (reading /*&& (byteLimit > 0 && totalReadedBytes < byteLimit) */) {
+			while (reading && inputStream != null/*&& (byteLimit > 0 && totalReadedBytes < byteLimit) */) {
 				readedBytes = inputStream.read(byteBuffer);
 				totalReadedBytes += readedBytes;
 				packetStrucutre.receivedPackets = totalReadedBytes;
