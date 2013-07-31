@@ -8,35 +8,25 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 
 
-interface ICallback {	
-	public void receiveReportMessages(int receivedBytes) ;
-}
-
-public class TCPSender implements Callable<PacketStructure>, ICallback{	
-	private Logger logger = null;	
-	private int id = 0;
-	
+public class TCPSender  extends ConnectionInstance implements ICallback{	
+		
 	private byte[] byteBuffer;	
 	private Socket socket = null;
 	private PrintWriter printerWriter = null;
 	private ReportHandler reportHandler = null;
 	private Vector<Integer> reportList = new Vector<Integer>();
-	private boolean running = true;
-	private String errorMessage = null;
+	private boolean running = true;	
 	private final String TAG = "TCPSender: ";	
-	private final int ACK_WAITING = 5000; //in milisec	
-	private PacketStructure packetStructure;
+	private final int ACK_WAITING = 5000; //in milisec
 	public static final String END_PACKET = "END_PACKET";	
 	
 	public TCPSender(Logger logger, final int id, final int bufferSize) {
-		super();		
-		this.id = id;
-		this.logger = logger;		
+		super(ConnectionInstance.TCP_SENDER, id, logger);				
 		logger.addLine(TAG+ "Created, id: " + id);
 		
 		reportHandler = new ReportHandler(logger);
 		packetStructure = new PacketStructure();
-		
+		packetStructure.id = id;
 		byteBuffer = new byte[bufferSize];
 		Utility.fillStringBuffer(byteBuffer, bufferSize);		
 	}
@@ -61,7 +51,7 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 		return true;
 	}
 
-	
+	@Override
 	public void stop() {
 		logger.addLine(TAG+"Sending and report receiver stopped!");
 		reportHandler.stopScaning();
@@ -73,6 +63,7 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 		} catch (IOException e) {
 			errorMessage = "Socket cannot stopped!";
 			packetStructure.receivedPackets = -1;
+			
 			logger.addLine(TAG+errorMessage);
 			e.printStackTrace();
 		}
@@ -89,14 +80,12 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 			OutputStream outputStream = socket.getOutputStream();			
 			logger.addLine(TAG+"Send message,  sendertId: " + id);			
 
-			packetStructure.sentPackets = 0;
 			packetStructure.receivedPackets = 0;
 			
 			
 			while (running) {
 				 outputStream.write(byteBuffer);
-				 outputStream.flush();
-				 
+				 outputStream.flush();				 
 			}
 			
 			logger.addLine(TAG+" Sending ended!");
@@ -105,7 +94,7 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 			logger.addLine(TAG+"Received report message: "+packetStructure.receivedPackets);
 		} catch (Exception e) {
 			errorMessage = "Error occured in sending packets";
-			packetStructure.sentPackets = -1;
+			packetStructure.receivedPackets = -1;
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
 		}
 		finally{
@@ -117,7 +106,7 @@ public class TCPSender implements Callable<PacketStructure>, ICallback{
 				}
 			} catch (IOException e) {
 				errorMessage = "Socket cannot stopped!";
-				packetStructure.sentPackets = -1;
+				packetStructure.receivedPackets = -1;
 				logger.addLine(TAG+errorMessage);
 				e.printStackTrace();
 			}

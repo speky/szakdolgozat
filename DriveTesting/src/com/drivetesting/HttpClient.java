@@ -1,5 +1,6 @@
 package com.drivetesting;
 
+import http.filehandler.ConnectionInstance;
 import http.filehandler.Logger;
 import http.filehandler.PacketStructure;
 import http.filehandler.TCPReceiver;
@@ -9,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
@@ -19,6 +21,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,12 +29,10 @@ import java.util.concurrent.Future;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.util.Log;
 
 public class HttpClient extends IntentService {
@@ -54,7 +55,8 @@ public class HttpClient extends IntentService {
 	private PrintWriter pw = null;
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
-	private TCPReceiver receiver = null;
+	
+	private ArrayList<ConnectionInstance> connectionInstances = new ArrayList<ConnectionInstance>();
 	
 	private ReportTask task = new ReportTask();	
 	private String errorMessage = null;
@@ -66,9 +68,7 @@ public class HttpClient extends IntentService {
 	private int reportPeriod = 0;
 	
 	private long receivedBytes = 0;
-	private long sentBytes = 0;
 	private long previousReceivedBytes = 0;
-	private long previousSentBytes = 0;
 	private long time = 0;
 	private SpeedInfo downloadSpeed;
 	private SpeedInfo uploadSpeed;
@@ -76,11 +76,10 @@ public class HttpClient extends IntentService {
 	class ReportTask extends TimerTask {
 		public void run() {
 			receivedBytes = getReceivedPackets() - previousReceivedBytes;
-			sentBytes = getSentPackets() - previousSentBytes;
 			calcSpeed();
-			logger.addLine("** ReceivedBytes: "+ receivedBytes + " sent: "+ sentBytes);
+			logger.addLine("** ReceivedBytes: "+ receivedBytes );
 			
-			sendMessage("packet", "Time: " + Calendar.getInstance().getTime() +" Packet: "+ Long.toString(receivedBytes)+ " sent: "+ Long.toString(sentBytes)/* +
+			sendMessage("packet", "Time: " + Calendar.getInstance().getTime() +" Packet: "+ Long.toString(receivedBytes)/* +
 						downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString()*/+"\n");
 		}
 	}
@@ -132,10 +131,9 @@ public class HttpClient extends IntentService {
 		time = currentTime;
 
 		downloadSpeed = calculate(ellapsedTime, receivedBytes);
-		uploadSpeed = calculate(ellapsedTime, sentBytes);
+		//uploadSpeed = calculate(ellapsedTime, sentBytes);
 
-		previousReceivedBytes = receivedBytes;
-		previousSentBytes = sentBytes;			
+		previousReceivedBytes = receivedBytes;		
 	}
 
 	/**
@@ -190,8 +188,7 @@ public class HttpClient extends IntentService {
 			scanner = new Scanner(socket.getInputStream());
 			pw = new PrintWriter(socket.getOutputStream());
 
-			previousReceivedBytes = 0;
-			previousSentBytes = 0;
+			previousReceivedBytes = 0;			
 			time = System.currentTimeMillis();
 						
 			makeNewThread();
@@ -210,31 +207,27 @@ public class HttpClient extends IntentService {
 	}
 
 	public int getReceivedPackets() {
-		if (receiver != null) {
-			return receiver.getReceivedPacket();
+		int packets = 0;
+		for (ConnectionInstance instance: connectionInstances) {
+			packets += instance.getReceivedPacket();			
 		}
-		return 0;
+		return packets;
 	}
-
-	public int getSentPackets() {
-		if (receiver != null) {
-			return receiver.getSentPacket();
-		}
-		return 0;
-	}
+	
 
 	public void stop() {
 		logger.addLine(TAG+ "send stop to server");
 		try {
-			sendMessageToServer("STOP / Http*/1.0\n DATE:2013.12.12\nCONNECTION: STOP\n");
+			sendMessageToServer("STOP / Http*/1.0\n DATE:2013.12.12\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		logger.addLine(TAG+ "stop threads");
 
-		if (receiver != null) {
+		for (ConnectionInstance receiver : connectionInstances) {
 			receiver.stop();
-		}		
+		}
+		
 		pool.shutdownNow();
 	}
 
@@ -271,8 +264,9 @@ public class HttpClient extends IntentService {
 			
 			calcSpeed();
 			
-			receiver = new TCPReceiver(logger, Integer.toString(++threadCount));
+			TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);
 			receiver.setSocket(socket);
+			connectionInstances.add(receiver);
 			Future<PacketStructure> future = pool.submit(receiver);
 			threadSet.add(future);
 
@@ -288,11 +282,12 @@ public class HttpClient extends IntentService {
 
 			for (Future<PacketStructure> futureInst : threadSet) {
 				try {
+					calcSpeed();
 					PacketStructure value = futureInst.get();
 					logger.addLine(TAG+"A thread ended, value: " + value);										
-					timer.cancel();
-					calcSpeed();
-					if (value.sentPackets == -1 || value.receivedPackets == -1) {
+					timer.cancel();			
+					deleteInstance(value.id);
+					if (value.id == -1 || value.receivedPackets == -1) {
 						sendMessage("error", "Error: " + receiver.getErrorMessage());
 					} else {
 						sendMessage("end", "Test end, received packets: "+ getReceivedPackets());
@@ -315,6 +310,15 @@ public class HttpClient extends IntentService {
 		}
 	}
 
+	private void deleteInstance(int id) {
+		for (int i = 0; i < connectionInstances.size(); ++i){
+			ConnectionInstance instance = connectionInstances.get(i);
+			if (instance.getId() == id) {
+				connectionInstances.remove(instance);
+			}
+		}
+	}
+	
 	private boolean sendMessageToServer(final String command) throws IOException {
 		logger.addLine(TAG+ "Send command to server: "+ command);
 		if (pw == null ){

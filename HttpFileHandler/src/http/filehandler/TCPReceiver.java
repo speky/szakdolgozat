@@ -6,28 +6,22 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
 
-public class TCPReceiver implements Callable<PacketStructure>{
-	private Logger logger = null;	
-	private String id = "0";		
+public class TCPReceiver extends ConnectionInstance {
 	private ReportHandler reportHandler = null;
-	private boolean reading = true;
-	private String errorMessage = null;		
+	private boolean reading = true;			
 	private final String TAG = "TCPReceiver: "+ id;
 	private Socket socket = null;
-	private PacketStructure packetStrucutre;
 	private int reportInterval = 0;
 	private Timer timer = null;
 	int totalReadedBytes = 0;
 	
-	public TCPReceiver(Logger logger, String id) {
-		super();		
-		this.id = id;
-		this.logger = logger;
-		logger.addLine(TAG+" TCP receiver created id: " + id);
+	public TCPReceiver(Logger logger, final int id) {
+		super(ConnectionInstance.TCP_RECEIVER, id, logger);
+		logger.addLine(TAG + " TCP receiver created id: " + Integer.toString(id));
 		reportHandler = new ReportHandler(logger);		
-		packetStrucutre = new PacketStructure();
+		packetStructure = new PacketStructure();
+		packetStructure.id = id;
 	}
 
 	final public String getErrorMessage() {
@@ -46,22 +40,14 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		this.socket = socket;
 		return true;
 	}
-
-	final public int getSentPacket(){
-		return packetStrucutre.sentPackets;
-	}
-	
-	final public int getReceivedPacket(){
-		return packetStrucutre.receivedPackets;
-	}
-	
+		
 	public PacketStructure call() {		
 		try {			
 			if (socket == null) {
 				errorMessage = "Invalid socket!";
 				logger.addLine(TAG+errorMessage );
-				packetStrucutre.receivedPackets = -1;
-				return packetStrucutre;
+				packetStructure.receivedPackets = -1;				
+				return packetStructure;
 			}
 			
 			if (reportInterval > 0) {
@@ -71,7 +57,7 @@ public class TCPReceiver implements Callable<PacketStructure>{
 					  public void run() {
 						  if (reportHandler  != null ) {
 								try {
-									reportHandler.sendReportMessage(socket.getOutputStream(), id, totalReadedBytes);
+									reportHandler.sendReportMessage(socket.getOutputStream(), Integer.toString(id), totalReadedBytes);
 								} catch (IOException e) {
 									logger.addLine(TAG+ "send report problem");
 									e.printStackTrace();
@@ -87,8 +73,8 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		catch (Exception e) {
 			 errorMessage = "Some kinf of error occured!";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
-			packetStrucutre.receivedPackets = -1;
-			return packetStrucutre;
+			packetStructure.receivedPackets = -1;			
+			return packetStructure;
 		} 
 		finally{
 			if (timer != null) {
@@ -106,9 +92,10 @@ public class TCPReceiver implements Callable<PacketStructure>{
 				e.printStackTrace();
 			}
 		}		
-		return packetStrucutre;
+		return packetStructure;
 	}
 
+	@Override
 	public void stop() {
 		logger.addLine(TAG+"Receiving stopped!");
 		reading = false;
@@ -137,9 +124,8 @@ public class TCPReceiver implements Callable<PacketStructure>{
 		}
 		int size = 2000;
 		byte[] byteBuffer = new byte[size];
-		packetStrucutre.receivedPackets = 0;
-		packetStrucutre.sentPackets = 0;
-		
+		packetStructure.receivedPackets = 0;
+				
 		//socket.setReceiveBufferSize(1024);//1KB
 		//logger.addLine(TAG + "rec buff size: "+ socket.getReceiveBufferSize());
 		
@@ -150,7 +136,7 @@ public class TCPReceiver implements Callable<PacketStructure>{
 			while (reading && inputStream != null/*&& (byteLimit > 0 && totalReadedBytes < byteLimit) */) {
 				readedBytes = inputStream.read(byteBuffer);
 				totalReadedBytes += readedBytes;
-				packetStrucutre.receivedPackets = totalReadedBytes;
+				packetStructure.receivedPackets = totalReadedBytes;
 				logger.addLine(TAG+"Readed Bytes: "+readedBytes);
 				
 				/*buffer.append(readedLine+"+");

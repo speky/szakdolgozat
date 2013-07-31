@@ -64,7 +64,7 @@ public class GPSService extends Service implements LocationListener {
 	}
 	
 	private void broadcast() {
-		System.out.println("*****HIT OUTGOING****************");
+		System.out.println("***** OUTGOING ******");
 		Intent i = new Intent();
 		i.setAction(CUSTOM_INTENT);
 		this.context.sendBroadcast(i);

@@ -100,7 +100,7 @@ public class TCPSenderTest {
         sender.setSocket(socket);               
         PacketStructure packetStructure = new PacketStructure();
         packetStructure.receivedPackets = 1;
-        packetStructure.sentPackets = 1;
+        packetStructure.id = 0;
         //Assert.assertTrue(packetStructure.equals(sender.call()));
         String message = "123456789asdfghjkyxcvbnm";
         String hash = Utility.calcCheckSum(message.getBytes());
@@ -136,7 +136,7 @@ public class TCPSenderTest {
         
         PacketStructure packetStructure = new PacketStructure();
         packetStructure.receivedPackets = 3;
-        packetStructure.sentPackets = 3;
+        packetStructure.id = 0;
         //Assert.assertTrue(packetStructure.equals(sender.call()));
         String message = "123456789a";        
         StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(message.getBytes())+

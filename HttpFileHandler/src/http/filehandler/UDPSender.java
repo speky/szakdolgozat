@@ -11,18 +11,14 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class UDPSender extends Thread {
-	private Logger logger = null;	
-	private int id = 0;
+public class UDPSender extends ConnectionInstance {
 	private FileInstance fileInstance = null;
 	private DatagramSocket socket = null;	
 	private int serverPort = 0;
 	private String serverAddress = "";
 
-	public UDPSender(Logger logger, final int id) {
-		super();
-		this.id = id;
-		this.logger = logger;
+	public UDPSender(final int id, Logger logger) {
+		super(ConnectionInstance.UDP_SENDER, id, logger);
 		//logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
 	}
 

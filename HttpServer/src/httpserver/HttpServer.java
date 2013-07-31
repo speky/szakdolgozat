@@ -1,6 +1,7 @@
 
 package httpserver;
 
+import http.filehandler.ConnectionInstance;
 import http.filehandler.HttpParser;
 import http.filehandler.Logger;
 import http.filehandler.PacketStructure;
@@ -18,6 +19,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -45,8 +47,7 @@ class ServerThread extends Thread{
 	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
 	private int threadCount = 0;
 
-	private TCPSender sender = null;
-	private TCPReceiver receiver = null;
+	private Vector<ConnectionInstance> connectionInstances = new Vector<ConnectionInstance>(); 
 	private String errorMessage = null;
 	private Socket commandSocket = null;
 	private Scanner scanner = null;	
@@ -117,11 +118,8 @@ class ServerThread extends Thread{
 						makeFileHandlingThread(port);
 
 					} else if (parser.getMethod().equals("STOP")) {
-						if (sender != null) {
-							sender.stop();
-						}
-						if (receiver != null) {
-							receiver.stop();
+						for (ConnectionInstance instance : connectionInstances ) {
+							instance.stop();
 						}
 					}else{
 						sendResponse();
@@ -151,7 +149,7 @@ class ServerThread extends Thread{
 			parser.setErrorText("Invalid port number");
 			retValue = false;
 		}
-		
+
 		if (!parser.getHeadProperty("MODE").equals("DL") && !parser.getHeadProperty("MODE").equals("UL") ||
 				!parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
 			logger.addLine("ERROR: wrong connction parameter received!");
@@ -180,8 +178,8 @@ class ServerThread extends Thread{
 			logger.addLine(TAG+e.getMessage());
 			e.printStackTrace();
 		}
-		
-		
+
+
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
 				int bufferSize = 8000; // 8kb
@@ -189,8 +187,9 @@ class ServerThread extends Thread{
 				if (bufferString != null) {
 					bufferSize = Integer.parseInt(bufferString); 
 				}
-				sender = new TCPSender(logger, ++threadCount, bufferSize);
+				TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
 				if (sender.setSocket(testSocket)) {
+					connectionInstances.add(sender);
 					Future<PacketStructure> future = pool.submit(sender);
 					threadSet.add(future);
 				}
@@ -198,18 +197,18 @@ class ServerThread extends Thread{
 				//new Thread(new UDPSender(logger, 1 ));
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
-			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				receiver = new TCPReceiver(logger, Integer.toString(++threadCount));
-								
+			if (parser.getHeadProperty("CONNECTION").equals("TCP")){				
+				TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);								
 				String timer = parser.getHeadProperty("REPORTPERIOD");
 				if (timer != null) {
 					receiver.setReportInterval(Integer.parseInt(timer)); 
-				}
+				}				
 				if (receiver.setSocket(testSocket)) {
+					connectionInstances.add(receiver);
 					Future<PacketStructure> future = pool.submit(receiver);
 					threadSet.add(future);
 				}
-				
+
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
 				//new Thread(new UDPRecever(logger, 1 ));
 			}
@@ -275,7 +274,7 @@ public class HttpServer {
 	private static Logger logger = null;
 	private static int activeConnections;
 
-	
+
 	public static  void decreaseConnectounCount() {
 		if  (activeConnections > 0) {
 			--activeConnections;

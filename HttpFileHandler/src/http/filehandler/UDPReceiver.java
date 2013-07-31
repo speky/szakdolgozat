@@ -5,18 +5,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-public class UDPReceiver extends Thread {
-	private Logger logger = null;	
-	private int id = 0;
-	private FileInstance fileInstance = null;
+public class UDPReceiver extends ConnectionInstance {
+	
 	private DatagramSocket socket = null;	
 	private int serverPort = 0;
 	private String serverAddress = "";
 
-	public UDPReceiver() {
-		super();
-		this.id = id;
-		this.logger = logger;
+	public UDPReceiver(final int id, Logger logger) {
+		super(ConnectionInstance.UDP_RECEIVER, id, logger);	
+		
 	}
 
 	public void run() {
