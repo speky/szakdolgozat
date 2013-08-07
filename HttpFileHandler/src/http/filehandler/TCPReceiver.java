@@ -23,11 +23,7 @@ public class TCPReceiver extends ConnectionInstance {
 		packetStructure = new PacketStructure();
 		packetStructure.id = id;
 	}
-
-	final public String getErrorMessage() {
-		return errorMessage;
-	}
-	
+		
 	public void setReportInterval(int milisec) {
 		reportInterval = milisec;
 	}

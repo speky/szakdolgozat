@@ -4,6 +4,9 @@ import http.filehandler.ConnectionInstance;
 import http.filehandler.Logger;
 import http.filehandler.PacketStructure;
 import http.filehandler.TCPReceiver;
+import http.filehandler.TCPSender;
+import http.filehandler.UDPReceiver;
+import http.filehandler.UDPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -214,6 +217,13 @@ public class HttpClient extends IntentService {
 		return packets;
 	}
 	
+	/*public int getSentPackets() {
+		int packets = 0;
+		for (ConnectionInstance instance: connectionInstances) {
+			packets += instance.getSentPackets();			
+		}
+		return packets;
+	}*/
 
 	public void stop() {
 		logger.addLine(TAG+ "send stop to server");
@@ -264,10 +274,28 @@ public class HttpClient extends IntentService {
 			
 			calcSpeed();
 			
-			TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);
-			receiver.setSocket(socket);
-			connectionInstances.add(receiver);
-			Future<PacketStructure> future = pool.submit(receiver);
+			Future<PacketStructure> future = null;
+			if (type == DriveTestApp.TCP) {
+				if (direction == DriveTestApp.DOWNLOAD) {
+					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);
+					receiver.setSocket(socket);
+					connectionInstances.add(receiver);
+					future = pool.submit(receiver);
+				} else {
+					TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
+					sender.setSocket(socket);					
+					connectionInstances.add(sender);
+					future = pool.submit(sender);
+				}
+			} else {
+				if (direction == DriveTestApp.DOWNLOAD) {
+					UDPReceiver receiver = new UDPReceiver(++threadCount, logger);
+					
+				} else {
+					UDPSender sender = new UDPSender(++threadCount, logger);
+					//sender.setReceiverParameters(port, address);
+				}
+			}						
 			threadSet.add(future);
 
 			//Declare the timer
@@ -285,31 +313,52 @@ public class HttpClient extends IntentService {
 					calcSpeed();
 					PacketStructure value = futureInst.get();
 					logger.addLine(TAG+"A thread ended, value: " + value);										
-					timer.cancel();			
-					deleteInstance(value.id);
-					if (value.id == -1 || value.receivedPackets == -1) {
-						sendMessage("error", "Error: " + receiver.getErrorMessage());
+					timer.cancel();
+					ConnectionInstance instance = getConnectionInstances(value.id);
+					if (instance == null) {
+						sendMessage("error", "Error: Invalid id!");
+						return;
+					}
+						
+					if (value.receivedPackets == -1) {						
+						sendMessage("error", "Error: " + instance.getErrorMessage());
 					} else {
 						sendMessage("end", "Test end, received packets: "+ getReceivedPackets());
-					}						
+					}
+					deleteInstance(instance);
 				} catch (ExecutionException e) {
 					e.printStackTrace();
-					sendMessage("error", "Error: "+e.getMessage());					
+					sendMessage("error", "Error: " + e.getMessage());					
 					pool.shutdownNow();
 				} catch (InterruptedException e) {					
 					e.printStackTrace();
-					sendMessage("error", "Error: "+e.getMessage());					
+					sendMessage("error", "Error: "  +e.getMessage());					
 					pool.shutdownNow();
 				}
 			}
 		}catch (IOException ex) {
-			String errorMessage = "Error: "+ex.getMessage();
+			String errorMessage = "Error: " + ex.getMessage();
 			logger.addLine(TAG+errorMessage );
 			sendMessage("error", errorMessage );			
 			pool.shutdownNow();
 		}
 	}
 
+	private ConnectionInstance getConnectionInstances(int id) {
+		for (ConnectionInstance instance : connectionInstances) {
+			if (id == instance.getId()){
+				return instance;
+			}
+		}
+		return null;		
+	}
+
+	private void deleteInstance(ConnectionInstance instance) {
+		if (instance != null) {
+			connectionInstances.remove(instance);
+		}
+	}
+	
 	private void deleteInstance(int id) {
 		for (int i = 0; i < connectionInstances.size(); ++i){
 			ConnectionInstance instance = connectionInstances.get(i);

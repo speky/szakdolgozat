@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
@@ -40,6 +41,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private ArrayList<Observer> observers;
 	private StringBuilder message = new StringBuilder();
 	private int action = 0;
+	
+	private Location location = null;
 	
 	Handler handler = new Handler() 
     { 
@@ -122,6 +125,10 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		return true;
 	}
 	
+	public void updateLocation(Location loc) {
+		location = loc;
+	}
+	
 	public boolean isTestRunning() {
 		return isTestRunning ;
 	}
@@ -135,7 +142,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	}
 
 	public void deactiveGspActivity() {
-		--activeGpsActivity;
+		if (activeGpsActivity > 0) {
+			--activeGpsActivity;			
+		} else {
+			
+		}
+		
 	}
 
 	public String getTestMessage() {

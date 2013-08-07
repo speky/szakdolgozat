@@ -37,11 +37,7 @@ public class TCPSender  extends ConnectionInstance implements ICallback{
 			packetStructure.receivedPackets = receivedBytes;
 		}
 	}
-	
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-	
+			
 	public boolean setSocket(Socket socket) {		
 		if (socket == null) {
 			return false;

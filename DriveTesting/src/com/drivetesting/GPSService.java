@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log; 
+import android.widget.Toast;
 
 public class GPSService extends Service implements LocationListener {
 
@@ -53,6 +54,13 @@ public class GPSService extends Service implements LocationListener {
 		((DriveTestApp)getApplication()).setGpsService(true);
 	}
 
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		getLocation();
+		return super.onStartCommand(intent, flags, startId);
+	}
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -82,6 +90,7 @@ public class GPSService extends Service implements LocationListener {
 			if (!isGPSEnabled && !isNetworkEnabled) {
 				// no network provider is enabled
 				Log.d(TAG, "*** Location service not available!");
+				showSettingsAlert();
 			} else {
 				this.canGetLocation = true;
 				// First get location from Network Provider
@@ -177,6 +186,8 @@ public class GPSService extends Service implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		if (location != null) {
+			((DriveTestApp)getApplication()).updateLocation(location);
+			Toast.makeText(this, "Location Changed!", Toast.LENGTH_SHORT).show();
 			latitude = location.getLatitude();
 			longitude = location.getLongitude();
 		}

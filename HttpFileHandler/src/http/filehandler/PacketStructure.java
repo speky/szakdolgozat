@@ -2,7 +2,7 @@ package http.filehandler;
 
 public class PacketStructure {
 
-	public  int id = 0;
+	public int id = 0;
 	public int receivedPackets = 0;
 	
 	@Override
