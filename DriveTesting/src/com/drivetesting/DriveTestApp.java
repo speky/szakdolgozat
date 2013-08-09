@@ -83,10 +83,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		dataStorage = new DataStorage(this);
 		Log.d(TAG, "App created");
 
-		// start location service 
-		context = getApplicationContext();
-		Intent service = new Intent(context, GPSService.class);
-		startService(service);
+		// start location service				
+		startService(new Intent(getApplicationContext(), GPSService.class));
 			
 		//Declare the timer
 		/*Timer t = new Timer();

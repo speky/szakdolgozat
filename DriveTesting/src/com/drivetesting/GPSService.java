@@ -27,7 +27,6 @@ public class GPSService extends Service implements LocationListener {
 	private static final long  DEFAULT_ACCURACY_CHANGE_FOR_UPDATES = 35;
 	public static final String CUSTOM_INTENT = "com.drivetest.intent.action.TEST";
 
-	private final Context context;
 	private LocationManager locationManager;
 	// flag for GPS status
 	boolean isGPSEnabled = false; 
@@ -43,17 +42,13 @@ public class GPSService extends Service implements LocationListener {
 	private static long minDistanceMeters = DEFAULT_MIN_DISTANCE_CHANGE_FOR_UPDATES;
 	private static float minAccuracyMeters = DEFAULT_ACCURACY_CHANGE_FOR_UPDATES;
 	
-	public GPSService(Context context) {
-		this.context = context;
-		getLocation();                
-	}   
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		((DriveTestApp)getApplication()).setGpsService(true);
 	}
-
+	
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -75,12 +70,12 @@ public class GPSService extends Service implements LocationListener {
 		System.out.println("***** OUTGOING ******");
 		Intent i = new Intent();
 		i.setAction(CUSTOM_INTENT);
-		this.context.sendBroadcast(i);
+		getApplication().sendBroadcast(i);
 	}
 
 	public Location getLocation() {
 		try {
-			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			locationManager = (LocationManager) getApplication().getSystemService(Context.LOCATION_SERVICE);
 
 			// getting GPS status
 			isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);     
@@ -118,7 +113,7 @@ public class GPSService extends Service implements LocationListener {
 						}
 					}
 				}
-				if (location != null || (location.hasAccuracy() &&location.getAccuracy() <= minAccuracyMeters)) {
+				if (location != null && (location.hasAccuracy() &&location.getAccuracy() <= minAccuracyMeters)) {
 					latitude = location.getLatitude();
 					longitude = location.getLongitude();
 				}
@@ -153,7 +148,7 @@ public class GPSService extends Service implements LocationListener {
 
 	// Function to show settings dialog       
 	public void showSettingsAlert() {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplication());
 
 		// Setting Dialog Title
 		alertDialog.setTitle("GPS settings");
@@ -168,7 +163,7 @@ public class GPSService extends Service implements LocationListener {
 		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
 				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				context.startActivity(intent);
+				getApplication().startActivity(intent);
 			}
 		});
 

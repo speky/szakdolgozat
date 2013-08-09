@@ -55,6 +55,8 @@
         </service>
         <service android:name=".HttpClient" >
         </service>
+        <service android:name=".GPSService" >
+        </service>
 
         <activity
             android:name=".OSMActivity"
