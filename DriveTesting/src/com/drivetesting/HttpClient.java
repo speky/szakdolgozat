@@ -170,7 +170,7 @@ public class HttpClient extends IntentService {
 			System.out.println("Invalid server address!");
 		}
 		
-		type= (Integer)intent.getExtras().get("type");
+		type = (Integer)intent.getExtras().get("type");
 		
 		if (type != DriveTestApp.UDP && type != DriveTestApp.TCP) {
 			sendMessage("error", "Error: Invalid protocol type!");
