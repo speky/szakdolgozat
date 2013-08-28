@@ -2,12 +2,8 @@ package com.drivetesting;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import android.app.AlertDialog;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -17,9 +13,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.ProgressBar;
 
-public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, Subject{
+public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, Subject, PhoneStateSubject{
 
 	static final String TAG = "DriveTesting";
 
@@ -30,18 +25,20 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	
 	private DataStorage dataStorage;
 	private SharedPreferences prefs;	
+		
+	private boolean networkConnected = false;	
 	
-	private boolean isGpsServiceRun = false;
-	private int activeGpsActivity = 0;
-	private Context context = null;
-
 	private ReportTask task = new ReportTask();
 	private boolean isTestRunning = false;
 
 	private ArrayList<Observer> observers;
+	private ArrayList<PhoneStateObserver> phoneStateObservers;
+	
 	private StringBuilder message = new StringBuilder();
 	private int action = 0;
-	
+
+	private boolean isGpsServiceRun = false;
+	private int activeGpsActivity = 0;
 	private Location location = null;
 	
 	Handler handler = new Handler() 
@@ -76,6 +73,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		super.onCreate();
 
 		observers = new ArrayList<Observer>();
+		phoneStateObservers = new ArrayList<PhoneStateObserver>();
+		
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 		prefs.registerOnSharedPreferenceChangeListener(this);
@@ -83,9 +82,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		dataStorage = new DataStorage(this);
 		Log.d(TAG, "App created");
 
-		// start location service				
+		// start location service
 		startService(new Intent(getApplicationContext(), GPSService.class));
-			
+		
+		// start location service
+		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));
+
 		//Declare the timer
 		/*Timer t = new Timer();
 		//Set the schedule function and rate
@@ -123,6 +125,52 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		return true;
 	}
 	
+	public boolean isInternetConnectionActive() {
+		return networkConnected;
+	}
+	public void setConnectionState(boolean value) {
+		networkConnected = value;
+	}
+	public void setNetworkState(final String value) {
+		notifyNetworkStateChange(value);
+	}	
+	public void setNetworkType(final String value) {
+		notifyNetworkTypeChange(value);
+	}		
+	public void setSignalStrength(final String value) {
+		notifySignalStrengthChange(value);
+	}
+	public void setCdmaEcio(final String value) {
+		notifyCdmaEcioChange(value);
+	}	
+	public void setEvdoDbm(final String value) {
+		notifyEvdoDbmChange(value);
+	}
+	public void setEvdoEcio(final String value) {
+		notifyEvdoEcioChange(value);
+	}
+	public void setEvdoSnr(final String value) {
+		notifyEvdoSnrChange(value);
+	}
+	public void setGsmBitErrorRate(final String value) {
+		notifyGsmBitErrorRateChange(value);
+	}
+	public void setCallState(final String value) {
+		notifyCallStateChange(value);
+	}
+	public void setDataConnectionState(final String value) {
+		notifyDataConnectionStateChange(value);
+	}
+	public void setDataConnectionDirection(final String value) {
+		notifyDataDirectionChange(value);
+	}
+	public void setServiceState(final String value) {
+		notifyServiceStateChange(value);
+	}
+	public void setCellLocation(final String mcc, final String mnc, final String lac, final String cid) {
+		notifyCellLocationChange(cid, lac, mcc, mnc);
+	}
+	
 	public void updateLocation(Location loc) {
 		location = loc;
 	}
@@ -141,11 +189,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	public void deactiveGspActivity() {
 		if (activeGpsActivity > 0) {
-			--activeGpsActivity;			
-		} else {
-			
+			--activeGpsActivity;
 		}
-		
 	}
 
 	public String getTestMessage() {
@@ -156,12 +201,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		message.delete(0, message.length());
 	}
 	
-	private static final Pattern IP_ADDRESS = Pattern.compile(
+	/*private static final Pattern IP_ADDRESS = Pattern.compile(
         "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
         + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
         + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
         + "|[1-9][0-9]|[0-9]))");
-	
+	*/
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
@@ -192,12 +237,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			System.out.println("timer update");
 		}
 	}
-
+	
+	// test data observer methods
 	@Override
 	public void registerObserver(Observer observer) {
 		observers.add(observer);
 	}
-
 	@Override
 	public void removeObserver(Observer observer) {
 		int index = observers.indexOf(observer);
@@ -205,14 +250,89 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			observers.remove(index);
 		}
 	}
-
 	@Override
 	public void notifyObservers() {
-		for (int i = 0; i < observers.size(); i++) {
-            Observer observer = (Observer)observers.get(i);
-            observer.update(action, message.toString());
-        }		
+		for (Observer observer :observers) {
+			if (observer != null) {
+				observer.update(action, message.toString());
+			}
+        }
 	}
 
-
+	// phoneStateObserver methods
+	public void registerPhoneStateObserver(PhoneStateObserver observer) {
+		phoneStateObservers.add(observer);
+	}
+	public void removePhoneStateObserver(PhoneStateObserver observer){		
+		int index = phoneStateObservers.indexOf(observer);
+		if (index > 0 ) {
+			phoneStateObservers.remove(index);
+		}
+	}
+	public void notifySignalStrengthChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {			
+			observer.updateSignalStrength(value);
+		}        
+	}
+	public void notifyCdmaEcioChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateCdmaEcio(value);			
+        }
+	}
+	public void notifyEvdoDbmChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateEvdoDbm(value);			
+        }
+	}
+	public void notifyEvdoEcioChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {			
+			observer.updateEvdoEcio(value);			
+        }
+	}
+	public void notifyEvdoSnrChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {			
+			observer.updateEvdoSnr(value);
+		}
+	}
+	public void notifyGsmBitErrorRateChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+				observer.updateGsmBitErrorRate(value);
+        }
+	}
+	public void notifyServiceStateChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateServiceState(value);
+        }
+	}
+	public void notifyCallStateChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateCallState(value);
+        }
+	}
+	public void notifyNetworkStateChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateNetworkState(value);
+        }
+	}
+	public void notifyDataConnectionStateChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateDataConnectionState(value);
+        }
+	}
+	public void notifyDataDirectionChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateDataDirection(value);
+        }
+	}
+	public void notifyNetworkTypeChange(String value){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+			observer.updateNetworkType(value);
+        }
+	}
+	public void notifyCellLocationChange(String mnc, String mcc, String lac, String cid){
+		for (PhoneStateObserver observer :phoneStateObservers) {
+				observer.updateCellLocation(mnc, mcc, lac, cid);
+        }
+	}
+	
 }

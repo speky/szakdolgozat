@@ -4,15 +4,10 @@ package com.drivetesting;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,6 +75,7 @@ public class TestActivity extends Activity implements Observer {
 	}
 		
 	public void onStopTestClick(View view) {
+		Log.d(TAG, "Stop test");
 		application.stopHttpClientService();
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 	}

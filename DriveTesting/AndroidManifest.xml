@@ -50,6 +50,11 @@
         <activity android:name=".TestActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".OSMActivity"
+            android:label="@string/title_activity_osm" 
+            android:screenOrientation="portrait">            
+        </activity>
         
         <service android:name=".UpdateService" >
         </service>
@@ -57,12 +62,10 @@
         </service>
         <service android:name=".GPSService" >
         </service>
-
-        <activity
-            android:name=".OSMActivity"
-            android:label="@string/title_activity_osm" 
-            android:screenOrientation="portrait">            
-        </activity>
+	<service android:name=".PhoneStateListenerService" >
+        </service>
+        
+        
     </application>
 
 </manifest>

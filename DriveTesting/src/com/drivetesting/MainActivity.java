@@ -9,36 +9,32 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.telephony.NeighboringCellInfo;
 import android.telephony.TelephonyManager;
-import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity implements PhoneStateObserver  {
 
 	private static final  String TAG = "MainActivity";
-	
-	private CustomPhoneStateListener phoneStateListener = null;
-	
+
 	private String[] from = new String[] {"name", "value"};
 	private int[] to = new int[] { R.id.column_name, R.id.column_value};
+	
 	private List<HashMap<String, String>> phoneDataList  = new ArrayList<HashMap<String, String>>();
 	private List<HashMap<String, String>> networkDataList  = new ArrayList<HashMap<String, String>>();
-	private List<HashMap<String, String>> dataList  = new ArrayList<HashMap<String, String>>();
+	
 	private SeparatedListAdapter separatedAdapter = null;
 	private SimpleAdapter phoneDataAdapter = null;
 	private SimpleAdapter networkDataAdapter = null;
 	
-	private static final int MIN_BATTERY_LEVEL = 20;
+	private TelephonyManager  telephonyManager = null; 
+
+	/*private static final int MIN_BATTERY_LEVEL = 20;
 	private BroadcastReceiver batteryInfoReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -55,15 +51,7 @@ public class MainActivity extends Activity  {
 				}
 			}
 		}
-	};
-
-	public List<HashMap<String, String>> getPhoneData() {
-		return phoneDataList;  
-	}
-
-	public List<HashMap<String, String>> getNetworkData() {
-		return networkDataList;  
-	}
+	};*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +62,6 @@ public class MainActivity extends Activity  {
 		actionBar.setTitle("Main"); 
 
 		setContentView(R.layout.main_tab);
-			
-		phoneStateListener = new CustomPhoneStateListener();
-		phoneStateListener.startSignalLevelListener();
-
-		// Registers BroadcastReceiver to track network connection changes.
-		//connectivityBroadcastReceiver = new ConnectivityBroadcastReceiver();		
-		//this.registerReceiver(connectivityBroadcastReceiver, filter);
 
 		// fill in the grid_item layout			
 		phoneDataAdapter = new SimpleAdapter(this, phoneDataList, R.layout.grid, from, to);
@@ -94,124 +75,290 @@ public class MainActivity extends Activity  {
 		ListView list = (ListView)findViewById(R.id.listview);
 		list.setAdapter(separatedAdapter);
 
-		
-		refreshNetworkDataList();
+		init();
 	}	
 
 	@Override
 	protected void onPause() {
-		Log.d(TAG, "onPause");		
-		// Unregister the listener with the telephony manager
-		phoneStateListener.stopListening();
-		unregisterReceiver(batteryInfoReceiver);
 		super.onPause();	
+		Log.d(TAG, "onPause");
+		((DriveTestApp)getApplication()).removePhoneStateObserver(this);
+		// Unregister the listener with the telephony manager
+		//unregisterReceiver(batteryInfoReceiver);
+
 	}
 
 	@Override
 	protected void onResume() {
-		Log.d(TAG, "onResume ");
 		super.onResume();
-		
-		// Register the listener with the telephony manager
-		phoneStateListener.startSignalLevelListener();
-
-		registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); 
-
-		/*SharedPreferences prefs = ((DriveTestApp)getApplication()).prefs;
-		checkbox.setText(new Boolean(prefs.getBoolean("checkbox", false)).toString());
-		ringtone.setText(prefs.getString("ringtone", "<unset>"));
-		checkbox2.setText(new Boolean(prefs.getBoolean("checkbox2", false)).toString());
-		//text.setText(prefs.getString("text", "<unset>"));
-		list.setText(prefs.getString("list", "<unset>"));
-		 */
+		Log.d(TAG, "onResume ");		
+		((DriveTestApp)getApplication()).registerPhoneStateObserver(this);
+		//registerReceiver(batteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)); 
 	}
 
 	@Override
-	protected void onDestroy(){
-		Log.d(TAG, "onDestroy ");
+	protected void onDestroy(){		
 		super.onDestroy();
-
+		Log.d(TAG, "onDestroy ");
 	}
 
-	public void refreshPhoneDataList() {
+	private String getPhoneType(){
+		String phoneType = "Ismeretlen";
+		switch (telephonyManager.getPhoneType()){
+		case TelephonyManager.PHONE_TYPE_NONE : 
+			phoneType = "NONE";
+			break;
+		case TelephonyManager.PHONE_TYPE_GSM : 
+			phoneType = "GSM";
+			break;
+		case TelephonyManager.PHONE_TYPE_CDMA : 
+			phoneType = "CDMA";
+			break;
+		case TelephonyManager.PHONE_TYPE_SIP : 
+			phoneType = "SIP";
+			break;
+		}
+		return phoneType;
+	}
 
-		phoneDataList.clear();
-		//Phone		
-		addHashMapElement(phoneDataList, "Phone Type", getPhoneType());
-		addHashMapElement(phoneDataList, "Telefon szám ", getTelephoneNumber());
-		addHashMapElement(phoneDataList, "IMEI\\ESN ", getIMEI());
-		addHashMapElement(phoneDataList, "Gyártó ", Build.MANUFACTURER);
-		addHashMapElement(phoneDataList, "Modell", Build.MODEL);
-		addHashMapElement(phoneDataList, "SIM állapota ", getSimState());
-		addHashMapElement(phoneDataList, "SIM SN ", getSimSerialNumber());
-		addHashMapElement(phoneDataList, "Software version ", getSoftwareVersion());
-		addHashMapElement(phoneDataList, "IMSI ", getSubscriberId());
-		addHashMapElement(phoneDataList, "Jelerõség ", signalStrengthString);
-		addHashMapElement(phoneDataList, "Bit hiba ráta", gsmBitErrorRate);
-		addHashMapElement(phoneDataList, "CDMA EcIo", cdmaEcio);
-		addHashMapElement(phoneDataList, "EVDO dBm", evdoDbm);
-		addHashMapElement(phoneDataList, "EVDOEcIi", evdoEcio);
-		addHashMapElement(phoneDataList, "SNR", evdoSnr);
+	private String getSimState(){
+		String simStateString = "NA";
+		switch (telephonyManager.getSimState()) {
+		case TelephonyManager.SIM_STATE_ABSENT:
+			simStateString = "No SIM";
+			break;
+		case TelephonyManager.SIM_STATE_NETWORK_LOCKED:
+			simStateString = "Network locked";
+			break;
+		case TelephonyManager.SIM_STATE_PIN_REQUIRED:
+			simStateString = "PIN required";
+			break;
+		case TelephonyManager.SIM_STATE_PUK_REQUIRED:
+			simStateString = "PUK required";
+			break;
+		case TelephonyManager.SIM_STATE_READY:
+			simStateString = "Ready";
+			break;
+		case TelephonyManager.SIM_STATE_UNKNOWN:
+			simStateString = "Ismeretlen";
+			break;
+		}        
+		return simStateString;
+	}
 
-		//location 
-		//sitedb
-		//provider
-		// latitude
-		// longitude
-		//altitude
-		//site bearing
-		//speed
-		// gps accuracy
-		// site latitude
-		//site longitude
-		//distance to site
+	private String getTelephoneNumber(){
+		return  telephonyManager.getLine1Number();
+	}
 
+	private String getRoaming(){
+		String roaming = "Nincs";
+		if (telephonyManager.isNetworkRoaming()){
+			roaming = "Van";
+		}
+		return roaming;
+	}
+
+	private String getNetworkCountry(){
+		return telephonyManager.getNetworkCountryIso().toUpperCase();
+	}
+
+	private String getNetworkOperatorName(){
+		return telephonyManager.getNetworkOperatorName();
+	}
+
+	private String getSubscriberId(){
+		return telephonyManager.getSubscriberId();	
+	}
+
+	private String getIMEI(){
+		return telephonyManager.getDeviceId();	
+	}
+
+	private String getSimSerialNumber(){
+		return telephonyManager.getSimSerialNumber();
+	}
+
+	private String getSoftwareVersion(){
+		return telephonyManager.getDeviceSoftwareVersion();
+	}
+
+	private void init() {
+		telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+
+		phoneDataList.clear();				
+		setHashMapElement(phoneDataList, "Phone type", getPhoneType());
+		setHashMapElement(phoneDataList, "Phone number", getTelephoneNumber());
+		setHashMapElement(phoneDataList, "IMEI\\ESN", getIMEI());
+		setHashMapElement(phoneDataList, "Manufacturer", Build.MANUFACTURER);
+		setHashMapElement(phoneDataList, "Model", Build.MODEL);
+		setHashMapElement(phoneDataList, "SIM state", getSimState());
+		setHashMapElement(phoneDataList, "SIM SN", getSimSerialNumber());
+		setHashMapElement(phoneDataList, "Software version", getSoftwareVersion());
+		setHashMapElement(phoneDataList, "IMSI", getSubscriberId());
+		setHashMapElement(phoneDataList, "Signal strength", "-1");
+		setHashMapElement(phoneDataList, "Cdma EcIo", "-1");
+		setHashMapElement(phoneDataList, "Evdo dBm", "-1");
+		setHashMapElement(phoneDataList, "Evdo EcIo", "-1");
+		setHashMapElement(phoneDataList, "Evdo SNR", "-1");
+		setHashMapElement(phoneDataList, "Bit error rate", "-1");
+		
+		networkDataList.clear();
+		setHashMapElement(networkDataList, "Operator", getNetworkOperatorName());
+		setHashMapElement(networkDataList, "Country", getNetworkCountry());
+		setHashMapElement(networkDataList, "Roaming", getRoaming());
+		setHashMapElement(networkDataList, "Call state", "-1");
+		setHashMapElement(networkDataList, "Service state", "-1");
+		setHashMapElement(networkDataList, "Network type", "-1");
+		setHashMapElement(networkDataList, "Network state", "-1");		
+		setHashMapElement(networkDataList, "Data direction", "-1");		
+		setHashMapElement(networkDataList, "Data connection state", "-1");
+		setHashMapElement(networkDataList, "MNC", "-1");
+		setHashMapElement(networkDataList, "MCC", "-1");
+		setHashMapElement(networkDataList, "LAC", "-1");
+		setHashMapElement(networkDataList, "CID", "-1");
+		
+	}
+
+	//location 
+	//sitedb
+	//provider
+	// latitude
+	// longitude
+	//altitude
+	//site bearing
+	//speed
+	// gps accuracy
+	// site latitude
+	//site longitude
+	//distance to site
+
+
+	public void setNeighboring(String value) {
+		//setHashMapElement(networkDataList, "Neighboring List", "Lac : Cid : RSSI");
+		setHashMapElement(networkDataList, "Neighbouring list", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}/*	
+	List<NeighboringCellInfo> NeighboringList = telephonyManager.getNeighboringCellInfo();
+
+	for(int i=0; i < NeighboringList.size(); i++){
+		String dBm;
+		int rssi = NeighboringList.get(i).getRssi();
+		if (rssi == NeighboringCellInfo.UNKNOWN_RSSI) {
+			dBm = "Unknown RSSI";
+		}else{
+			dBm = String.valueOf(-113 + 2 * rssi) + " dBm";
+		}
+		String neighboring = String.valueOf(NeighboringList.get(i).getLac()) +" : "+ String.valueOf(NeighboringList.get(i).getCid()) +" : "	+ dBm +"\n";		
+	}*/
+
+	private int findElement(final String key, List<HashMap<String, String>> dataList) {
+		for (int i = 0; i < dataList.size(); ++i) {
+			String name = dataList.get(i).get("name");
+			if (name.equals(key)) {
+				return i;
+			} 
+		}		
+		return -1;
+	}
+
+	private void setHashMapElement(List<HashMap<String, String>> dataList, String key, String value){
+		int id = findElement(key, dataList);		
+		if (dataList.isEmpty() ||  id == -1) {
+			// add new element
+			HashMap<String, String> map = new HashMap<String, String>();		
+			map.put("name", key);
+			map.put("value", value);		            
+			dataList .add(map);
+		} else {
+			// modify
+			dataList.get(id).put("value", value);
+		}
+	}
+
+	@Override
+	public void updateSignalStrength(String value) {
+		setHashMapElement(phoneDataList, "Signal strength", value);
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();	
+	}
+	@Override
+	public void updateCdmaEcio(String value) {
+		setHashMapElement(phoneDataList, "Cdma EcIo", value);
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateEvdoDbm(String value) {
+		setHashMapElement(phoneDataList, "Evdo dBm", value);
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateEvdoEcio(String value) {
+		setHashMapElement(phoneDataList, "Evdo EcIo", value);
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateEvdoSnr(String value) {
+		setHashMapElement(phoneDataList, "Evdo SNR", value);
+		phoneDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateGsmBitErrorRate(String value) {
+		setHashMapElement(phoneDataList, "Bit error rate", value);
 		phoneDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
 	}
 	
-	public void refreshNetworkDataList() {
-
-		networkDataList.clear();
-		// Network		
-		addHashMapElement(networkDataList, "Operátor ", getNetworkOperatorName());
-		addHashMapElement(networkDataList, "Hálózat típusa ", networkType);
-		addHashMapElement(networkDataList, "Hálózat állapota", networkState);
-		addHashMapElement(networkDataList, "Service state ", serviceStateString);
-		addHashMapElement(networkDataList, "Ország ", getNetworkCountry());
-		addHashMapElement(networkDataList, "MCC ", getMCC());
-		addHashMapElement(networkDataList, "MNC ", getMNC());
-		addHashMapElement(networkDataList, "LAC", getLAC());
-		addHashMapElement(networkDataList, "CellID", getCID());
-		addHashMapElement(networkDataList, "Adatkapcsolat ", dataDirection);
-		addHashMapElement(networkDataList, "Kapcsolat állapota ", dataConnectionState);
-		addHashMapElement(networkDataList, "Roaming ", getRoaming());
-		addHashMapElement(networkDataList, "Hívás állapot", callState );
-		List<NeighboringCellInfo> NeighboringList = telephonyManager.getNeighboringCellInfo();
-		addHashMapElement(networkDataList, "Neighboring List", "Lac : Cid : RSSI");
-		for(int i=0; i < NeighboringList.size(); i++){
-			String dBm;
-			int rssi = NeighboringList.get(i).getRssi();
-			if (rssi == NeighboringCellInfo.UNKNOWN_RSSI) {
-				dBm = "Unknown RSSI";
-			}else{
-				dBm = String.valueOf(-113 + 2 * rssi) + " dBm";
-			}
-			String neighboring = String.valueOf(NeighboringList.get(i).getLac()) +" : "+ String.valueOf(NeighboringList.get(i).getCid()) +" : "
-									+ dBm +"\n";
-			addHashMapElement(networkDataList, "", neighboring);
-		}
-
+	@Override
+	public void updateServiceState(String value) {
+		setHashMapElement(networkDataList, "Service state", value);
 		networkDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
 	}
-
-	private void addHashMapElement(List<HashMap<String, String>> dataList, String key, String value){
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("name", key);
-		map.put("value", value);		            
-		dataList .add(map);		
+	@Override
+	public void updateCallState(String value) {
+		setHashMapElement(networkDataList, "Call state", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
 	}
+	@Override
+	public void updateNetworkState(String value) {
+		setHashMapElement(networkDataList, "Network state", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateDataConnectionState(String value) {
+		setHashMapElement(networkDataList, "Data connection state", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateDataDirection(String value) {
+		setHashMapElement(networkDataList, "Data direction", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateNetworkType(String value) {
+		setHashMapElement(networkDataList, "Network type", value);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	@Override
+	public void updateCellLocation(String mnc, String mcc, String lac, String cid) {
+		setHashMapElement(networkDataList, "MNC", mnc);
+		setHashMapElement(networkDataList, "MCC", mcc);
+		setHashMapElement(networkDataList, "LAC", lac);	
+		setHashMapElement(networkDataList, "CID", cid);
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();	
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,17 +394,6 @@ public class MainActivity extends Activity  {
 		}
 	}
 
-	public class IncomingReceiver extends BroadcastReceiver{
-		 
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
-	 
-	        if (intent.getAction().equals(GPSService.CUSTOM_INTENT)) {
-	                System.out.println("*****GOT THE INTENT********");
-	 
-	        }
-	    }
-	}
 	/*
 	public void onClick(View view) {
 		Intent intent = new Intent(this, DownloadService.class);
@@ -283,5 +419,17 @@ public class MainActivity extends Activity  {
 
 		};
 	};*/
+/*public class IncomingReceiver extends BroadcastReceiver{
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			if (intent.getAction().equals(GPSService.CUSTOM_INTENT)) {
+				System.out.println("*****GOT THE INTENT********");
+
+			}
+		}
+	}*/
 
 }
+
