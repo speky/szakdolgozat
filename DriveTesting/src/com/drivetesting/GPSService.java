@@ -1,9 +1,7 @@
 package com.drivetesting;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,8 +10,7 @@ import android.location.LocationProvider;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
-import android.util.Log; 
+import android.util.Log;
 import android.widget.Toast;
 
 public class GPSService extends Service implements LocationListener {
@@ -28,115 +25,23 @@ public class GPSService extends Service implements LocationListener {
 	public static final String CUSTOM_INTENT = "com.drivetest.intent.action.TEST";
 
 	private LocationManager locationManager;
-	// flag for GPS status
-	boolean isGPSEnabled = false; 
-	// flag for network status
-	boolean isNetworkEnabled = false; 
-	boolean canGetLocation = false;
-
-	Location location = null;
-	double latitude = 0.0;
-	double longitude = 0.0; 
 
 	private static long minTimeMillis = DEFAULT_MIN_TIME_BW_UPDATES ;//2000;
 	private static long minDistanceMeters = DEFAULT_MIN_DISTANCE_CHANGE_FOR_UPDATES;
 	private static float minAccuracyMeters = DEFAULT_ACCURACY_CHANGE_FOR_UPDATES;
-	
-	
+
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		((DriveTestApp)getApplication()).setGpsService(true);
-	}
-	
-	
+		locationManager = (LocationManager) getApplication().getSystemService(Context.LOCATION_SERVICE);
+	}	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		getLocation();
 		return super.onStartCommand(intent, flags, startId);
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		((DriveTestApp)getApplication()).setGpsService(false);
-	}
-
-	private void shutdownLoggerService() {
-		locationManager.removeUpdates(this);
-	}
-	
-	private void broadcast() {
-		System.out.println("***** OUTGOING ******");
-		Intent i = new Intent();
-		i.setAction(CUSTOM_INTENT);
-		getApplication().sendBroadcast(i);
-	}
-
-	public Location getLocation() {
-		try {
-			locationManager = (LocationManager) getApplication().getSystemService(Context.LOCATION_SERVICE);
-
-			// getting GPS status
-			isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);     
-			// getting network status
-			isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-			if (!isGPSEnabled && !isNetworkEnabled) {
-				// no network provider is enabled
-				Log.d(TAG, "*** Location service not available!");
-				showSettingsAlert();
-			} else {
-				this.canGetLocation = true;
-				// First get location from Network Provider
-				if (isNetworkEnabled) {
-					locationManager.requestLocationUpdates(
-							LocationManager.NETWORK_PROVIDER,
-							minTimeMillis,
-							minDistanceMeters, this);
-					Log.d(TAG,  "Network");
-					if (locationManager != null) {
-						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-						
-					}
-				}
-				// if GPS Enabled get lat/long using GPS Services
-				if (isGPSEnabled) {
-					if (location == null) {
-						locationManager.requestLocationUpdates(
-								LocationManager.GPS_PROVIDER,
-								minTimeMillis,
-								minDistanceMeters, this);
-						Log.d(TAG, "GPS Enabled");
-						if (locationManager != null) {
-							location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-						}
-					}
-				}
-				if (location != null && (location.hasAccuracy() &&location.getAccuracy() <= minAccuracyMeters)) {
-					latitude = location.getLatitude();
-					longitude = location.getLongitude();
-				}
-			}     
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.d(TAG, e.getMessage());
-		}
-		return location;
-	}
-
-	//Function to get latitude        
-	public double getLatitude(){
-		return latitude;
-	}
-
-	// Function to get longitude        
-	public double getLongitude(){		
-		return longitude;
-	}
-
-	public boolean canGetLocation() {
-		return this.canGetLocation;
 	}
 
 	//Stop using GPS listener
@@ -146,69 +51,98 @@ public class GPSService extends Service implements LocationListener {
 		}       
 	}
 
-	// Function to show settings dialog       
-	public void showSettingsAlert() {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplication());
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		stopUsingGPS();
+		((DriveTestApp)getApplication()).setGpsService(false);
+	}
 
-		// Setting Dialog Title
-		alertDialog.setTitle("GPS settings");
+	/*private void broadcast() {
+		System.out.println("***** OUTGOING ******");
+		Intent i = new Intent();
+		i.setAction(CUSTOM_INTENT);
+		getApplication().sendBroadcast(i);
+	}*/
 
-		// Setting Dialog Message
-		alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+	public void getLocation() {
+		try {
+			// getting GPS status
+			((DriveTestApp)getApplication()).isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);     
+			// getting network status
+			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			Location location = null;
+			if (((DriveTestApp)getApplication()).isGPSEnabled == false &&  isNetworkEnabled == false) {
+				// no network provider is enabled
+				Log.d(TAG, "Location service not available!");				
+			} else {				
+				// if GPS Enabled get lat/long using GPS Services
+				if (((DriveTestApp)getApplication()).isGPSEnabled) {
+					locationManager.requestLocationUpdates(
+							LocationManager.GPS_PROVIDER,
+							minTimeMillis,
+							minDistanceMeters, this);
+					Log.d(TAG, "use GPS provider");
+					if (locationManager != null) {
+						location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+					}
+				}
 
-		// Setting Icon to Dialog
-		//alertDialog.setIcon(R.drawable.delete);
+				// get location from Network Provider
+				if (isNetworkEnabled && location == null) {
+					locationManager.requestLocationUpdates(
+							LocationManager.NETWORK_PROVIDER,
+							minTimeMillis,
+							minDistanceMeters, this);
+					Log.d(TAG,  "use Network provider");
+					if (locationManager != null) {
+						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-		// On pressing Settings button
-		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int which) {
-				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				getApplication().startActivity(intent);
+					}
+				}				
+				if (location != null /*&& (location.hasAccuracy() && location.getAccuracy() <= minAccuracyMeters)*/) {
+					double latitude = location.getLatitude();
+					double longitude = location.getLongitude();
+					Log.d(TAG, "Update location: Lat: "+ Double.toString(latitude) + " Lon: "+ Double.toString(longitude));
+					((DriveTestApp)getApplication()).updateLocation(location);
+				}
 			}
-		});
-
-		// on pressing cancel button
-		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
-
-		// Showing Alert Message
-		alertDialog.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.d(TAG, e.getMessage());
+		}		 
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		if (location != null) {
 			((DriveTestApp)getApplication()).updateLocation(location);
-			Toast.makeText(this, "Location Changed!", Toast.LENGTH_SHORT).show();
-			latitude = location.getLatitude();
-			longitude = location.getLongitude();
 		}
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
 		Log.d(TAG, "Provider disabled, "+ provider);
+		((DriveTestApp)getApplication()).setGpsService(false);
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		Log.d(TAG, "Provider enabled, "+ provider);
+		((DriveTestApp)getApplication()).setGpsService(true);
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		String showStatus = null;
+		String showStatus = "";
 		if (status == LocationProvider.AVAILABLE)
 			showStatus = "Available";
 		if (status == LocationProvider.TEMPORARILY_UNAVAILABLE)
 			showStatus = "Temporarily Unavailable";
 		if (status == LocationProvider.OUT_OF_SERVICE)
 			showStatus = "Out of Service";
-		
-		Log.d(TAG, "status:" +status );
+
+		Log.d(TAG, "status:" +showStatus );
 	}
 
 	// This is the object that receives interactions from clients. See
@@ -239,7 +173,7 @@ public class GPSService extends Service implements LocationListener {
 	public static float getMinAccuracyMeters() {
 		return minAccuracyMeters;
 	}
-	
+
 	public static void setMinAccuracyMeters(float _minAccuracyMeters) {
 		minAccuracyMeters = _minAccuracyMeters;
 	}

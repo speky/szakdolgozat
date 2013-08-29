@@ -3,11 +3,16 @@ package com.drivetesting;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,7 +72,45 @@ public class TestActivity extends Activity implements Observer {
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
 	 
+	// Function to show settings dialog       
+	public void showSettingsAlert() {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+		// Setting Dialog Title
+		alertDialog.setTitle("GPS settings");
+
+		// Setting Dialog Message
+		alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+		// Setting Icon to Dialog
+		alertDialog.setIcon(android.R.drawable.ic_delete);
+
+		// On pressing Settings button
+		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int which) {
+				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				startActivity(intent);				
+			}
+		});
+
+		// on pressing cancel button
+		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+
+		// Showing Alert Message
+		alertDialog.show();
+	}
+	
 	public void onStartTestClick(View view) {
+		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+	    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {	        
+			showSettingsAlert();
+			return;
+		}
+		((DriveTestApp)getApplication()).startGPSService();
 		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
 		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;
 		application.startHttpClientService(direction, type);
@@ -135,22 +178,20 @@ public class TestActivity extends Activity implements Observer {
 	}
 
 	private void save() {
-		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = sharedPreferences.edit();	    
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
 		editor.commit();
-		Toast.makeText(this, "Save", Toast.LENGTH_LONG).show();
 	}
 
 	private void load() {	    	    
-		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
-		directionGroup.check(directionGroupIndex);
-
 		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_group);
 		typeGroup.check(typeGroupIndex);
 		
-		Toast.makeText(this, "Load", Toast.LENGTH_LONG).show();		
+		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
+		directionGroup.check(directionGroupIndex);
+		
 	}
 
 	@Override
@@ -190,10 +231,10 @@ public class TestActivity extends Activity implements Observer {
 	/**
 	 * Show a notification while this service is running.
 	 */
-	private void showNotification() {
+	/*private void showNotification() {
 		// In this sample, we'll use the same text for the ticker and the
 		// expanded notification
-		/*CharSequence text = "Drive Test Notification";//getText(R.string.local_service_started);
+		CharSequence text = "Drive Test Notification";//getText(R.string.local_service_started);
 
 		// Set the icon, scrolling text and timestamp
 		Notification notification = new Notification(R.drawable.ic_launcher, text, System.currentTimeMillis());
@@ -208,8 +249,8 @@ public class TestActivity extends Activity implements Observer {
 		// Send the notification.
 		// We use a layout id because it is a unique number. We use it later to
 		// cancel.
-		notificationManager.notify(R.string.local_service_started, notification);*/
-	}
+		notificationManager.notify(R.string.local_service_started, notification);
+	}*/
 
 	@Override
 	public void update(int action, String str) {

@@ -20,16 +20,18 @@
             android:id="@+id/type_tcp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onTypeChoosed"
             android:checked="true"
+            android:onClick="onTypeChoosed"
             android:text="@string/tcp" />
 
         <RadioButton
             android:id="@+id/type_udp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"            
+            android:layout_height="wrap_content"
+            android:checked="false"
             android:onClick="onTypeChoosed"
             android:text="@string/udp" />
+
     </RadioGroup>
 
     <TextView
@@ -48,6 +50,7 @@
             android:id="@+id/dir_ul"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="false"
             android:onClick="onDirectionChoosed"
             android:text="@string/upload" />
 

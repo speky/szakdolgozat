@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -38,7 +39,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private int action = 0;
 
 	private boolean isGpsServiceRun = false;
-	private int activeGpsActivity = 0;
+	public boolean isGPSEnabled = false;	
 	private Location location = null;
 	
 	Handler handler = new Handler() 
@@ -81,13 +82,16 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		
 		dataStorage = new DataStorage(this);
 		Log.d(TAG, "App created");
-
-		// start location service
-		startService(new Intent(getApplicationContext(), GPSService.class));
 		
-		// start location service
+		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));
 
+		//init 
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		SharedPreferences.Editor editor = sharedPreferences.edit();	    
+		editor.putInt("DirectionGroup", 0);
+		editor.putInt("TypeGroup", 0);
+		editor.commit();
 		//Declare the timer
 		/*Timer t = new Timer();
 		//Set the schedule function and rate
@@ -101,7 +105,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	}
 
-	public boolean startHttpClientService(int direction, int type) {		
+	public void startGPSService() {
+		startService(new Intent(getApplicationContext(), GPSService.class));
+	}
+	
+	public boolean startHttpClientService(int direction, int type) {
+		startGPSService();
 		Intent httpIntent = new Intent(this, HttpClient.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
@@ -117,12 +126,16 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		return true;
 	}
 
-	public boolean stopHttpClientService() {
+	public void  stopGPSService() {
+		Intent intent = new Intent(this, GPSService.class);		
+		stopService(intent);		
+	}
+	
+	public void stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpClient.class);		
 		stopService(httpIntent);
 		isTestRunning = false;
 		clearTestMessage();
-		return true;
 	}
 	
 	public boolean isInternetConnectionActive() {
@@ -180,17 +193,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	}
 	
 	public void setGpsService(boolean isRun) {
-		isGpsServiceRun = true;
-	}
-	
-	public void activeGpsActivity() {
-		++activeGpsActivity;
-	}
-
-	public void deactiveGspActivity() {
-		if (activeGpsActivity > 0) {
-			--activeGpsActivity;
-		}
+		isGpsServiceRun = isRun;
 	}
 
 	public String getTestMessage() {
