@@ -2607,6 +2607,39 @@ A program által használt adatbázis modell bemutatása, mezők jellemzése
 \end_layout
 
 \begin_layout Standard
+SQLite is an Open Source database.
+ SQLite supports standard relational database features like SQL syntax,
+ transactions and prepared statements.
+ The database requires limited memory at runtime (approx.
+ 250 KByte) which makes it a good candidate from being embedded into other
+ runtimes.
+\end_layout
+
+\begin_layout Standard
+SQLite is embedded into every Android device.
+ Using an SQLite database in Android does not require a setup procedure
+ or administration of the database.
+\end_layout
+
+\begin_layout Standard
+You only have to define the SQL statements for creating and updating the
+ database.
+ Afterwards the database is automatically managed for you by the Android
+ platform.
+\end_layout
+
+\begin_layout Standard
+Access to an SQLite database involves accessing the file system.
+ This can be slow.
+ Therefore it is recommended to perform database operations asynchronously.
+\end_layout
+
+\begin_layout Standard
+If your application creates a database, this database is by default saved
+ in the directory DATA/data/APP_NAME/databases/FILENAME.
+\end_layout
+
+\begin_layout Standard
 To address the problem of showing accurate serving cell locations, I have
  added (in version 1.1.0) the ability to load your own cell site list into
  the app's database.

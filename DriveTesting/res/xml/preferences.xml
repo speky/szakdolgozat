@@ -19,26 +19,27 @@
     />
     <EditTextPreference
       android:key="reportPeriod"
-      android:title="ReportPeriod"
+      android:title="Report Period"
       android:summary="Click to pop up a field for entry"
       android:dialogTitle="Test report Period"
       android:defaultValue="1000"
       android:inputType="number"
     />
-    <CheckBoxPreference
+    <EditTextPreference
+      android:key="testName"
+      android:title="Test Name"
+      android:summary="Click to pop up a field for entry"
+      android:dialogTitle="Test name"
+      android:defaultValue="Test1"
+      android:inputType="text"
+    />        
+  </PreferenceCategory>
+  <PreferenceCategory android:title="Other Preferences">
+      <CheckBoxPreference
       android:key="checkbox"
       android:title="Checkbox Preference"
       android:summary="Check it on, check it off"
     />
-    <RingtonePreference
-      android:key="ringtone"
-      android:title="Ringtone Preference"
-      android:showDefault="true"
-      android:showSilent="true"
-      android:summary="Pick a tone, any tone"
-    />
-  </PreferenceCategory>
-  <PreferenceCategory android:title="Other Preferences">
     <EditTextPreference
       android:key="text"
       android:title="Text Entry Dialog"

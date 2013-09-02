@@ -21,9 +21,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
-public class TestActivity extends Activity implements Observer {
+import com.drivetesting.Observers.TestObserver;
+
+public class TestActivity extends Activity implements TestObserver {
 	
 	private final String TAG = "TestActivity: ";
 	private final String DIRECTION_GROUP = "DirectionGroup";
@@ -69,6 +70,9 @@ public class TestActivity extends Activity implements Observer {
 		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
 		
+		findViewById(R.id.bt_startTest).setEnabled(true);
+		findViewById(R.id.bt_stopTest).setEnabled(false);
+		
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
 	 
@@ -113,14 +117,19 @@ public class TestActivity extends Activity implements Observer {
 		((DriveTestApp)getApplication()).startGPSService();
 		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
 		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;
+		progressBar.setVisibility(ProgressBar.VISIBLE);
+		findViewById(R.id.bt_startTest).setEnabled(false);
+		findViewById(R.id.bt_stopTest).setEnabled(true);
 		application.startHttpClientService(direction, type);
-		progressBar.setVisibility(ProgressBar.VISIBLE);	
+		
 	}
 		
 	public void onStopTestClick(View view) {
 		Log.d(TAG, "Stop test");
 		application.stopHttpClientService();
-		progressBar.setVisibility(ProgressBar.INVISIBLE);
+		progressBar.setVisibility(ProgressBar.INVISIBLE);		
+		findViewById(R.id.bt_startTest).setEnabled(true);
+		findViewById(R.id.bt_stopTest).setEnabled(false);
 	}
 
 	public void onClearClick(View view) {

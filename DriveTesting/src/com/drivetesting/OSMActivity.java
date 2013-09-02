@@ -15,6 +15,9 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
+import com.drivetesting.Observers.LocationObserver;
+import com.drivetesting.Subjects.LocationSubject;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -36,7 +39,7 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class OSMActivity extends Activity implements LocationListener {
+public class OSMActivity extends Activity implements LocationObserver {
 
 	private static final String TAG = "LocationActivity";
 
@@ -45,11 +48,14 @@ public class OSMActivity extends Activity implements LocationListener {
 	private MapController mapController;
 	private LocationManager locationManager = null;
 
-	MyItemizedIconOverlay myItemizedIconOverlay = null;
-	MyLocationOverlay myLocationOverlay = null;
+	private MyItemizedIconOverlay myItemizedIconOverlay = null;
+	private MyLocationOverlay myLocationOverlay = null;
 
-	ArrayList<OverlayItem> overlayItemArray;
-
+	private ArrayList<OverlayItem> overlayItemArray;
+	
+	private double lat = 0.0;
+	private double lon = 0.0;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -118,27 +124,7 @@ public class OSMActivity extends Activity implements LocationListener {
 		ItemizedIconOverlay<OverlayItem> anotherItemizedIconOverlay	= new ItemizedIconOverlay<OverlayItem>(this, overlayItemArray, myOnItemGestureListener);
 		//mapView.getOverlays().add(anotherItemizedIconOverlay);
 		//---
-
-		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);        
-		boolean enabledOnly = true;
-		StringBuilder sb = new StringBuilder("Enabled Providers:");
-		List<String> providers = locationManager.getProviders(enabledOnly);
-
-		for (String provider : providers) {
-			locationManager.requestLocationUpdates(provider, 1000, 0, this);
-			sb.append("\n").append(provider).append(": ");
-			Location location = locationManager.getLastKnownLocation(provider);
-			if (location != null) {
-				double lat = location.getLatitude();
-				double lng = location.getLongitude();
-				sb.append(lat).append(", ").append(lng);
-			} else {
-				sb.append("No Location");
-			}
-
-		}
-		this.locationText.setText(sb);
-
+		
 		/*Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); 
         if (location != null) {
 	          Log.d(TAG, location.toString());
@@ -153,13 +139,6 @@ public class OSMActivity extends Activity implements LocationListener {
 		mapView.getOverlays().add(myLocationOverlay);
 		mapView.postInvalidate();
 	}
-
-	@Override
-	public void onLocationChanged(Location location) {   
-		Log.d(TAG, "onLocationChanged with location " + location.toString());
-		String text = String.format("Lat:\t %f\nLong:\t %f\nAlt:\t %f\nBearing:\t %f", location.getLatitude(), 
-				location.getLongitude(), location.getAltitude(), location.getBearing());
-		this.locationText.setText(text);
 
 		/*try {
 		      List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10); //<10>
@@ -180,21 +159,6 @@ public class OSMActivity extends Activity implements LocationListener {
 
 		mapView.invalidate();
 		*/
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-
-	}
-	@Override
-	public void onProviderEnabled(String provider) {
-
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-
-	}
 
 	@Override
 	protected void onResume() {
@@ -213,6 +177,14 @@ public class OSMActivity extends Activity implements LocationListener {
 		myLocationOverlay.disableCompass();
 	}
 
+	@Override
+	public void update(double lat, double lon) {
+		this.lat = lat;
+		this.lon = lon;
+		this.locationText.setText("Location: " + Double.toString(lat) + " " + Double.toString(lon));
+		Log.d(TAG, "location update");		
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);
@@ -248,7 +220,6 @@ public class OSMActivity extends Activity implements LocationListener {
 	}
 	
 	OnItemGestureListener<OverlayItem> myOnItemGestureListener = new OnItemGestureListener<OverlayItem>() {
-
 		@Override
 		public boolean onItemLongPress(int arg0, OverlayItem arg1) {
 			
@@ -319,4 +290,6 @@ public class OSMActivity extends Activity implements LocationListener {
 		}
 		
 	}
+
+	
 }

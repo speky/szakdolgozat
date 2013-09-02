@@ -1,10 +1,6 @@
-package com.drivetesting;
+package com.drivetesting.Observers;
 
-public interface Observer {
-	public void update(int action, String str);
-}
-
-interface PhoneStateObserver {
+public interface PhoneStateObserver {
 	public void updateSignalStrength(String value);
 	public void updateCdmaEcio(String value);
 	public void updateEvdoDbm(String value);

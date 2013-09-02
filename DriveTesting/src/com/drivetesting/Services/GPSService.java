@@ -1,4 +1,4 @@
-package com.drivetesting;
+package com.drivetesting.Services;
 
 import android.app.Service;
 import android.content.Context;
@@ -11,7 +11,8 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.drivetesting.DriveTestApp;
 
 public class GPSService extends Service implements LocationListener {
 
@@ -145,15 +146,6 @@ public class GPSService extends Service implements LocationListener {
 		Log.d(TAG, "status:" +showStatus );
 	}
 
-	// This is the object that receives interactions from clients. See
-	// RemoteService for a more complete example.
-	private final IBinder mBinder = new LocalBinder();
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		return mBinder;
-	}
-
 	public static void setMinTimeMillis(long _minTimeMillis) {
 		minTimeMillis = _minTimeMillis;
 	}
@@ -186,5 +178,10 @@ public class GPSService extends Service implements LocationListener {
 		GPSService getService() {
 			return GPSService.this;
 		}
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+		return null;
 	}
 }

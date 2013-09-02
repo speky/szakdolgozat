@@ -1,13 +1,8 @@
-package com.drivetesting;
+package com.drivetesting.Subjects;
 
-public interface Subject {
+import com.drivetesting.Observers.PhoneStateObserver;
 
-	public void registerObserver(Observer observer);
-	public void removeObserver(Observer observer);
-	public void notifyObservers();
-}
-
-interface PhoneStateSubject {
+public interface PhoneStateSubject {
 	public void registerPhoneStateObserver(PhoneStateObserver observer);
 	public void removePhoneStateObserver(PhoneStateObserver observer);
 	public void notifySignalStrengthChange(String value);
@@ -24,4 +19,3 @@ interface PhoneStateSubject {
 	public void notifyNetworkTypeChange(String value);
 	public void notifyCellLocationChange(String mnc, String mcc, String lac, String cid);
 }
-

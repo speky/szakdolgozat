@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.drivetesting.Observers.PhoneStateObserver;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -276,7 +278,7 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 
 	@Override
 	public void updateSignalStrength(String value) {
-		setHashMapElement(phoneDataList, "Signal strength", value);
+		setHashMapElement(phoneDataList, "Signal strength", value + getApplicationContext().getString(R.string.unit_dbm));
 		phoneDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();	
 	}

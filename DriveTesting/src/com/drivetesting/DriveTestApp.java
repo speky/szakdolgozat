@@ -1,10 +1,11 @@
 package com.drivetesting;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -15,7 +16,18 @@ import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, Subject, PhoneStateSubject{
+import com.drivetesting.Observers.LocationObserver;
+import com.drivetesting.Observers.PhoneStateObserver;
+import com.drivetesting.Observers.TestObserver;
+import com.drivetesting.Services.GPSService;
+import com.drivetesting.Services.HttpService;
+import com.drivetesting.Services.PhoneStateListenerService;
+import com.drivetesting.Subjects.LocationSubject;
+import com.drivetesting.Subjects.PhoneStateSubject;
+import com.drivetesting.Subjects.TestSubject;
+
+public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, 
+											TestSubject, PhoneStateSubject, LocationSubject{
 
 	static final String TAG = "DriveTesting";
 
@@ -24,7 +36,19 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
 	
+	private int MNC = 0;
+	private int MCC = 0;
+	private int LAC = 0;
+	private int CID = 0;
+	private double signalStrength = 0.0;
+	private long testId = -1;
+	private String testName = "-";
+	private double DLSpeed = 0.0;
+	private double ULSpeed = 0.0;
+	
 	private DataStorage dataStorage;
+	private Timer dataStorageTimer;
+	
 	private SharedPreferences prefs;	
 		
 	private boolean networkConnected = false;	
@@ -32,15 +56,29 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private ReportTask task = new ReportTask();
 	private boolean isTestRunning = false;
 
-	private ArrayList<Observer> observers;
+	private ArrayList<TestObserver> testObservers;
 	private ArrayList<PhoneStateObserver> phoneStateObservers;
+	private ArrayList<LocationObserver> locationObservers;
 	
 	private StringBuilder message = new StringBuilder();
 	private int action = 0;
 
 	private boolean isGpsServiceRun = false;
-	public boolean isGPSEnabled = false;	
+	public boolean isGPSEnabled = false;
 	private Location location = null;
+	
+	private void tokenizeMessage(String message) {
+		String[] tokens = message.split(" ");
+		for (int i = 0; i < tokens.length; ++i) {
+			String token = tokens[i];
+			if (token.equals("DL")) {
+				DLSpeed = Double.parseDouble(tokens[++i]); 
+			}
+			if (token.equals("UL")) {
+				ULSpeed = Double.parseDouble(tokens[++i]); 
+			}
+		}
+	}
 	
 	Handler handler = new Handler() 
     { 
@@ -54,7 +92,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
             }
             
             if ( msg.getData().containsKey("packet")) {
-            	message.append(msg.getData().getString("packet")+"\n");
+            	String data = msg.getData().getString("packet");
+            	message.append(data +"\n");
+            	tokenizeMessage(data);
             	action = 1;
             	Log.d(TAG, "get data" + message.toString());
             } 
@@ -73,8 +113,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public void onCreate() {
 		super.onCreate();
 
-		observers = new ArrayList<Observer>();
+		testObservers = new ArrayList<TestObserver>();
 		phoneStateObservers = new ArrayList<PhoneStateObserver>();
+		locationObservers = new ArrayList<LocationObserver>();
 		
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
@@ -85,36 +126,59 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));
+		startTimer();
+	}
 
-		//init 
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		SharedPreferences.Editor editor = sharedPreferences.edit();	    
-		editor.putInt("DirectionGroup", 0);
-		editor.putInt("TypeGroup", 0);
-		editor.commit();
+	class ReportTask extends TimerTask {
+		public void run() {
+			if (isTestRunning) {
+				String lon = "-";
+				String lat = "-"; 
+				if (location != null ) {
+					Double.toString(location.getLatitude());
+					Double.toString(location.getLongitude());
+				}				 
+				dataStorage.insert(testId, 
+													testName, 
+													lat, 
+													lon,
+													Double.toString(signalStrength),													 
+													Double.toString(ULSpeed),
+													Double.toString(DLSpeed),
+													MCC,
+													MNC,
+													LAC,
+													CID);
+			}
+		}
+	}
+	
+	public void startGPSService() {
+		startService(new Intent(getApplicationContext(), GPSService.class));
+	}
+	
+	private void startTimer() {
 		//Declare the timer
-		/*Timer t = new Timer();
+		dataStorageTimer = new Timer();
 		//Set the schedule function and rate
-		t.scheduleAtFixedRate(
+		dataStorageTimer.scheduleAtFixedRate(
 				task,
 				//Set how long before to start calling the TimerTask (in milliseconds)
 				10,
 				//Set the amount of time between each execution (in milliseconds)
 				1000);
-		 */
-
-	}
-
-	public void startGPSService() {
-		startService(new Intent(getApplicationContext(), GPSService.class));
 	}
 	
-	public boolean startHttpClientService(int direction, int type) {
-		startGPSService();
-		Intent httpIntent = new Intent(this, HttpClient.class);
+	public boolean startHttpClientService(int direction, int type) {		
+		dataStorage.open();
+		Intent httpIntent = new Intent(this, HttpService.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
 		}
+		dataStorage.insert(3, "testName", "0", "0", "0", "0", "0", 2, 2, 2, 2);
+		dataStorage.insert(1, "testName", "0", "0", "0", "0", "0", 2, 2, 2, 2);
+		testId = dataStorage.getMaxTestId();
+		testName = prefs.getString("testName", "-");		
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);
@@ -128,14 +192,25 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 
 	public void  stopGPSService() {
 		Intent intent = new Intent(this, GPSService.class);		
-		stopService(intent);		
+		stopService(intent);
 	}
 	
 	public void stopHttpClientService() {
-		Intent httpIntent = new Intent(this, HttpClient.class);		
+		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
 		isTestRunning = false;
 		clearTestMessage();
+		dataStorageTimer = null;		
+//		dataStorage.close();
+	}
+
+	public List<DbData> querryTestData(int testId) {
+		if (testId < 0) {
+			return dataStorage.querryAll();
+		}else {
+			return dataStorage.querrySpecifiedTest(String.valueOf(testId));
+		}
+		
 	}
 	
 	public boolean isInternetConnectionActive() {
@@ -151,6 +226,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		notifyNetworkTypeChange(value);
 	}		
 	public void setSignalStrength(final String value) {
+		signalStrength = Double.parseDouble(value);
 		notifySignalStrengthChange(value);
 	}
 	public void setCdmaEcio(final String value) {
@@ -181,11 +257,16 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		notifyServiceStateChange(value);
 	}
 	public void setCellLocation(final String mcc, final String mnc, final String lac, final String cid) {
+		MCC = Integer.parseInt(mcc);
+		MNC = Integer.parseInt(mnc);
+		LAC = Integer.parseInt(lac);
+		CID = Integer.parseInt(cid);
 		notifyCellLocationChange(cid, lac, mcc, mnc);
 	}
 	
 	public void updateLocation(Location loc) {
 		location = loc;
+		notifyLocationObservers();
 	}
 	
 	public boolean isTestRunning() {
@@ -228,36 +309,30 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
                 builder.setMessage("It is not a valid IP address!");
                 builder.setPositiveButton("Ok", null);
                 builder.show();
-			}*/
-			
-		}
-
-	}
-
-	class ReportTask extends TimerTask {
-		public void run() {
-
-			System.out.println("timer update");
+			}*/			
+		} else if (key.equals("testName")){
+			testName = prefs.getString("testName", "-");
+			Log.d(TAG, "Test's name has changed");
 		}
 	}
 	
 	// test data observer methods
 	@Override
-	public void registerObserver(Observer observer) {
-		observers.add(observer);
+	public void registerObserver(TestObserver testObserver) {
+		testObservers.add(testObserver);
 	}
 	@Override
-	public void removeObserver(Observer observer) {
-		int index = observers.indexOf(observer);
+	public void removeObserver(TestObserver testObserver) {
+		int index = testObservers.indexOf(testObserver);
 		if (index > 0 ) {
-			observers.remove(index);
+			testObservers.remove(index);
 		}
 	}
 	@Override
 	public void notifyObservers() {
-		for (Observer observer :observers) {
-			if (observer != null) {
-				observer.update(action, message.toString());
+		for (TestObserver testObserver :testObservers) {
+			if (testObserver != null) {
+				testObserver.update(action, message.toString());
 			}
         }
 	}
@@ -338,4 +413,24 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
         }
 	}
 	
+// handle location observers
+	@Override
+	public void registerObserver(LocationObserver observer) {
+		locationObservers.add(observer);			
+	}
+	@Override
+	public void removeObserver(LocationObserver observer) {
+		int index = locationObservers.indexOf(observer);
+		if (index > 0 ) {
+			locationObservers.remove(index);
+		}		
+	}
+	@Override
+	public void notifyLocationObservers() {
+		for (LocationObserver locationObserver :locationObservers) {
+			if (locationObserver != null && location != null) {
+				locationObserver.update(location.getLatitude(), location.getLongitude());
+			}
+        }
+	}
 }

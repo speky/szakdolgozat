@@ -1,4 +1,4 @@
-package com.drivetesting;
+package com.drivetesting.Services;
 
 import http.filehandler.ConnectionInstance;
 import http.filehandler.Logger;
@@ -14,7 +14,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
@@ -37,7 +36,9 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
-public class HttpClient extends IntentService {
+import com.drivetesting.DriveTestApp;
+
+public class HttpService extends IntentService {
 	public static final int MAX_THREAD = 10;
 	private static final int SOCKET_TIMEOUT = 1000;
 
@@ -81,8 +82,9 @@ public class HttpClient extends IntentService {
 			calcSpeed();
 			logger.addLine("** ReceivedBytes: "+ receivedBytes );
 			
-			sendMessage("packet", "Time: " + Calendar.getInstance().getTime() +" Packet: "+ Long.toString(receivedBytes)/* +
-						downloadSpeed.getSpeedString() + " " + uploadSpeed.getSpeedString()*/+"\n");
+			sendMessage("packet", "Packet "+ Long.toString(receivedBytes) +
+													   " DL 0.0" +
+														" UL 0.0");
 		}
 	}
 
@@ -93,7 +95,7 @@ public class HttpClient extends IntentService {
 			b.putString(key, value); 
 			m.setData(b);
 			try {
-				Log.d("Client", key + " "+ value);
+				Log.d(TAG, key + " "+ value);
 				messenger.send(m);
 			} catch (RemoteException e) {
 				e.printStackTrace();
@@ -101,7 +103,7 @@ public class HttpClient extends IntentService {
 		}
 	}
 
-	public  HttpClient() {
+	public  HttpService() {
 		super("HttpClientIntentService");				
 		logger = new Logger("");
 		logger.addLine(TAG+"test");
@@ -109,7 +111,7 @@ public class HttpClient extends IntentService {
 	}
 	    
     protected Socket createSocket(int port) {
-		try {
+		try {			
 			Socket socket = new Socket();			
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);
 			logger.addLine(TAG+" Create new socket");
@@ -184,7 +186,7 @@ public class HttpClient extends IntentService {
 		
 		bufferSize = Integer.parseInt((String)intent.getExtras().get("bufferSize"));
 		reportPeriod = Integer.parseInt((String)intent.getExtras().get("reportPeriod"));
-		
+				
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());

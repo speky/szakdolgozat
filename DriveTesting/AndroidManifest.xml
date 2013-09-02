@@ -58,11 +58,11 @@
         
         <service android:name=".UpdateService" >
         </service>
-        <service android:name=".HttpClient" >
+        <service android:name="com.drivetesting.Services.HttpService" >
         </service>
-        <service android:name=".GPSService" >
+        <service android:name="com.drivetesting.Services.GPSService" >
         </service>
-	<service android:name=".PhoneStateListenerService" >
+	<service android:name="com.drivetesting.Services.PhoneStateListenerService" >
         </service>
         
         

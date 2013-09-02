@@ -1,4 +1,4 @@
-package com.drivetesting;
+package com.drivetesting.Services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -15,6 +15,9 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+
+import com.drivetesting.DriveTestApp;
+import com.drivetesting.R;
 
 public class PhoneStateListenerService extends Service{
 
@@ -124,14 +127,14 @@ public class PhoneStateListenerService extends Service{
 			String dbm = "";
 			switch (telephonyManager.getPhoneType()){
 			case TelephonyManager.PHONE_TYPE_CDMA:
-				dbm = String.valueOf(signalStrength.getCdmaDbm()) + getApplicationContext().getString(R.string.unit_dbm);
+				dbm = String.valueOf(signalStrength.getCdmaDbm());
 				application.setSignalStrength(dbm);
 				Log.d(TAG, " Signal strength changed:  CdmaDbm" + dbm);
 				break;
 			case TelephonyManager.PHONE_TYPE_GSM:
 				int rssi = signalStrength.getGsmSignalStrength();
 				int rssi_dbm = -113 + 2 *  rssi;
-				dbm = String.valueOf(rssi_dbm) + getApplicationContext() .getString(R.string.unit_dbm);
+				dbm = String.valueOf(rssi_dbm);
 				application.setSignalStrength(dbm);
 				Log.d(TAG, " Signal strength changed:  Rssi Dbm" + dbm);
 				break;
