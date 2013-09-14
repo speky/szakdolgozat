@@ -1,4 +1,4 @@
-package com.drivetesting.Services;
+package com.drivetesting.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -101,10 +101,8 @@ public class GPSService extends Service implements LocationListener {
 
 					}
 				}				
-				if (location != null /*&& (location.hasAccuracy() && location.getAccuracy() <= minAccuracyMeters)*/) {
-					double latitude = location.getLatitude();
-					double longitude = location.getLongitude();
-					Log.d(TAG, "Update location: Lat: "+ Double.toString(latitude) + " Lon: "+ Double.toString(longitude));
+				if (location != null /*&& (location.hasAccuracy() && location.getAccuracy() <= minAccuracyMeters)*/) {					
+					Log.d(TAG, "Update location: Lat: "+ Double.toString(location.getLatitude()) + " Lon: "+ Double.toString(location.getLongitude()));
 					((DriveTestApp)getApplication()).updateLocation(location);
 				}
 			}
@@ -118,6 +116,7 @@ public class GPSService extends Service implements LocationListener {
 	public void onLocationChanged(Location location) {
 		if (location != null) {
 			((DriveTestApp)getApplication()).updateLocation(location);
+			Log.d(TAG, "Update location: Lat: "+ Double.toString(location.getLatitude()) + " Lon: "+ Double.toString(location.getLongitude()));
 		}
 	}
 

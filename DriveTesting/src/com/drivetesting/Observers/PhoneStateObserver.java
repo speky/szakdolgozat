@@ -1,4 +1,4 @@
-package com.drivetesting.Observers;
+package com.drivetesting.observers;
 
 public interface PhoneStateObserver {
 	public void updateSignalStrength(String value);

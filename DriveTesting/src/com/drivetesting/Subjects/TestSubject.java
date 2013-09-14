@@ -1,6 +1,6 @@
-package com.drivetesting.Subjects;
+package com.drivetesting.subjects;
 
-import com.drivetesting.Observers.TestObserver;
+import com.drivetesting.observers.TestObserver;
 
 public interface TestSubject {
 

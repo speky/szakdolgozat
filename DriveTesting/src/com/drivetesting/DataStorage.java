@@ -61,7 +61,7 @@ public class DataStorage {
 		return df.format(c.getTime());
 	}
 
-	public void insert(long testId, String testName, String lat, String lon, String signalStrength, String up, String down,
+	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, double down,
 							int mcc, int mnc, int lac, int cid) {		
 		String date = currentTime();
 		ContentValues values = new ContentValues();
@@ -87,11 +87,11 @@ public class DataStorage {
 		row.testId= cursor.getLong(cursor.getColumnIndexOrThrow(TESTID));
 		row.testName= cursor.getString(cursor.getColumnIndexOrThrow(TESTNAME));
 		row.time = cursor.getString(cursor.getColumnIndexOrThrow(TIME));
-		row.signalStrength = cursor.getString(cursor.getColumnIndexOrThrow(SIGNAL));
-		row.lat = cursor.getString(cursor.getColumnIndexOrThrow(LAT));
-		row.lon = cursor.getString(cursor.getColumnIndexOrThrow(LON));
-		row.up = cursor.getString(cursor.getColumnIndexOrThrow(UPSPEED));
-		row.down = cursor.getString(cursor.getColumnIndexOrThrow(DOWNSPEED));
+		row.signalStrength = cursor.getDouble(cursor.getColumnIndexOrThrow(SIGNAL));
+		row.lat = cursor.getDouble(cursor.getColumnIndexOrThrow(LAT));
+		row.lon = cursor.getDouble(cursor.getColumnIndexOrThrow(LON));
+		row.up = cursor.getDouble(cursor.getColumnIndexOrThrow(UPSPEED));
+		row.down = cursor.getDouble(cursor.getColumnIndexOrThrow(DOWNSPEED));
 		row.mcc = cursor.getInt(cursor.getColumnIndexOrThrow(MCC));
 		row.mnc = cursor.getInt(cursor.getColumnIndexOrThrow(MNC));
 		row.lac = cursor.getInt(cursor.getColumnIndexOrThrow(LAC));

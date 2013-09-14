@@ -1,5 +1,7 @@
-package com.drivetesting.Observers;
+package com.drivetesting.observers;
+
+import android.location.Location;
 
 public interface LocationObserver {
-	public void update(double lat,  double lon);
+	public void update(Location location);
 }

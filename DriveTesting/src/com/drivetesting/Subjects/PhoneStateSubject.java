@@ -1,6 +1,6 @@
-package com.drivetesting.Subjects;
+package com.drivetesting.subjects;
 
-import com.drivetesting.Observers.PhoneStateObserver;
+import com.drivetesting.observers.PhoneStateObserver;
 
 public interface PhoneStateSubject {
 	public void registerPhoneStateObserver(PhoneStateObserver observer);

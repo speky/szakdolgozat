@@ -16,15 +16,15 @@ import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.drivetesting.Observers.LocationObserver;
-import com.drivetesting.Observers.PhoneStateObserver;
-import com.drivetesting.Observers.TestObserver;
-import com.drivetesting.Services.GPSService;
-import com.drivetesting.Services.HttpService;
-import com.drivetesting.Services.PhoneStateListenerService;
-import com.drivetesting.Subjects.LocationSubject;
-import com.drivetesting.Subjects.PhoneStateSubject;
-import com.drivetesting.Subjects.TestSubject;
+import com.drivetesting.observers.LocationObserver;
+import com.drivetesting.observers.PhoneStateObserver;
+import com.drivetesting.observers.TestObserver;
+import com.drivetesting.services.GPSService;
+import com.drivetesting.services.HttpService;
+import com.drivetesting.services.PhoneStateListenerService;
+import com.drivetesting.subjects.LocationSubject;
+import com.drivetesting.subjects.PhoneStateSubject;
+import com.drivetesting.subjects.TestSubject;
 
 public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, 
 											TestSubject, PhoneStateSubject, LocationSubject{
@@ -112,7 +112,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
+		Log.d(TAG, "App created");
 		testObservers = new ArrayList<TestObserver>();
 		phoneStateObservers = new ArrayList<PhoneStateObserver>();
 		locationObservers = new ArrayList<LocationObserver>();
@@ -122,7 +122,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		prefs.registerOnSharedPreferenceChangeListener(this);
 		
 		dataStorage = new DataStorage(this);
-		Log.d(TAG, "App created");
+		dataStorage.open();	
+		
+		dataStorage.insert(3, "testName", 12.0, 3.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
+		dataStorage.insert(1, "testName", 5.0, 2.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
+		dataStorage.insert(1, "testName", 3.0, 4.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
+		testId = 1;
 		
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));
@@ -132,19 +137,19 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	class ReportTask extends TimerTask {
 		public void run() {
 			if (isTestRunning) {
-				String lon = "-";
-				String lat = "-"; 
+				double lat = 0;
+				double lon = 0;
 				if (location != null ) {
-					Double.toString(location.getLatitude());
-					Double.toString(location.getLongitude());
+					lon = location.getLongitude();
+					lat = location.getLatitude();
 				}				 
 				dataStorage.insert(testId, 
 													testName, 
 													lat, 
 													lon,
-													Double.toString(signalStrength),													 
-													Double.toString(ULSpeed),
-													Double.toString(DLSpeed),
+													signalStrength,													 
+													ULSpeed,
+													DLSpeed,
 													MCC,
 													MNC,
 													LAC,
@@ -170,14 +175,11 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	}
 	
 	public boolean startHttpClientService(int direction, int type) {		
-		dataStorage.open();
 		Intent httpIntent = new Intent(this, HttpService.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
 		}
-		dataStorage.insert(3, "testName", "0", "0", "0", "0", "0", 2, 2, 2, 2);
-		dataStorage.insert(1, "testName", "0", "0", "0", "0", "0", 2, 2, 2, 2);
-		testId = dataStorage.getMaxTestId();
+				
 		testName = prefs.getString("testName", "-");		
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
@@ -190,6 +192,10 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		return true;
 	}
 
+	public long getTestId() {
+		return testId;
+	}
+	
 	public void  stopGPSService() {
 		Intent intent = new Intent(this, GPSService.class);		
 		stopService(intent);
@@ -209,8 +215,21 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			return dataStorage.querryAll();
 		}else {
 			return dataStorage.querrySpecifiedTest(String.valueOf(testId));
+		}		
+	}
+	
+	public List<Location> querryLocationData() {
+		if (testId > 0) {			
+			List<DbData> data = dataStorage.querrySpecifiedTest(String.valueOf(testId));
+			List<Location> locationList = new ArrayList<Location>(); 
+			for (int i = 0; i < data.size(); ++i) {
+				Location loc = new Location("dummyprovider");
+				loc.setLongitude(data.get(i).lon);
+				loc.setLatitude(data.get(i).lat);
+			}
+			return locationList;
 		}
-		
+		return null;
 	}
 	
 	public boolean isInternetConnectionActive() {
@@ -429,7 +448,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public void notifyLocationObservers() {
 		for (LocationObserver locationObserver :locationObservers) {
 			if (locationObserver != null && location != null) {
-				locationObserver.update(location.getLatitude(), location.getLongitude());
+				locationObserver.update(location);
 			}
         }
 	}

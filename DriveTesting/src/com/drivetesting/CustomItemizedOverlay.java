@@ -25,8 +25,7 @@ public class CustomItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  populate(); 
  }
  
- public void clear(){
-	  
+ public void clear(){	  
 	  overlayItemList.clear();
 	  populate(); 
 }

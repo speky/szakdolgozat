@@ -1,4 +1,4 @@
-package com.drivetesting.Services;
+package com.drivetesting.services;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;

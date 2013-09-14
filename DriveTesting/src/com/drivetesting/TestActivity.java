@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.drivetesting.Observers.TestObserver;
+import com.drivetesting.observers.TestObserver;
 
 public class TestActivity extends Activity implements TestObserver {
 	

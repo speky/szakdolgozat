@@ -1,6 +1,6 @@
-package com.drivetesting.Subjects;
+package com.drivetesting.subjects;
 
-import com.drivetesting.Observers.LocationObserver;
+import com.drivetesting.observers.LocationObserver;
 
 public interface LocationSubject {
 	public void registerObserver(LocationObserver observer);

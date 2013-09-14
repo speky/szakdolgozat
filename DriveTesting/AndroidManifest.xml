@@ -5,7 +5,7 @@
 
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="15"   />
+        android:targetSdkVersion="18"   />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -19,25 +19,19 @@
     
 
     <application
-        android:name=".DriveTestApp"
-        android:debuggable="true"
+        android:name=".DriveTestApp"        
+        android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"  
-        android:uiOptions="splitActionBarWhenNarrow"        
+        android:uiOptions="splitActionBarWhenNarrow" 
         >
 	        
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_drive_test" 
-            android:screenOrientation="portrait">
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:screenOrientation="portrait">                        
         </activity>
         <activity
             android:name=".PrefsActivity"
@@ -53,16 +47,18 @@
         <activity
             android:name=".OSMActivity"
             android:label="@string/title_activity_osm" 
-            android:screenOrientation="portrait">            
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>            
         </activity>
         
-        <service android:name=".UpdateService" >
+        <service android:name=".services.HttpService" >
         </service>
-        <service android:name="com.drivetesting.Services.HttpService" >
+        <service android:name=".services.GPSService" >
         </service>
-        <service android:name="com.drivetesting.Services.GPSService" >
-        </service>
-	<service android:name="com.drivetesting.Services.PhoneStateListenerService" >
+	<service android:name=".services.PhoneStateListenerService" >
         </service>
         
         
