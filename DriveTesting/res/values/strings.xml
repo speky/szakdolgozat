@@ -1,30 +1,20 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <string name="app_name">DriveTesting</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_drive_test">DriveTestActivity</string>
-    <string name="dbname">Adatbázis név</string>
-    <string name="dbname_sum">Elmentett adatbázis fájl neve</string>
-    <string name="checkbox">checkbox</string>
-    <string name="ringtone">ringtone</string>
-    <string name="checkbox2">checkbox2</string>
-    <string name="text">text</string>
-    <string name="list">list</string>
     <string name="export">Start Export</string>
     <string name="outputname">Output file name</string>
     <string name="kml">Export to KML format</string>
-    <string name="plaintext">Export to plain text</string>
+    <string name="plaintext">Export to CVS</string>
     <string name="menu_export">Export</string>
     <string name="title_activity_osm">OSMActivity</string>
     <string name="menu_map">Map</string>
     <string name="menu_test">Test</string>
     <string name="menu_main">Main</string>
     <string name="unit_dbm">dBm</string>
-    <string name="network_connected">Hálózati kapcoslat aktív!</string>
-    <string name="connection_lost">Nincs hálózati kapcsolat </string>
-    <string name="phone_header">Telefon adatai</string>
-    <string name="network_header">Hálózat adatai</string>
+    <string name="phone_header">Phone data</string>
+    <string name="network_header">Network data</string>
     <string name="upload">Upload</string>
     <string name="download">Download</string>
     <string name="tcp">TCP</string>
@@ -34,7 +24,10 @@
     <string name="start">Start Test</string>
     <string name="stop">Stop Test</string>
     <string name="clean">Clear Text</string>
-    <string name="save">Save</string>    
+    <string name="save">Save</string>
+    <string name="telephony_mgr">Telephony Manager Information:</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="address">Address</string>
     
-
 </resources>

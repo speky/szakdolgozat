@@ -3,6 +3,7 @@ package com.drivetesting;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import com.drivetesting.observers.PhoneStateObserver;
 
@@ -159,7 +160,7 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	}
 
 	private String getNetworkCountry(){
-		return telephonyManager.getNetworkCountryIso().toUpperCase();
+		return telephonyManager.getNetworkCountryIso().toUpperCase(Locale.getDefault());
 	}
 
 	private String getNetworkOperatorName(){

@@ -1,0 +1,28 @@
+package http.filehandler;
+
+public class UDPReport extends TCPReport{
+	protected double jitter = 0.0;
+	protected int lostDatagram = 0;
+	protected int sumDatagram = 0;
+
+	public UDPReport(String interval, double transferedData, double bandwidth, double jitter, int lost, int sum) {
+		super(interval, transferedData, bandwidth);
+		this.jitter = jitter;
+		this.lostDatagram = lost;
+		this.sumDatagram = sum;
+	}
+
+	@Override
+	public String getHeader() {
+		return "[ID] Interval Transfer Bandwidth Jitter Lost/Total";
+	}
+	
+	@Override
+	public String toString() {
+		String base = super.toString(); 
+		double percent = (100.0 / new Double(sumDatagram)) * new Double(lostDatagram); 
+		return base + " " + Double.toString(jitter) + " " + Integer.toString(lostDatagram) + "/" + Integer.toString(sumDatagram) + " ("+percent+")" ;
+	}
+	
+
+}

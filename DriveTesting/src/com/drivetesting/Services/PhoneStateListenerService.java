@@ -1,5 +1,7 @@
 package com.drivetesting.services;
 
+import java.util.Locale;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -178,7 +180,7 @@ public class PhoneStateListenerService extends Service{
 			GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
 			String lac = "0";
 			if (cellLocation != null){
-				lac = String.format("%d", cellLocation.getLac());	
+				lac = String.format(Locale.getDefault(), "%d", cellLocation.getLac());	
 			}
 			return lac;
 		}
@@ -187,7 +189,7 @@ public class PhoneStateListenerService extends Service{
 			GsmCellLocation cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
 			String cid = "0";
 			if (cellLocation != null){
-				cid = String.format("%d", cellLocation.getCid()& 0xffff);	
+				cid = String.format(Locale.getDefault(), "%d", cellLocation.getCid()& 0xffff);	
 			}
 			return cid;
 		}

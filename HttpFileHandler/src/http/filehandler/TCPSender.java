@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Vector;
-import java.util.concurrent.Callable;
 
 
 public class TCPSender  extends ConnectionInstance implements ICallback{	

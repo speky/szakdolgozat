@@ -55,13 +55,12 @@ public class HttpService extends IntentService {
 	private int threadCount = 0;
 	private Socket socket;
 	private Scanner scanner;
-	private PrintWriter pw = null;
+	private PrintWriter printWriter = null;
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
 	
 	private ArrayList<ConnectionInstance> connectionInstances = new ArrayList<ConnectionInstance>();
-	
-	private ReportTask task = new ReportTask();	
+			
 	private String errorMessage = null;
 	private Messenger messenger = null;
 	
@@ -75,6 +74,7 @@ public class HttpService extends IntentService {
 	private long time = 0;
 	private SpeedInfo downloadSpeed;
 	private SpeedInfo uploadSpeed;
+	private ReportTask task = new ReportTask();
 	
 	class ReportTask extends TimerTask {
 		public void run() {
@@ -190,7 +190,7 @@ public class HttpService extends IntentService {
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
-			pw = new PrintWriter(socket.getOutputStream());
+			printWriter = new PrintWriter(socket.getOutputStream());
 
 			previousReceivedBytes = 0;			
 			time = System.currentTimeMillis();
@@ -371,12 +371,12 @@ public class HttpService extends IntentService {
 	
 	private boolean sendMessageToServer(final String command) throws IOException {
 		logger.addLine(TAG+ "Send command to server: "+ command);
-		if (pw == null ){
+		if (printWriter == null ){
 			return false;
 		}
-		pw.println(command );		
-		pw.println("END" );
-		pw.flush();
+		printWriter.println(command );		
+		printWriter.println("END" );
+		printWriter.flush();
 		return true;		
 	}
 
@@ -414,7 +414,7 @@ public class HttpService extends IntentService {
 				System.out.println("Parse head "+ line);
 				int separatorPosition = line.indexOf(':');
 				if  (separatorPosition >= 0) {
-					String type = line.substring(0,separatorPosition).trim().toUpperCase();
+					String type = line.substring(0,separatorPosition).trim().toUpperCase(Locale.getDefault());
 					String value = line.substring(separatorPosition+1).trim();
 					headerProperty.put(type, value);							
 				}
@@ -430,7 +430,7 @@ public class HttpService extends IntentService {
 			return false;
 		}		
 		String version = stringTokens.nextToken();
-		answerProperty.put("VERSION", version.toUpperCase());
+		answerProperty.put("VERSION", version.toUpperCase(Locale.getDefault()));
 
 		if ( !stringTokens.hasMoreTokens()){
 			System.out.println("Tokenized string is too short!");			

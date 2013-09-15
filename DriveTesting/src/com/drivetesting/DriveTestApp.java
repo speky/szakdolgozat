@@ -63,7 +63,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private StringBuilder message = new StringBuilder();
 	private int action = 0;
 
-	private boolean isGpsServiceRun = false;
+	public boolean isGpsServiceRun = false;
 	public boolean isGPSEnabled = false;
 	private Location location = null;
 	
@@ -80,8 +80,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		}
 	}
 	
-	Handler handler = new Handler() 
-    { 
+	private Handler handler = new Handler() { 
         @Override 
         public void handleMessage(Message msg) {
         	if ( msg.getData().containsKey("error")) {        		

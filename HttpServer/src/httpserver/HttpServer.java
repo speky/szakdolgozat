@@ -35,8 +35,7 @@ class ServerThread extends Thread{
 
 	private final int FirstPort = 5555;
 	private final int MaxPort = 6000;
-	private final int SOCKET_TIMEOUT = 10000; //in milisec
-	private final int REPEAT_SOCKET_CONNECTION = 3;
+	private final int SOCKET_TIMEOUT = 10000; //in milisec	
 
 	private int id = -1;
 	private Logger logger = null;
@@ -47,8 +46,7 @@ class ServerThread extends Thread{
 	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
 	private int threadCount = 0;
 
-	private Vector<ConnectionInstance> connectionInstances = new Vector<ConnectionInstance>(); 
-	private String errorMessage = null;
+	private Vector<ConnectionInstance> connectionInstances = new Vector<ConnectionInstance>();	
 	private Socket commandSocket = null;
 	private Scanner scanner = null;	
 	private Socket testSocket = null;
@@ -83,8 +81,7 @@ class ServerThread extends Thread{
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 
-		} catch (Exception e) {
-			errorMessage = "Server socket creation problem";
+		} catch (Exception e) {			
 			logger.addLine(TAG+id+" ERROR in run() " + e.getMessage());
 			return -1;
 		}

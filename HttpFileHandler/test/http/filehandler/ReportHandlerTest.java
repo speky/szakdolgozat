@@ -4,10 +4,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.HashSet;
 import java.util.Vector;
 
 import org.junit.AfterClass;
