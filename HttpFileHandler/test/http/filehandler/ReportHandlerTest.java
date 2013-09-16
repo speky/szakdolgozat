@@ -168,7 +168,7 @@ public class ReportHandlerTest {
 		}
 
 		Vector<Integer> set = new Vector<Integer> ();		
-		ReportHandler handler = new ReportHandler (logger);           
+		ReportSender handler = new ReportSender (logger);           
 		handler.startReportReceiver(wrapper, "id", socket, set);
 		try {
 			Thread.sleep(1000);

@@ -30,11 +30,11 @@ public class UDPReceiver extends ConnectionInstance {
 			int preReport = lastreport;
 			lastreport += reportInterval;
 			String interval = Integer.toString(preReport) + "-" + Integer.toString(lastreport);
-			try {
+			/*try {
 				sendReportToServer((new UDPReport(interval, transferedData, bandwidth, jitter, lost, sum)).toString());
 			} catch (IOException ex) {
 				logger.addLine(ex.getMessage());
-			}
+			}*/
 			transferedData = 0.0;
 		}
 	}
@@ -54,7 +54,7 @@ public class UDPReceiver extends ConnectionInstance {
 	}
 	
 	public UDPReceiver(final int id, Logger logger, Socket reportSocket, int reportInterval,	 int port, int bufferSize) {
-		super(ConnectionInstance.UDP_RECEIVER, id, logger);	
+		super(ConnectionInstance.UDP, id, logger);	
 		this.reportSocket = reportSocket;
 		this.reportInterval = reportInterval;		
 		this.port = port;

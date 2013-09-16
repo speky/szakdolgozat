@@ -4,7 +4,8 @@ package httpserver;
 import http.filehandler.ConnectionInstance;
 import http.filehandler.HttpParser;
 import http.filehandler.Logger;
-import http.filehandler.PacketStructure;
+import http.filehandler.ReportHandler;
+import http.filehandler.ReportSender;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 
@@ -32,7 +33,7 @@ import java.util.concurrent.Future;
 class ServerThread extends Thread{	
 	private static final int MAX_THREAD = 10;
 	private static final String TAG = "ServerThread id: ";
-
+	private final int ReportPort = 5000;
 	private final int FirstPort = 5555;
 	private final int MaxPort = 6000;
 	private final int SOCKET_TIMEOUT = 10000; //in milisec	
@@ -43,9 +44,9 @@ class ServerThread extends Thread{
 	private Properties HeaderProperty = null;
 	private int portOffset = 0;
 	private ExecutorService pool = null;
-	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
+	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
-
+	private ReportSender reporter = null;
 	private Vector<ConnectionInstance> connectionInstances = new Vector<ConnectionInstance>();	
 	private Socket commandSocket = null;
 	private Scanner scanner = null;	
@@ -176,6 +177,7 @@ class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 
+		reporter = new ReportSender(logger, ReportPort);
 
 		if (parser.getHeadProperty("MODE").equals("DL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
@@ -187,7 +189,7 @@ class ServerThread extends Thread{
 				TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
 				if (sender.setSocket(testSocket)) {
 					connectionInstances.add(sender);
-					Future<PacketStructure> future = pool.submit(sender);
+					Future<Integer> future = pool.submit(sender);
 					threadSet.add(future);
 				}
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
@@ -202,7 +204,7 @@ class ServerThread extends Thread{
 				}				
 				if (receiver.setSocket(testSocket)) {
 					connectionInstances.add(receiver);
-					Future<PacketStructure> future = pool.submit(receiver);
+					Future<Integer> future = pool.submit(receiver);
 					threadSet.add(future);
 				}
 
@@ -210,7 +212,8 @@ class ServerThread extends Thread{
 				//new Thread(new UDPRecever(logger, 1 ));
 			}
 		}
-
+		reporter.stop();
+		reporter = null;
 		return true;
 	}
 

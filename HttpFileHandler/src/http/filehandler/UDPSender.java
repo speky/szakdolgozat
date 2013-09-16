@@ -8,23 +8,18 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class UDPSender extends ConnectionInstance {
-	private FileInstance fileInstance = null;
 	private DatagramSocket socket = null;	
 	private int serverPort = 0;
 	private String serverAddress = "";
 
 	public UDPSender(final int id, Logger logger) {
-		super(ConnectionInstance.UDP_SENDER, id, logger);
+		super(ConnectionInstance.UDP, id, logger);
 		//logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
 	}
 
 	public void setReceiverParameters(final int port, final String address) {
 		serverAddress = address;
 		serverPort = port;		
-	}
-
-	public void setFile(final FileInstance instance) {
-		fileInstance = instance;
 	}
 
 	public void run() {

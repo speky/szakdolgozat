@@ -5,8 +5,8 @@ public class UDPReport extends TCPReport{
 	protected int lostDatagram = 0;
 	protected int sumDatagram = 0;
 
-	public UDPReport(String interval, double transferedData, double bandwidth, double jitter, int lost, int sum) {
-		super(interval, transferedData, bandwidth);
+	public UDPReport(String interval, double transferedData,  final double dlSpeed, final double ulSpeed, double jitter, int lost, int sum) {
+		super(interval, transferedData, dlSpeed, ulSpeed);
 		this.jitter = jitter;
 		this.lostDatagram = lost;
 		this.sumDatagram = sum;
@@ -14,7 +14,7 @@ public class UDPReport extends TCPReport{
 
 	@Override
 	public String getHeader() {
-		return "[ID] Interval Transfer Bandwidth Jitter Lost/Total";
+		return "UDP\n[ID] Interval Transfer DLspeed ULspeed Jitter Lost/Total";
 	}
 	
 	@Override

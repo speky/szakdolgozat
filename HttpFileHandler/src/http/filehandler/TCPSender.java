@@ -4,39 +4,32 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.util.Vector;
 
 
-public class TCPSender  extends ConnectionInstance implements ICallback{	
+public class TCPSender  extends ConnectionInstance {	
 		
 	private byte[] byteBuffer;	
 	private Socket socket = null;
 	private PrintWriter printerWriter = null;
-	private ReportHandler reportHandler = null;
+	private MessageI reportSender = null;
+	private ReceiverReportI reportReceiver = null;
 	private Vector<Integer> reportList = new Vector<Integer>();
 	private boolean running = true;	
 	private final String TAG = "TCPSender: ";	
 	private final int ACK_WAITING = 5000; //in milisec
 	public static final String END_PACKET = "END_PACKET";	
 	
-	public TCPSender(Logger logger, final int id, final int bufferSize) {
-		super(ConnectionInstance.TCP_SENDER, id, logger);				
+	public TCPSender(Logger logger, final int id, final int bufferSize, MessageI sender, ReceiverReportI receiver) {
+		super(ConnectionInstance.TCP, id, logger);				
 		logger.addLine(TAG+ "Created, id: " + id);
-		
-		reportHandler = new ReportHandler(logger);
-		packetStructure = new PacketStructure();
-		packetStructure.id = id;
+		reportSender = sender;
+		reportReceiver = receiver;
 		byteBuffer = new byte[bufferSize];
 		Utility.fillStringBuffer(byteBuffer, bufferSize);		
 	}
 
-	@Override
-	public void receiveReportMessages(int receivedBytes) {
-		if (packetStructure != null ) {
-			packetStructure.receivedPackets = receivedBytes;
-		}
-	}
-			
 	public boolean setSocket(Socket socket) {		
 		if (socket == null) {
 			return false;
@@ -49,64 +42,51 @@ public class TCPSender  extends ConnectionInstance implements ICallback{
 	@Override
 	public void stop() {
 		logger.addLine(TAG+"Sending and report receiver stopped!");
-		reportHandler.stopScaning();
-		reportHandler = null;
-		packetStructure = null;
+				
 		running = false;
 		try {
 			socket.close();			
 		} catch (IOException e) {
 			errorMessage = "Socket cannot stopped!";
-			packetStructure.receivedPackets = -1;
-			
 			logger.addLine(TAG+errorMessage);
 			e.printStackTrace();
 		}
 	}
 	
-	public PacketStructure call() {		
-		try {			
+	public Integer call() {
+		try {
 			if (checkPrerequisite() == false) {
-				packetStructure.receivedPackets = -1;
-				return packetStructure;
+				return -1;
 			}
-			
-			reportHandler.startReportReceiver(this, Integer.toString(id), socket, reportList);
-			OutputStream outputStream = socket.getOutputStream();			
-			logger.addLine(TAG+"Send message,  sendertId: " + id);			
-
-			packetStructure.receivedPackets = 0;
-			
-			
+			OutputStream outputStream = socket.getOutputStream();
+			logger.addLine(TAG+"Send message,  sendertId: " + id);
 			while (running) {
 				 outputStream.write(byteBuffer);
-				 outputStream.flush();				 
-			}
-			
+				 outputStream.flush();
+				 if (null != reportReceiver) {
+					 reportReceiver.setSentBytes(byteBuffer.length);
+				 }else if (null != reportSender) {
+					 reportSender.sendReportMessage(Integer.toString(id), "message");
+				 }
+				 
+			}			
 			logger.addLine(TAG+" Sending ended!");
-						
-			reportHandler.stopScaning();
-			logger.addLine(TAG+"Received report message: "+packetStructure.receivedPackets);
 		} catch (Exception e) {
 			errorMessage = "Error occured in sending packets";
-			packetStructure.receivedPackets = -1;
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
 		}
 		finally{
-			try {
-				reportHandler.stopScaning();
-				reportHandler = null;				
+			try {								
 				if (socket != null) {
 					socket.close();
 				}
 			} catch (IOException e) {
 				errorMessage = "Socket cannot stopped!";
-				packetStructure.receivedPackets = -1;
 				logger.addLine(TAG+errorMessage);
 				e.printStackTrace();
 			}
 		}
-		return packetStructure;
+		return 0;
 	}
 
 	private boolean checkPrerequisite() {
