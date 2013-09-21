@@ -4,7 +4,6 @@ package httpserver;
 import http.filehandler.ConnectionInstance;
 import http.filehandler.HttpParser;
 import http.filehandler.Logger;
-import http.filehandler.ReportHandler;
 import http.filehandler.ReportSender;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;

@@ -31,7 +31,9 @@ public class TCPSenderTest {
 	public void testTCPSenderWithoutAnyParameter() {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();        
-        
+        MessageI message = mock(MessageI.class);
+    	ReceiverReportI reportReceiver = mock(ReceiverReportI.class);
+    	
         try {
 			when(socket.getOutputStream()).thenReturn(byteArrayOutputStream);
 			
@@ -39,10 +41,9 @@ public class TCPSenderTest {
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, 0);
-        PacketStructure packetStructure = new PacketStructure();
-        packetStructure.receivedPackets = -1;        
-        Assert.assertTrue(packetStructure.equals(sender.call()));
+        TCPSender sender = new TCPSender(logger, 0, 0, message, reportReceiver);
+                        
+        Assert.assertTrue(-1 == sender.call());
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
 	
@@ -50,7 +51,9 @@ public class TCPSenderTest {
 	public void testTCPSenderWithSocketParameter() {
         final Socket socket = mock(Socket.class);        
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        InetAddress inetAddr = null;
+        MessageI message = mock(MessageI.class);
+    	ReceiverReportI reportReceiver = mock(ReceiverReportI.class);
+        InetAddress inetAddr = null;        
 		try {
 			inetAddr = InetAddress.getByName("127.0.0.1");
 		} catch (UnknownHostException e1) {		
@@ -64,12 +67,11 @@ public class TCPSenderTest {
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, 0);
+        TCPSender sender = new TCPSender(logger, 0, 0, message, reportReceiver);
 
         Assert.assertTrue(sender.setSocket(null) == false);
         Assert.assertTrue(sender.setSocket(socket) == true);
-        PacketStructure packetStructure = new PacketStructure();
-        packetStructure.receivedPackets = -1;
+        
         //Assert.assertTrue(packetStructure.equals(sender.call()));
         Assert.assertTrue(byteArrayOutputStream.toString().equals(""));
 	}
@@ -79,7 +81,9 @@ public class TCPSenderTest {
         final Socket socket = mock(Socket.class);
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         String ackMessage = "POST test.txt HTTP*/1.0\n ACK: 0\nEND\n";
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());        
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());
+        MessageI message = mock(MessageI.class);
+    	ReceiverReportI reportReceiver = mock(ReceiverReportI.class);
         InetAddress inetAddr = null;
 		try {
 			inetAddr = InetAddress.getByName("127.0.0.1");
@@ -95,16 +99,14 @@ public class TCPSenderTest {
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, 1);
+        TCPSender sender = new TCPSender(logger, 0, 1, message, reportReceiver);
 
         sender.setSocket(socket);               
-        PacketStructure packetStructure = new PacketStructure();
-        packetStructure.receivedPackets = 1;
-        packetStructure.id = 0;
+        
         //Assert.assertTrue(packetStructure.equals(sender.call()));
-        String message = "123456789asdfghjkyxcvbnm";
-        String hash = Utility.calcCheckSum(message.getBytes());
-        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+message+"\n"+TCPSender.END_PACKET+"\r\nEND\n\r\n");
+        String msg = "123456789asdfghjkyxcvbnm";
+        String hash = Utility.calcCheckSum(msg.getBytes());
+        String testString = new String("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+hash+"\nTEXT: "+msg+"\n"+TCPSender.END_PACKET+"\r\nEND\n\r\n");
         String out = byteArrayOutputStream.toString(); 
         //Assert.assertTrue(out.equals(testString));
 	}
@@ -115,6 +117,8 @@ public class TCPSenderTest {
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         String ackMessage = "POST test.txt HTTP*/1.0\nACK: 0\nEND\nPOST test.txt HTTP*/1.0\nACK: 1\nEND\nPOST test.txt HTTP*/1.0\nACK: 2\nEND\n";
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(ackMessage.getBytes());
+        MessageI message = mock(MessageI.class);
+    	ReceiverReportI reportReceiver = mock(ReceiverReportI.class);
         InetAddress inetAddr = null;
 		try {
 			inetAddr = InetAddress.getByName("127.0.0.1");
@@ -130,24 +134,21 @@ public class TCPSenderTest {
 			e.printStackTrace();
 		}
 
-        TCPSender sender = new TCPSender(logger, 0, 1);
+        TCPSender sender = new TCPSender(logger, 0, 1, message, reportReceiver);
 
         sender.setSocket(socket);
         
-        PacketStructure packetStructure = new PacketStructure();
-        packetStructure.receivedPackets = 3;
-        packetStructure.id = 0;
         //Assert.assertTrue(packetStructure.equals(sender.call()));
-        String message = "123456789a";        
-        StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        String msg = "123456789a";        
+        StringBuffer testString = new StringBuffer("POST test.txt HTTP*/1.0\nID: 0\nHASH: "+Utility.calcCheckSum(msg.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");
         
-        message =  "sdfghjkyxc";
-        testString.append("POST test.txt HTTP*/1.0\nID: 1\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        msg =  "sdfghjkyxc";
+        testString.append("POST test.txt HTTP*/1.0\nID: 1\nHASH: "+Utility.calcCheckSum(msg.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");
         
-        message = "vbnm";
-        testString.append("POST test.txt HTTP*/1.0\nID: 2\nHASH: "+Utility.calcCheckSum(message.getBytes())+
+        msg = "vbnm";
+        testString.append("POST test.txt HTTP*/1.0\nID: 2\nHASH: "+Utility.calcCheckSum(msg.getBytes())+
         		"\nTEXT: "+message+"\nEND_PACKET\r\n");        
         testString.append("END\n\r\n");
         

@@ -2,7 +2,6 @@ package http.filehandler;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 import java.util.Vector;
@@ -13,9 +12,10 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	private Logger logger = null;	
 	private Socket socket = null;
 	private boolean isScanStopped = false;	
-	private Vector<Integer> reportList = null; 
+	private Vector<TCPReport> tcpReportList = null; 
+	private Vector<UDPReportTest> udpReportList = null;
 	
-	public ReportReceiver(String id, Logger logger, String serverAddress, int port, Vector<Integer> reports) {
+	public ReportReceiver(Logger logger, String serverAddress, int port) {
 		super();
 		this.logger = logger;
 		try {
@@ -26,9 +26,18 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		reportList = reports;
+		tcpReportList = new Vector<TCPReport>();
+		udpReportList = new Vector<UDPReportTest>();
 	}
 
+	public ReportReceiver(Logger logger, Socket socket) {
+		super();
+		this.logger = logger;
+		this.socket =  socket;
+		tcpReportList = new Vector<TCPReport>();
+		udpReportList = new Vector<UDPReportTest>();
+	}
+	
 	public void stopScaning(){
 		try {
 			socket.close();
@@ -43,40 +52,32 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		String reportProperty = parser.getHeadProperty("REPORT");
 		if (reportProperty != null ) {
 			int bytes = Integer.parseInt(reportProperty); 
-			reportList.add(bytes);
+			//reportList.add(bytes);
 		} else {
 			logger.addLine(TAG +"Error ReportReceiver: property is wrong!");				
 		}			
 	}
 
-	public void run() {
+	public void receiveReport() {
+		HttpParser parser = new HttpParser(logger);
 		Scanner scanner = null;
 		try {
-			if (socket == null) {
-				logger.addLine(TAG +"Error ReportReceiver: socket is null!");					
-				return;					
-			}
-			scanner = new Scanner(socket.getInputStream());
-			HttpParser parser = new HttpParser(logger);
-			StringBuffer buffer = new StringBuffer();				
+			scanner = new Scanner(socket.getInputStream());		
+			StringBuffer buffer = new StringBuffer();
 			logger.addLine(TAG +"Report thread started");
 			while (isScanStopped != true) {
 				if (scanner.hasNextLine()){
 					String readedLine = scanner.nextLine();
 					buffer.append(readedLine+"+");
 					if (readedLine.compareTo("END") ==  0) {
-						parser.parseHttpMessage(buffer.toString());							
+						parser.parseHttpMessage(buffer.toString());
 						checkProperty(parser);
 						buffer.delete(0, buffer.length());
 					}
 				}
 			}
-		} catch (SocketException e) {
-			logger.addLine(TAG+"Error in ReportHandler: "+e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
-			logger.addLine(TAG+"Error in ReportHandler: "+e.getMessage());
-			e.printStackTrace();
+			logger.addLine(TAG+ e.getMessage());
 		}
 		finally {
 			if (scanner != null) {
@@ -84,10 +85,20 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 				scanner = null;
 			}
 		}
+
+	}
+	
+	public void run() {
+		if (socket == null) {
+			logger.addLine(TAG +"Error ReportReceiver: socket is null!");					
+			return;					
+		}
+		receiveReport();
+	
 	}
 
 	@Override
-	public void setReceivedtBytes(int bytes) {
+	public void setReceivedBytes(int bytes) {
 		
 	}
 

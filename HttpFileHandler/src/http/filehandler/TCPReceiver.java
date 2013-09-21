@@ -53,7 +53,7 @@ public class TCPReceiver extends ConnectionInstance {
 					  @Override
 					  public void run() {
 						  if (reportReceiver  != null ) {								
-							  reportReceiver.setReceivedtBytes(totalReadedBytes);
+							  reportReceiver.setReceivedBytes(totalReadedBytes);
 						  } else if (null != reportSender){
 							  reportSender.sendReportMessage(Integer.toString(id), Integer.toString(totalReadedBytes));
 						  }
