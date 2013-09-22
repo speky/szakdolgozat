@@ -1,11 +1,10 @@
 package http.filehandler;
 
-import java.util.StringTokenizer;
 
 public class UDPReport extends TCPReport{
-	protected double jitter = 0.0;
-	protected int lostDatagram = 0;
-	protected int sumDatagram = 0;
+	public  double jitter = 0.0;
+	public  int lostDatagram = 0;
+	public  int sumDatagram = 0;
 	
 	public UDPReport() {
 		super();
@@ -28,7 +27,7 @@ public class UDPReport extends TCPReport{
 			jitter = Double.parseDouble((String)tokens.nextElement());
 			lostDatagram = Integer.parseInt((String)tokens.nextElement());
 			sumDatagram = Integer.parseInt((String)tokens.nextElement());
-			tokens.nextElement();
+			//tokens.nextElement();
 		} catch (Exception ex) {
 			ex.getMessage();
 			return false;

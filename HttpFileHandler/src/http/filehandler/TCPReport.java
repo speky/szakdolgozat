@@ -3,11 +3,11 @@ package http.filehandler;
 import java.util.StringTokenizer;
 
 public class TCPReport {
-	protected int reporterId = 0;
-	protected String interval = "-";
-	protected double transferedData = 0.0;
-	protected double dlSpeed = 0.0;
-	protected double ulSpeed = 0.0;
+	public  int reporterId = 0;
+	public String interval = "-";
+	public  double transferedData = 0.0;
+	public  double dlSpeed = 0.0;
+	public  double ulSpeed = 0.0;
 	protected String data = "KB";
 	protected String rate = "Kbits/sec";
 	protected StringTokenizer tokens = null;
@@ -42,7 +42,7 @@ public class TCPReport {
 			dlSpeed = Double.parseDouble((String)tokens.nextElement());
 			//skip rate type
 			tokens.nextElement();
-			dlSpeed = Double.parseDouble((String)tokens.nextElement());
+			ulSpeed = Double.parseDouble((String)tokens.nextElement());
 			//skip rate type
 			tokens.nextElement();
 		} catch (Exception ex) {
@@ -66,7 +66,7 @@ public class TCPReport {
 
 	@Override
 	public String toString() {		
-		return Integer.toString(reporterId)+interval +" "+Double.toString(transferedData) +" "+ data + 
+		return Integer.toString(reporterId)+" " +interval +" "+Double.toString(transferedData) +" "+ data + 
 				" " + Double.toString(dlSpeed) +" "+ rate+" " + Double.toString(ulSpeed) +" "+ rate;
 	}
 

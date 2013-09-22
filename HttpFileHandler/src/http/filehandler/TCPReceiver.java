@@ -55,7 +55,7 @@ public class TCPReceiver extends ConnectionInstance {
 						  if (reportReceiver  != null ) {								
 							  reportReceiver.setReceivedBytes(totalReadedBytes);
 						  } else if (null != reportSender){
-							  reportSender.sendReportMessage(Integer.toString(id), Integer.toString(totalReadedBytes));
+							  reportSender.sendReportMessage(Integer.toString(id), "TCP", Integer.toString(totalReadedBytes));
 						  }
 					  }
 					}, reportInterval, reportInterval);

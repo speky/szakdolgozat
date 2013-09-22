@@ -33,8 +33,7 @@ public class ReportSender implements MessageI{
 			printer = new PrintWriter(socket.getOutputStream());
 		} catch (IOException e) {
 			logger.addLine(TAG + e.getMessage());
-		}
-		
+		}		
 	}
 	
 	protected boolean createSocket() {
@@ -65,12 +64,12 @@ public class ReportSender implements MessageI{
 	}
 	
 	@Override
-	public void sendReportMessage(String id,  String message){					
-		logger.addLine(TAG +"Send report message, id:" + id);
+	public void sendReportMessage(String id, String type,  String message){					
+		logger.addLine(TAG +"Send report message, id:"+ id);
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("POST HTTP*/1.0\n");
-		buffer.append("REPORT: "+ id +"\n");
-		buffer.append(message+"\n");
+		buffer.append("POST "+ id +" HTTP*/1.0\n");
+		buffer.append("REPORT: "+ type +"\n");		
+		buffer.append("MESSAGE: "+message+"\n");
 		buffer.append("END\n");
 		printer.print(buffer);
 		printer.flush();

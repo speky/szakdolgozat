@@ -11,23 +11,32 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	
 	private Logger logger = null;	
 	private Socket socket = null;
+	private Scanner scanner = null;
 	private boolean isScanStopped = false;	
 	private Vector<TCPReport> tcpReportList = null; 
-	private Vector<UDPReportTest> udpReportList = null;
+	private Vector<UDPReport> udpReportList = null;
+	
+	public Vector<TCPReport> getTcpReportList() {
+		return tcpReportList;
+	}
+	
+	public Vector<UDPReport> getUdpReportList() {
+		return udpReportList;
+	}
 	
 	public ReportReceiver(Logger logger, String serverAddress, int port) {
 		super();
 		this.logger = logger;
 		try {
-			socket =  new Socket(serverAddress, port);			
-			
+			socket =  new Socket(serverAddress, port);
+			scanner = new Scanner(socket.getInputStream());			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		tcpReportList = new Vector<TCPReport>();
-		udpReportList = new Vector<UDPReportTest>();
+		udpReportList = new Vector<UDPReport>();
 	}
 
 	public ReportReceiver(Logger logger, Socket socket) {
@@ -35,7 +44,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		this.logger = logger;
 		this.socket =  socket;
 		tcpReportList = new Vector<TCPReport>();
-		udpReportList = new Vector<UDPReportTest>();
+		udpReportList = new Vector<UDPReport>();
 	}
 	
 	public void stopScaning(){
@@ -48,33 +57,65 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		isScanStopped = true;
 	}
 	
-	private void checkProperty(HttpParser parser) {
-		String reportProperty = parser.getHeadProperty("REPORT");
-		if (reportProperty != null ) {
-			int bytes = Integer.parseInt(reportProperty); 
-			//reportList.add(bytes);
+	private boolean checkProperty(HttpParser parser) {
+		if (parser == null) {
+			logger.addLine(TAG +"Error:parser is null!");
+			return false;
+		}
+		if (null == parser.getHeadProperty("REPORT") ) {
+			logger.addLine(TAG +"Error:report type is null!");
+			return false;
+		}
+		boolean ret = true;
+		// parse report message and add them to report list
+		String reportType = parser.getHeadProperty("REPORT");
+		if (reportType.equals("TCP")) {
+			TCPReport report = new TCPReport();
+			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
+			if (ret) {
+				tcpReportList.add(report);
+			}
+			
+		} else if (reportType.equals("UDP")) {
+			UDPReport report = new UDPReport();
+			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
+			if (ret) {
+				udpReportList.add(report);
+			}
+			
 		} else {
-			logger.addLine(TAG +"Error ReportReceiver: property is wrong!");				
-		}			
+			logger.addLine(TAG +"Error:type is invalid: " + reportType);
+			return false;
+		}
+		return ret;		
 	}
 
-	public void receiveReport() {
+	public boolean parseReport (StringBuffer buffer) {		
 		HttpParser parser = new HttpParser(logger);
-		Scanner scanner = null;
+		boolean ret = true;
+		ret = parser.parseHttpMessage(buffer.toString());
+		ret = checkProperty(parser);
+		buffer.delete(0, buffer.length());		
+		parser = null;
+		buffer = null;
+		return  ret;
+	}
+	
+	public void receiveReport() {
 		try {
-			scanner = new Scanner(socket.getInputStream());		
+			if (scanner == null) {
+				scanner = new Scanner(socket.getInputStream());
+			}
 			StringBuffer buffer = new StringBuffer();
 			logger.addLine(TAG +"Report thread started");
 			while (isScanStopped != true) {
 				if (scanner.hasNextLine()){
-					String readedLine = scanner.nextLine();
+					String readedLine = scanner.nextLine();			
 					buffer.append(readedLine+"+");
 					if (readedLine.compareTo("END") ==  0) {
-						parser.parseHttpMessage(buffer.toString());
-						checkProperty(parser);
-						buffer.delete(0, buffer.length());
+						parseReport(buffer);
 					}
-				}
+				}				
 			}
 		} catch (IOException e) {
 			logger.addLine(TAG+ e.getMessage());
@@ -83,7 +124,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 			if (scanner != null) {
 				scanner.close();
 				scanner = null;
-			}
+			}			
 		}
 
 	}

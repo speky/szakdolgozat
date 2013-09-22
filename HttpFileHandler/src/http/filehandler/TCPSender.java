@@ -66,7 +66,7 @@ public class TCPSender  extends ConnectionInstance {
 				 if (null != reportReceiver) {
 					 reportReceiver.setSentBytes(byteBuffer.length);
 				 }else if (null != reportSender) {
-					 reportSender.sendReportMessage(Integer.toString(id), "message");
+					 reportSender.sendReportMessage(Integer.toString(id), "TCP", "message");
 				 }
 				 
 			}			
