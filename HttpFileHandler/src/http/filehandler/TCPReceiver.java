@@ -44,7 +44,7 @@ public class TCPReceiver extends ConnectionInstance {
 			if (socket == null) {
 				errorMessage = "Invalid socket!";
 				logger.addLine(TAG+errorMessage );
-				return -1;
+				return id;
 			}
 			
 			if (reportInterval > 0) {
@@ -53,7 +53,7 @@ public class TCPReceiver extends ConnectionInstance {
 					  @Override
 					  public void run() {
 						  if (reportReceiver  != null ) {								
-							  reportReceiver.setReceivedBytes(totalReadedBytes);
+							  reportReceiver.setReceivedBytes(reportInterval, totalReadedBytes);
 						  } else if (null != reportSender){
 							  reportSender.sendReportMessage(Integer.toString(id), "TCP", Integer.toString(totalReadedBytes));
 						  }
@@ -66,8 +66,7 @@ public class TCPReceiver extends ConnectionInstance {
 		}		
 		catch (Exception e) {
 			 errorMessage = "Some kinf of error occured!";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
-			return -1;
+			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		} 
 		finally{
 			if (timer != null) {
@@ -85,7 +84,7 @@ public class TCPReceiver extends ConnectionInstance {
 				e.printStackTrace();
 			}
 		}		
-		return 0;
+		return id;
 	}
 
 	@Override
@@ -122,13 +121,11 @@ public class TCPReceiver extends ConnectionInstance {
 		//logger.addLine(TAG + "rec buff size: "+ socket.getReceiveBufferSize());
 		
 		int readedBytes = 0;
-		int byteLimit = 0;
-		
+				
 		try {
-			while (reading && inputStream != null/*&& (byteLimit > 0 && totalReadedBytes < byteLimit) */) {
+			while (reading && inputStream != null) {
 				readedBytes = inputStream.read(byteBuffer);
-				totalReadedBytes += readedBytes;
-				//packetStructure.receivedPackets = totalReadedBytes;
+				totalReadedBytes += readedBytes;		
 				logger.addLine(TAG+"Readed Bytes: "+readedBytes);								
 			}					
 		} catch (IOException e) {

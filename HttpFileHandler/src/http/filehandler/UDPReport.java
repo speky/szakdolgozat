@@ -10,7 +10,7 @@ public class UDPReport extends TCPReport{
 		super();
 	}
 
-	public UDPReport(int id, String interval, double transferedData,  final double dlSpeed, final double ulSpeed, double jitter, int lost, int sum) {
+	public UDPReport(int id, int interval, double transferedData,  final double dlSpeed, final double ulSpeed, double jitter, int lost, int sum) {
 		super(id, interval, transferedData, dlSpeed, ulSpeed);
 		this.jitter = jitter;
 		this.lostDatagram = lost;

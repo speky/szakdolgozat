@@ -2,6 +2,7 @@ package com.drivetesting.services;
 
 import java.util.Locale;
 
+import android.R;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +20,6 @@ import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
 
 import com.drivetesting.DriveTestApp;
-import com.drivetesting.R;
 
 public class PhoneStateListenerService extends Service{
 
@@ -148,7 +148,7 @@ public class PhoneStateListenerService extends Service{
 			}
 
 			application.setCdmaEcio(String.valueOf(signalStrength.getCdmaEcio()));
-			application.setEvdoDbm(String.valueOf(signalStrength.getEvdoDbm())+ getApplicationContext() .getString(R.string.unit_dbm));
+			application.setEvdoDbm(String.valueOf(signalStrength.getEvdoDbm())/*+ getApplicationContext() .getString(R.string.unit_dbm)*/);
 			application.setEvdoEcio(String.valueOf(signalStrength.getEvdoEcio()));
 			application.setEvdoSnr(String.valueOf(signalStrength.getEvdoSnr()));
 			application.setGsmBitErrorRate(String.valueOf(signalStrength.getGsmBitErrorRate()));

@@ -2,7 +2,8 @@ package com.drivetesting.services;
 
 import http.filehandler.ConnectionInstance;
 import http.filehandler.Logger;
-import http.filehandler.PacketStructure;
+import http.filehandler.ReportI;
+import http.filehandler.ReportReceiver;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 import http.filehandler.UDPReceiver;
@@ -38,7 +39,7 @@ import android.util.Log;
 
 import com.drivetesting.DriveTestApp;
 
-public class HttpService extends IntentService {
+public class HttpService extends IntentService implements ReportI {
 	public static final int MAX_THREAD = 10;
 	private static final int SOCKET_TIMEOUT = 1000;
 
@@ -47,48 +48,29 @@ public class HttpService extends IntentService {
 	
 	private final String TAG = "HttpClient: ";
 	private final int ServerPort = 4444;
+	private final int ReportPort = 5000;
 
 	private  String serverAddress = null;
 	private Logger logger;
 	private ExecutorService pool = null;
-	private Set<Future<PacketStructure>> threadSet = new HashSet<Future<PacketStructure>>();
+	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
 	private Socket socket;
 	private Scanner scanner;
 	private PrintWriter printWriter = null;
 	private Properties answerProperty = new Properties();
 	private Properties headerProperty = new Properties();
-	
 	private ArrayList<ConnectionInstance> connectionInstances = new ArrayList<ConnectionInstance>();
-			
+	private ReportReceiver reportReceiver = null;
 	private String errorMessage = null;
-	private Messenger messenger = null;
-	
 	private int type = 0;
 	private int direction = 0;
 	private int bufferSize = 0;
 	private int reportPeriod = 0;
-	
-	private long receivedBytes = 0;
-	private long previousReceivedBytes = 0;
-	private long time = 0;
-	private SpeedInfo downloadSpeed;
-	private SpeedInfo uploadSpeed;
-	private ReportTask task = new ReportTask();
-	
-	class ReportTask extends TimerTask {
-		public void run() {
-			receivedBytes = getReceivedPackets() - previousReceivedBytes;
-			calcSpeed();
-			logger.addLine("** ReceivedBytes: "+ receivedBytes );
-			
-			sendMessage("packet", "Packet "+ Long.toString(receivedBytes) +
-													   " DL 0.0" +
-														" UL 0.0");
-		}
-	}
 
-	private void sendMessage(final String key, final String value) {
+	private Messenger messenger = null;
+	
+	public void sendMessage(final String key, final String value) {
 		if (messenger != null) {
 			Message m = Message.obtain();			
 			Bundle b = new Bundle();
@@ -128,37 +110,6 @@ public class HttpService extends IntentService {
 		return null;
 	}
 
-	private void calcSpeed() {
-		
-		long currentTime =  System.currentTimeMillis();
-		long ellapsedTime = currentTime - time;
-		time = currentTime;
-
-		downloadSpeed = calculate(ellapsedTime, receivedBytes);
-		//uploadSpeed = calculate(ellapsedTime, sentBytes);
-
-		previousReceivedBytes = receivedBytes;		
-	}
-
-	/**
-	 * 1 byte = 0.0078125 kilobits
-	 * 1 kilobits = 0.0009765625 megabit
-	 * 
-	 * @param time in miliseconds
-	 * @param bytes number of bytes downloaded/uploaded
-	 * @return SpeedInfo containing current speed
-	 */
-	private SpeedInfo calculate(final long time, final long bytes){
-		SpeedInfo info = new SpeedInfo();
-		if (time == 0) {
-			return info;
-		}
-		info.bps = (bytes / (time / 1000.0) );
-		info.kilobits  = info.bps  * BYTE_TO_KILOBIT;
-		info.megabits = info.kilobits * KILOBIT_TO_MEGABIT;
-		
-		return info;
-	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -191,12 +142,8 @@ public class HttpService extends IntentService {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
-
-			previousReceivedBytes = 0;			
-			time = System.currentTimeMillis();
-						
+			
 			makeNewThread();
-
 		}catch (Exception e) {
 			e.printStackTrace();
 			sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+ ServerPort );
@@ -210,26 +157,10 @@ public class HttpService extends IntentService {
 		stop();
 	}
 
-	public int getReceivedPackets() {
-		int packets = 0;
-		for (ConnectionInstance instance: connectionInstances) {
-			packets += instance.getReceivedPacket();			
-		}
-		return packets;
-	}
-	
-	/*public int getSentPackets() {
-		int packets = 0;
-		for (ConnectionInstance instance: connectionInstances) {
-			packets += instance.getSentPackets();			
-		}
-		return packets;
-	}*/
-
 	public void stop() {
 		logger.addLine(TAG+ "send stop to server");
 		try {
-			sendMessageToServer("STOP / Http*/1.0\n DATE:2013.12.12\n");
+			sendMessageToServer("STOP / Http*/1.0\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -237,8 +168,7 @@ public class HttpService extends IntentService {
 
 		for (ConnectionInstance receiver : connectionInstances) {
 			receiver.stop();
-		}
-		
+		}		
 		pool.shutdownNow();
 	}
 
@@ -273,12 +203,13 @@ public class HttpService extends IntentService {
 				return;
 			}
 			
-			calcSpeed();
+			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort);
 			
-			Future<PacketStructure> future = null;
+			Future<Integer> future = null;
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);
+					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, null, reportReceiver);
+					receiver.setReportInterval(reportPeriod);
 					receiver.setSocket(socket);
 					connectionInstances.add(receiver);
 					future = pool.submit(receiver);
@@ -290,42 +221,25 @@ public class HttpService extends IntentService {
 				}
 			} else {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					UDPReceiver receiver = new UDPReceiver(++threadCount, logger);
+				//	UDPReceiver receiver = new UDPReceiver(++threadCount, logger, reportReceiver);
 					
 				} else {
-					UDPSender sender = new UDPSender(++threadCount, logger);
+					//UDPSender sender = new UDPSender(++threadCount, logger, reportReceiver);
 					//sender.setReceiverParameters(port, address);
 				}
 			}						
 			threadSet.add(future);
 
-			//Declare the timer
-			Timer timer = new Timer();
-			//Set the schedule function and rate
-			timer.scheduleAtFixedRate(
-					task,
-					//Set how long before to start calling the TimerTask (in milliseconds)
-					10,
-					//Set the amount of time between each execution (in milliseconds)
-					reportPeriod);
-
-			for (Future<PacketStructure> futureInst : threadSet) {
-				try {
-					calcSpeed();
-					PacketStructure value = futureInst.get();
+			for (Future<Integer> futureInst : threadSet) {
+				try {					
+					Integer value = futureInst.get();
 					logger.addLine(TAG+"A thread ended, value: " + value);										
-					timer.cancel();
-					ConnectionInstance instance = getConnectionInstances(value.id);
+					ConnectionInstance instance = getConnectionInstances(value);
 					if (instance == null) {
 						sendMessage("error", "Error: Invalid id!");
 						return;
-					}
-						
-					if (value.receivedPackets == -1) {						
-						sendMessage("error", "Error: " + instance.getErrorMessage());
-					} else {
-						sendMessage("end", "Test end, received packets: "+ getReceivedPackets());
-					}
+					}						
+					sendMessage("end", "Test end");					
 					deleteInstance(instance);
 				} catch (ExecutionException e) {
 					e.printStackTrace();

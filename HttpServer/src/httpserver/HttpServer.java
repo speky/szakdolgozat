@@ -196,7 +196,7 @@ class ServerThread extends Thread{
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
 			if (parser.getHeadProperty("CONNECTION").equals("TCP")){				
-				TCPReceiver receiver = new TCPReceiver(logger, ++threadCount);								
+				TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, reporter, null);								
 				String timer = parser.getHeadProperty("REPORTPERIOD");
 				if (timer != null) {
 					receiver.setReportInterval(Integer.parseInt(timer)); 

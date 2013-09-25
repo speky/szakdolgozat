@@ -90,10 +90,10 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
             	Log.d(TAG, message.toString());
             }
             
-            if ( msg.getData().containsKey("packet")) {
-            	String data = msg.getData().getString("packet");
+            if ( msg.getData().containsKey("TCP")) {
+            	String data = msg.getData().getString("TCP");
             	message.append(data +"\n");
-            	tokenizeMessage(data);
+            	//tokenizeMessage(data);
             	action = 1;
             	Log.d(TAG, "get data" + message.toString());
             } 

@@ -12,20 +12,13 @@ public class TCPSender  extends ConnectionInstance {
 		
 	private byte[] byteBuffer;	
 	private Socket socket = null;
-	private PrintWriter printerWriter = null;
-	private MessageI reportSender = null;
-	private ReceiverReportI reportReceiver = null;
-	private Vector<Integer> reportList = new Vector<Integer>();
 	private boolean running = true;	
 	private final String TAG = "TCPSender: ";	
-	private final int ACK_WAITING = 5000; //in milisec
 	public static final String END_PACKET = "END_PACKET";	
 	
-	public TCPSender(Logger logger, final int id, final int bufferSize, MessageI sender, ReceiverReportI receiver) {
+	public TCPSender(Logger logger, final int id, final int bufferSize) {
 		super(ConnectionInstance.TCP, id, logger);				
-		logger.addLine(TAG+ "Created, id: " + id);
-		reportSender = sender;
-		reportReceiver = receiver;
+		logger.addLine(TAG+ "Created, id: " + id);		
 		byteBuffer = new byte[bufferSize];
 		Utility.fillStringBuffer(byteBuffer, bufferSize);		
 	}
@@ -56,19 +49,13 @@ public class TCPSender  extends ConnectionInstance {
 	public Integer call() {
 		try {
 			if (checkPrerequisite() == false) {
-				return -1;
+				return id;
 			}
 			OutputStream outputStream = socket.getOutputStream();
 			logger.addLine(TAG+"Send message,  sendertId: " + id);
 			while (running) {
 				 outputStream.write(byteBuffer);
-				 outputStream.flush();
-				 if (null != reportReceiver) {
-					 reportReceiver.setSentBytes(byteBuffer.length);
-				 }else if (null != reportSender) {
-					 reportSender.sendReportMessage(Integer.toString(id), "TCP", "message");
-				 }
-				 
+				 outputStream.flush();				 				 
 			}			
 			logger.addLine(TAG+" Sending ended!");
 		} catch (Exception e) {
@@ -86,7 +73,7 @@ public class TCPSender  extends ConnectionInstance {
 				e.printStackTrace();
 			}
 		}
-		return 0;
+		return id;
 	}
 
 	private boolean checkPrerequisite() {

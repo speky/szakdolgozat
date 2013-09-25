@@ -46,12 +46,6 @@
       android:summary="Click to pop up a field for entry"
       android:dialogTitle="Enter something useful"
     />
-    <ListPreference
-      android:key="list"
-      android:title="Selection Dialog"
-      android:summary="Click to pop up a list to choose from"
-      android:entries="@array/cities"
-      android:entryValues="@array/airport_codes"
-      android:dialogTitle="Choose a Pennsylvania city" />
+    
   </PreferenceCategory>
 </PreferenceScreen>
