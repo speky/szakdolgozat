@@ -55,6 +55,25 @@ public class Utility {
 		}
 	}
 	
+	public static void fillStringBuffer(byte[] buffer, final int size, byte[] udpData) {
+		if ( udpData == null) {
+			fillStringBuffer(buffer, size);
+			return;
+		}		
+		if (buffer == null) {
+			return;
+		}				
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+		char[] charSet = alphabet.toCharArray();
+		 System.arraycopy(udpData, 0, buffer, 0, udpData.length);		
+		// fill buffer with random characters
+		for (int i = udpData.length; i < size; ++i) {
+			Random r =  new Random();
+			int index = r.nextInt(charSet.length);
+			buffer[i] = (byte) charSet[index];
+		}
+	}
+	
 	public static String calcCheckSum(final byte[]  bytes) {	    
 	    try {
 	        MessageDigest md = MessageDigest.getInstance("SHA-256");

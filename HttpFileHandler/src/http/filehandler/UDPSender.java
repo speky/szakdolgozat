@@ -6,45 +6,131 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 
 public class UDPSender extends ConnectionInstance {
 	private DatagramSocket socket = null;	
-	private int serverPort = 0;
-	private String serverAddress = "";
+	private int receiverPort = 0;
+	private InetAddress receiverAddress = null;
+	private int bufferSize;	
+	private final String TAG = "UDPSender: ";
+	private double UDPRate = 1.0; 
+	private  double kSecs_to_usecs = 1e6; 
+	private int    kBytes_to_Bits = 8;  
+	private int packetID;
+	private long adjust ;
+	private long delay_target ;
+	private long delay; 
+	
 
-	public UDPSender(final int id, Logger logger) {
+	public UDPSender(final int id, Logger logger, final int bufferSize) {
 		super(ConnectionInstance.UDP, id, logger);
-		//logger.addLine("Add a client, id: " + client.id + " IP: " + socket.getInetAddress().getHostAddress());
+		logger.addLine(TAG+ " id: " + id);
+		this.bufferSize = bufferSize;
+		init();		
 	}
 
+	private void init () {
+		// Due to the UDP timestamps etc, included 
+		// reduce the read size by an amount 
+		// equal to the header size
+		delay_target = 0;
+		delay = 0; 
+		adjust = 0;
+		// compute delay for bandwidth restriction, constrained to [0,1] seconds 
+		delay_target = (int) (bufferSize * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) ); 
+		
+		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
+			logger.addLine(TAG + "WARNING: delay too large, reducing from"+delay_target / kSecs_to_usecs +" to 1 second!"); 
+			delay_target = (int) kSecs_to_usecs * 1; 
+		}         
+	}
+
+	// used on mobile side
 	public void setReceiverParameters(final int port, final String address) {
-		serverAddress = address;
-		serverPort = port;		
+		receiverPort = port;	
+		try {
+			receiverAddress  = InetAddress.getByName(address);
+			socket = new DatagramSocket(receiverPort, receiverAddress);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
+	// used on server side
+	public void setReceiverParameters(final int port) {
+		receiverAddress = null;
+		receiverPort = port;		
+		try {			
+			socket = new DatagramSocket(port);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void getAddressThroughNAT() {
+		// Buffer for receiving incoming data
+		byte[] inboundDatagramBuffer = new byte[1024];
+		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);
+		// Source IP address
+		receiverAddress = inboundDatagram.getAddress();
+		receiverPort = inboundDatagram.getPort();
+		// Actually receive the datagram
+		try {
+			socket.receive(inboundDatagram);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void run() {
 		try {
-			socket = new DatagramSocket();
-			byte[] buf = new byte[1000];
-			//DatagramPacket dp = new DatagramPacket(buf, buf.length);
-			InetAddress hostAddress = InetAddress.getByName("localhost");
+			byte[] buf = new byte[bufferSize];			
+			packetID = 0;
+			long lastPacketTime = 0;
+			int packetSize = 0;
+			
+			if (receiverAddress == null) {
+				getAddressThroughNAT();
+			}
+			
 			while (true) {
+				long time = Calendar.getInstance().getTimeInMillis();
+				// delay between writes 
+				// make an adjustment for how long the last loop iteration took 
+				// TODO this doesn't work well in certain cases, like 2 parallel streams 
+				adjust = delay_target + (time -lastPacketTime); 
+				lastPacketTime = time ; 
 
-				String outMessage = " "; //stdin.readLine();
+				if ( adjust > 0  ||  delay > 0 ) {
+					delay += adjust; 
+				}
+				
+				byte[]  packetData = (Integer.toString(packetID) +" " + Long.toString(time) +" ").getBytes();
+				// re-generate byte buffer array if the packet id or time data's length has changed
+				if (packetSize != packetData.length) {
+					Utility.fillStringBuffer(buf, bufferSize, packetData);
+				}
 
-				//if (outMessage.equals("bye"))
-				//break;
-				String outString = "Client say: " + outMessage;
-				buf = outString.getBytes();
-
-				DatagramPacket out = new DatagramPacket(buf, buf.length, hostAddress, 9999);
+				DatagramPacket out = new DatagramPacket(buf, buf.length, receiverAddress, receiverPort);
 				socket.send(out);
-
-				/*s.receive(dp);
-				String rcvd = "rcvd from " + dp.getAddress() + ", " + dp.getPort() + ": "
-						+ new String(dp.getData(), 0, dp.getLength());				
-				System.out.println(rcvd);
-				 */
+				
+				// wait for hold the preset 
+				if ( delay > 0 ) {					
+					try {
+						Thread.sleep( delay );
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+				}
+				++packetID;
 			}
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block

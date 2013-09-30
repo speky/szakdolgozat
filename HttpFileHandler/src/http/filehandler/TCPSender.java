@@ -13,14 +13,13 @@ public class TCPSender  extends ConnectionInstance {
 	private byte[] byteBuffer;	
 	private Socket socket = null;
 	private boolean running = true;	
-	private final String TAG = "TCPSender: ";	
-	public static final String END_PACKET = "END_PACKET";	
+	private final String TAG = "TCPSender: ";
 	
 	public TCPSender(Logger logger, final int id, final int bufferSize) {
 		super(ConnectionInstance.TCP, id, logger);				
 		logger.addLine(TAG+ "Created, id: " + id);		
 		byteBuffer = new byte[bufferSize];
-		Utility.fillStringBuffer(byteBuffer, bufferSize);		
+		Utility.fillStringBuffer(byteBuffer, bufferSize);
 	}
 
 	public boolean setSocket(Socket socket) {		
@@ -55,7 +54,7 @@ public class TCPSender  extends ConnectionInstance {
 			logger.addLine(TAG+"Send message,  sendertId: " + id);
 			while (running) {
 				 outputStream.write(byteBuffer);
-				 outputStream.flush();				 				 
+				 outputStream.flush();
 			}			
 			logger.addLine(TAG+" Sending ended!");
 		} catch (Exception e) {
