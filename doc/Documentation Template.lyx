@@ -917,102 +917,151 @@ mikor jelez a program hibát és mit tegyen a felhasználó ha ilyennel találko
 Fejlesztői dokumentáció
 \end_layout
 
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a probléma részletes specifikációját,
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a felhasznált módszerek részletes leírását, a használt fogalmak definícióját,
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a program logikai és fizikai szerkezetének leírását (adatszerkezetek,
- adatbázisok, modulfelbontás),
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a tesztelési tervet és a tesztelés eredményeit.
-\end_layout
-
 \begin_layout Section
 Mobilhálózatok bemutatása
 \end_layout
 
-\begin_layout Standard
-Mobil hálózat kezdete:
-\end_layout
-
-\begin_layout Standard
-A multi-directional, cellular network antenna array In December 1947, Douglas
- H.
- Ring and W.
- Rae Young, Bell Labs engineers, proposed hexagonal cells for mobile phones
- in vehicles.[12] Philip T.
- Porter, also of Bell Labs, proposed that the cell towers be at the corners
- of the hexagons rather than the centers and have directional antennas that
- would transmit/receive in three directions (see picture at right) into
- three adjacent hexagon cells on three different frequencies.[13] At this
- stage, the technology to implement these ideas did not exist, nor had the
- frequencies been allocated.
- Several years would pass before Richard H.
- Frenkiel and Joel S.
- Engel of Bell Labs developed the electronics to achieve this in the 1960s.
-\end_layout
-
-\begin_layout Standard
-In all these early examples, a mobile phone had to stay within the coverage
- area serviced by one base station throughout the phone call, i.e.
- there was no continuity of service as the phones moved through several
- cell areas.
- The concepts of frequency reuse and handoff, as well as a number of other
- concepts that formed the basis of modern cell phone technology, were described
- in the 1970s.
- In 1970 Amos E.
- Joel, Jr., a Bell Labs engineer,[14] invented an automatic "call handoff"
- system to allow mobile phones to move through several cell areas during
- a single conversation without interruption.
-\end_layout
-
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
-Handheld mobile phone
+Mobil hálózat kezdete, története
 \end_layout
 
 \begin_layout Standard
-Prior to 1973, mobile telephony was limited to phones installed in cars
- and other vehicles.[14] Motorola and Bell Labs raced to be the first to
- produce a handheld mobile phone.
- That race ended on April 3, 1973 when Martin Cooper, a Motorola researcher
- and executive, made the first mobile telephone call from handheld subscriber
- equipment, placing a call to Dr.
- Joel S.
- Engel of Bell Labs.[3][4] The prototype handheld phone used by Dr.
- Cooper weighed 2.5 pounds and measured 9 inches long, 5 inches deep and
- 1.75 inches wide.
- The prototype offered a talk time of just 30 minutes and took 10 hours
- to re-charge.[5]
+Már a második világháborúban képesek voltak rádió telefonos kapcsolatot
+ kiépíteni katonai használatra.
+ Kézi rádió adó-vevők már az 1940-es évektől elérhetőek voltak, pár telefon
+ társaságnak volt gépkocsiban is használható mobil telefon készüléke.
+ A korai készülékek testesek voltak és sok áramot fogyasztottak, a hálózat
+ pedig csak néhány szimultán beszélgetést tudott csak kiszolgálni.
+ 
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align right
+\begin_inset Graphics
+	filename 621px-Mobile_radio_telephone.jpg
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Első mobil telefonok egyike
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+Az egyesült államokbeli Bell laboratórium mérnökei olyan rendszeren dolgoztak,
+ ami képessé teszi a mobil felhasználókat hívások kezdeményezésére és fogadására
+ akár az autójukból.
+ Az AT&T vállalat 1947 megalkotta az első mobil telefon hálozatot a Mobile
+ Telephone Service-t (MTS).
+ 5,000 ügyféle volt és körülbelül heti 30 000 hívást bonyolítottak rajta.
+ A cella technológia bevezetése lehetővé tette a frekvenciák sokszori ujrahaszno
+sítását kis szomszédos területeken, melyeket alacsony teljesítményű adók
+ segítségével fedtek le.
+ Ez lehetővé tette gazdaságilag megvalósítható moódon a mobil telefonok
+ széles körben való elterjedését.
 \end_layout
 
 \begin_layout Standard
-John F.
- Mitchell,[6][7][8] Motorola's chief of portable communication products
- and Cooper's boss in 1973, played a key role in advancing the development
- of handheld mobile telephone equipment.
- Mitchell successfully pushed Motorola to develop wireless communication
- products that would be small enough to use anywhere and participated in
- the design of the cellular phone.[9][10]
+A mobil telefonok fejlődése jól nyomon követhető az egymást követő generációkon,
+ a korai "0G" szolgáltatásokon keresztül (MTS) az első generációs (1G) analóg
+ cellás hálózatok és második generációs (2G) digitális mobil hálózatokon
+ át a harmadik generációs (3G) szélessávú adat szolgáltatásokig.
+ Napjainkban fejlődnek és egyre inkább elterjednek a negyedik generációs
+ (4G) native-IP hálózatok.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Cellák koncepciója
+\end_layout
+
+\begin_layout Standard
+1947-ben Douglas H.
+ Ring és W.
+ Rae Young a Bell laboratórium mérnökei egy javasolták a hatszögletü cellák
+ használatát a mobil hálozatokban.
+ Akkoriban ez még nem volt megvalósítható csupán két évtizeddel később mikor
+ Richard H.
+ Frenkiel, Joel S.
+ Engel és Philip T.
+ Porter mérnökök kiterjesztették a korai javaslatot és egy sokkal részletesebb
+ tervet dolgoztak ki.
+ Porter volt, aki előszőr javasolta, hogy az adótornyok használják a már
+ jólismert irányított antennákat, anak érdekében, hogy redukálják ay interferenc
+iát és növeljék a csatornák újrahasznosíthatóságát.
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0in
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Transmitting_tower_top_us.jpg
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Többirányú mobilhálózati antenna
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ezekben a korai időkbena mobil készüléknek az adótorony által lefedett körzetben
+ kellett maradnia, ahhoz hogy sztolgáltatás folyamatos maradjon, vagyis
+ a szolgáltatás nem volt foyltonos, átjárható az egyes cellák között.
+ A koncepciók, mint a frekvencia újrahasználás és az átadás (handoff vagy
+ handover) számos új mobiltelefon hálózati koncepciók alapját képezték.
+ 1970-ben Amos E.
+ Joel Bell Laboratórium mérnöke feltalálta a három oldalú antennát, hogy
+ segítse a hívások átadásának folyamatát egyik cellából a másikba.
 \end_layout
 
 \begin_layout Subsection
 Mobilhálózatokban használt kifejezések leírása
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Hozzáférési Technológiák
@@ -1062,7 +1111,7 @@ CDMA
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Mobil hálózati szabványok
@@ -1287,7 +1336,7 @@ Enhanced voice quality To ensure compatibility, 3GPP demands at least AMR-NB
  This codec is mandated in 3GPP networks that support 16 kHz samplin
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Mobil hálózat szolgáltatások, technológiák
@@ -1354,50 +1403,75 @@ Handover
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Mobil hálózat elemei
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
+BSC - Base Station Controller, 
+\end_layout
+
+\begin_layout Description
+BSS - Base Station Subsystem, ez része a hagyományos mobilhálózatnak (2G,
+ GSM) which is responsible for handling traffic and signaling between a
+ mobile phone and the network switching subsystem.
+ The BSS carries out transcoding of speech channels, allocation of radio
+ channels to mobile phones, paging, transmission and reception over the
+ air interface and many other tasks related to the radio network.
+\end_layout
+
+\begin_layout Description
+BTS - Base Transceiver Station, tartalmazza a rádió szignálok átviteléhez
+ és fogadásához szükséges berendezéseket, antennákat, valamint a bázisállomással
+ (BSC) történő kommunikáció dekodoláshoz és titkositáshoz szökséges eszközöket.
+ VAlójában nem más, mint egy pikocella sok rádi adó-vevővel (TRX), amik
+ lehetővé teszik különböző frekvenciák kiszolgálását.
+ Egy BTS-t a "szülő
+\begin_inset Quotes srd
+\end_inset
+
+ bázis állomás (BSC) vezérel.
+\end_layout
+
+\begin_layout Description
 MS - Mobile Station azaz maga a mobil készülék, amivel a felhasználó hívást
  kezdeményezhet és fogadhat.
+ Ez a terminologia 2G rendszerekre vonatkozik, mint a GSM.
+ 3G rendszerekeben a mobile station helyett user equipment-ként (UE) hivatkoznak
+ rá.
 \end_layout
 
-\begin_layout Standard
-BSC - Base Station Controller
+\begin_layout Description
+RNC - Radio Network Controller, 
 \end_layout
 
-\begin_layout Standard
-RNC - Radio Network Controller
-\end_layout
-
-\begin_layout Standard
+\begin_layout Description
 Node-b 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 VLR - Visitor Location Register
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 HLR - Home Location Register
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 M-MGW - Mobile Media Gateway
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 SGSN - 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 GGSN - 
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 MSC - Mobil Softswitch Controller
 \end_layout
 
@@ -1419,7 +1493,7 @@ Az első rádiótelefon szolgáltatás '40es végén vezették be Amerikában, e
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Első generáció 
@@ -1432,7 +1506,7 @@ Első generációs mobil rendszer az AMPS (Advance mobile phone system), melyet
  mely lehetővé teszi, hogy hanghívást bonyolíthat az egész országban.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Második generáció
@@ -1448,6 +1522,50 @@ Második generáció
 \end_layout
 
 \begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\paragraph_spacing single
+\noindent
+\align center
+\begin_inset Graphics
+	filename Gsm_structures.svg.jpg
+	scale 60
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+GSM hálózat felépítése
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+első kereskedelemben működtetett digitális cellás rendszer, mely TDMA (Time
+ division multiple acces) alapú.
+\end_layout
+
+\begin_layout Subsubsection
 
 \series bold
 Harmadik generáció
@@ -1467,6 +1585,45 @@ Harmadik generáció
  W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
  A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
  2000 CDM-et (Code Division Multiplexing) eljárást használ.
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename UMTS_structures.svg.jpg
+	scale 80
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+3G hálózat struktúrája
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1485,7 +1642,7 @@ Harmadik generáció
  is ráta 64 Kpbs.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Negyedik generáció 

@@ -14,7 +14,7 @@ public class UDPSender extends ConnectionInstance {
 	private InetAddress receiverAddress = null;
 	private int bufferSize;	//in KB
 	private final String TAG = "UDPSender: ";
-	private double UDPRate = 1024.0 * 1024.0; 
+	private double UDPRate = 1024.0 * 1024.0; //1MBit/sec
 	private  double kSecs_to_usecs = 1e6; 
 	private int    kBytes_to_Bits = 8;  
 	private int packetID;
