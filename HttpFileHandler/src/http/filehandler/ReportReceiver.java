@@ -1,6 +1,7 @@
 package http.filehandler;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -32,15 +33,34 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		try {
 			socket =  new Socket(serverAddress, port);
 			scanner = new Scanner(socket.getInputStream());			
+			//sendReportMessage("0", "TCP", "TEST");
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
 		tcpReportList = new Vector<TCPReport>();
 		udpReportList = new Vector<UDPReport>();
 	}
 
+	
+	public void sendReportMessage(String id, String type,  String message){					
+		PrintWriter printer = null;
+		try {
+			printer = new PrintWriter(socket.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("POST "+ id +" HTTP*/1.0\n");
+		buffer.append("REPORT: "+ type +"\n");		
+		buffer.append("MESSAGE: "+message+"\n");
+		buffer.append("END\n");
+		printer.print(buffer);
+		printer.flush();
+	}
+	
 	public ReportReceiver(Logger logger, Socket socket, ReportI reporter) {
 		super();
 		this.logger = logger;
@@ -54,7 +74,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		try {
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
 		socket = null;
 		isScanStopped = true;
@@ -78,10 +98,8 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
 			if (ret) {
 				tcpReportList.add(report);				
-				reporter.sendMessage("TCP", report.toString());
-				
-			}
-			
+				reporter.sendMessage("TCP", report.toString());				
+			}			
 		} else if (reportType.equals("UDP")) {
 			UDPReport report = new UDPReport();
 			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
@@ -121,12 +139,13 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 					String readedLine = scanner.nextLine();			
 					buffer.append(readedLine+"+");
 					if (readedLine.compareTo("END") ==  0) {
+						System.out.println(TAG+" receiver report" + buffer.toString());
 						parseReport(buffer);
 					}
 				}				
 			}
 		} catch (IOException e) {
-			logger.addLine(TAG+ e.getMessage());
+			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
 		finally {
 			if (scanner != null) {

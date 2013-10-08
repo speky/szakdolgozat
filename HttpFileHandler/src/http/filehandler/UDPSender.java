@@ -12,16 +12,16 @@ public class UDPSender extends ConnectionInstance {
 	private DatagramSocket socket = null;	
 	private int receiverPort = 0;
 	private InetAddress receiverAddress = null;
-	private int bufferSize;	
+	private int bufferSize;	//in KB
 	private final String TAG = "UDPSender: ";
-	private double UDPRate = 1.0; 
+	private double UDPRate = 1024.0 * 1024.0; 
 	private  double kSecs_to_usecs = 1e6; 
 	private int    kBytes_to_Bits = 8;  
 	private int packetID;
 	private long adjust ;
 	private long delay_target ;
 	private long delay; 
-	
+	private boolean running = true;
 
 	public UDPSender(final int id, Logger logger, final int bufferSize) {
 		super(ConnectionInstance.UDP, id, logger);
@@ -38,7 +38,7 @@ public class UDPSender extends ConnectionInstance {
 		delay = 0; 
 		adjust = 0;
 		// compute delay for bandwidth restriction, constrained to [0,1] seconds 
-		delay_target = (int) (bufferSize * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) ); 
+		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) ); 
 		
 		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
 			logger.addLine(TAG + "WARNING: delay too large, reducing from"+delay_target / kSecs_to_usecs +" to 1 second!"); 
@@ -47,49 +47,58 @@ public class UDPSender extends ConnectionInstance {
 	}
 
 	// used on mobile side
-	public void setReceiverParameters(final int port, final String address) {
+	public boolean setReceiverParameters(final int port, final String address) {
 		receiverPort = port;	
 		try {
 			receiverAddress  = InetAddress.getByName(address);
 			socket = new DatagramSocket(receiverPort, receiverAddress);
+			return true;
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
+		return false;
 	}
 
 	// used on server side
-	public void setReceiverParameters(final int port) {
+	public boolean setReceiverParameter(final int port) {
 		receiverAddress = null;
 		receiverPort = port;		
 		try {			
 			socket = new DatagramSocket(port);
+			return true;
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
+		return false;
 	}
 	
 	private void getAddressThroughNAT() {
 		// Buffer for receiving incoming data
-		byte[] inboundDatagramBuffer = new byte[1024];
-		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);
-		// Source IP address
-		receiverAddress = inboundDatagram.getAddress();
-		receiverPort = inboundDatagram.getPort();
+		byte[] inboundDatagramBuffer = new byte[bufferSize];
+		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);		
 		// Actually receive the datagram
 		try {
 			socket.receive(inboundDatagram);
+			// Source IP address
+			receiverAddress = inboundDatagram.getAddress();
+			receiverPort = inboundDatagram.getPort();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
 	}
 	
-	public void run() {
+	@Override
+	public void stop() {
+		logger.addLine(TAG+" stopped!");
+		running = false;
+		if (socket != null) {
+			socket.close();
+		}
+	}
+	
+	public Integer call() {
 		try {
 			byte[] buf = new byte[bufferSize];			
 			packetID = 0;
@@ -100,8 +109,9 @@ public class UDPSender extends ConnectionInstance {
 				getAddressThroughNAT();
 			}
 			
-			while (true) {
+			while (running) {
 				long time = Calendar.getInstance().getTimeInMillis();
+				lastPacketTime = time;
 				// delay between writes 
 				// make an adjustment for how long the last loop iteration took 
 				// TODO this doesn't work well in certain cases, like 2 parallel streams 
@@ -126,21 +136,19 @@ public class UDPSender extends ConnectionInstance {
 					try {
 						Thread.sleep( delay );
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
+						return id;
 					} 
 				}
 				++packetID;
 			}
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
+		return id;
 	}
 }

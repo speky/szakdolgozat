@@ -7,6 +7,8 @@ import http.filehandler.Logger;
 import http.filehandler.ReportSender;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
+import http.filehandler.UDPReceiver;
+import http.filehandler.UDPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +35,7 @@ class ServerThread extends Thread{
 	private static final int MAX_THREAD = 10;
 	private static final String TAG = "ServerThread id: ";
 	private final int ReportPort = 5000;
-	private final int FirstPort = 5555;
+	private final int FirstPort = 5600;
 	private final int MaxPort = 6000;
 	private final int SOCKET_TIMEOUT = 10000; //in milisec	
 
@@ -87,7 +89,7 @@ class ServerThread extends Thread{
 		}
 		return port;
 	}
-
+		
 	public void run() {
 		try {   
 			while (true) {
@@ -117,6 +119,8 @@ class ServerThread extends Thread{
 					} else if (parser.getMethod().equals("STOP")) {
 						for (ConnectionInstance instance : connectionInstances ) {
 							instance.stop();
+							reporter.stop();
+							reporter = null;
 						}
 					}else{
 						sendResponse();
@@ -138,6 +142,11 @@ class ServerThread extends Thread{
 		return nextPort;
 	}
 
+	private void addConnectionInstance(ConnectionInstance instance) {
+		connectionInstances.add(instance);
+		Future<Integer> future = pool.submit(instance);
+		threadSet.add(future);
+	}
 
 	private boolean makeFileHandlingThread(int port) {
 		boolean retValue = true;
@@ -178,41 +187,48 @@ class ServerThread extends Thread{
 
 		reporter = new ReportSender(logger, ReportPort);
 
+		if (reporter.isSocketConnected() == false) {
+			reporter = null;
+			return false;
+		}
+		int bufferSize = 8000; // 8kb
+		String bufferString = parser.getHeadProperty("URI");
+		if (bufferString != null) {
+			bufferSize = Integer.parseInt(bufferString); 
+		}
+		
+		int time = 1000; 
+		if (parser.getHeadProperty("REPORTPERIOD") != null) {
+			time = Integer.parseInt(parser.getHeadProperty("REPORTPERIOD"));
+		}
+		
 		if (parser.getHeadProperty("MODE").equals("DL")){
-			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
-				int bufferSize = 8000; // 8kb
-				String bufferString = parser.getHeadProperty("URI");
-				if (bufferString != null) {
-					bufferSize = Integer.parseInt(bufferString); 
-				}
+			if (parser.getHeadProperty("CONNECTION").equals("TCP")){				
 				TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
-				if (sender.setSocket(testSocket)) {
-					connectionInstances.add(sender);
-					Future<Integer> future = pool.submit(sender);
-					threadSet.add(future);
+				if (sender.setSocket(testSocket)) {					
+					addConnectionInstance(sender);
 				}
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
-				//new Thread(new UDPSender(logger, 1 ));
+				UDPSender sender  = new UDPSender(++threadCount, logger, bufferSize);				
+				if (sender.setReceiverParameter(port)) {
+					addConnectionInstance(sender);
+				}
 			}
 		}else if (parser.getHeadProperty("MODE").equals("UL")){
-			if (parser.getHeadProperty("CONNECTION").equals("TCP")){				
-				TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, reporter, null);								
-				String timer = parser.getHeadProperty("REPORTPERIOD");
-				if (timer != null) {
-					receiver.setReportInterval(Integer.parseInt(timer)); 
-				}				
+			if (parser.getHeadProperty("CONNECTION").equals("TCP")){
+				TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, reporter, null);				
+				receiver.setReportInterval(time);				
 				if (receiver.setSocket(testSocket)) {
-					connectionInstances.add(receiver);
-					Future<Integer> future = pool.submit(receiver);
-					threadSet.add(future);
+					addConnectionInstance(receiver);
 				}
 
 			} else if (parser.getHeadProperty("CONNECTION").equals("UDP")){
-				//new Thread(new UDPRecever(logger, 1 ));
+				UDPReceiver receiver  = new UDPReceiver(++threadCount, logger, reporter, null, time, bufferSize);
+				if (receiver.setTestPort(port)) {
+					addConnectionInstance(receiver);
+				}
 			}
-		}
-		reporter.stop();
-		reporter = null;
+		}		
 		return true;
 	}
 
@@ -266,7 +282,7 @@ class ServerThread extends Thread{
 
 public class HttpServer {
 
-	private static final int SERVER_PORT = 4444;
+	private static final int SERVER_PORT = 4500;
 	private static final String TAG = "HTTP_Server: ";
 
 	private static ServerSocket serverSocket = null;

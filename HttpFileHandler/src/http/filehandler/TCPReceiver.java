@@ -7,8 +7,6 @@ import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.mockito.exceptions.Reporter;
-
 public class TCPReceiver extends ConnectionInstance {	
 	private boolean reading = true;			
 	private final String TAG = "TCPReceiver: "+ id;
@@ -89,12 +87,11 @@ public class TCPReceiver extends ConnectionInstance {
 
 	@Override
 	public void stop() {
-		logger.addLine(TAG+"Receiving stopped!");
+		logger.addLine(TAG+" stopped!");
 		reading = false;
 		if (timer != null) {
 			timer.cancel();
-		}
-		
+		}		
 		if (socket != null) {
 			try {				
 				socket.close();				
@@ -126,7 +123,7 @@ public class TCPReceiver extends ConnectionInstance {
 			while (reading && inputStream != null) {
 				readedBytes = inputStream.read(byteBuffer);
 				totalReadedBytes += readedBytes;		
-				logger.addLine(TAG+"Readed Bytes: "+readedBytes);								
+				//logger.addLine(TAG+"Readed Bytes: "+readedBytes);								
 			}					
 		} catch (IOException e) {
 			logger.addLine(TAG+e.getMessage());			

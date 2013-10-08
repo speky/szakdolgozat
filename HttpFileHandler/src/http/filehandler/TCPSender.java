@@ -2,10 +2,7 @@ package http.filehandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.Buffer;
-import java.util.Vector;
 
 
 public class TCPSender  extends ConnectionInstance {	
@@ -33,8 +30,7 @@ public class TCPSender  extends ConnectionInstance {
 
 	@Override
 	public void stop() {
-		logger.addLine(TAG+"Sending and report receiver stopped!");
-				
+		logger.addLine(TAG+" stopped!");				
 		running = false;
 		try {
 			socket.close();			
@@ -79,8 +75,7 @@ public class TCPSender  extends ConnectionInstance {
 		if (socket == null) {
 			logger.addLine(TAG+"Id: " + id+ " Connection problem!");			
 			return false;
-		}
-		
+		}		
 		return true;
 	}
 

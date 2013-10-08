@@ -47,7 +47,7 @@ public class HttpService extends IntentService implements ReportI {
 	private static final double KILOBIT_TO_MEGABIT = 0.0009765625;
 	
 	private final String TAG = "HttpClient: ";
-	private final int ServerPort = 4444;
+	private final int ServerPort = 4500;
 	private final int ReportPort = 5000;
 
 	private  String serverAddress = null;
@@ -166,12 +166,19 @@ public class HttpService extends IntentService implements ReportI {
 		}
 		logger.addLine(TAG+ "stop threads");
 
-		for (ConnectionInstance receiver : connectionInstances) {
-			receiver.stop();
+		for (ConnectionInstance instance : connectionInstances) {
+			instance.stop();
 		}		
 		pool.shutdownNow();
 	}
 
+	
+	private void addConnectionInstance(ConnectionInstance instance) {
+		connectionInstances.add(instance);		
+		Future<Integer> future = pool.submit(instance);
+		threadSet.add(future);
+	}
+	
 	public void makeNewThread() {
 		try {
 			logger.addLine(TAG+"makeNewThread" );
@@ -204,32 +211,36 @@ public class HttpService extends IntentService implements ReportI {
 			}
 			
 			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort);
-			
-			Future<Integer> future = null;
+			reportReceiver.start();
+						
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, null, reportReceiver);
 					receiver.setReportInterval(reportPeriod);
-					receiver.setSocket(socket);
-					connectionInstances.add(receiver);
-					future = pool.submit(receiver);
+					if (receiver.setSocket(socket)) {					
+						addConnectionInstance(receiver);
+				}
 				} else {
 					TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
-					sender.setSocket(socket);					
-					connectionInstances.add(sender);
-					future = pool.submit(sender);
+					if (sender.setSocket(socket)){
+						addConnectionInstance(sender);
+					}
 				}
 			} else {
 				if (direction == DriveTestApp.DOWNLOAD) {
-				//	UDPReceiver receiver = new UDPReceiver(++threadCount, logger, reportReceiver);
+					UDPReceiver receiver = new UDPReceiver(++threadCount, logger, null,  reportReceiver, reportPeriod,  bufferSize);
+					if (receiver.setSenderParameters(testPort, serverAddress)) {
+						addConnectionInstance(receiver);
+					}
 					
 				} else {
-					//UDPSender sender = new UDPSender(++threadCount, logger, reportReceiver);
-					//sender.setReceiverParameters(port, address);
+					UDPSender sender = new UDPSender(++threadCount, logger, bufferSize);					
+					if (sender.setReceiverParameters(testPort, serverAddress)) {					
+						addConnectionInstance(sender);
+					}
 				}
 			}						
-			threadSet.add(future);
-
+			
 			for (Future<Integer> futureInst : threadSet) {
 				try {					
 					Integer value = futureInst.get();
@@ -271,15 +282,6 @@ public class HttpService extends IntentService implements ReportI {
 	private void deleteInstance(ConnectionInstance instance) {
 		if (instance != null) {
 			connectionInstances.remove(instance);
-		}
-	}
-	
-	private void deleteInstance(int id) {
-		for (int i = 0; i < connectionInstances.size(); ++i){
-			ConnectionInstance instance = connectionInstances.get(i);
-			if (instance.getId() == id) {
-				connectionInstances.remove(instance);
-			}
 		}
 	}
 	
