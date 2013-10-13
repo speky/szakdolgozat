@@ -18,10 +18,7 @@ public class UDPReceiver extends ConnectionInstance {
 	private InetAddress senderAddress = null;
 	private int senderPort = 0;
 	private final int bufferSize;
-	private int totalReadedBytes = 0;
-	private int lastreport = 0;
-	private double transferedData = 0.0;	
-	private double bandwidth = 0.0;
+	private int totalReadedBytes = 0;	
 	private double lastTransit = 0.0;
 	private double jitter = 0.0;
 	private int packetCount = 0;
@@ -112,7 +109,10 @@ public class UDPReceiver extends ConnectionInstance {
 			// Buffer for receiving incoming data
 			byte[] inboundDatagramBuffer = new byte[bufferSize];
 			DatagramPacket datagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length, senderAddress, senderPort);
-			socket.send(datagram );		
+			socket.send(datagram );
+			DatagramPacket data = new DatagramPacket(inboundDatagramBuffer, bufferSize);
+			socket.receive(data);
+			//InetAddress adr = data.getAddress();
 		} catch (IOException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}		
@@ -131,9 +131,13 @@ public class UDPReceiver extends ConnectionInstance {
 			@Override
 			public void run() {
 				if (reportReceiver  != null ) {								
-					reportReceiver.setReceivedBytes(reportInterval, totalReadedBytes);
+					reportReceiver.setReceivedBytes(id, reportInterval, totalReadedBytes, jitter, lost, cntOutofOrder, sum);
 				} else if (null != reportSender){
-					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(totalReadedBytes));
+					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(totalReadedBytes)+ " "+
+																																	 Double.toString(jitter)+ " "+
+																																	 Integer.toString(lost)+ " "+
+																																	 Integer.toString(cntOutofOrder)+" "+
+																																	 Integer.toString(sum)+ " ");
 				}
 			}
 		}, reportInterval, reportInterval);
@@ -146,9 +150,7 @@ public class UDPReceiver extends ConnectionInstance {
 			try {
 				socket.receive(datagramPacket);
 				byte[] bytes = datagramPacket.getData();				
-				totalReadedBytes += bytes.length;
-				parsePackage(bytes.toString(), System.currentTimeMillis());
-				
+				totalReadedBytes += bytes.length;								
 			} catch (IOException e) {
 				logger.addLine(TAG+ " Error: " + e.getMessage());
 				return id;
@@ -157,10 +159,11 @@ public class UDPReceiver extends ConnectionInstance {
 			long time = Calendar.getInstance().getTimeInMillis();
 			String received = new String(datagramPacket.getData(), 0, datagramPacket.getLength()) + ", from address: "
 					+ datagramPacket.getAddress() + ", port: " + datagramPacket.getPort();
-			logger.addLine(TAG+received);
+			//logger.addLine(TAG+received);
 			parsePackage(received, time);
 
 		}
+		logger.addLine(TAG+ "exited!");
 		return id;
 
 	}

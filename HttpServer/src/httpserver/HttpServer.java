@@ -35,8 +35,8 @@ class ServerThread extends Thread{
 	private static final int MAX_THREAD = 10;
 	private static final String TAG = "ServerThread id: ";
 	private final int ReportPort = 5000;
-	private final int FirstPort = 5600;
-	private final int MaxPort = 6000;
+	private final int FirstPort = 5500;
+	private final int MaxPort = 5600;
 	private final int SOCKET_TIMEOUT = 10000; //in milisec	
 
 	private int id = -1;
@@ -119,9 +119,9 @@ class ServerThread extends Thread{
 					} else if (parser.getMethod().equals("STOP")) {
 						for (ConnectionInstance instance : connectionInstances ) {
 							instance.stop();
-							reporter.stop();
-							reporter = null;
 						}
+						reporter.stop();
+						reporter = null;						
 					}else{
 						sendResponse();
 					}	
@@ -191,7 +191,7 @@ class ServerThread extends Thread{
 			reporter = null;
 			return false;
 		}
-		int bufferSize = 8000; // 8kb
+		int bufferSize = 1000; // 8kb
 		String bufferString = parser.getHeadProperty("URI");
 		if (bufferString != null) {
 			bufferSize = Integer.parseInt(bufferString); 

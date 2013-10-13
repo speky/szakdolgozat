@@ -35,18 +35,8 @@ public class TCPReport {
 		tokens = new StringTokenizer(report);
 		try {			
 			reporterId = Integer.parseInt((String)tokens.nextElement());
-			interval = Integer.parseInt((String)tokens.nextElement());
-			//skip sec
-			tokens.nextElement();
-			transferedData = Double.parseDouble((String)tokens.nextElement());
-			//skip data type
-			tokens.nextElement();
-			dlSpeed = Double.parseDouble((String)tokens.nextElement());
-			//skip rate type
-			tokens.nextElement();
-			ulSpeed = Double.parseDouble((String)tokens.nextElement());
-			//skip rate type
-			tokens.nextElement();
+			interval = Integer.parseInt((String)tokens.nextElement());			
+			transferedData = Double.parseDouble((String)tokens.nextElement());			
 		} catch (Exception ex) {
 			ex.getMessage();
 			return false;
@@ -54,6 +44,14 @@ public class TCPReport {
 		return true;
 	}
 
+	public void setDLSpeed(Double speed) {
+		this.dlSpeed = speed;
+	}
+	
+	public void setULSpeed(Double speed) {
+		this.ulSpeed = speed;
+	}
+	
 	public void setData(String data) {
 		this.data = data;
 	}

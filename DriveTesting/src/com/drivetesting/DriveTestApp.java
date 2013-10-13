@@ -90,13 +90,19 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
             	Log.d(TAG, message.toString());
             }
             
-            if ( msg.getData().containsKey("TCP")) {
+            if ( msg.getData().containsKey("TCP")) {            	
             	String data = msg.getData().getString("TCP");
             	message.append(data +"\n");
             	//tokenizeMessage(data);
             	action = 1;
             	Log.d(TAG, "get data" + message.toString());
-            } 
+            } else if ( msg.getData().containsKey("UDP")) {            	
+                	String data = msg.getData().getString("UDP");
+                	message.append(data +"\n");
+                	//tokenizeMessage(data);
+                	action = 1;
+                	Log.d(TAG, "get data" + message.toString());                
+            }
             
             if ( msg.getData().containsKey("end")) {
             	message.append(msg.getData().getString("end")+"\n");      	
@@ -173,7 +179,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 				1000);
 	}
 	
-	public boolean startHttpClientService(int direction, int type) {		
+	public boolean startHttpClientService(int direction, int type) {
+		clearTestMessage();
 		Intent httpIntent = new Intent(this, HttpService.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						

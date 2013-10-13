@@ -33,7 +33,6 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		try {
 			socket =  new Socket(serverAddress, port);
 			scanner = new Scanner(socket.getInputStream());			
-			//sendReportMessage("0", "TCP", "TEST");
 		} catch (UnknownHostException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		} catch (IOException e) {
@@ -94,14 +93,18 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		// ** receiver is on server side => it is upload speed regarding to mobile device **
 		String reportType = parser.getHeadProperty("REPORT");
 		if (reportType.equals("TCP")) {
-			TCPReport report = new TCPReport();			
-			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
-			if (ret) {
+			TCPReport report = new TCPReport();
+			//TCPReport report = new TCPReport(1, 2, 42.0, 3.2, 2.4);
+			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));			
+			if (ret) {				
+				//report.setDLSpeed();
+				//report.setULSpeed();
 				tcpReportList.add(report);				
 				reporter.sendMessage("TCP", report.toString());				
 			}			
 		} else if (reportType.equals("UDP")) {
 			UDPReport report = new UDPReport();
+			//UDPReport report = new UDPReport(1, 2, 42.0, 3.2, 2.4, 1.2, 2, 3, 5);
 			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
 			if (ret) {
 				udpReportList.add(report);
@@ -164,17 +167,25 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		receiveReport();
 	
 	}
+	
 	//** receiver is on mobile side => it is download speed regarding to mobile device **
 	@Override
-	public void setReceivedBytes(final int interval, final int bytes) {
-		double dlSpeed = 0.0;
-		int id = 0;
+	public void setReceivedBytes(final int id, final int interval, final int bytes) {
+		double dlSpeed = 0.0;		
 		TCPReport report = new TCPReport(id, interval, (double)bytes, dlSpeed, 0.0);	
 		tcpReportList.add(report);	
 		reporter.sendMessage("TCP", report.toString());
 	}
 
-/*	private void calcSpeed() {
+	@Override
+	public void setReceivedBytes(final int id, final int interval, final int bytes, final double jitter, final int lost, final int outOfOrdered, final int sum ){
+		double dlSpeed = 0.0;		
+		UDPReport report = new UDPReport(id, interval, (double)bytes, dlSpeed, 0.0, jitter, lost, outOfOrdered, sum);	
+		tcpReportList.add(report);	
+		reporter.sendMessage("TCP", report.toString());
+	}
+
+	/*private void calcSpeed() {
 		
 		long currentTime =  System.currentTimeMillis();
 		long ellapsedTime = currentTime - time;

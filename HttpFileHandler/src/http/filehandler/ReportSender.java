@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ReportSender implements MessageI{
 	private final String TAG = "ReportSender: ";
@@ -22,7 +21,6 @@ public class ReportSender implements MessageI{
 		if (createSocket()) {
 			try {
 				printer = new PrintWriter(socket.getOutputStream());
-				//sendReportMessage("0", "TCP", "TEST");
 			} catch (IOException e) {
 				logger.addLine(TAG + e.getMessage());
 			}
@@ -36,7 +34,7 @@ public class ReportSender implements MessageI{
 			printer = new PrintWriter(socket.getOutputStream());
 		} catch (IOException e) {
 			logger.addLine(TAG + e.getMessage());
-		}		
+		}
 	}
 	
 	public boolean isSocketConnected() {
@@ -45,17 +43,10 @@ public class ReportSender implements MessageI{
 	
 	protected boolean createSocket() {
 		try {
-			serverSocket = new ServerSocket(port);			
+			serverSocket = new ServerSocket(port);
 			socket = serverSocket.accept();
-			
-			/*Scanner	scanner = new Scanner(socket.getInputStream());			
-			StringBuffer buffer = new StringBuffer();			
-			while (scanner.hasNextLine()){
-				String readedLine = scanner.nextLine();
-				break;
-			}*/
-			
-		} catch (Exception e) {			
+
+		} catch (Exception e) {
 			logger.addLine(TAG + e.getMessage());
 			return false;
 		}
@@ -80,15 +71,14 @@ public class ReportSender implements MessageI{
 	}
 	
 	@Override
-	public void sendReportMessage(String id, String type,  String message){					
+	public void sendReportMessage(String id, String type,  String message){
 	//	logger.addLine(TAG +"Send report message, id:"+ id);
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("POST "+ id +" HTTP*/1.0\n");
-		buffer.append("REPORT: "+ type +"\n");		
+		buffer.append("REPORT: "+ type +"\n");
 		buffer.append("MESSAGE: "+message+"\n");
 		buffer.append("END\n");
 		printer.print(buffer);
 		printer.flush();
 	}
-}	
-
+}

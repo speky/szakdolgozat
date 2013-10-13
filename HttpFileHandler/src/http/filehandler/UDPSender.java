@@ -12,7 +12,7 @@ public class UDPSender extends ConnectionInstance {
 	private DatagramSocket socket = null;	
 	private int receiverPort = 0;
 	private InetAddress receiverAddress = null;
-	private int bufferSize;	//in KB
+	private int bufferSize;	//in Byte
 	private final String TAG = "UDPSender: ";
 	private double UDPRate = 1024.0 * 1024.0; //1MBit/sec
 	private  double kSecs_to_usecs = 1e6; 
@@ -23,11 +23,15 @@ public class UDPSender extends ConnectionInstance {
 	private long delay; 
 	private boolean running = true;
 
-	public UDPSender(final int id, Logger logger, final int bufferSize) {
+	public UDPSender(final int id, Logger logger, final int bufferSizeInByte) {
 		super(ConnectionInstance.UDP, id, logger);
 		logger.addLine(TAG+ " id: " + id);
-		this.bufferSize = bufferSize;
+		bufferSize = bufferSizeInByte;
 		init();		
+	}
+	
+	public void setRateInBitsPerSec(final double rate) {
+		UDPRate = rate;
 	}
 
 	private void init () {
@@ -38,7 +42,9 @@ public class UDPSender extends ConnectionInstance {
 		delay = 0; 
 		adjust = 0;
 		// compute delay for bandwidth restriction, constrained to [0,1] seconds 
-		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) ); 
+		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) );
+		//sec = rate/byte*8 (= bits)
+		delay_target = (int) (UDPRate/((bufferSize) * kBytes_to_Bits));
 		
 		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
 			logger.addLine(TAG + "WARNING: delay too large, reducing from"+delay_target / kSecs_to_usecs +" to 1 second!"); 
@@ -51,7 +57,8 @@ public class UDPSender extends ConnectionInstance {
 		receiverPort = port;	
 		try {
 			receiverAddress  = InetAddress.getByName(address);
-			socket = new DatagramSocket(receiverPort, receiverAddress);
+			receiverPort = port;
+			socket = new DatagramSocket();
 			return true;
 		} catch (UnknownHostException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
@@ -84,6 +91,8 @@ public class UDPSender extends ConnectionInstance {
 			// Source IP address
 			receiverAddress = inboundDatagram.getAddress();
 			receiverPort = inboundDatagram.getPort();
+			DatagramPacket out = new DatagramPacket(inboundDatagramBuffer, 1000, receiverAddress, receiverPort);
+			socket.send(out);
 		} catch (IOException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
@@ -122,7 +131,7 @@ public class UDPSender extends ConnectionInstance {
 					delay += adjust; 
 				}
 				
-				byte[]  packetData = (Integer.toString(packetID) +" " + Long.toString(time) +" ").getBytes();
+				byte[]  packetData = (Integer.toString(++packetID) +" " + Long.toString(time) +" ").getBytes();
 				// re-generate byte buffer array if the packet id or time data's length has changed
 				if (packetSize != packetData.length) {
 					Utility.fillStringBuffer(buf, bufferSize, packetData);
@@ -139,8 +148,7 @@ public class UDPSender extends ConnectionInstance {
 						logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 						return id;
 					} 
-				}
-				++packetID;
+				}				
 			}
 		} catch (SocketException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
@@ -149,6 +157,7 @@ public class UDPSender extends ConnectionInstance {
 		} catch (IOException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
+		logger.addLine(TAG+ "exited!");
 		return id;
 	}
 }

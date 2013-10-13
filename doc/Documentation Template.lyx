@@ -1410,7 +1410,18 @@ Mobil hálózat elemei
 \end_layout
 
 \begin_layout Description
-BSC - Base Station Controller, 
+BSC - Base Station Controller, egy BSC több tíz esetleg több száz BTS-t
+ irányít.
+ A BSC rádió csatornák kiosztásáért felelős, mérési eredményeket fogad a
+ mobil készülékektől és a BTS-ek közötti handover-eket kezeli.
+ BSC fő funkciója összekötőként viselkedik a BTS-ek és a Mobile Switching
+ Center (MSC) között.
+ Általában a hálózatokban gyakorta úgy struktúrálják, hogy számos BSC-t
+ elosztanak a régiókban közel a BTS-ekhez,melyek egy nagy központosított
+ MSC site-al állnak kapcsolatban.
+ MSC-ket és Service GPRS Support Node-okat (SGSN) is kiszolgál (abban az
+ esetben ha GPRS-t használ).
+ 
 \end_layout
 
 \begin_layout Description
@@ -1444,7 +1455,13 @@ MS - Mobile Station azaz maga a mobil készülék, amivel a felhasználó hívá
 \end_layout
 
 \begin_layout Description
-RNC - Radio Network Controller, 
+RNC - Radio Network Controller az UMTS mobil hálózat (UTRAN) irányító egysége
+ és a hozzá kapcsolt Node B-k kontrollálásáért felelős.
+ BSC-nek 3G-s hálózati megfelelője, hasonló munkát végez: az üzenetek encryptálá
+sa és erőforrás kezelés.
+ Az RNC kapcsolatban áll a Circuit Switched Core Network-hez a Media Gateway-en
+ (MGW) keresztül és az Serving GPRS Support Node-en (SGSN) keresztül a Packet
+ Switched Core Network-höz.
 \end_layout
 
 \begin_layout Description
