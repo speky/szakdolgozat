@@ -10,6 +10,20 @@ import java.util.Vector;
 public class ReportReceiver extends Thread implements ReceiverReportI{
 	private final String TAG = "ReportReceiver: ";
 	
+	enum DataType {
+		BYTE,
+		KB,
+		MB
+	}
+	
+	enum RateType {
+		BITS,
+		KBITS,
+		MBITS
+	}
+	
+	private DataType data = DataType.BYTE;
+	private RateType rate = RateType.BITS;
 	private Logger logger = null;	
 	private Socket socket = null;
 	private Scanner scanner = null;
@@ -17,7 +31,8 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	private Vector<TCPReport> tcpReportList = null; 
 	private Vector<UDPReport> udpReportList = null;
 	private ReportI reporter = null;
-	
+	private boolean isUpload;
+		
 	public Vector<TCPReport> getTcpReportList() {
 		return tcpReportList;
 	}
@@ -26,13 +41,23 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		return udpReportList;
 	}
 	
-	public ReportReceiver(Logger logger, ReportI reporter, String serverAddress, int port) {
-		super();		
+	public void setData(DataType type) {
+		data = type;
+	}
+
+	public void setRate(RateType type) {
+		rate = type;
+	}
+	
+	public ReportReceiver(Logger logger, ReportI reporter, String serverAddress, int port, boolean upload) {
+		super();
 		this.logger = logger;
 		this.reporter = reporter;
+				
 		try {
 			socket =  new Socket(serverAddress, port);
-			scanner = new Scanner(socket.getInputStream());			
+			scanner = new Scanner(socket.getInputStream());
+			isUpload = upload;
 		} catch (UnknownHostException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		} catch (IOException e) {
@@ -94,22 +119,23 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		String reportType = parser.getHeadProperty("REPORT");
 		if (reportType.equals("TCP")) {
 			TCPReport report = new TCPReport();
-			//TCPReport report = new TCPReport(1, 2, 42.0, 3.2, 2.4);
-			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));			
+			report.setData(data);
+			report.setRate(rate);
+			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
+			calcSpeed(report);
 			if (ret) {				
-				//report.setDLSpeed();
-				//report.setULSpeed();
-				tcpReportList.add(report);				
+				tcpReportList.add(report);
 				reporter.sendMessage("TCP", report.toString());				
 			}			
 		} else if (reportType.equals("UDP")) {
 			UDPReport report = new UDPReport();
-			//UDPReport report = new UDPReport(1, 2, 42.0, 3.2, 2.4, 1.2, 2, 3, 5);
+			report.setData(data);
+			report.setRate(rate);
 			ret = report.parseReport(parser.getHeadProperty("MESSAGE"));
+			calcSpeed(report);
 			if (ret) {
 				udpReportList.add(report);
-				String s = report.toString();
-				reporter.sendMessage("UDP", s);
+				reporter.sendMessage("UDP", report.toString());
 			}
 			
 		} else {
@@ -168,54 +194,55 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	
 	}
 	
-	//** receiver is on mobile side => it is download speed regarding to mobile device **
+	// ** receiver is on mobile side => it is download speed regarding to mobile device **
 	@Override
 	public void setReceivedBytes(final int id, final int interval, final int bytes) {
-		double dlSpeed = 0.0;		
-		TCPReport report = new TCPReport(id, interval, (double)bytes, dlSpeed, 0.0);	
+		TCPReport report = new TCPReport(id, interval, (double)bytes, 0.0, 0.0);
+		calcSpeed(report);
 		tcpReportList.add(report);	
 		reporter.sendMessage("TCP", report.toString());
 	}
 
 	@Override
-	public void setReceivedBytes(final int id, final int interval, final int bytes, final double jitter, final int lost, final int outOfOrdered, final int sum ){
-		double dlSpeed = 0.0;		
-		UDPReport report = new UDPReport(id, interval, (double)bytes, dlSpeed, 0.0, jitter, lost, outOfOrdered, sum);	
+	public void setReceivedBytes(final int id, final int interval, final int bytes, final double jitter, final int lost, final int outOfOrdered, final int sum ){		
+		UDPReport report = new UDPReport(id, interval, (double)bytes, 0.0, 0.0, jitter, lost, outOfOrdered, sum);
+		calcSpeed(report);
 		tcpReportList.add(report);	
 		reporter.sendMessage("TCP", report.toString());
 	}
 
-	/*private void calcSpeed() {
+	private void calcSpeed(TCPReport report) {
 		
-		long currentTime =  System.currentTimeMillis();
-		long ellapsedTime = currentTime - time;
-		time = currentTime;
-
-		downloadSpeed = calculate(ellapsedTime, receivedBytes);
-		//uploadSpeed = calculate(ellapsedTime, sentBytes);
-
-		previousReceivedBytes = receivedBytes;		
-	}
-
-	/ **
-	 * 1 byte = 0.0078125 kilobits
-	 * 1 kilobits = 0.0009765625 megabit
-	 * 
-	 * @param time in miliseconds
-	 * @param bytes number of bytes downloaded/uploaded
-	 * @return SpeedInfo containing current speed
-	 * /
-	private SpeedInfo calculate(final long time, final long bytes){
-		SpeedInfo info = new SpeedInfo();
-		if (time == 0) {
-			return info;
+		long time =  report.getInterval();
+		double transfered = report.getTransferedData();
+		
+		if (isUpload) {
+			report.setULSpeed(calculate(time, transfered));
+		} else {
+			report.setDLSpeed(calculate(time, transfered));
 		}
-		info.bps = (bytes / (time / 1000.0) );
-		info.kilobits  = info.bps  * BYTE_TO_KILOBIT;
-		info.megabits = info.kilobits * KILOBIT_TO_MEGABIT;
 		
-		return info;
+		if (data == DataType.KB) {
+			report.setTransferedData(transfered / 1024.0);
+		}else if (data == DataType.MB) {
+			report.setTransferedData(transfered / (1024.0*1024));
+		}
 	}
-*/
+	
+	private double calculate(final long timeInSec, final double bytes) {		
+		double transferRate = 0.0;
+		if (timeInSec == 0) {
+			return transferRate;
+		}
+		//bits
+		transferRate= bytes / (double) timeInSec * 8;
+		
+		if (rate == RateType.KBITS) {
+			transferRate /= 1000.0; 
+		}else if (rate == RateType.MBITS) {
+			transferRate /= (1000.0 * 1000.0);
+		}		
+		return transferRate ;
+	}
 	
 }	

@@ -22,8 +22,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,9 +41,6 @@ public class HttpService extends IntentService implements ReportI {
 	public static final int MAX_THREAD = 10;
 	private static final int SOCKET_TIMEOUT = 1000;
 
-	private static final double BYTE_TO_KILOBIT = 0.0078125;
-	private static final double KILOBIT_TO_MEGABIT = 0.0009765625;
-	
 	private final String TAG = "HttpClient: ";
 	private final int ServerPort = 4500;
 	private final int ReportPort = 5000;
@@ -67,6 +62,7 @@ public class HttpService extends IntentService implements ReportI {
 	private int direction = 0;
 	private int bufferSize = 0;
 	private int reportPeriod = 0;
+	private int rateType = 0;
 
 	private Messenger messenger = null;
 	

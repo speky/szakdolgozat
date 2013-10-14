@@ -1,26 +1,31 @@
 package http.filehandler;
 
+import http.filehandler.ReportReceiver.DataType;
+import http.filehandler.ReportReceiver.RateType;
+
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 public class TCPReport {
+	
+	private HashMap<DataType, String> DataString;
+	private HashMap<RateType, String> RateString;
+	
 	public  int reporterId = 0;
-	public int  interval = 0;
+	public long  interval = 0;
 	public  double transferedData = 0.0;
 	public  double dlSpeed = 0.0;
 	public  double ulSpeed = 0.0;
-	protected String data = "KB";
-	protected String rate = "Kbits/sec";
+	protected DataType data = DataType.BYTE;
+	protected RateType rate = RateType.BITS;
 	protected StringTokenizer tokens = null;
-	
+		
 	public TCPReport() {
-		reporterId = 0;
-		this.interval = 0;
-		this.transferedData = 0.0;
-		this.dlSpeed = 0.0;
-		this.ulSpeed = 0.0;
+		init();
 	}
-	
-	public TCPReport(final int id, final int interval, final double transferedData, final double dlSpeed, final double ulSpeed) {
+		
+	public TCPReport(final int id, final long interval, final double transferedData, final double dlSpeed, final double ulSpeed) {
+		init();
 		reporterId = id;
 		this.interval = interval;
 		this.transferedData = transferedData;
@@ -28,6 +33,28 @@ public class TCPReport {
 		this.ulSpeed = ulSpeed;
 	}
 
+	private void init() {
+		DataString = new HashMap<DataType, String>();
+		DataString .put(DataType.BYTE, "B");
+		DataString .put(DataType.KB, "KB");
+		DataString .put(DataType.MB, "MB");
+		
+		RateString = new HashMap<RateType, String>() ;
+		RateString .put(RateType.BITS, "bits");
+		RateString .put(RateType.KBITS, "kbits");
+		RateString .put(RateType.MBITS, "mbits");
+		
+		reporterId = 0;
+		interval = 0;
+		transferedData = 0.0;
+		dlSpeed = 0.0;
+		ulSpeed = 0.0;
+	}
+	
+	public long getInterval() { return interval; }
+	
+	public double getTransferedData() { return transferedData; }
+	
 	public boolean parseReport(final String report) {
 		if (report == null) {
 			return false;
@@ -35,7 +62,7 @@ public class TCPReport {
 		tokens = new StringTokenizer(report);
 		try {			
 			reporterId = Integer.parseInt((String)tokens.nextElement());
-			interval = Integer.parseInt((String)tokens.nextElement());			
+			interval = Long.parseLong((String)tokens.nextElement());			
 			transferedData = Double.parseDouble((String)tokens.nextElement());			
 		} catch (Exception ex) {
 			ex.getMessage();
@@ -44,6 +71,10 @@ public class TCPReport {
 		return true;
 	}
 
+	public void setTransferedData(Double data) {
+		this.transferedData = data;
+	}
+	
 	public void setDLSpeed(Double speed) {
 		this.dlSpeed = speed;
 	}
@@ -52,12 +83,12 @@ public class TCPReport {
 		this.ulSpeed = speed;
 	}
 	
-	public void setData(String data) {
-		this.data = data;
+	public void setData(DataType type) {
+		data = type;
 	}
 
-	public void setRate(String rate) {
-		this.rate = rate;
+	public void setRate(RateType type) {
+		rate = type;
 	}
 
 	public String getHeader() {
@@ -66,8 +97,8 @@ public class TCPReport {
 
 	@Override
 	public String toString() {		
-		return Integer.toString(reporterId)+" " +Integer.toString(interval)+" sec" +" "+Double.toString(transferedData) +" "+ data + 
-				" " + Double.toString(dlSpeed) +" "+ rate+" " + Double.toString(ulSpeed) +" "+ rate;
+		return Integer.toString(reporterId)+" " +Long.toString(interval)+" sec" +" "+Double.toString(transferedData) +" "+ DataString.get(data)+ 
+				" " + Double.toString(dlSpeed) +" "+ RateString.get(rate)+" " + Double.toString(ulSpeed) +" "+ RateString.get(rate);
 	}
 
 }
