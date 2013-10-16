@@ -1,9 +1,10 @@
 package com.drivetesting;
 
+import http.filehandler.TCPReport;
+import http.filehandler.UDPReport;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Application;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import com.drivetesting.subjects.PhoneStateSubject;
 import com.drivetesting.subjects.TestSubject;
 
 public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, 
-											TestSubject, PhoneStateSubject, LocationSubject{
+											TestSubject, PhoneStateSubject, LocationSubject {
 
 	static final String TAG = "DriveTesting";
 
@@ -41,19 +42,12 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private int LAC = 0;
 	private int CID = 0;
 	private double signalStrength = 0.0;
-	private long testId = -1;
-	private String testName = "-";
-	private double DLSpeed = 0.0;
-	private double ULSpeed = 0.0;
-	
+	private long testId = 0;
+	private String testName = "-";	
 	private DataStorage dataStorage;
-	private Timer dataStorageTimer;
-	
 	private SharedPreferences prefs;	
 		
 	private boolean networkConnected = false;	
-	
-	private ReportTask task = new ReportTask();
 	private boolean isTestRunning = false;
 
 	private ArrayList<TestObserver> testObservers;
@@ -66,20 +60,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public boolean isGpsServiceRun = false;
 	public boolean isGPSEnabled = false;
 	private Location location = null;
-	
-	private void tokenizeMessage(String message) {
-		String[] tokens = message.split(" ");
-		for (int i = 0; i < tokens.length; ++i) {
-			String token = tokens[i];
-			if (token.equals("DL")) {
-				DLSpeed = Double.parseDouble(tokens[++i]); 
-			}
-			if (token.equals("UL")) {
-				ULSpeed = Double.parseDouble(tokens[++i]); 
-			}
-		}
-	}
-	
+		
 	private Handler handler = new Handler() { 
         @Override 
         public void handleMessage(Message msg) {
@@ -92,16 +73,21 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
             
             if ( msg.getData().containsKey("TCP")) {            	
             	String data = msg.getData().getString("TCP");
-            	message.append(data +"\n");
-            	//tokenizeMessage(data);
+            	TCPReport report = new TCPReport();
+            	report.parseReport(data);
+            	message.insert(0, data +"\n");
             	action = 1;
             	Log.d(TAG, "get data" + message.toString());
+            	storeTCPReportItem(report.dlSpeed, report.ulSpeed);
+            	
             } else if ( msg.getData().containsKey("UDP")) {            	
                 	String data = msg.getData().getString("UDP");
-                	message.append(data +"\n");
-                	//tokenizeMessage(data);
+                	UDPReport report = new UDPReport();
+                	report.parseReport(data);
+                	message.insert(0, data +"\n");
                 	action = 1;
-                	Log.d(TAG, "get data" + message.toString());                
+                	Log.d(TAG, "get data" + message.toString());
+                	storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);
             }
             
             if ( msg.getData().containsKey("end")) {
@@ -129,19 +115,15 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		dataStorage = new DataStorage(this);
 		dataStorage.open();	
 		
-		dataStorage.insert(3, "testName", 12.0, 3.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
-		dataStorage.insert(1, "testName", 5.0, 2.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
-		dataStorage.insert(1, "testName", 3.0, 4.0, 0.0, 0.0, 0.0, 2, 2, 2, 2);
-		testId = 1;
-		
+		dataStorage.insert(3, "testName", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2);
+		dataStorage.insert(1, "testName", 5.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0, 0,2, 2, 2, 2);
+		dataStorage.insert(1, "testName", 3.0, 4.0, 0.0, 0.0, 0.0, 0.0, 0, 0,2, 2, 2, 2);
+				
 		// start phone state service
-		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));
-		startTimer();
+		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
-	class ReportTask extends TimerTask {
-		public void run() {
-			if (isTestRunning) {
+	private void storeTCPReportItem(final double dlSpeed, final double ulSpeed) {
 				double lat = 0;
 				double lon = 0;
 				if (location != null ) {
@@ -153,34 +135,49 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 													lat, 
 													lon,
 													signalStrength,													 
-													ULSpeed,
-													DLSpeed,
+													ulSpeed,
+													dlSpeed,
+													0.0,
+													0,
+													0,
 													MCC,
 													MNC,
 													LAC,
-													CID);
-			}
-		}
+													CID);			
 	}
+	
+	private void storeUDPReportItem(final double dlSpeed, final double ulSpeed, final double jitter, final int lost, final int sum) {
+		double lat = 0;
+		double lon = 0;
+		if (location != null ) {
+			lon = location.getLongitude();
+			lat = location.getLatitude();
+		}				 
+		dataStorage.insert(testId, 
+											testName, 
+											lat, 
+											lon,
+											signalStrength,													 
+											ulSpeed,
+											dlSpeed,
+											jitter,
+											lost,
+											sum,
+											MCC,
+											MNC,
+											LAC,
+											CID);
+	
+}
+
 	
 	public void startGPSService() {
 		startService(new Intent(getApplicationContext(), GPSService.class));
 	}
-	
-	private void startTimer() {
-		//Declare the timer
-		dataStorageTimer = new Timer();
-		//Set the schedule function and rate
-		dataStorageTimer.scheduleAtFixedRate(
-				task,
-				//Set how long before to start calling the TimerTask (in milliseconds)
-				10,
-				//Set the amount of time between each execution (in milliseconds)
-				1000);
-	}
-	
+		
 	public boolean startHttpClientService(int direction, int type) {
 		clearTestMessage();
+		++testId;
 		Intent httpIntent = new Intent(this, HttpService.class);
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
@@ -189,10 +186,11 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		testName = prefs.getString("testName", "-");		
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
-		httpIntent.putExtra("type", type);
-				
-		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "100"));
-		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "100"));
+		httpIntent.putExtra("type", type);				
+		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
+		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));		
+		httpIntent.putExtra("rateType", prefs.getString("rateType", "1"));
+		
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;
@@ -211,8 +209,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
 		isTestRunning = false;
-		clearTestMessage();
-		dataStorageTimer = null;		
+		clearTestMessage();		
 //		dataStorage.close();
 	}
 

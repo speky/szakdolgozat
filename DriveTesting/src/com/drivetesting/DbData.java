@@ -10,6 +10,9 @@ public class DbData {
 	public double signalStrength;
 	public double up;
 	public double down;
+	public double jitter;
+	public int lost;
+	public int sum;
 	public int mcc;
 	public int mnc;
 	public int lac;
@@ -25,6 +28,9 @@ public class DbData {
 		signalStrength = 0.0;
 		up= 0.0;
 		down= 0.0;
+		jitter = 0.0;
+		lost = 0;
+		sum = 0;
 		mcc = -1;
 		mnc = -1;
 		lac = -1;

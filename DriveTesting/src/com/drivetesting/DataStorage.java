@@ -31,6 +31,9 @@ public class DataStorage {
 	public static final String SIGNAL = "signal_strenght";
 	public static final String UPSPEED = "up_speed";
 	public static final String DOWNSPEED = "down_speed";
+	public static final String JITTER = "jitter";
+	public static final String PACKETLOST = "lost_packet";
+	public static final String SUMPACKET= "sum_packet";
 	public static final String MCC = "mcc";
 	public static final String MNC = "mnc";
 	public static final String LAC = "lac";
@@ -62,8 +65,8 @@ public class DataStorage {
 		return df.format(c.getTime());
 	}
 
-	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, double down,
-							int mcc, int mnc, int lac, int cid) {		
+	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, double down, double jitter, int lost, int sum, 
+			int mcc, int mnc, int lac, int cid) {		
 		String date = currentTime();
 		ContentValues values = new ContentValues();
 		values.put(TESTID,  testId);
@@ -74,11 +77,14 @@ public class DataStorage {
 		values.put(SIGNAL, signalStrength);
 		values.put(UPSPEED, up);
 		values.put(DOWNSPEED, down);
+		values.put(JITTER, jitter);
+		values.put(PACKETLOST, lost);
+		values.put(SUMPACKET, sum);
 		values.put(MCC, mcc);
 		values.put(MNC, mnc);
 		values.put(LAC, lac);
 		values.put(CID, cid);
-		
+
 		db.insert(DB_TABLE, null, values);
 	}
 
@@ -93,16 +99,18 @@ public class DataStorage {
 		row.lon = cursor.getDouble(cursor.getColumnIndexOrThrow(LON));
 		row.up = cursor.getDouble(cursor.getColumnIndexOrThrow(UPSPEED));
 		row.down = cursor.getDouble(cursor.getColumnIndexOrThrow(DOWNSPEED));
+		row.jitter = cursor.getInt(cursor.getColumnIndexOrThrow(JITTER));
+		row.lost = cursor.getInt(cursor.getColumnIndexOrThrow(PACKETLOST));
+		row.sum = cursor.getInt(cursor.getColumnIndexOrThrow(SUMPACKET));
 		row.mcc = cursor.getInt(cursor.getColumnIndexOrThrow(MCC));
 		row.mnc = cursor.getInt(cursor.getColumnIndexOrThrow(MNC));
 		row.lac = cursor.getInt(cursor.getColumnIndexOrThrow(LAC));
 		row.cid = cursor.getInt(cursor.getColumnIndexOrThrow(CID));
 		return row;
 	}
-	
+
 	public List<DbData> querryAll() {
 		List<DbData> dataList = new ArrayList<DbData>();
-		//Cursor query = db.query(DB_TABLE, null, null, null, null, null, null);//C_TIME +" DESC");
 		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE , null);
 		if (cursor != null) {
 			cursor.moveToFirst();		
@@ -115,17 +123,17 @@ public class DataStorage {
 		}
 		return dataList;		
 	}
-	
+
 	public List<DbData> querrySpecifiedTest(String testId) {
 		List<DbData> dataList = new ArrayList<DbData>();
 
 		String[] whereArgs = new String[] {
-			    testId
-			    //testName
-			};
+				testId
+				//testName
+		};
 		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE +
-																" WHERE " + TESTID +"  = ?", whereArgs); //OR " + TESTNAME +"= ?
-																
+				" WHERE " + TESTID +"  = ?", whereArgs); //OR " + TESTNAME +"= ?
+
 
 		if (cursor != null) {
 			cursor.moveToFirst();		
@@ -138,20 +146,12 @@ public class DataStorage {
 		}
 		return dataList;		
 	}
-	 
-	public long getMaxTestId() {				
-		/*Cursor cursor = db.rawQuery("SELECT MAX("+TESTID +") FROM "+DB_TABLE, null);
-		long id = 1;		
-		if (cursor != null) {			
-			 id = cursor.getLong(cursor.getColumnIndexOrThrow(TESTID));
-			cursor.close();
-		}
-		return id;*/
-		  final SQLiteStatement stmt = db.compileStatement("SELECT MAX("+TESTID +") FROM "+DB_TABLE);
 
-	    return stmt.simpleQueryForLong();
+	public long getMaxTestId() {
+		final SQLiteStatement stmt = db.compileStatement("SELECT MAX("+TESTID +") FROM "+DB_TABLE);
+		return stmt.simpleQueryForLong();
 	}
-	
+
 	class DbHelper extends SQLiteOpenHelper {
 		public DbHelper(Context context) {
 			super(context, DB_NAME, null, DB_VERSION);			
@@ -161,8 +161,10 @@ public class DataStorage {
 		public void onCreate(SQLiteDatabase db) {
 			String sql = 
 					String.format("create table %s (%s integer primary key autoincrement, %s integer, %s varchar(100), %s varchar(100), %s varchar(15), " +
-							"%s varchar(15),  %s varchar(15),  %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer)", 
-							DB_TABLE , ID, TESTID, TESTNAME, TIME,  LAT, LON, SIGNAL, UPSPEED, DOWNSPEED, MCC, MNC, LAC, CID);
+							"%s varchar(15),  %s varchar(15),  %s varchar(15), %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer, %s integer, %s integer)", 
+							DB_TABLE , ID, TESTID, TESTNAME, TIME,  LAT, LON, SIGNAL, UPSPEED, DOWNSPEED, JITTER, PACKETLOST, SUMPACKET, 
+							MCC, MNC, LAC, CID);
+
 			Log.d(TAG, "onCreate Sql:"+sql);
 			db.execSQL(sql);
 		}

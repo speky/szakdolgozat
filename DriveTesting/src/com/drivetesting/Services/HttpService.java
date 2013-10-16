@@ -4,6 +4,8 @@ import http.filehandler.ConnectionInstance;
 import http.filehandler.Logger;
 import http.filehandler.ReportI;
 import http.filehandler.ReportReceiver;
+import http.filehandler.ReportReceiver.DataType;
+import http.filehandler.ReportReceiver.RateType;
 import http.filehandler.TCPReceiver;
 import http.filehandler.TCPSender;
 import http.filehandler.UDPReceiver;
@@ -60,9 +62,9 @@ public class HttpService extends IntentService implements ReportI {
 	private String errorMessage = null;
 	private int type = 0;
 	private int direction = 0;
-	private int bufferSize = 0;
-	private int reportPeriod = 0;
-	private int rateType = 0;
+	private int bufferSize = 8000;
+	private int reportPeriod = 1000;
+	private int rateType = 1;
 
 	private Messenger messenger = null;
 	
@@ -133,7 +135,8 @@ public class HttpService extends IntentService implements ReportI {
 		
 		bufferSize = Integer.parseInt((String)intent.getExtras().get("bufferSize"));
 		reportPeriod = Integer.parseInt((String)intent.getExtras().get("reportPeriod"));
-				
+		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
+		
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
@@ -179,17 +182,20 @@ public class HttpService extends IntentService implements ReportI {
 		try {
 			logger.addLine(TAG+"makeNewThread" );
 			
+			boolean isUpload = false;
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: TCP\n");
+					isUpload = true;
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: TCP\nUnit: "+rateType+"\nBUFFERSIZE: " + bufferSize +"\n");
 				} else {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: TCP\nREPORTPERIOD: " + reportPeriod +"\n");
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: TCP\nBUFFERSIZE: " + bufferSize +"\n");
 				}
 			}else {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: DL\n CONNECTION: UDP\n");
-				} else {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nTime: "+System.currentTimeMillis()+"\nMODE: UL\n CONNECTION: UDP\n");
+					isUpload = true;
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
+				} else {					
+					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
 				}
 			}					
 
@@ -206,8 +212,24 @@ public class HttpService extends IntentService implements ReportI {
 				return;
 			}
 			
-			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort);
-			reportReceiver.start();
+			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort, isUpload);
+			switch (rateType) {
+			case 1:
+						reportReceiver.setData(DataType.BYTE);
+						reportReceiver.setRate(RateType.BITS);
+						reportReceiver.start();
+						break;
+			case 2:
+				reportReceiver.setData(DataType.KB);
+				reportReceiver.setRate(RateType.KBITS);
+				reportReceiver.start();
+				break;
+			case 3:
+				reportReceiver.setData(DataType.MB);
+				reportReceiver.setRate(RateType.MBITS);
+				reportReceiver.start();
+				break;
+			}
 						
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {

@@ -10,13 +10,13 @@ import java.util.Vector;
 public class ReportReceiver extends Thread implements ReceiverReportI{
 	private final String TAG = "ReportReceiver: ";
 	
-	enum DataType {
+	public enum DataType {
 		BYTE,
 		KB,
 		MB
 	}
 	
-	enum RateType {
+	public enum RateType {
 		BITS,
 		KBITS,
 		MBITS

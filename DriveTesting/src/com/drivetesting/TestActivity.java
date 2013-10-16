@@ -120,8 +120,7 @@ public class TestActivity extends Activity implements TestObserver {
 		progressBar.setVisibility(ProgressBar.VISIBLE);
 		findViewById(R.id.bt_startTest).setEnabled(false);
 		findViewById(R.id.bt_stopTest).setEnabled(true);
-		application.startHttpClientService(direction, type);
-		
+		application.startHttpClientService(direction, type);		
 	}
 		
 	public void onStopTestClick(View view) {
@@ -187,7 +186,7 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 
 	private void save() {
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		//sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = sharedPreferences.edit();	    
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
@@ -195,7 +194,7 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 
 	private void load() {	    	    
-		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_group);
+		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_tcp);
 		typeGroup.check(typeGroupIndex);
 		
 		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
