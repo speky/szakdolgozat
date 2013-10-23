@@ -6,7 +6,7 @@
     <string name="export">Start Export</string>
     <string name="outputname">Output file name</string>
     <string name="kml">Export to KML format</string>
-    <string name="plaintext">Export to CVS</string>
+    <string name="cvstext">Export to CVS</string>
     <string name="menu_export">Export</string>
     <string name="title_activity_osm">OSMActivity</string>
     <string name="menu_map">Map</string>

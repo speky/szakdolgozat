@@ -36,4 +36,25 @@ public class DbData {
 		lac = -1;
 		cid = -1;
 	}
+	@Override
+	public String toString() {
+		StringBuilder exportText = new StringBuilder();
+		exportText.append(id +",");
+		exportText.append(testId +",");
+		exportText.append(testName +",");
+		exportText.append(time.toString() +",");
+		exportText.append(lat +",");
+		exportText.append(lon +",");
+		exportText.append(signalStrength +",");
+		exportText.append(up +",");
+		exportText.append(down +",");
+		exportText.append(jitter +",");
+		exportText.append(lost +",");
+		exportText.append(sum +",");
+		exportText.append(mcc +",");
+		exportText.append(mnc +",");
+		exportText.append(lat +",");
+		exportText.append(cid);
+		return exportText.toString();
+	}
 }

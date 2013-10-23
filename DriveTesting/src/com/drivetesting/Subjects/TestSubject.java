@@ -4,8 +4,8 @@ import com.drivetesting.observers.TestObserver;
 
 public interface TestSubject {
 
-	public void registerObserver(TestObserver testObserver);
-	public void removeObserver(TestObserver testObserver);
-	public void notifyObservers();
+	public void registerReportObserver(TestObserver testObserver);
+	public void removeReportObserver(TestObserver testObserver);
+	public void notifyReportObservers();
 }
 

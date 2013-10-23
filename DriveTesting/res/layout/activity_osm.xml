@@ -2,7 +2,30 @@
      android:orientation="vertical"
      android:layout_width="fill_parent"
      android:layout_height="fill_parent" >
-	       
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+      
+
+    <Button
+        android:id="@+id/testIdButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" 
+        android:onClick ="onTestClick"
+        android:text="Set Test Id" />
+
+    <TextView
+        android:id="@+id/testIdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:text="Test Id:" />
+      
+    </RelativeLayout>
+    
      <org.osmdroid.views.MapView
          android:id="@+id/mapView"
          android:clickable="true"

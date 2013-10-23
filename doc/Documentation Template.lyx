@@ -1465,31 +1465,60 @@ sa és erőforrás kezelés.
 \end_layout
 
 \begin_layout Description
-Node-b 
+Node-B - Ezt a terminust az UMTS hálozatban használják és megfelel a BTS-nek
+ a GSM-ben.
+ A mobil készülékek Node B-n tudnak egymással kommunikálni.
+ Az RNC kontrollálja ezt a node-ot.
 \end_layout
 
 \begin_layout Description
-VLR - Visitor Location Register
+VLR - Visitor Location Register, egy adatbázis azon előfizetők számára,
+ akik be barangoltak az adott VLR-hez tartozó Mobile Switching Center (MSC)
+ területére.
+ minden egyes bázis állomáshoz pontosan egy VLR tartozik, így az előfizető
+ egyidőben mindig csak egy VLR-ben szerepel.
+ Az adatok vagy a mobil készülékről (MS), vagy a HLR-től érkeznek.
+ Amint érzékel egy új MS-t az MSC azonnal készít egy új bejegyzést a VLR-jében
+ és frissit a HLR-ben az előfizető helyzetét.
 \end_layout
 
 \begin_layout Description
-HLR - Home Location Register
+HLR - Home Location Register, egy központi adatbázis, ami tartalmazza az
+ összes mobil telefon előfizetőj adatát, akik használhatják GSM hálozatot.
+ 
 \end_layout
 
 \begin_layout Description
-M-MGW - Mobile Media Gateway
+M-MGW - Mobile Media Gateway egy olyan eszköz, ami a digitális média folyamokat
+ konvertálja (transzkodolja) a különbözö telekommunikációs hálozatok között
+ (PSTN, 2G, 3G, stb.), illetve lehetővé teszi a különféle átviteli protokolok
+ használatatá (ATM, IP, TDM) a hálózatok között.
 \end_layout
 
 \begin_layout Description
-SGSN - 
+SGSN - serving GPRS support node felelős a mobil eszközök és kisozlgálo
+ állomások közötti adat csomagok szállításáért.
+ A feladatai közé tartozik az írányítás (routing), a helymeghatározás és
+ a felhasnzálók azonositása (authentication).
+ 
 \end_layout
 
 \begin_layout Description
-GGSN - 
+GGSN - gateway GPRS support node központi eleme a GPRS hálózatnak, az internet
+ elérését biztosítja a GPRS hálózat és a külső hálozatok között.
+ Kivülről nézve a GGSN egy router, aki elrejti a GPRS hálózat infrastruktúráját
+ a külső hálózattól.
+ Mikor adat csomagokat kap megvizsgálja, hogy a felhasználó aktív-e és,
+ ha igen akkor továbbítja a csomagot az SGSN-nek, aki kisozlgálja a mobil
+ felhasználót.
 \end_layout
 
 \begin_layout Description
-MSC - Mobil Softswitch Controller
+MSC - Mobil Softswitch Controller ) elsődleges eleme a GSM/CDMA hálózatoknak,
+ a hang hívások route-olásáért és az SMS, valamint más szolgáltatásokért
+ felelős(mint a konferencia hívások, FAX).
+ Kiépíti, majd lebontja a kapcsolatokat, hívásokat, valamint kezeli a hand-over-
+eket.
 \end_layout
 
 \begin_layout Subsection
@@ -1539,16 +1568,11 @@ Második generáció
 \end_layout
 
 \begin_layout Standard
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
+\begin_inset Float figure
+placement H
+wide false
+sideways false
 status open
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \paragraph_spacing single
@@ -1556,15 +1580,18 @@ status open
 \align center
 \begin_inset Graphics
 	filename Gsm_structures.svg.jpg
-	scale 60
+	scale 55
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
-GSM hálózat felépítése
+2G hálózat struktúrája
 \end_layout
 
 \end_inset
@@ -1572,14 +1599,13 @@ GSM hálózat felépítése
 
 \end_layout
 
-\end_inset
-
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Standard
-első kereskedelemben működtetett digitális cellás rendszer, mely TDMA (Time
- division multiple acces) alapú.
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection
@@ -1601,28 +1627,29 @@ Harmadik generáció
  (Universal Mobile Telecommunications System).
  W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
  A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
- 2000 CDM-et (Code Division Multiplexing) eljárást használ.
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
-status open
-
-\begin_layout Plain Layout
-
+ 2000 CDM-e (Code Division Multiplexing) eljárást használ.
 \end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement h
+wide false
+sideways false
+status open
 
 \begin_layout Plain Layout
 \noindent
 \align center
 \begin_inset Graphics
 	filename UMTS_structures.svg.jpg
-	scale 80
+	scale 55
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
 \begin_inset Caption
 
 \begin_layout Plain Layout
@@ -1692,11 +1719,10 @@ A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó ada
 \end_layout
 
 \begin_layout Standard
-The table below shows the data speeds achievable with each technology.
- As can be seen, with each progression to 3G and beyond, the data rates
- obtainable is increasing, allowing even more bandwidth intensive services
- to be introduced.
- 
+A lenti táblázat tartalmazza az átviteli sebességeket különféle technologiák
+ esetén.
+ Amint látható, a 3G és a későbbi hálózatok adat rátája egyre inkább növekszik,
+ így lehetővé téve a nagyobb sávszélesség igényű szolgáltatások bevezetését.
 \end_layout
 
 \begin_layout Standard
@@ -2226,7 +2252,7 @@ finish()
 \end_layout
 
 \begin_layout Subsubsection
-Service
+Service TODO: intent service
 \end_layout
 
 \begin_layout Standard
@@ -2319,7 +2345,7 @@ onDestroy()
 \end_layout
 
 \begin_layout Subsubsection
-Broadcast receiver
+Broadcast receiver TODO: ehelyett application object
 \end_layout
 
 \begin_layout Standard
@@ -2346,56 +2372,48 @@ Futási környezet, erőforrás kezelés
 \end_layout
 
 \begin_layout Standard
-Java és az android kapcsolata, dalvik virtuális gép.
+Java és az Android kapcsolata, dalvik virtuális gép.
  Erőforrások (képek, szövegek, hangok) kezelése
 \end_layout
 
 \begin_layout Standard
-Below is the list of permissions for this app and what exactly they mean:
+Az alábbi lista tartalmazza a jogokat (permissions) amit a mobil alkalmazás
+ használ:
 \end_layout
 
-\begin_layout Standard
-Your location coarse (network-based) location, fine (GPS) location
+\begin_layout Description
+
+\series bold
+coarse location (network-based):
+\series medium
+ ahhoz hogy megjelnithessük a készülék helyzetét a térképen és mérhessük
+ a jelerősséget az alaklamazásnak szüksége van erre.
+ Ezt a hálózati poziciót gyorsan el tudja nekünk küldeni hálózati eszköz,
+ de elég durva becslést ad a telefon helyére, körülbelül 100 métres pontossággal.
+ Ezt akkor használjuk, mikor a GPS szolgáltatás nem elérhető, például beltérben.
 \end_layout
 
-\begin_layout Standard
-In order to display your location on the map and record signal strength
- data the app needs to figure out were on the Earth you are.
- It does this by first getting a fast fix of your position through your
- cellular carrier.
- The cellular network can provide a fast, but very rough estimate of you
- location, usually within a few dozen or hundred meters of your actual location.
- This method is used whenever a GPS signal cannot be found (such as when
- you are indoors.)
+\begin_layout Description
+
+\series bold
+fine location (GPS):
+\series default
+A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatározz
+uk a telefon helyzetét.
 \end_layout
 
-\begin_layout Standard
-A fine fix of your location is obtained through GPS.
- This is used whenever you are outdoors and can receive a good GPS satellite
- signal.
- It is important to note that if you have a GPS fix and then go indoors
- the app will not revert back to a network-based location fix.
- This appears to be a bug in Android...or my app, haven't figured out which
- yet.
-\end_layout
+\begin_layout Description
 
-\begin_layout Standard
-Network communication full internet access, view network state, view Wi-Fi
- state
-\end_layout
-
-\begin_layout Standard
-Internet access is necessary due to the handful of hyperlinks within the
- app and its use of Google Maps -- the map needs to download new tiles as
- you move along it.
+\series bold
+Network communication, full internet access, view network state
+\series default
+: A hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
+ Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
+ frissítéséhez.
  The app will actually stop updating the map if signal strength gets too
  week (below -102 dBm), otherwise it would appear to freeze waiting for
  tile updates.
-\end_layout
-
-\begin_layout Standard
-Reporting on the network state is one of the features of the app, as is
- viewing the Wi-Fi state.
+ :O ???
 \end_layout
 
 \begin_layout Standard
@@ -2454,7 +2472,7 @@ Komponensek leírása
 \end_layout
 
 \begin_layout Standard
-A programban használt elemek leírása (Activity, broadcast receiver, manager-ek)
+Kliens oldali komponensek
 \end_layout
 
 \begin_layout Standard
@@ -2754,6 +2772,10 @@ Enclose this in a try/catch and you should be good.
  
 \end_layout
 
+\begin_layout Standard
+Szerver oldali komponensek
+\end_layout
+
 \begin_layout Section
 A program architektúrája
 \end_layout
@@ -2764,12 +2786,11 @@ alrendszerek, rétegek kapcsolatainak bemutatása, a fentebb definiált komponen
 \end_layout
 
 \begin_layout Subsection
-Szerver oldali komponens
+Szerver oldal
 \end_layout
 
-\begin_layout Standard
-a szerver (HTTPx) funkciójának bemutatása; a használt protokoll és szerver-klien
-s kommunikáció leírása
+\begin_layout Subsection
+Kliens oldal
 \end_layout
 
 \begin_layout Subsection
@@ -2928,55 +2949,24 @@ Tesztelés
 \begin_layout Standard
 The first "Lint" program originated on Seventh Edition Research Unix at
  Bell Laboratories.
- Steve Johnson wrote it as an offshoot of his development of the first Portable
- C Compiler, in the late 1970's.
- It is covered in my little book "Checking C Programs with Lint" (O'Reilly.
- Ever since, people have been writing lint-like tools.
- Some well-known ones for Java code include PMD, FindBugs, and CheckStyle.
- The first two, plus a number of other tools, are covered in my 2007 book
- "Checking Java Programs." The most recent one that's relevant to us is,
- of course, AndroidLint, a part of the standard Android SDK.
+ AndroidLint, a part of the standard Android SDK.
 \end_layout
 
 \begin_layout Standard
-What each of these tools does is examine your code, and offer opinions based
- on expert-level knowledge of the language and libraries.
- The hard part is to bear in mind that they are only opinions.
- There will be cases where you think you know better than the tool, and
- you later find out that you're wrong.
+What the tools does is examine your code, and offer opinions based on expert-lev
+el knowledge of the language and libraries.
  But there will be cases where you're right.
  And, of course, it's an impossibly-hard problem for the computer to know
  which, so there is no substitute for the judgement of an experienced developer!
 \end_layout
 
 \begin_layout Standard
-These tools typically find a lot of embarassing issues in your code the
- first time you run time.
- One very common error is to create a Toast by calling makeText(), and forget
+One very common error is to create a Toast by calling makeText(), and forget
  to call the new Toast's show() method; the toast is created but never pops
  up! The standard compiler cannot catch this kind of error, but Android
  Lint can, and that is just one of its many capabilities.
- After laughing at yourself for a minute, you edit (and test!) your code,
- and run lint again.
- You repeat this process until you no longer get any messages that you care
- about.
-\end_layout
-
-\begin_layout Standard
-To run Android Lint, you can use the command-line version in $SDK_HOME/tools/lin
-t.
- Or, you can run it under Eclipse.
- Just right-click on the project.
- Select Android Tools -> Run Lint: Check for Common Errors.
- The warnings appear as code markers just like the ones form Eclipse itself.
- Since they are not managed by the Eclipse compiler, you may need to run
- lint again after editing your code.
- If you get tired of the game, you can use the same menu to remove the lint
- markers.
-\end_layout
-
-\begin_layout Standard
-Here is an example of running the command line version:
+ you can run it under Eclipse.
+ 
 \end_layout
 
 \begin_layout Subsection

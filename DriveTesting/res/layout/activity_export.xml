@@ -22,11 +22,11 @@
         android:layout_height="wrap_content" >
 
         <RadioButton
-            android:id="@+id/export_text"
+            android:id="@+id/export_cvs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/plaintext" />
+            android:text="@string/cvstext" />
 
         <RadioButton
             android:id="@+id/export_kml"
@@ -39,6 +39,7 @@
         android:id="@+id/export"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/export" />
+        android:text="@string/export" 
+        android:onClick="onExportClick"/>
 
 </LinearLayout>

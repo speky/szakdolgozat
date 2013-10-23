@@ -43,7 +43,7 @@ public class CustomItemizedIconOverlay extends ItemizedIconOverlay<OverlayItem>{
 			Point out = new Point();
 			mapview.getProjection().toPixels(in, out);
 
-			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker_node);
+			Bitmap bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.marker);
 			//shift the bitmap center
 			canvas.drawBitmap(bm, 
 					out.x - bm.getWidth()/2,  

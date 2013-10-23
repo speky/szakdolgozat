@@ -109,11 +109,11 @@ public class DataStorage {
 		return row;
 	}
 
-	public List<DbData> querryAll() {
+	public List<DbData> queryAll() {
 		List<DbData> dataList = new ArrayList<DbData>();
 		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE , null);
 		if (cursor != null) {
-			cursor.moveToFirst();		
+			cursor.moveToFirst();
 			while (cursor.isAfterLast() == false) {
 				DbData data = cursorToData(cursor);
 				dataList.add(data);
@@ -121,10 +121,47 @@ public class DataStorage {
 			}
 			cursor.close();
 		}
-		return dataList;		
+		return dataList;
 	}
 
-	public List<DbData> querrySpecifiedTest(String testId) {
+	public String getColunNames() {
+		StringBuilder columns = new StringBuilder();
+		columns.append(ID+",");
+		columns.append(TESTID +",");
+		columns.append(TESTNAME+",");
+		columns.append(TIME +",");
+		columns.append(LAT+",");
+		columns.append(LON+",");
+		columns.append(SIGNAL+",");
+		columns.append(UPSPEED+",");
+		columns.append(DOWNSPEED+",");
+		columns.append(JITTER+",");
+		columns.append(PACKETLOST+",");
+		columns.append(SUMPACKET+",");
+		columns.append(MCC+",");
+		columns.append(MNC+",");
+		columns.append(LAC+",");
+		columns.append(CID+",");
+		return columns.toString();
+	}
+	
+	public CharSequence[] queryTestIds() {
+		List<String> idList = new ArrayList<String>();		
+		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID+" FROM "+DB_TABLE , null);
+		if (cursor != null) {
+			cursor.moveToFirst();	
+			while (cursor.isAfterLast() == false) {
+				long id = cursor.getLong(cursor.getColumnIndexOrThrow(TESTID));
+				idList.add(Long.toString(id));
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+		CharSequence[] items = idList.toArray(new CharSequence[idList.size()]);
+		return items;
+	}
+	
+	public List<DbData> querySpecifiedTest(String testId) {
 		List<DbData> dataList = new ArrayList<DbData>();
 
 		String[] whereArgs = new String[] {

@@ -4,14 +4,12 @@ package com.drivetesting;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -40,8 +38,7 @@ public class TestActivity extends Activity implements TestObserver {
 	private ProgressBar progressBar = null;
 	
 	private SharedPreferences sharedPreferences;
-	private NotificationManager notificationManager = null;
-	
+		
 	private DriveTestApp application = null;
 	
 	@Override
@@ -72,8 +69,7 @@ public class TestActivity extends Activity implements TestObserver {
 		
 		findViewById(R.id.bt_startTest).setEnabled(true);
 		findViewById(R.id.bt_stopTest).setEnabled(false);
-		
-		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	
 	}
 	 
 	// Function to show settings dialog       
@@ -158,21 +154,20 @@ public class TestActivity extends Activity implements TestObserver {
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();		
-		notificationManager.cancel("Drive Test Notification", 0);//R.string.local_service_started);
+		super.onDestroy();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		application.removeObserver(this);
+		application.removeReportObserver(this);
 		save();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		application.registerObserver(this);	
+		application.registerReportObserver(this);	
 		
 		load();
 		
@@ -187,7 +182,7 @@ public class TestActivity extends Activity implements TestObserver {
 
 	private void save() {
 		//sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		SharedPreferences.Editor editor = sharedPreferences.edit();	    
+		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
 		editor.commit();
@@ -236,30 +231,6 @@ public class TestActivity extends Activity implements TestObserver {
 		}
 	}
 
-	/**
-	 * Show a notification while this service is running.
-	 */
-	/*private void showNotification() {
-		// In this sample, we'll use the same text for the ticker and the
-		// expanded notification
-		CharSequence text = "Drive Test Notification";//getText(R.string.local_service_started);
-
-		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(R.drawable.ic_launcher, text, System.currentTimeMillis());
-
-		// The PendingIntent to launch our activity if the user selects this
-		// notification
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,	new Intent(this, TestActivity.class), 0);
-
-		// Set the info for the views that show in the notification panel.
-		notification.setLatestEventInfo(this, getText(R.string.service_name),		text, contentIntent);
-
-		// Send the notification.
-		// We use a layout id because it is a unique number. We use it later to
-		// cancel.
-		notificationManager.notify(R.string.local_service_started, notification);
-	}*/
-
 	@Override
 	public void update(int action, String str) {
     	text.setText(str) ;
@@ -267,8 +238,7 @@ public class TestActivity extends Activity implements TestObserver {
     		progressBar.setVisibility(ProgressBar.VISIBLE);    		
     	}  	else {
     		progressBar.setVisibility(ProgressBar.INVISIBLE);    		
-    	}
-		
+    	}		
 	}
 
 }

@@ -42,7 +42,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private int LAC = 0;
 	private int CID = 0;
 	private double signalStrength = 0.0;
-	private long testId = 0;
+	private int testId = 0;
 	private String testName = "-";	
 	private DataStorage dataStorage;
 	private SharedPreferences prefs;	
@@ -87,7 +87,8 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
                 	message.insert(0, data +"\n");
                 	action = 1;
                 	Log.d(TAG, "get data" + message.toString());
-                	storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);
+                	storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);                	
+                	notifyReportObservers();
             }
             
             if ( msg.getData().containsKey("end")) {
@@ -95,7 +96,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
             	action = 0;
             	Log.d(TAG, message.toString());
             }
-            notifyObservers();
+            notifyReportObservers();
             super.handleMessage(msg); 
         } 
     };
@@ -213,17 +214,25 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 //		dataStorage.close();
 	}
 
-	public List<DbData> querryTestData(int testId) {
+	public List<DbData> queryTestData(int testId) {
 		if (testId < 0) {
-			return dataStorage.querryAll();
+			return dataStorage.queryAll();
 		}else {
-			return dataStorage.querrySpecifiedTest(String.valueOf(testId));
+			return dataStorage.querySpecifiedTest(String.valueOf(testId));
 		}		
 	}
 	
-	public List<Location> querryLocationData() {
+	public  CharSequence[] getTestIds() {
+		return dataStorage.queryTestIds();
+	}
+	
+	public DataStorage getDataStorage() {
+		return dataStorage;
+	}
+	
+	public List<Location> queryLocationData() {
 		if (testId > 0) {			
-			List<DbData> data = dataStorage.querrySpecifiedTest(String.valueOf(testId));
+			List<DbData> data = dataStorage.querySpecifiedTest(String.valueOf(testId));
 			List<Location> locationList = new ArrayList<Location>(); 
 			for (int i = 0; i < data.size(); ++i) {
 				Location loc = new Location("dummyprovider");
@@ -340,24 +349,25 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	
 	// test data observer methods
 	@Override
-	public void registerObserver(TestObserver testObserver) {
+	public void registerReportObserver(TestObserver testObserver) {
 		testObservers.add(testObserver);
 	}
 	@Override
-	public void removeObserver(TestObserver testObserver) {
+	public void removeReportObserver(TestObserver testObserver) {
 		int index = testObservers.indexOf(testObserver);
 		if (index > 0 ) {
 			testObservers.remove(index);
 		}
 	}
 	@Override
-	public void notifyObservers() {
+	public void notifyReportObservers() {
 		for (TestObserver testObserver :testObservers) {
 			if (testObserver != null) {
-				testObserver.update(action, message.toString());
+				testObserver.update(action, message.toString());				
 			}
         }
 	}
+	
 
 	// phoneStateObserver methods
 	public void registerPhoneStateObserver(PhoneStateObserver observer) {
