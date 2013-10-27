@@ -3,14 +3,31 @@ package http.filehandler;
 import http.filehandler.ReportReceiver.DataType;
 import http.filehandler.ReportReceiver.RateType;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class TCPReport {
 	
-	private HashMap<DataType, String> DataString;
-	private HashMap<RateType, String> RateString;
-	
+	public  static final Map<DataType, String> DataString;
+    static {
+    	Map<DataType, String> aMap = new HashMap<DataType, String> ();
+        aMap.put(DataType.BYTE, "B");
+        aMap.put(DataType.KB, "KB");
+        aMap.put(DataType.MB, "MB");
+        DataString = Collections.unmodifiableMap(aMap);
+    }
+    
+	public static final Map<RateType, String> RateString;
+	static {
+    	Map<RateType, String> aMap = new HashMap<RateType, String> ();
+        aMap.put(RateType.BITS, "bits");
+        aMap.put(RateType.KBITS, "kbits");
+        aMap.put(RateType.MBITS, "mbits");
+        RateString = Collections.unmodifiableMap(aMap);
+    }
+		
 	public  int reporterId = 0;
 	public long  interval = 0;
 	public  double transferedData = 0.0;
@@ -33,17 +50,7 @@ public class TCPReport {
 		this.ulSpeed = ulSpeed;
 	}
 
-	private void init() {
-		DataString = new HashMap<DataType, String>();
-		DataString .put(DataType.BYTE, "B");
-		DataString .put(DataType.KB, "KB");
-		DataString .put(DataType.MB, "MB");
-		
-		RateString = new HashMap<RateType, String>() ;
-		RateString .put(RateType.BITS, "bits");
-		RateString .put(RateType.KBITS, "kbits");
-		RateString .put(RateType.MBITS, "mbits");
-		
+	private void init() {		
 		reporterId = 0;
 		interval = 0;
 		transferedData = 0.0;

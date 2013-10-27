@@ -6,6 +6,8 @@ import http.filehandler.UDPReport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.osmdroid.util.GeoPoint;
+
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +30,7 @@ import com.drivetesting.subjects.PhoneStateSubject;
 import com.drivetesting.subjects.TestSubject;
 
 public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, 
-											TestSubject, PhoneStateSubject, LocationSubject {
+TestSubject, PhoneStateSubject, LocationSubject {
 
 	static final String TAG = "DriveTesting";
 
@@ -36,7 +38,10 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public static final int TCP = 1;
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
-	
+
+	private DataStorage dataStorage;
+	private SharedPreferences prefs;
+
 	private int MNC = 0;
 	private int MCC = 0;
 	private int LAC = 0;
@@ -44,63 +49,61 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	private double signalStrength = 0.0;
 	private int testId = 0;
 	private String testName = "-";	
-	private DataStorage dataStorage;
-	private SharedPreferences prefs;	
-		
-	private boolean networkConnected = false;	
+	private int rateType = 0;
+	private boolean networkConnected = false;
+	private String networkType = ""; 
 	private boolean isTestRunning = false;
 
 	private ArrayList<TestObserver> testObservers;
 	private ArrayList<PhoneStateObserver> phoneStateObservers;
 	private ArrayList<LocationObserver> locationObservers;
-	
+
 	private StringBuilder message = new StringBuilder();
 	private int action = 0;
 
 	public boolean isGpsServiceRun = false;
 	public boolean isGPSEnabled = false;
 	private Location location = null;
-		
+
 	private Handler handler = new Handler() { 
-        @Override 
-        public void handleMessage(Message msg) {
-        	if ( msg.getData().containsKey("error")) {        		
-        		stopHttpClientService();
-        		message.append(msg.getData().getString("error") +"\n");
-            	action = 0;
-            	Log.d(TAG, message.toString());
-            }
-            
-            if ( msg.getData().containsKey("TCP")) {            	
-            	String data = msg.getData().getString("TCP");
-            	TCPReport report = new TCPReport();
-            	report.parseReport(data);
-            	message.insert(0, data +"\n");
-            	action = 1;
-            	Log.d(TAG, "get data" + message.toString());
-            	storeTCPReportItem(report.dlSpeed, report.ulSpeed);
-            	
-            } else if ( msg.getData().containsKey("UDP")) {            	
-                	String data = msg.getData().getString("UDP");
-                	UDPReport report = new UDPReport();
-                	report.parseReport(data);
-                	message.insert(0, data +"\n");
-                	action = 1;
-                	Log.d(TAG, "get data" + message.toString());
-                	storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);                	
-                	notifyReportObservers();
-            }
-            
-            if ( msg.getData().containsKey("end")) {
-            	message.append(msg.getData().getString("end")+"\n");      	
-            	action = 0;
-            	Log.d(TAG, message.toString());
-            }
-            notifyReportObservers();
-            super.handleMessage(msg); 
-        } 
-    };
-	
+		@Override 
+		public void handleMessage(Message msg) {
+			if ( msg.getData().containsKey("error")) {        		
+				stopHttpClientService();
+				message.append(msg.getData().getString("error") +"\n");
+				action = 0;
+				Log.d(TAG, message.toString());
+			}
+
+			if ( msg.getData().containsKey("TCP")) {            	
+				String data = msg.getData().getString("TCP");
+				TCPReport report = new TCPReport();
+				report.parseReport(data);
+				message.insert(0, data +"\n");
+				action = 1;
+				Log.d(TAG, "get data" + message.toString());
+				storeTCPReportItem(report.dlSpeed, report.ulSpeed);
+
+			} else if ( msg.getData().containsKey("UDP")) {            	
+				String data = msg.getData().getString("UDP");
+				UDPReport report = new UDPReport();
+				report.parseReport(data);
+				message.insert(0, data +"\n");
+				action = 1;
+				Log.d(TAG, "get data" + message.toString());
+				storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);
+			}
+
+			if ( msg.getData().containsKey("end")) {
+				message.append(msg.getData().getString("end")+"\n");      	
+				action = 0;
+				Log.d(TAG, message.toString());
+			}
+			notifyReportObservers();
+			super.handleMessage(msg); 
+		} 
+	};
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -108,45 +111,51 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		testObservers = new ArrayList<TestObserver>();
 		phoneStateObservers = new ArrayList<PhoneStateObserver>();
 		locationObservers = new ArrayList<LocationObserver>();
-		
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 		prefs.registerOnSharedPreferenceChangeListener(this);
-		
+
 		dataStorage = new DataStorage(this);
 		dataStorage.open();	
+
+		dataStorage.deleteAll();
+		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, networkType);
 		
-		dataStorage.insert(3, "testName", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2);
-		dataStorage.insert(1, "testName", 5.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0, 0,2, 2, 2, 2);
-		dataStorage.insert(1, "testName", 3.0, 4.0, 0.0, 0.0, 0.0, 0.0, 0, 0,2, 2, 2, 2);
-				
+		dataStorage.insert(1, "testName1", 47.497147, 19.070567, 1.1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
+		dataStorage.insert(1, "testName1", 47.497219, 19.069383, 2.2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
+		dataStorage.insert(1, "testName1", 47.497994, 19.068972, 3.3, 3.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
+		dataStorage.insert(1, "testName1", 47.495769, 19.070244, 4.4, 4.4, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
+		 
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
 	private void storeTCPReportItem(final double dlSpeed, final double ulSpeed) {
-				double lat = 0;
-				double lon = 0;
-				if (location != null ) {
-					lon = location.getLongitude();
-					lat = location.getLatitude();
-				}				 
-				dataStorage.insert(testId, 
-													testName, 
-													lat, 
-													lon,
-													signalStrength,													 
-													ulSpeed,
-													dlSpeed,
-													0.0,
-													0,
-													0,
-													MCC,
-													MNC,
-													LAC,
-													CID);			
+		double lat = 0;
+		double lon = 0;
+		if (location != null ) {
+			lon = location.getLongitude();
+			lat = location.getLatitude();
+		}				 
+		dataStorage.insert(testId, 
+				testName, 
+				lat, 
+				lon,
+				signalStrength,													 
+				ulSpeed,
+				dlSpeed,
+				0.0,
+				0,
+				0,
+				MCC,
+				MNC,
+				LAC,
+				CID,
+				rateType, 
+				networkType);			
 	}
-	
+
 	private void storeUDPReportItem(final double dlSpeed, final double ulSpeed, final double jitter, final int lost, final int sum) {
 		double lat = 0;
 		double lon = 0;
@@ -155,27 +164,28 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			lat = location.getLatitude();
 		}				 
 		dataStorage.insert(testId, 
-											testName, 
-											lat, 
-											lon,
-											signalStrength,													 
-											ulSpeed,
-											dlSpeed,
-											jitter,
-											lost,
-											sum,
-											MCC,
-											MNC,
-											LAC,
-											CID);
-	
-}
+				testName, 
+				lat, 
+				lon,
+				signalStrength,													 
+				ulSpeed,
+				dlSpeed,
+				jitter,
+				lost,
+				sum,
+				MCC,
+				MNC,
+				LAC,
+				CID, 
+				rateType, 
+				networkType );
+	}
 
-	
+
 	public void startGPSService() {
 		startService(new Intent(getApplicationContext(), GPSService.class));
 	}
-		
+
 	public boolean startHttpClientService(int direction, int type) {
 		clearTestMessage();
 		++testId;
@@ -183,15 +193,16 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		if (handler != null) {
 			httpIntent.putExtra("handler", new Messenger(handler));						
 		}
-				
+
 		testName = prefs.getString("testName", "-");		
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);				
 		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
-		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));		
-		httpIntent.putExtra("rateType", prefs.getString("rateType", "1"));
-		
+		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
+		rateType = prefs.getInt("rateType", 1);
+		httpIntent.putExtra("rateType", Integer.toString(rateType));
+
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;
@@ -200,50 +211,36 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public long getTestId() {
 		return testId;
 	}
-	
+
 	public void  stopGPSService() {
 		Intent intent = new Intent(this, GPSService.class);		
 		stopService(intent);
 	}
-	
+
 	public void stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
 		isTestRunning = false;
 		clearTestMessage();		
-//		dataStorage.close();
+		//		dataStorage.close();
 	}
 
-	public List<DbData> queryTestData(int testId) {
-		if (testId < 0) {
+	public List<DbData> queryTestData(long id) {
+		if (id < 0) {
 			return dataStorage.queryAll();
 		}else {
-			return dataStorage.querySpecifiedTest(String.valueOf(testId));
+			return dataStorage.querySpecifiedTest(String.valueOf(id));
 		}		
 	}
-	
+
 	public  CharSequence[] getTestIds() {
 		return dataStorage.queryTestIds();
 	}
-	
+
 	public DataStorage getDataStorage() {
 		return dataStorage;
 	}
-	
-	public List<Location> queryLocationData() {
-		if (testId > 0) {			
-			List<DbData> data = dataStorage.querySpecifiedTest(String.valueOf(testId));
-			List<Location> locationList = new ArrayList<Location>(); 
-			for (int i = 0; i < data.size(); ++i) {
-				Location loc = new Location("dummyprovider");
-				loc.setLongitude(data.get(i).lon);
-				loc.setLatitude(data.get(i).lat);
-			}
-			return locationList;
-		}
-		return null;
-	}
-	
+
 	public boolean isInternetConnectionActive() {
 		return networkConnected;
 	}
@@ -254,6 +251,7 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		notifyNetworkStateChange(value);
 	}	
 	public void setNetworkType(final String value) {
+		networkType = value;
 		notifyNetworkTypeChange(value);
 	}		
 	public void setSignalStrength(final String value) {
@@ -294,16 +292,16 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		CID = Integer.parseInt(cid);
 		notifyCellLocationChange(cid, lac, mcc, mnc);
 	}
-	
+
 	public void updateLocation(Location loc) {
 		location = loc;
 		notifyLocationObservers();
 	}
-	
+
 	public boolean isTestRunning() {
 		return isTestRunning ;
 	}
-	
+
 	public void setGpsService(boolean isRun) {
 		isGpsServiceRun = isRun;
 	}
@@ -311,17 +309,17 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public String getTestMessage() {
 		return message.toString();
 	}
-	
+
 	public void clearTestMessage() {
 		message.delete(0, message.length());
 	}
-	
+
 	/*private static final Pattern IP_ADDRESS = Pattern.compile(
         "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
         + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
         + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
         + "|[1-9][0-9]|[0-9]))");
-	*/
+	 */
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;
@@ -329,9 +327,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		if (key.equals("serverIp")) {
 			/*Matcher matcher = IP_ADDRESS.matcher(pref.getString("serverIp", null));
 			if (matcher.matches()) {
-			*/
-			    // ip is correct
-				Log.d(TAG, "Server IP has changed");
+			 */
+			// ip is correct
+			Log.d(TAG, "Server IP has changed");
 			/*	
 			}else {
 				Log.d(TAG, "Server IP is wrong");
@@ -344,9 +342,13 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 		} else if (key.equals("testName")){
 			testName = prefs.getString("testName", "-");
 			Log.d(TAG, "Test's name has changed");
+		} else if (key.equals("rateType")){
+			rateType = prefs.getInt("rateType", 1);
+			Log.d(TAG, "Test's name has changed");
+			
 		}
 	}
-	
+
 	// test data observer methods
 	@Override
 	public void registerReportObserver(TestObserver testObserver) {
@@ -365,9 +367,9 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			if (testObserver != null) {
 				testObserver.update(action, message.toString());				
 			}
-        }
+		}
 	}
-	
+
 
 	// phoneStateObserver methods
 	public void registerPhoneStateObserver(PhoneStateObserver observer) {
@@ -387,17 +389,17 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	public void notifyCdmaEcioChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateCdmaEcio(value);			
-        }
+		}
 	}
 	public void notifyEvdoDbmChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateEvdoDbm(value);			
-        }
+		}
 	}
 	public void notifyEvdoEcioChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {			
 			observer.updateEvdoEcio(value);			
-        }
+		}
 	}
 	public void notifyEvdoSnrChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {			
@@ -406,46 +408,46 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 	}
 	public void notifyGsmBitErrorRateChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
-				observer.updateGsmBitErrorRate(value);
-        }
+			observer.updateGsmBitErrorRate(value);
+		}
 	}
 	public void notifyServiceStateChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateServiceState(value);
-        }
+		}
 	}
 	public void notifyCallStateChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateCallState(value);
-        }
+		}
 	}
 	public void notifyNetworkStateChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateNetworkState(value);
-        }
+		}
 	}
 	public void notifyDataConnectionStateChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateDataConnectionState(value);
-        }
+		}
 	}
 	public void notifyDataDirectionChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateDataDirection(value);
-        }
+		}
 	}
 	public void notifyNetworkTypeChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateNetworkType(value);
-        }
+		}
 	}
 	public void notifyCellLocationChange(String mnc, String mcc, String lac, String cid){
 		for (PhoneStateObserver observer :phoneStateObservers) {
-				observer.updateCellLocation(mnc, mcc, lac, cid);
-        }
+			observer.updateCellLocation(mnc, mcc, lac, cid);
+		}
 	}
-	
-// handle location observers
+
+	// handle location observers
 	@Override
 	public void registerObserver(LocationObserver observer) {
 		locationObservers.add(observer);			
@@ -463,6 +465,6 @@ public class DriveTestApp extends Application implements OnSharedPreferenceChang
 			if (locationObserver != null && location != null) {
 				locationObserver.update(location);
 			}
-        }
+		}
 	}
 }

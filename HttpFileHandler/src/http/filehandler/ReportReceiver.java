@@ -33,7 +33,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	private ReportI reporter = null;
 	private boolean isUpload;
 		
-	public Vector<TCPReport> getTcpReportList() {
+	public Vector<TCPReport> getTcpReportList() {	
 		return tcpReportList;
 	}
 	

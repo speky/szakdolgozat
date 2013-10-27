@@ -67,7 +67,7 @@ public class HttpService extends IntentService implements ReportI {
 	private int rateType = 1;
 
 	private Messenger messenger = null;
-	
+
 	public void sendMessage(final String key, final String value) {
 		if (messenger != null) {
 			Message m = Message.obtain();			
@@ -89,8 +89,8 @@ public class HttpService extends IntentService implements ReportI {
 		logger.addLine(TAG+"test");
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
-	    
-    protected Socket createSocket(int port) {
+
+	protected Socket createSocket(int port) {
 		try {			
 			Socket socket = new Socket();			
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);
@@ -119,29 +119,29 @@ public class HttpService extends IntentService implements ReportI {
 			sendMessage("error", "Error: Invalid server address!");
 			System.out.println("Invalid server address!");
 		}
-		
+
 		type = (Integer)intent.getExtras().get("type");
-		
+
 		if (type != DriveTestApp.UDP && type != DriveTestApp.TCP) {
 			sendMessage("error", "Error: Invalid protocol type!");
 			System.out.println("Invalid protocol type!");
 		}
-		
+
 		direction = (Integer)intent.getExtras().get("direction");
 		if (direction != DriveTestApp.DOWNLOAD && direction != DriveTestApp.UPLOAD) {
 			sendMessage("error", "Error: Invalid direction!");
 			System.out.println("Invalid direction!");
 		}
-		
+
 		bufferSize = Integer.parseInt((String)intent.getExtras().get("bufferSize"));
 		reportPeriod = Integer.parseInt((String)intent.getExtras().get("reportPeriod"));
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
-		
+
 		try {
 			socket = new Socket(serverAddress, ServerPort);
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
-			
+
 			makeNewThread();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -171,17 +171,17 @@ public class HttpService extends IntentService implements ReportI {
 		pool.shutdownNow();
 	}
 
-	
+
 	private void addConnectionInstance(ConnectionInstance instance) {
 		connectionInstances.add(instance);		
 		Future<Integer> future = pool.submit(instance);
 		threadSet.add(future);
 	}
-	
+
 	public void makeNewThread() {
 		try {
 			logger.addLine(TAG+"makeNewThread" );
-			
+
 			boolean isUpload = false;
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
@@ -205,39 +205,37 @@ public class HttpService extends IntentService implements ReportI {
 				logger.addLine(TAG+ "Bad answer from server, text:"+answerProperty.getProperty("TEXT"));
 				sendMessage("error", "Server reject the test: "+ answerProperty.getProperty("TEXT"));				
 			}
-			
+
 			Socket socket = createSocket(testPort);
 			if (socket == null) {
 				sendMessage("error", "Could not connect to server! test port: "+ testPort);
 				return;
 			}
-			
+
 			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort, isUpload);
 			switch (rateType) {
 			case 1:
-						reportReceiver.setData(DataType.BYTE);
-						reportReceiver.setRate(RateType.BITS);
-						reportReceiver.start();
-						break;
+				reportReceiver.setData(DataType.BYTE);
+				reportReceiver.setRate(RateType.BITS);						
+				break;
 			case 2:
 				reportReceiver.setData(DataType.KB);
-				reportReceiver.setRate(RateType.KBITS);
-				reportReceiver.start();
+				reportReceiver.setRate(RateType.KBITS);				
 				break;
 			case 3:
 				reportReceiver.setData(DataType.MB);
-				reportReceiver.setRate(RateType.MBITS);
-				reportReceiver.start();
+				reportReceiver.setRate(RateType.MBITS);				
 				break;
 			}
-						
+			reportReceiver.start();
+
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, null, reportReceiver);
 					receiver.setReportInterval(reportPeriod);
 					if (receiver.setSocket(socket)) {					
 						addConnectionInstance(receiver);
-				}
+					}
 				} else {
 					TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
 					if (sender.setSocket(socket)){
@@ -250,7 +248,7 @@ public class HttpService extends IntentService implements ReportI {
 					if (receiver.setSenderParameters(testPort, serverAddress)) {
 						addConnectionInstance(receiver);
 					}
-					
+
 				} else {
 					UDPSender sender = new UDPSender(++threadCount, logger, bufferSize);					
 					if (sender.setReceiverParameters(testPort, serverAddress)) {					
@@ -258,7 +256,7 @@ public class HttpService extends IntentService implements ReportI {
 					}
 				}
 			}						
-			
+
 			for (Future<Integer> futureInst : threadSet) {
 				try {					
 					Integer value = futureInst.get();
@@ -302,7 +300,7 @@ public class HttpService extends IntentService implements ReportI {
 			connectionInstances.remove(instance);
 		}
 	}
-	
+
 	private boolean sendMessageToServer(final String command) throws IOException {
 		logger.addLine(TAG+ "Send command to server: "+ command);
 		if (printWriter == null ){

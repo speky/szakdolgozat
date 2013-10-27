@@ -45,7 +45,8 @@ public class ExportActivity extends Activity {
 	}
 
 	public void onExportClick(View view) {
-		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), 1);
+		int testId = 1;
+		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId);
 		export.execute("");
 	}
 

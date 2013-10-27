@@ -38,6 +38,8 @@ public class DataStorage {
 	public static final String MNC = "mnc";
 	public static final String LAC = "lac";
 	public static final String CID = "cid";
+	public static final String NETWORKTYPE = "network_type";
+	public static final String RATE = "rate";
 
 	private DbHelper dbHelper;
 	private SQLiteDatabase db;
@@ -59,14 +61,18 @@ public class DataStorage {
 		dbHelper.close();
 	}
 
+	public void deleteAll() {
+		db.delete(DB_TABLE, null, null);	
+	}
+	
 	private String currentTime(){
 		Calendar c = Calendar.getInstance();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 		return df.format(c.getTime());
 	}
 
-	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, double down, double jitter, int lost, int sum, 
-			int mcc, int mnc, int lac, int cid) {		
+	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, 
+			double down, double jitter, int lost, int sum,	 int mcc, int mnc, int lac, int cid, int rate, String networkType) {		
 		String date = currentTime();
 		ContentValues values = new ContentValues();
 		values.put(TESTID,  testId);
@@ -84,8 +90,11 @@ public class DataStorage {
 		values.put(MNC, mnc);
 		values.put(LAC, lac);
 		values.put(CID, cid);
+		values.put(RATE, rate);
+		values.put(NETWORKTYPE, networkType);
 
-		db.insert(DB_TABLE, null, values);
+		long rowId = db.insert(DB_TABLE, null, values);
+		System.out.println(rowId);
 	}
 
 	private DbData cursorToData(Cursor cursor) {
@@ -106,24 +115,11 @@ public class DataStorage {
 		row.mnc = cursor.getInt(cursor.getColumnIndexOrThrow(MNC));
 		row.lac = cursor.getInt(cursor.getColumnIndexOrThrow(LAC));
 		row.cid = cursor.getInt(cursor.getColumnIndexOrThrow(CID));
+		row.rate = cursor.getInt(cursor.getColumnIndexOrThrow(RATE));
+		row.networkType = cursor.getString(cursor.getColumnIndexOrThrow(NETWORKTYPE));
 		return row;
 	}
-
-	public List<DbData> queryAll() {
-		List<DbData> dataList = new ArrayList<DbData>();
-		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE , null);
-		if (cursor != null) {
-			cursor.moveToFirst();
-			while (cursor.isAfterLast() == false) {
-				DbData data = cursorToData(cursor);
-				dataList.add(data);
-				cursor.moveToNext();
-			}
-			cursor.close();
-		}
-		return dataList;
-	}
-
+	
 	public String getColunNames() {
 		StringBuilder columns = new StringBuilder();
 		columns.append(ID+",");
@@ -142,7 +138,24 @@ public class DataStorage {
 		columns.append(MNC+",");
 		columns.append(LAC+",");
 		columns.append(CID+",");
+		columns.append(RATE+",");
+		columns.append(NETWORKTYPE);		
 		return columns.toString();
+	}
+
+	public List<DbData> queryAll() {
+		List<DbData> dataList = new ArrayList<DbData>();
+		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE , null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+			while (cursor.isAfterLast() == false) {
+				DbData data = cursorToData(cursor);
+				dataList.add(data);
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+		return dataList;
 	}
 	
 	public CharSequence[] queryTestIds() {
@@ -166,11 +179,8 @@ public class DataStorage {
 
 		String[] whereArgs = new String[] {
 				testId
-				//testName
 		};
-		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE +
-				" WHERE " + TESTID +"  = ?", whereArgs); //OR " + TESTNAME +"= ?
-
+		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
 
 		if (cursor != null) {
 			cursor.moveToFirst();		
@@ -198,9 +208,9 @@ public class DataStorage {
 		public void onCreate(SQLiteDatabase db) {
 			String sql = 
 					String.format("create table %s (%s integer primary key autoincrement, %s integer, %s varchar(100), %s varchar(100), %s varchar(15), " +
-							"%s varchar(15),  %s varchar(15),  %s varchar(15), %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer, %s integer, %s integer)", 
+							"%s varchar(15),  %s varchar(15),  %s varchar(15), %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s varchar(30))", 
 							DB_TABLE , ID, TESTID, TESTNAME, TIME,  LAT, LON, SIGNAL, UPSPEED, DOWNSPEED, JITTER, PACKETLOST, SUMPACKET, 
-							MCC, MNC, LAC, CID);
+							MCC, MNC, LAC, CID, RATE, NETWORKTYPE);
 
 			Log.d(TAG, "onCreate Sql:"+sql);
 			db.execSQL(sql);

@@ -27,12 +27,14 @@ public class TestActivity extends Activity implements TestObserver {
 	private final String TAG = "TestActivity: ";
 	private final String DIRECTION_GROUP = "DirectionGroup";
 	private final String TYPE_GROUP = "TypeGroup";
-					
+	private final String MESSAGE = "message";
+	private final String STARTON = "start";
+	
 	private RadioGroup directionGroup = null;
 	private int directionGroupIndex = 0;	
 	private RadioGroup typeGroup = null;
 	private int typeGroupIndex = 0;
-
+		
 	private EditText text = null;
 	
 	private ProgressBar progressBar = null;
@@ -181,10 +183,11 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 
 	private void save() {
-		//sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
+		editor.putString(MESSAGE, text.getText().toString());
+		editor.putBoolean(STARTON, findViewById(R.id.bt_startTest).isEnabled());
 		editor.commit();
 	}
 
@@ -195,6 +198,11 @@ public class TestActivity extends Activity implements TestObserver {
 		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
 		directionGroup.check(directionGroupIndex);
 		
+		text.setText(sharedPreferences.getString(MESSAGE, ""));
+		
+		Boolean isStarted = sharedPreferences.getBoolean(STARTON, true);
+		findViewById(R.id.bt_startTest).setEnabled(isStarted);
+		findViewById(R.id.bt_stopTest).setEnabled(!isStarted);		
 	}
 
 	@Override
