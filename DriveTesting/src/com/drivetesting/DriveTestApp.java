@@ -29,8 +29,7 @@ import com.drivetesting.subjects.LocationSubject;
 import com.drivetesting.subjects.PhoneStateSubject;
 import com.drivetesting.subjects.TestSubject;
 
-public class DriveTestApp extends Application implements OnSharedPreferenceChangeListener, 
-TestSubject, PhoneStateSubject, LocationSubject {
+public class DriveTestApp extends Application implements TestSubject, PhoneStateSubject, LocationSubject {
 
 	static final String TAG = "DriveTesting";
 
@@ -114,13 +113,12 @@ TestSubject, PhoneStateSubject, LocationSubject {
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
-		prefs.registerOnSharedPreferenceChangeListener(this);
-
+		
 		dataStorage = new DataStorage(this);
 		dataStorage.open();	
 
 		dataStorage.deleteAll();
-		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, networkType);
+		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, "networkType");
 		
 		dataStorage.insert(1, "testName1", 47.497147, 19.070567, 1.1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
 		dataStorage.insert(1, "testName1", 47.497219, 19.069383, 2.2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
@@ -131,6 +129,14 @@ TestSubject, PhoneStateSubject, LocationSubject {
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
+	public SharedPreferences  getSharedPreference() {
+		return prefs;
+	}
+	
+	public void setSharedPreference(SharedPreferences   pref) {
+		prefs = pref;
+	}
+	
 	private void storeTCPReportItem(final double dlSpeed, final double ulSpeed) {
 		double lat = 0;
 		double lon = 0;
@@ -312,41 +318,6 @@ TestSubject, PhoneStateSubject, LocationSubject {
 
 	public void clearTestMessage() {
 		message.delete(0, message.length());
-	}
-
-	/*private static final Pattern IP_ADDRESS = Pattern.compile(
-        "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
-        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
-        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
-        + "|[1-9][0-9]|[0-9]))");
-	 */
-	@Override
-	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
-		this.prefs = pref;
-		Log.d(TAG, "On Change preferences: "+ key);
-		if (key.equals("serverIp")) {
-			/*Matcher matcher = IP_ADDRESS.matcher(pref.getString("serverIp", null));
-			if (matcher.matches()) {
-			 */
-			// ip is correct
-			Log.d(TAG, "Server IP has changed");
-			/*	
-			}else {
-				Log.d(TAG, "Server IP is wrong");
-				final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                builder.setTitle("Invalid Input");
-                builder.setMessage("It is not a valid IP address!");
-                builder.setPositiveButton("Ok", null);
-                builder.show();
-			}*/			
-		} else if (key.equals("testName")){
-			testName = prefs.getString("testName", "-");
-			Log.d(TAG, "Test's name has changed");
-		} else if (key.equals("rateType")){
-			rateType = prefs.getInt("rateType", 1);
-			Log.d(TAG, "Test's name has changed");
-			
-		}
 	}
 
 	// test data observer methods

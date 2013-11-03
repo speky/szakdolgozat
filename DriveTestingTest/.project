@@ -3,7 +3,7 @@
 	<name>DriveTestingTest</name>
 	<comment></comment>
 	<projects>
-		<project>com.drivetesting.MainActivity</project>
+		<project>DriveTesting</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

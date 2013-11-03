@@ -75,7 +75,7 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 	 
 	// Function to show settings dialog       
-	public void showSettingsAlert() {
+	public void showSettingsGPSAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
 		// Setting Dialog Title
@@ -106,12 +106,47 @@ public class TestActivity extends Activity implements TestObserver {
 		alertDialog.show();
 	}
 	
+	public void showSettingsNetworkAlert() {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+		// Setting Dialog Title
+		alertDialog.setTitle("Network settings");
+
+		// Setting Dialog Message
+		alertDialog.setMessage("Network is not enabled. Do you want to go to settings menu?");
+
+		// Setting Icon to Dialog
+		alertDialog.setIcon(android.R.drawable.ic_delete);
+
+		// On pressing Settings button
+		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int which) {
+				Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+				startActivity(intent);
+			}
+		});
+
+		// on pressing cancel button
+		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+
+		// Showing Alert Message
+		alertDialog.show();
+	}
+	
 	public void onStartTestClick(View view) {
-		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-	    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {	        
-			showSettingsAlert();
+		if (application.isInternetConnectionActive() == false) {	        
+			showSettingsNetworkAlert();
 			return;
 		}
+		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+	    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {	        
+			showSettingsGPSAlert();
+			return;
+		}	    
 		((DriveTestApp)getApplication()).startGPSService();
 		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
 		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;

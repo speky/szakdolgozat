@@ -2,7 +2,6 @@ package com.drivetesting.services;
 
 import java.util.Locale;
 
-import android.R;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,6 +17,7 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.drivetesting.DriveTestApp;
 
@@ -70,11 +70,11 @@ public class PhoneStateListenerService extends Service{
 						/*||networkInfo.getType() == ConnectivityManager.TYPE_WIFI)) {*/
 						String networkType = networkInfo.getSubtypeName();
 						Log.d(TAG, "connectivity network type: "+networkType);
-						((DriveTestApp)getApplication()).setNetworkType(networkType);
+						application.setNetworkType(networkType);
 
 						if (networkInfo.isConnected()) {
-							((DriveTestApp)getApplication()).setConnectionState(true);
-							((DriveTestApp)getApplication()).setNetworkState("Connected");
+							application.setConnectionState(true);
+							application.setNetworkState("Connected");
 						}
 					}
 				}
@@ -93,6 +93,7 @@ public class PhoneStateListenerService extends Service{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
+		Toast.makeText(getBaseContext(), "PhoneState destroy", Toast.LENGTH_LONG).show();
 		// stop listening to phone state changes
 		if (telephonyManager != null){  
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);	

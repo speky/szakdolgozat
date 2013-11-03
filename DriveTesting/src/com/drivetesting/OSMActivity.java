@@ -187,15 +187,6 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
         alert.show();
 	}
 
-	// callback to store activity status before a restart (orientation change for instance)
-	@Override 
-	protected void onSaveInstanceState (Bundle outState){		
-		outState.putInt("zoom_level", mapView.getZoomLevel());
-		GeoPoint c = (GeoPoint) mapView.getMapCenter();		
-		outState.putParcelable("map_center", c);
-		outState.putLong("test_id", testId);
-	}
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -297,7 +288,6 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		waypoints.add(firstNode.mLocation);		
 		waypoints.add(newPoint); 
 		
-		//Settings.ACTION_WIRELESS_SETTINGS			
 		new UpdateRoadTask().execute(waypoints);
 		mapView.postInvalidate();
 	}

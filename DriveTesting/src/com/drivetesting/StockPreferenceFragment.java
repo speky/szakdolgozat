@@ -11,5 +11,6 @@ public class StockPreferenceFragment extends PreferenceFragment {
 		int res = getActivity().getResources().getIdentifier(getArguments().getString("resource"), "xml", getActivity().getPackageName());
 
 		addPreferencesFromResource(res);
+		
 	}
 }
