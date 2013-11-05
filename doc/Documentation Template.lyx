@@ -2147,7 +2147,7 @@ okat is.
 \end_layout
 
 \begin_layout Subsection
-Architektúra
+Android komponensek
 \end_layout
 
 \begin_layout Standard
@@ -2516,8 +2516,23 @@ Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni amit Inetent-ne
  meg egy képet vagy nyisson meg egy weboldalt.
 \end_layout
 
+\begin_layout Subsubsection*
+Intent
+\end_layout
+
+\begin_layout Standard
+Az intent üzenetekkel futás idejü kapcsolatot, kötést létesíthetünk Android
+ komponensek között.
+ Intent objektum egy adatstruktúra, ami általában a végrehajtandó művelet
+ absztrakt leírását tartalmazza, illetve a fogadó komponens számár a fontos
+ információkat is tartalmazhat.
+ Ezen felül tartalmaz a rendszer számár a lényeges információkat pl.: a fogadó
+ komponens kategóriáját.
+ 
+\end_layout
+
 \begin_layout Subsection
-Futási környezet, erőforrás kezelés
+Futási környezet és a konfigurációs fájlok
 \end_layout
 
 \begin_layout Standard
@@ -2543,11 +2558,216 @@ legkisebb jogosultság elvét,
 így az alkalmazás csak a számára szükséges komponensekhez fér hozzá.
  Egy alaklamazás engedéyt kérhet arra, hogy komponensekhez, adatokhoz férhessen
  hozzá például: névjegyzék, tárolók (SD kártya), kamera, stb.
- Minden engedélyt a felhasynálónak kell jóváhagynia telepítéskor.
+ Minden engedélyt a felhasználónak kell jóváhagynia telepítéskor.
 \end_layout
 
-\begin_layout Subsection
-Kliens oldali komponensek leírása
+\begin_layout Subsubsection
+AndroidManifest.xml
+\end_layout
+
+\begin_layout Standard
+Az Android rendszer számára szükséges konfigurációs paramétereket tartalmazza,
+ illetve az alkalmazás által használt komponensek deklarációját.
+ Tartalmazza továbbá a felhasználói jogosultságok listáját, deklarálja az
+ alaklamazás futtatásához szükséges minumum Android API szint számát, illetve
+ egzéb hardver és szoftver paramétereket.
+ Azok a komponensek, amik nincsenek dekarálva ebben a fájlban, nem láthatóak
+ a rendszer számára.
+ Ez a fájl az alkalmazás gyökérkönyvtárában foglal helyet.
+\end_layout
+
+\begin_layout Standard
+így néz ki egy Activity deklarációja a manifest fájlban:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=XML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" ...
+ >
+\end_layout
+
+\begin_layout Plain Layout
+
+	<application android:name=".DriveTestApp" ...>
+\end_layout
+
+\begin_layout Plain Layout
+
+		<activity android:name=".MainActivity"
+\end_layout
+
+\begin_layout Plain Layout
+
+         android:label="@string/title_activity_drive_test" ...>
+\end_layout
+
+\begin_layout Plain Layout
+
+       </activity>
+\end_layout
+
+\begin_layout Plain Layout
+
+	   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+	</application>
+\end_layout
+
+\begin_layout Plain Layout
+
+</manifest>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az <activity> elemben az android:name parameter tartalmazza az Aktivity
+ osztályból származó osztály nevét, melyet az alkalmazásban használunk.
+ Az android:label parameterben megadhatjuk a felhasználó számára megjelnő
+ nevet.
+\end_layout
+
+\begin_layout Standard
+Komponensek deklarációja a manifest fájlban a következők lehetnek:
+\end_layout
+
+\begin_layout Itemize
+<activity> elemek az Activity-ból származó osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<service> elemek a Service ileltve IntentService típusú osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<receiver> elemek a BroadcastReceiver osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<provider> elemek a tartalomszolgáltató osztályakhoz
+\end_layout
+
+\begin_layout Subsubsection
+Felhasználói felület leírása
+\end_layout
+
+\begin_layout Standard
+Az Android rendszerben az Activity objektumok rendelkeznek felhasználói
+ felülettel, melyek leírását obejktumonként külön-külön kell deklarálni
+ xml fájlokban.
+ Ezek a fájlok az alkalmazás könyvtárán belül a 
+\shape italic
+res
+\backslash
+layout
+\shape default
+ könyvtárban találhatóak.
+ Egy XML elem neve ebben az esetben egy Java objektum nevét tükrözi, tehát
+ ha az XML elem egy <Button> elem, akkor az alaklmazás egy Button (gomb)
+ objektumot fog létrehozni.
+ Amikor betöltődik egy Activity objektum, akkor a neki megfelelő felület
+ leírő XML fájlból a rendszer megfelelően létrehozza futási időben és inicializá
+lja ezeket az objektumokat.
+ 
+\end_layout
+
+\begin_layout Standard
+Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombbal:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<?xml version="1.0" encoding="utf-8"?>
+\end_layout
+
+\begin_layout Plain Layout
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:layout_width="match_parent"
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:layout_height="match_parent"
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:orientation="vertical" >
+\end_layout
+
+\begin_layout Plain Layout
+
+	<TextView android:id="@+id/textView1"
+\end_layout
+
+\begin_layout Plain Layout
+
+		      android:layout_width="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+      		android:layout_height="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+      		android:text="" />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <Button android:id="@+id/button1"
+\end_layout
+
+\begin_layout Plain Layout
+
+            android:layout_width="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+            android:layout_height="wrap_content"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</LinearLayout>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
+ Eclipsbe ágyazott grafikus szerkesztőfelület segítségével is.
+ Különféle Layut objektumok segítségével meghatározhatjuk az egyes elemek
+ (gombok, szövegmezök, stb.) elhelyezkedését.
+ 
 \end_layout
 
 \begin_layout Section
