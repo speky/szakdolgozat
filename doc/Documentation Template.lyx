@@ -672,7 +672,7 @@ A drive testing egyfajta mérési módszere és értékelése a mobiltelefon há
  Ez a teszt fontos szerepet kap a telefonhálózatokat üzemeltető cégek hálózat
  tervezési, üzemeltetési stratégiáiban és nem utolsó sorban a hibák felderítéséb
 en.
- Drive test felszerelés tipikusan ilyen adatokat gyűjt a hálózatról:
+ Drive test felszerelés tipikusan ay alábbi adatokat gyűjti a hálózatról:
 \end_layout
 
 \begin_layout Itemize
@@ -745,12 +745,12 @@ k miatt.
  autóval kivonul a megadott területre, ahol a tesztet el kell végeznie.
  Majd bekonfigurálja az eszközöket a méréshez.
  Egy egyszerűbb felszerelés látható a jobb oldali képen.
- A mérés típusától függöen egyre bonyolultabb és költségesebb eszközökre,
+ A mérés típusától függően egyre bonyolultabb és költségesebb eszközökre,
  felszerelésekre van szükség.
- Majd az autóval végigjárja a kijelölt útvonalat, akár többször is, miközben
- a mérési eredményeket rögzíti a számítógép.
- A mérés végeztével kiértékeli az eredményeket, általában egy erre a célra
- készült program segítségével.
+ Majd az autóval végigjárja a kijelölt útvonalat - akár többször is - miközben
+ a mérési eredményeket rögzíti a számítógép egz speciálisan erre a célra
+ fejleszttt szoftver segítségével.
+ A mérés végeztével kiértékeli az eredményeket a program segítségével.
  Látható, hogy sok költséges, speciális eszközre van szükség a mérések elvégzésé
 hez.
  
@@ -765,17 +765,39 @@ A szakdolgozatom célja egy
 \begin_inset Quotes sld
 \end_inset
 
-drive testing" alkalmazás megvalósítása, egy kis költségvetésű mobil egység
+drive testing" alkalmazás megvalósítása, egy kis költségvetésű mobilkészülék
  segítségével.
- Nagy előnye a programnak a meglévő mérésekkel szemben, hogy a teszt elvégzéséhe
-zelég egy mobiltelefon készülék.
+ Nagy előnye ennek a megoldásnak a meglévő technológiával szemben, hogy
+ a teszt elvégzéséhez elég egy mobiltelefon készülék és a teszt elvégzásáhez
+ nem kell egy mérnököt alkalmazni.
  Az Android platform lehetőséget nyújt arra, hogy az alkalmazás információkat
  gyűjtsön a telefonról, valamint a mobilhálózatról.
  Ezen információk segítségével egy olyan program készíthető, amely képes
- részben vagy teljesen kiváltani a jelenleg használt eljárásokat.
- Segítséget nyújt a telefonhálózat problémáinak felderítésében, fejlesztendő
+ részben vagy teljesen kiváltani a jelenleg használt technikát.
+ Segítséget nyújt a telefonhálózat problémáinak felderítésében és a fejlesztendő
  területek feltérképezésében.
  
+\end_layout
+
+\begin_layout Standard
+Az Android platformot választottam, mivel széles körben elérhető és a 
+\begin_inset CommandInset href
+LatexCommand href
+name "Wikipedia"
+target "http://en.wikipedia.org/wiki/Mobile_operating_system"
+
+\end_inset
+
+adatai szerint ezt használják a legtöbben a világon, így akár a felhasználók
+ által gyűjtött teszt adatokat is felhasználhatják a telefon szolgáltatók,
+ operátorok.
+ 
+\end_layout
+
+\begin_layout Standard
+A szakdolgozatom leginkább a mobil adat hyvások tesztelésével és elemzésével
+ foglalkozik., mivel a jövőben ez a terület különösen fontos szerepet fog
+ játszani a mobil kommunikációban.
 \end_layout
 
 \begin_layout Standard
@@ -861,6 +883,97 @@ Program használatának feltételei
 
 \begin_layout Standard
 A program által használt interfészek, eszközök(HW, SW) leírása
+\end_layout
+
+\begin_layout Standard
+Az alábbi lista tartalmazza a jogokat (permissions) amit a mobil alkalmazás
+ használ:
+\end_layout
+
+\begin_layout Description
+
+\series bold
+coarse location (network-based):
+\series medium
+ ahhoz hogy megjelnithessük a készülék helyzetét a térképen és mérhessük
+ a jelerősséget az alaklamazásnak szüksége van erre.
+ Ezt a hálózati poziciót gyorsan el tudja nekünk küldeni hálózati eszköz,
+ de elég durva becslést ad a telefon helyére, körülbelül 100 métres pontossággal.
+ Ezt akkor használjuk, mikor a GPS szolgáltatás nem elérhető, például beltérben.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+fine location (GPS):
+\series default
+A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatározz
+uk a telefon helyzetét.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+Network communication, full internet access, view network state
+\series default
+: A hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
+ Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
+ frissítéséhez.
+ The app will actually stop updating the map if signal strength gets too
+ week (below -102 dBm), otherwise it would appear to freeze waiting for
+ tile updates.
+ :O ???
+\end_layout
+
+\begin_layout Standard
+Storage modify/delete USB storage contents
+\end_layout
+
+\begin_layout Standard
+Users need the ability to save recorded data to, and read that and other
+ data from, the rfsignaldata directory on the USB storage device (your phone).
+ Older data that was recorded and saved can be reloaded and played back
+ within the app.
+ Also users can load their own custom site location data into the database.
+ All of these actions require interacting with the storage device.
+ The app ONLY interacts with the rfsignaldata directory.
+\end_layout
+
+\begin_layout Standard
+Phone calls read phone state and identity
+\end_layout
+
+\begin_layout Standard
+This is a critical permission since reading these parameters is at the heart
+ of the app's function.
+ The app does not save or transmit any of these parameters other than those
+ which appear in the recorded data.
+ Critical identity parameters such as IMEI/ESN, phone number, SIM serial
+ number, and MAC address are never recorded or transmitted by the app.
+\end_layout
+
+\begin_layout Standard
+System tools change Wi-Fi state, prevent phone from sleeping
+\end_layout
+
+\begin_layout Standard
+One of the many features the app monitors is the Wi-Fi state of the device
+ as well as the signal strength of other Wi-Fi hotspots within range.
+ Turning on and off the feature that listens for hotspots requires the change
+ Wi-Fi state permission.
+ While hotspots are identified and can be recorded, the Wi-Fi state of the
+ device is never transmitted or saved.
+\end_layout
+
+\begin_layout Standard
+Because of the way the app will be used it is necessary to keep the device
+ awake, so a "wake-lock" is held to prevent the device from sleeping.
+ This does not apply if you start recording and press the Back button to
+ get out of the app.
+ In this case, the app will continue to record, but the device may go to
+ sleep (if it has been setup to do that).
+ If this happens then signal strength updates will stop and not resume until
+ the device awakes.
 \end_layout
 
 \begin_layout Section
@@ -1058,7 +1171,7 @@ Ezekben a korai időkbena mobil készüléknek az adótorony által lefedett kö
 \end_layout
 
 \begin_layout Subsection
-Mobilhálózatokban használt kifejezések leírása
+Mobilhálózatokban gyakran használt kifejezések leírása
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1286,54 +1399,53 @@ LTE
  (Long-Term Evolution) 4G LTE, a legújabb sztenderd a mobiltelefonok és
  adat terminálok közötti nagy sebességű vezetéknélküli adat kommunikációra.
  GSM/EDGE és UMTS/HSPA nhálózati technológiákon alapszik, de nagyobb kapacitást
- és sebeséget nyújt különböző rádiós interfészek együtes alkalmazásával.
- A világ első publikus LTE szolgáltatója a TeliaSonera Oslo-ban és Stockholm-ban
- 2009 December 14.
- Várhatóan az LTE lesz az első igazán globális mobil telefon sztenderd,
- habár a országonként különböző frekvencia sávok hasnzálata miatt csak a
- többsávos telefonok lesznek képesek kihasználni minden országban az LTE
- szolgáltatást.
- Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogat, az LTE
- 326 Mbit átvételére lesz képes másodpercenként 4x4 antennával, 20 MHz széles
- frekvenciatartományon.
+ és sebeséget nyújt különböző rádiós interfészek együttes alkalmazásával.
+ A világ első publikus LTE szolgáltatója a TeliaSonera Oslo-ban és Stockholm-ban.
+ Várhatóan az LTE lesz az első igazán globális mobiltelefon sztenderd, habár
+ a országonként különböző frekvencia sávok használata miatt csak a többsávos
+ telefonok lesznek képesek kihasználni minden országban az LTE szolgáltatást.
+ Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogatták, az
+ LTE 326 Mbit átvételére lesz képes másodpercenként, 20 MHz széles frekvenciatar
+tományon.
 \end_layout
 
 \begin_layout Standard
-The LTE standard only supports packet switching with its all-IP network.
- Voice calls in GSM, UMTS and CDMA2000 are circuit switched, so with the
- adoption of LTE, carriers will have to re-engineer their voice call network.[24]
- Three different approaches sprang up:
+Az LTE sztenderd csak IP hálozatokat támogatja.
+ A GSM, UMTS és CDMA2000 hagyományos vonalkapcsolt hálózatok, így az LTE-vel
+ való együtt múködés miatt át kell tervezni a hálózatokat.
+ Erre több fél megoldást dolgoztak ki:
 \end_layout
 
 \begin_layout Standard
-VoLTE (Voice Over LTE): This approach is based on the IP Multimedia Subsystem
- (IMS) network, with specific profiles for control and media planes of voice
- service on LTE defined by GSMA in PRD IR.92.
- This approach results in the voice service (control and media planes) being
- delivered as data flows within the LTE data bearer.
- This means that there is no dependency on (or ultimately, requirement for)
- the legacy Circuit Switch voice network to be maintained.
- CSFB (Circuit Switched Fallback): In this approach, LTE just provides data
- services, and when a voice call is to be initiated or received, it will
- fall back to the CS domain.
- When using this solution, operators just need to upgrade the MSC instead
- of deploying the IMS, and therefore, can provide services quickly.
- However, the disadvantage is longer call setup delay.
- SVLTE (Simultaneous Voice and LTE): In this approach, the handset works
- simultaneously in the LTE and CS modes, with the LTE mode providing data
- services and the CS mode providing the voice service.
- This is a solution solely based on the handset, which does not have special
- requirements on the network and does not require the deployment of IMS
- either.
- The disadvantage of this solution is that the phone can become expensive
- with high power consumption.
+
+\series bold
+VoLTE 
+\series default
+(Voice Over LTE) megközelítés IP Multimedia Subsystem (IMS) hálózaton alapszik.
+ Eyyel a megoldással a hang szolgáltatás adat folyamként továbbítódik ay
+ LTE állomáson keresztül.
+ Ez azt jelenti, hogy nem kell modósítani a a hagyományos vonalkapcsolt
+ hálózatot, képes lesz a 4güs hívást adat csomagként továbbítani.
 \end_layout
 
 \begin_layout Standard
-Enhanced voice quality To ensure compatibility, 3GPP demands at least AMR-NB
- codec (narrow band), but the recommended speech codec for VoLTE is Adaptive
- Multi-Rate Wideband, also known as HD Voice.
- This codec is mandated in 3GPP networks that support 16 kHz samplin
+Másik megközelítés a 
+\series bold
+CSFB 
+\series default
+(Circuit Switched Fallback).
+ Eben az esetben az LTE csak adat csomag szolgáltatást nyújt, és a hang
+ hívások vonal kapcsolt hálózatban dolgozódnak fel.
+ Ezt a megoldást használva az operátoroknakcsak az MSC-tkell frissíteniük
+ IMS telepítés helyett.
+ Hátránya a hossyabb hívás kiépítési idő.
+ 
+\end_layout
+
+\begin_layout Standard
+A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-NB
+ kodek (narrow band) használatát, de a javasolt beszád kodek VoLTE-hoz az
+ Adaptive Multi-Rate Wideband, avagy a HD Voice.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1709,20 +1821,52 @@ A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
  háromdimenziós animációs játék és 5.1-es hang szolgáltatást.
 \end_layout
 
-\begin_layout Subsection
-A hálózatok vizsgált adatai
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename interphaseLTEnetwork.jpg
+	scale 60
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+4G hálózat architektúrája
 \end_layout
 
-\begin_layout Standard
-A mobilhálózatok paramétereinek összefoglalása (KPI-ok) a vizsgálandó adatokkal,
- értékhatárokkal
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+A hálózatok vizsgált adatai
 \end_layout
 
 \begin_layout Standard
 A lenti táblázat tartalmazza az átviteli sebességeket különféle technologiák
  esetén.
  Amint látható, a 3G és a későbbi hálózatok adat rátája egyre inkább növekszik,
- így lehetővé téve a nagyobb sávszélesség igényű szolgáltatások bevezetését.
+ így lehetővé téve a nagyobb sávszélesség igényű szolgáltatások bevezetését,
+ mint a HD audio és video szolgáltatások.
 \end_layout
 
 \begin_layout Standard
@@ -1944,7 +2088,7 @@ HSDPA
 \begin_inset Text
 
 \begin_layout Plain Layout
-VSF-OFCDM
+LTE
 \end_layout
 
 \end_inset
@@ -1953,7 +2097,7 @@ VSF-OFCDM
 \begin_inset Text
 
 \begin_layout Plain Layout
-le 100 Mbpsm, fel 20 Mbps.
+le 1 Gbps, fel 500 Mbps.
 \end_layout
 
 \end_inset
@@ -1995,7 +2139,11 @@ Android platform bemutatása
 Az Andoroid fejlesztő környezet széleskörű támogatást nyújt a fejlesztőknek
  a telefon és a hálózat adatainak lekéréséhez, ami nagyban megkönnyíti az
  alkalmazás fejlesztését.
- 
+ A nyilt fejlesztői környezettel az Android lehetőséget biztosít a fejlesztőnek,
+ hogy magas színvonalú és innovatív alkalmazásokat készítsen.
+ A fejlesztők kihasználhatják például az adott eszköz hardware képességeit,
+ hozzáférhetnek a felhasználó adataihoz és akár futtathatnak háttér szolgáltatás
+okat is.
 \end_layout
 
 \begin_layout Subsection
@@ -2003,9 +2151,10 @@ Architektúra
 \end_layout
 
 \begin_layout Standard
-Az Android fejlesztőkörnyezetnek három komponensét használom.
- Mindegyiknek különböző célja és szerepe van a programban.
- 
+Az Android fejlesztőkörnyezetnek több komponense létezik, mindegyiknek különböző
+ célja és szerepe van a programban.
+ Eyek általában egzmástól függenek, de önálló példányban léteznek és saját
+ életciklusuk van.
 \end_layout
 
 \begin_layout Subsubsection
@@ -2372,408 +2521,33 @@ Futási környezet, erőforrás kezelés
 \end_layout
 
 \begin_layout Standard
-Java és az Android kapcsolata, dalvik virtuális gép.
- Erőforrások (képek, szövegek, hangok) kezelése
+Az Adndroid tartalmaz egy alap könyvtárat mely megvalósítja a Java programozási
+ nyelv túlnyomó részét.
+ 
 \end_layout
 
 \begin_layout Standard
-Az alábbi lista tartalmazza a jogokat (permissions) amit a mobil alkalmazás
- használ:
-\end_layout
-
-\begin_layout Description
-
-\series bold
-coarse location (network-based):
-\series medium
- ahhoz hogy megjelnithessük a készülék helyzetét a térképen és mérhessük
- a jelerősséget az alaklamazásnak szüksége van erre.
- Ezt a hálózati poziciót gyorsan el tudja nekünk küldeni hálózati eszköz,
- de elég durva becslést ad a telefon helyére, körülbelül 100 métres pontossággal.
- Ezt akkor használjuk, mikor a GPS szolgáltatás nem elérhető, például beltérben.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-fine location (GPS):
-\series default
-A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatározz
-uk a telefon helyzetét.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-Network communication, full internet access, view network state
-\series default
-: A hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
- Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
- frissítéséhez.
- The app will actually stop updating the map if signal strength gets too
- week (below -102 dBm), otherwise it would appear to freeze waiting for
- tile updates.
- :O ???
+Minden alkalmazás saját szálon fut és saját Dalvik virtuális gép páldánnyal
+ rendelkezik, így egymástól elkülönítve tudnak futni az egyes alaklamazások.
+ A Dalvik VM (virtuális gép) a Linux kernelre támaszkodik az alacsony szintű
+ funkcionalitás használata során, mint például a szálkezelés.
+ A Linux továbbá biztonsági, memoria és hálózat kezelési szolgálttásokat
+ is nyújt.
 \end_layout
 
 \begin_layout Standard
-Storage modify/delete USB storage contents
-\end_layout
-
-\begin_layout Standard
-Users need the ability to save recorded data to, and read that and other
- data from, the rfsignaldata directory on the USB storage device (your phone).
- Older data that was recorded and saved can be reloaded and played back
- within the app.
- Also users can load their own custom site location data into the database.
- All of these actions require interacting with the storage device.
- The app ONLY interacts with the rfsignaldata directory.
-\end_layout
-
-\begin_layout Standard
-Phone calls read phone state and identity
-\end_layout
-
-\begin_layout Standard
-This is a critical permission since reading these parameters is at the heart
- of the app's function.
- The app does not save or transmit any of these parameters other than those
- which appear in the recorded data.
- Critical identity parameters such as IMEI/ESN, phone number, SIM serial
- number, and MAC address are never recorded or transmitted by the app.
-\end_layout
-
-\begin_layout Standard
-System tools change Wi-Fi state, prevent phone from sleeping
-\end_layout
-
-\begin_layout Standard
-One of the many features the app monitors is the Wi-Fi state of the device
- as well as the signal strength of other Wi-Fi hotspots within range.
- Turning on and off the feature that listens for hotspots requires the change
- Wi-Fi state permission.
- While hotspots are identified and can be recorded, the Wi-Fi state of the
- device is never transmitted or saved.
-\end_layout
-
-\begin_layout Standard
-Because of the way the app will be used it is necessary to keep the device
- awake, so a "wake-lock" is held to prevent the device from sleeping.
- This does not apply if you start recording and press the Back button to
- get out of the app.
- In this case, the app will continue to record, but the device may go to
- sleep (if it has been setup to do that).
- If this happens then signal strength updates will stop and not resume until
- the device awakes.
+Az Android operácós rendszer megvalósítja a 
+\shape italic
+legkisebb jogosultság elvét, 
+\shape default
+így az alkalmazás csak a számára szükséges komponensekhez fér hozzá.
+ Egy alaklamazás engedéyt kérhet arra, hogy komponensekhez, adatokhoz férhessen
+ hozzá például: névjegyzék, tárolók (SD kártya), kamera, stb.
+ Minden engedélyt a felhasynálónak kell jóváhagynia telepítéskor.
 \end_layout
 
 \begin_layout Subsection
-Komponensek leírása
-\end_layout
-
-\begin_layout Standard
-Kliens oldali komponensek
-\end_layout
-
-\begin_layout Standard
-Basic Steps to Setup the GPS:
-\end_layout
-
-\begin_layout Standard
-Set the permissions in the Manifest.
-\end_layout
-
-\begin_layout Standard
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
- />
-\end_layout
-
-\begin_layout Standard
-These permissions are needed so the device can use the "coarse" location
- where the mobile location is determined by the cell network.
- This is not very precise, but it is fast and will give your ballpark position
- (literally) until the slower, more power intensive, but more accurate GPS
- can get an accurate fix.
-\end_layout
-
-\begin_layout Standard
-Create the location objects.
-\end_layout
-
-\begin_layout Standard
-LocationManager locationManager; LocationListener listenerCoarse, listenerFine;
-\end_layout
-
-\begin_layout Standard
-I set these as global variables.
-\end_layout
-
-\begin_layout Standard
-Listen to the location objects.
-\end_layout
-
-\begin_layout Standard
-This is the heart of the exercise.
- I create a method that gets called when the activity starts.
- I call it in the onResume() method because this is called the first time
- the activity is used and every time it resumes after being paused (see
- activity lifecycle).
- The method has this structure:
-\end_layout
-
-\begin_layout Standard
-private void locationSetup(){ // set the location manager // Initialize
- fine criteria for location providers // Initialize coarse criteria for
- location providers.
- // set gps update distance & time // get the last known location // setup
- your listener // setup fine and coarse listeners }
-\end_layout
-
-\begin_layout Standard
-First set the global location manager objects:
-\end_layout
-
-\begin_layout Standard
-locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-\end_layout
-
-\begin_layout Standard
-Now initialize your fine and coarse listener criteria:
-\end_layout
-
-\begin_layout Standard
-Criteria fine = new Criteria(); fine.setAccuracy(Criteria.ACCURACY_FINE);
- fine.setAltitudeRequired(false); fine.setBearingRequired(false); fine.setSpeedRequ
-ired(true); fine.setCostAllowed(true);
-\end_layout
-
-\begin_layout Standard
-Criteria coarse = new Criteria(); coarse.setAccuracy(Criteria.ACCURACY_COARSE);
-\end_layout
-
-\begin_layout Standard
-With the "fine" criteria I'm asking for ACCURACY_FINE, of course, I don't
- need altitude or bearing necessarily, but I do want speed.
- The setCostAllowed() condition is set because not all mobile plans include
- an unlimited data package, so customers may be charged a per-use fee for
- data, which includes GPS data.
- So, it's necessary to ask users if it's okay to incur costs on their behalf
- for data that your application consumes.
- I set this to true under the assumption they know they are using data constantl
-y, but you can choose otherwise.
-\end_layout
-
-\begin_layout Standard
-The coarse criteria is simple, just set to ACCURACY_COARSE.
- I made the mistake of choosing very strict criteria on this once and did
- not realize that I effectively made this "coarse" criteria a "fine" criteria.
- This is important because making the coarse criteria too fine will basically
- force the app to always use the GPS location handling rather than the looser
- (and faster) network.
- What this means in practice is if the user is inside when the app starts
- he will never be able to determine his location -- GPS does not work indoors.
-\end_layout
-
-\begin_layout Standard
-Keep the coarse criteria loose, like I have it, and it will locate the mobile
- in a building and switch over to GPS when the mobile moves outdoors.
-\end_layout
-
-\begin_layout Standard
-I then set the power level for both:
-\end_layout
-
-\begin_layout Standard
-fine.setPowerRequirement(Criteria.POWER_HIGH); coarse.setPowerRequirement(Criteria.P
-OWER_LOW);
-\end_layout
-
-\begin_layout Standard
-You can let the user choose these levels with preferences in your code.
- 
-\end_layout
-
-\begin_layout Standard
-Now set you update intervals:
-\end_layout
-
-\begin_layout Standard
-int GPS_TIMEUPDATE = 1500; // update gps every 1.5sec int GPS_DISTANCEUPDATE
- = 7; // update gps every 7m
-\end_layout
-
-\begin_layout Standard
-Now get your last known location:
-\end_layout
-
-\begin_layout Standard
-String provider = locationManager.getBestProvider(coarse, true); Location
- location = locationManager.getLastKnownLocation(provider);
-\end_layout
-
-\begin_layout Standard
-This basically sets provider=network which gives you a fast result to the
- "location" variable based on the last location the device was aware of.
- This object contains your rough latitude and longitude and a few other
- things.
- 
-\end_layout
-
-\begin_layout Standard
-We now set up listeners for coarse and fine location updates:
-\end_layout
-
-\begin_layout Standard
-if (listenerFine == null || listenerCoarse == null){ createLocationListeners();
- }
-\end_layout
-
-\begin_layout Standard
-When the app starts, listenerFine and listenerCoarse will, of course, be
- null, so the createLocationListeners() method will be called (we will create
- that shortly).
- Once the listeners are initialized we set up the update specifics for the
- two listeners:
-\end_layout
-
-\begin_layout Standard
-if(listenerCoarse != null){ locationManager.requestLocationUpdates( locationManag
-er.getBestProvider(coarse, true), GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, listenerCoa
-rse ); }
-\end_layout
-
-\begin_layout Standard
-if(listenerFine != null){ locationManager.requestLocationUpdates( locationManager.
-getBestProvider(fine, true), GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, listenerFine
- ); }
-\end_layout
-
-\begin_layout Standard
-locationManager.getBestProvider([criteria], [boolean]) returns the name of
- the provider that best meets the given criteria.
- Only providers that are permitted to be accessed by the calling activity
- will be returned.
- If several providers meet the criteria, the one with the best accuracy
- is returned.
- If no provider meets the criteria, the criteria are loosened in the following
- sequence: power requirement, accuracy, bearing, speed, then altitude.
- Note that the requirement on monetary cost is not removed in this process.
-\end_layout
-
-\begin_layout Standard
-GPS_TIMEUPDATE is the minimum time interval for notifications, in milliseconds.
- This field is only used as a hint to conserve power, and actual time between
- location updates may be greater or lesser than this value.
-\end_layout
-
-\begin_layout Standard
-GPS_DISTANCEUPDATE the minimum distance interval for notifications, in meters.
-\end_layout
-
-\begin_layout Standard
-And finally the location listener (listenerFine/listenerCoarse) that is
- called for every update.
- All the above code is placed in a try/catch and will look like this:
-\end_layout
-
-\begin_layout Standard
-locationSetup private void locationSetup(){ try{ // set the location manager
- locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-\end_layout
-
-\begin_layout Standard
-// Initialize fine criteria for location providers Criteria fine = new Criteria(
-); fine.setAccuracy(Criteria.ACCURACY_FINE); fine.setAltitudeRequired(false);
- fine.setBearingRequired(false); fine.setSpeedRequired(true); fine.setCostAllowed(t
-rue); // Initialize coarse criteria for location providers.
- Criteria coarse = new Criteria(); coarse.setAccuracy(Criteria.ACCURACY_COARSE);
- 
-\end_layout
-
-\begin_layout Standard
-fine.setPowerRequirement(Criteria.POWER_HIGH); coarse.setPowerRequirement(Criteria.P
-OWER_LOW); // set gps update distance & time int GPS_TIMEUPDATE = 1500;
- // update gps every 1.5sec int GPS_DISTANCEUPDATE = 7; // update gps every
- 7m
-\end_layout
-
-\begin_layout Standard
-// get the last known location String provider = locationManager.getBestProvider(
-coarse, true); Location location = locationManager.getLastKnownLocation(provider)
-; // your initial location // setup your listener if (listenerFine == null
- || listenerCoarse == null){ createLocationListeners(); }
-\end_layout
-
-\begin_layout Standard
-// Will keep updating about every GPS_TIMEUPDATE ms until accuracy is //
- about GPS_DISTANCEUPDATE meters to get quick fix.
- if(listenerCoarse != null){ locationManager.requestLocationUpdates( locationMana
-ger.getBestProvider(coarse, true), GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, listenerCo
-arse ); } // Will keep updating about every GPS_TIMEUPDATE ms until accuracy
- is // about GPS_DISTANCEUPDATE meters to get accurate fix.
- if(listenerFine != null){ locationManager.requestLocationUpdates( locationManage
-r.getBestProvider(fine, true), GPS_TIMEUPDATE, GPS_DISTANCEUPDATE, listenerFine
- ); } }catch(Exception e){ e.printStackTrace(); } }
-\end_layout
-
-\begin_layout Standard
-Next we create the method that defines the location listeners.
- This method will automatically use either a fine or coarse location listener
- based on the accuracy it is currently receiving:
-\end_layout
-
-\begin_layout Standard
-createLocationListeners /** * Creates LocationListeners */ private void
- createLocationListeners() {
-\end_layout
-
-\begin_layout Standard
-listenerFine = new LocationListener() { public void onStatusChanged(String
- provider, int status, Bundle extras) {} public void onProviderEnabled(String
- provider) {} public void onProviderDisabled(String provider) {} public
- void onLocationChanged(Location location) { if (location.getAccuracy() >
- 500 && location.hasAccuracy()){ locationManager.removeUpdates(listenerFine);
- }else{ // do something with your location update } } };
-\end_layout
-
-\begin_layout Standard
-listenerCoarse = new LocationListener() { public void onStatusChanged(String
- provider, int status, Bundle extras) {} public void onProviderEnabled(String
- provider) {} public void onProviderDisabled(String provider) {} public
- void onLocationChanged(Location location) { if (location.getAccuracy() <
- 500 && location.hasAccuracy()){ locationManager.removeUpdates(listenerCoarse);
- }else{ // do something with your location update }
-\end_layout
-
-\begin_layout Standard
-} }; }
-\end_layout
-
-\begin_layout Standard
-Stop listening to the location objects.
-\end_layout
-
-\begin_layout Standard
-Finally a best practices is to turn off your listeners if you pause or exit
- your activity, otherwise the user will see the GPS icon in the notification
- bar continue to blink after leaving the app.
-\end_layout
-
-\begin_layout Standard
-if(locationManager != null){ locationManager.removeUpdates(listenerCoarse);
- locationManager.removeUpdates(listenerFine); }
-\end_layout
-
-\begin_layout Standard
-Enclose this in a try/catch and you should be good.
- I like to set this in a separate "stopListening()" method that gets called
- when I exit or pause the activity or leave the activity.
- 
-\end_layout
-
-\begin_layout Standard
-Szerver oldali komponensek
+Kliens oldali komponensek leírása
 \end_layout
 
 \begin_layout Section
