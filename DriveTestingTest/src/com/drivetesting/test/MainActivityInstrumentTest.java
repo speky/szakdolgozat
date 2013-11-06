@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Instrumentation;
+import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.widget.ListView;
 
 import com.drivetesting.MainActivity;
 import com.drivetesting.R;
+import com.drivetesting.TestActivity;
 
 public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -24,18 +27,52 @@ public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2
 
 	@Override  
 	protected void setUp() throws Exception {  
-		super.setUp();  
+		super.setUp();
+		setActivityInitialTouchMode(false);
 		mainActivity = getActivity();
 		assertNotNull(mainActivity);		
 		phoneDataList = mainActivity.getPhoneDataList();
-		networkDataList = mainActivity.getNetworkDataList(); 
+		networkDataList = mainActivity.getNetworkDataList();		
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
+	/*public void testStartSecondActivity() throws Exception {
+
+		// add monitor to check for the second activity
+		ActivityMonitor monitor = getInstrumentation().addMonitor(TestActivity.class.getName(), null, false);
+
+		// find button and click it
+		Button view = (Button) activity.findViewById(R.id.button1);
+
+		// TouchUtils handles the sync with the main thread internally
+		TouchUtils.clickView(this, view);
+
+		// to click on a click, e.g., in a listview
+		// listView.getChildAt(0);
+
+		// wait 2 seconds for the start of the activity
+		TestActivity testActivity = (TestActivity) monitor.waitForActivityWithTimeout(2000);
+		assertNotNull(testActivity);
+
+		// search for the textView
+		TextView textView = (TextView) testActivity.findViewById(R.id.resultText);
+
+		// check that the TextView is on the screen
+		ViewAsserts.assertOnScreen(startedActivity.getWindow().getDecorView(), textView);
+		// validate the text on the TextView
+		assertEquals("Text incorrect", "Started", textView.getText().toString());
+
+		// press back and click again
+		this.sendKeys(KeyEvent.KEYCODE_BACK);
+
+		TouchUtils.clickView(this, view);
+	}*/
+
+
 	public void testPhoneDefaultValues() {
 		HashMap<String, String> map = phoneDataList.get(0);
 		assertTrue(map.size() == 2);
@@ -113,7 +150,7 @@ public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2
 		assertTrue(map.get("name").equals("Bit error rate"));
 		assertTrue(map.get("value").equals("-1"));
 	}
-	
+
 	public void testNetworkDefaultValues() {
 		HashMap<String, String> map = networkDataList.get(0);
 		assertTrue(map.size() == 2);
@@ -180,15 +217,15 @@ public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2
 		assertTrue(map.get("name").equals("CID"));		
 		assertTrue(map.get("value").equals("260"));
 	}
-	
-	public void testStateAfterRestart() throws Exception {		
-	    // Stop the activity - The onDestroy() method called
-	    mainActivity.finish();
 
-	    // Re-start the Activity - the onResume() method called
-	    mainActivity = getActivity();
-	    
-	    phoneDataList = mainActivity.getPhoneDataList(); 
+	public void testStateAfterRestart() throws Exception {		
+		// Stop the activity - The onDestroy() method called
+		mainActivity.finish();
+
+		// Re-start the Activity - the onResume() method called
+		mainActivity = getActivity();
+
+		phoneDataList = mainActivity.getPhoneDataList(); 
 		networkDataList = mainActivity.getNetworkDataList();
 
 

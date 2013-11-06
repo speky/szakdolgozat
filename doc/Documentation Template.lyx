@@ -2534,7 +2534,7 @@ Az intent üzenetekkel futás idejü kapcsolatot, kötést létesíthetünk Andr
 \end_layout
 
 \begin_layout Subsection
-Futási környezet és a konfigurációs fájlok
+Futási környezet és konfigurációs fájlok
 \end_layout
 
 \begin_layout Standard
@@ -2769,7 +2769,36 @@ Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
  Eclipsbe ágyazott grafikus szerkesztőfelület segítségével is.
  Különféle Layut objektumok segítségével meghatározhatjuk az egyes elemek
  (gombok, szövegmezök, stb.) elhelyezkedését.
+ A felhasználóval való interakciókra különféle elemek állnak rendelkezésre
+ pl.: gombok, beviteli mezők, dátumválasztók, stb.
+ ezeket widget-eknek nevezzük.
+ A felhasználói felület (UI - user interface) leíró XML fájlokban hozzá
+ tudunk rendelni különféle elemekhez visszhívó (callback) metódusokat.
+ Ezeket az XML elemek android:on<valami> (pl.: android:onClick=<metódus_név>)
+ paraméterében tudjuk meghatározni.
+ A felhasználói felületet leíró fájlt használó Activity osztályban kell
+ definiálni az XML elemekhez tartozó visszahívó metódusokat melyek meghívódnak,
+ ha az adott eseményt kiváltja egy felhasználói esemény.
  
+\end_layout
+
+\begin_layout Subsubsection
+Menü leírása
+\end_layout
+
+\begin_layout Standard
+Menüket külön leíró XML fájl(ok)ban definiálhatunk, melyekben meg kell határozni
+ az egyes menüpontokat.
+ Ezen leíró fájlok a program könyvtárán belül a res
+\backslash
+menu mappában találhatóak.
+ A felhasználó a menün keresztül navigálhat a user interface-el rendelkező
+ Activity-k között és elérheti a beállításokat.
+ Az Activity osztályokhoz az onCreateoptionMenu metodus megvalósításával
+ tudunk menüt renedleni.
+ Itt kell megadni, hogy mi történjen, ha a felhasználó az egyes menüpontokra
+ kattint.
+ Az Android rendszer automatikusan kirajzolja a menüt a képernyőre.
 \end_layout
 
 \begin_layout Section
