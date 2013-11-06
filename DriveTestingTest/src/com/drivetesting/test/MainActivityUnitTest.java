@@ -119,6 +119,60 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity>{
 	}
 
 	@SmallTest
+	public void testSetSignalStrength() {
+		mainActivity.updateSignalStrength("3.2");		
+		HashMap<String, String> map = phoneDataList.get(9);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Signal strength"));		
+		assertTrue(map.get("value").equals("3.2dBm"));
+	}
+	
+	@SmallTest
+	public void testSetCdmaEcIo() {
+		mainActivity.updateCdmaEcio("3.2");		
+		HashMap<String, String> map = phoneDataList.get(10);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Cdma EcIo"));		
+		assertTrue(map.get("value").equals("3.2"));
+	}
+	
+	@SmallTest
+	public void testSetEvdodBm() {
+		mainActivity.updateEvdoDbm("3.2");		
+		HashMap<String, String> map = phoneDataList.get(11);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Evdo dBm"));		
+		assertTrue(map.get("value").equals("3.2"));
+	}
+	
+	@SmallTest
+	public void testSetEvdoEcio() {
+		mainActivity.updateEvdoEcio("3.2");		
+		HashMap<String, String> map = phoneDataList.get(12);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Evdo EcIo"));		
+		assertTrue(map.get("value").equals("3.2"));
+	}
+	
+	@SmallTest
+	public void testSetEvdoSNR() {
+		mainActivity.updateEvdoSnr("3.2");		
+		HashMap<String, String> map = phoneDataList.get(13);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Evdo SNR"));		
+		assertTrue(map.get("value").equals("3.2"));
+	}
+	
+	@SmallTest
+	public void testSetBitErrorRate() {
+		mainActivity.updateGsmBitErrorRate("3.2");		
+		HashMap<String, String> map = phoneDataList.get(14);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Bit error rate"));		
+		assertTrue(map.get("value").equals("3.2"));
+	}
+	
+	@SmallTest
 	public void testNetworkDefaultValues() {
 		HashMap<String, String> map = networkDataList.get(0);
 		assertTrue(map.size() == 2);
@@ -187,5 +241,87 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity>{
 		assertTrue(map.get("value").equals("-"));
 	}
 
-
+	@SmallTest
+	public void testSetServiceState() {
+		mainActivity.updateServiceState("In service");		
+		networkDataList = mainActivity.getNetworkDataList();
+		HashMap<String, String> map = networkDataList.get(4);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Service state"));
+		assertTrue(map.get("value").equals("In service"));
+	}
+	
+	@SmallTest
+	public void testSetCallState() {
+		mainActivity.updateCallState("Idle");		
+		networkDataList = mainActivity.getNetworkDataList();
+		HashMap<String, String> map = networkDataList.get(3);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Call state"));
+		assertTrue(map.get("value").equals("Idle"));
+	}
+	
+	@SmallTest
+	public void testSetNetworkState() {
+		mainActivity.updateNetworkState("Connected");
+		phoneDataList = mainActivity.getPhoneDataList();
+		HashMap<String, String> map = networkDataList.get(6);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Network state"));
+		assertTrue(map.get("value").equals("Connected"));
+	}
+	
+	@SmallTest
+	public void testSetDataConnectionState() {
+		mainActivity.updateDataConnectionState("Connected");
+		phoneDataList = mainActivity.getPhoneDataList();
+		HashMap<String, String> map = networkDataList.get(8);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Data connection state"));
+		assertTrue(map.get("value").equals("Connected"));
+	}
+	
+	@SmallTest
+	public void testSetDataDirection() {
+		mainActivity.updateDataDirection("In");		
+		HashMap<String, String> map = networkDataList.get(7);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Data direction"));
+		assertTrue(map.get("value").equals("In"));
+	}
+	
+	@SmallTest
+	public void testSetNetworkType() {
+		mainActivity.updateNetworkType("UMTS");		
+		HashMap<String, String> map = networkDataList.get(5);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("Network type"));
+		assertTrue(map.get("value").equals("UMTS"));
+	}
+	
+	@SmallTest
+	public void testSetCellLocation() {
+		mainActivity.updateCellLocation("1", "2", "3", "4");
+		phoneDataList = mainActivity.getPhoneDataList();
+		HashMap<String, String> map = networkDataList.get(9);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("MNC"));
+		assertTrue(map.get("value").equals("1"));
+	
+		map = networkDataList.get(10);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("MCC"));
+		assertTrue(map.get("value").equals("2"));
+	
+		map = networkDataList.get(11);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("LAC"));
+		assertTrue(map.get("value").equals("3"));
+	
+		map = networkDataList.get(12);
+		assertTrue(map.size() == 2);
+		assertTrue(map.get("name").equals("CID"));
+		assertTrue(map.get("value").equals("4"));	
+}
+	
 }

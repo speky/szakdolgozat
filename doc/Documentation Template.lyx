@@ -1744,7 +1744,7 @@ Harmadik generáció
 
 \begin_layout Standard
 \begin_inset Float figure
-placement h
+placement H
 wide false
 sideways false
 status open
@@ -1823,6 +1823,7 @@ A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
@@ -1871,6 +1872,7 @@ A lenti táblázat tartalmazza az átviteli sebességeket különféle technolog
 
 \begin_layout Standard
 \begin_inset Float table
+placement H
 wide false
 sideways false
 status open
@@ -2582,8 +2584,8 @@ Az Android rendszer számára szükséges konfigurációs paramétereket tartalm
 
 \begin_layout Standard
 \begin_inset listings
-lstparams "language=XML"
-inline false
+lstparams "breaklines=true,language=XML,showstringspaces=false"
+inline true
 status open
 
 \begin_layout Plain Layout

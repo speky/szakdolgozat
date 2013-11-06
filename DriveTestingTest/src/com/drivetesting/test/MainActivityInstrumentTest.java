@@ -60,7 +60,7 @@ public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2
 
 		map = phoneDataList.get(4);
 		assertTrue(map.size() == 2);
-		assertTrue(map.get("name").equals("Model"));
+		assertTrue(map.get("name").equals("Model"));	
 		assertTrue(map.get("value").equals("sdk"));
 
 		map = phoneDataList.get(5);
@@ -180,20 +180,8 @@ public class MainActivityInstrumentTest extends ActivityInstrumentationTestCase2
 		assertTrue(map.get("name").equals("CID"));		
 		assertTrue(map.get("value").equals("260"));
 	}
-
-	public void testStartActivity() throws Exception {
-	    // Start the Activity - the onResume() method called
-	    mainActivity = getActivity();
-	    Thread.sleep(1000);
-
-	    phoneDataList = mainActivity.getPhoneDataList(); 
-		networkDataList = mainActivity.getNetworkDataList();
-	    testPhoneDefaultValues();
-	    testNetworkDefaultValues();
-	}
 	
-	public void testStateAfterRestart() throws Exception {
-		
+	public void testStateAfterRestart() throws Exception {		
 	    // Stop the activity - The onDestroy() method called
 	    mainActivity.finish();
 

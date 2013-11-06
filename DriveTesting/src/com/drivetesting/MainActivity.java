@@ -224,26 +224,6 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	//provider
 	// gps accuracy
 
-	public void setNeighboring(String value) {
-		//setHashMapElement(networkDataList, "Neighboring List", "Lac : Cid : RSSI");
-		setHashMapElement(networkDataList, "Neighbouring list", value);
-		networkDataAdapter.notifyDataSetChanged();
-		separatedAdapter.notifyDataSetChanged();
-	}
-	/*	
-	List<NeighboringCellInfo> NeighboringList = telephonyManager.getNeighboringCellInfo();
-
-	for(int i=0; i < NeighboringList.size(); i++){
-		String dBm;
-		int rssi = NeighboringList.get(i).getRssi();
-		if (rssi == NeighboringCellInfo.UNKNOWN_RSSI) {
-			dBm = "Unknown RSSI";
-		}else{
-			dBm = String.valueOf(-113 + 2 * rssi) + " dBm";
-		}
-		String neighboring = String.valueOf(NeighboringList.get(i).getLac()) +" : "+ String.valueOf(NeighboringList.get(i).getCid()) +" : "	+ dBm +"\n";		
-	}*/
-
 	private int findElement(final String key, List<HashMap<String, String>> dataList) {
 		for (int i = 0; i < dataList.size(); ++i) {
 			String name = dataList.get(i).get("name");
