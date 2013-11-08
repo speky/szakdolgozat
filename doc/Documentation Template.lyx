@@ -1559,12 +1559,11 @@ BSC - Base Station Controller, egy BSC több tíz esetleg több száz BTS-t
 \end_layout
 
 \begin_layout Description
-BSS - Base Station Subsystem, ez része a hagyományos mobilhálózatnak (2G,
- GSM) which is responsible for handling traffic and signaling between a
- mobile phone and the network switching subsystem.
- The BSS carries out transcoding of speech channels, allocation of radio
- channels to mobile phones, paging, transmission and reception over the
- air interface and many other tasks related to the radio network.
+BSS - Base Station Subsystem, része a hagyományos mobilhálózatnak (2G, GSM)
+ és a kommunikációt biztosítja a mobiltelefon és a ahálózati kapcsoló alrendszer
+ között.
+ A BSS transzkódolást végez, rádió csatornákat rendel a mobiltelefonokhoz,lapozá
+st kezel, éa még sok más feladatot ellát a rádiós hálózatban.
 \end_layout
 
 \begin_layout Description
@@ -2798,6 +2797,55 @@ menu mappában találhatóak.
  Itt kell megadni, hogy mi történjen, ha a felhasználó az egyes menüpontokra
  kattint.
  Az Android rendszer automatikusan kirajzolja a menüt a képernyőre.
+\end_layout
+
+\begin_layout Subsubsection*
+Adattárolás
+\end_layout
+
+\begin_layout Standard
+Az Android számos lehetőséget kínál az adatok perzisztens tárolására.
+ Ezek lehetnek megosztott preferenciák (Shared preference), mely primitív
+ adatokat tarol kulcs érték párok alapján, külső illetve belső tároló, illetve
+ SQLite adatbázis.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Megosztott preferenciák
+\series default
+ segítségével tárolhatjuk el egyszerűen az alakalmazás, illetve az egyes
+ Activity objektumok állapotát, mivel az adatok megmaradnak az alakalmazás
+ megszünése után is.
+ Kulcs-árták párok segítségével el tudjuk menteni az objektumok változóinak
+ értékét, majd visszaolvasni ha szükséges.
+ Az eltárolt attribútumok float, int, long, boolean és string típusúak lehetnek.
+ A getSharedPreferences metódus segítségével névvel ellátott preferenciát
+ kapunk, melzet első paraméterként kell megadnunk, és arra hivatkozva bárhonnan
+ el tudjuk érni az alaklamzásból.
+ A getPreferences függvény segítségével Az Activitz objektumokhoy rendelhetünk
+ egy preferenciát, amiben az adott tevékenzség objektum adatait tárolhatjuk.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Belső tár 
+\series default
+segítségével
+\series bold
+ 
+\series default
+olzan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
+ban, amikhez csak az alakalmazás férhet hozzá és annak eltávolításakor ezek
+ a fájlok automatikusan törlődnek.
+ A külső tár lehet a telefonhoz csatolt SD kártya, azaz hordozható memória
+ egység, melyen olyan fájlokat tárolhatunk, melyekhez a felhasználó is hozzáférh
+et.
+ 
 \end_layout
 
 \begin_layout Section
