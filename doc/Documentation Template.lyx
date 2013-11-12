@@ -877,11 +877,6 @@ A Felhasználói dokumentáció tartalmazza
 
 \begin_layout Labeling
 \labelwidthstring 00.00.0000
-- a megoldott probléma rövid megfogalmazását,
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
 - a felhasznált módszerek rövid leírását,
 \end_layout
 
@@ -895,8 +890,18 @@ Program bemutatása
 \end_layout
 
 \begin_layout Standard
-A program céljának leírása a felhasználó(k) szemszögéből.
- A célközönség bemutatása (mobil felhasználó, operátor)
+A Drive Testing applikáció egy Android készüléken futtatható program, mely
+ a telefon hálózatról tud különféle statisztikai adatokat gyűjteni.
+ Ehhez tartozik egy szerver oldali program is, melyel a mobil alakalmazás
+ a mérések során aktívan kommunikál.
+ Az alkalamazással futtatható tesztek adatoakt gyűjtenek a szerver programmal
+ való kommunikáció során, melyek fontos információkkal szolgálhatnak a telefon
+ hálózatot üzemeltető operátoroknak.
+ A tesztelő akár menetközben, autóban ülve tudja futtatni a teszteket futtani.
+ A mérések során az adatok grafikus térképen is megtekinthetőek és a futtatás
+ végeztével az eredmények ki is exportálhatóak az adatbázisból egy tetszőleges
+ fájlba CSV formátumban.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -904,87 +909,102 @@ Program használatának feltételei
 \end_layout
 
 \begin_layout Standard
-A program által használt interfészek, eszközök(HW, SW) leírása
+
+\series bold
+Hardver feltételek:
 \end_layout
 
 \begin_layout Standard
-Az alábbi lista tartalmazza a jogokat (permission) amit a mobil alkalmazás
+Az alkalmzás futtatásához szükséges egy legalább 4.0.4 verziójú Android operációsr
+endszerű telefonkészülék.
+ Továbbá egy asztali számítógép, melyen található JVM (Java virtuális gép)
+ a szerver oldali program futtatásához.
+ Ennek internet hozáférést kell biztosítani.
+ A mobilkészüléken be kell kapcsolni a mobilhálózaton keresztüli adatelérést
+ (Beállítások -> Vezeték nélküli és mobilhálózatok ->Mobilhálózatok-> Adatok
+ engedélyezve jelölőnégyzetet kell bepipálni), illetve a GPS pozíciók eléréséhez
+ a Helyszolgáltatások menüpontban a GPS-műholdak jelölőnégyzet segítségével
+ aktiválhatjuk.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Szoftver feltételek:
+\end_layout
+
+\begin_layout Standard
+A feltelepített programban be kell állítani a szerver oldali számítógép
+ IP címét, ha router illetve egyéb más hálózati eszköz is érintett a kommunkáció
+ban, ugy biztosítani kell, hogy az applikáció kommunikálni tudjon a 4500-as
+ porton keresztűl.
+ Továbbá a program használhatja még a 5000, illetve a 5500 és 6000 közötti
+ portokat a mobileszközzel való kommunkáció során.
+\end_layout
+
+\begin_layout Standard
+Az alábbi lista tartalmazza a jogokat (permission) amit a mobilalkalmazás
  használ:
 \end_layout
 
 \begin_layout Description
 
 \series bold
-coarse location (network-based):
+access coarse location:
 \series medium
- ahhoz hogy megjelnithessük a készülék helyzetét a térképen és mérhessük
- a jelerősséget az alaklamazásnak szüksége van erre.
- Ezt a hálózati poziciót gyorsan el tudja nekünk küldeni hálózati eszköz,
- de elég durva becslést ad a telefon helyére, körülbelül 100 métres pontossággal.
+ az alaklamazásnak szüksége van erre ahhoz, hogy megjeleníthessük a készülék
+ helyzetét a térképen és mérhessük a jelerősséget.
+ Ezt a hálózati poziciót gyorsan el tudja nekünk kűldeni az adott hálózati
+ eszköz, de elég durva becslést ad a telefon helyére, körülbelül 100 métres
+ pontossággal.
  Ezt akkor használjuk, mikor a GPS szolgáltatás nem elérhető, például beltérben.
 \end_layout
 
 \begin_layout Description
 
 \series bold
-fine location (GPS):
+access fine location (GPS):
 \series default
-A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatározz
-uk a telefon helyzetét.
+ A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatároz
+zuk a telefon helyzetét, ehhez a szolgáltatáshoz szükséges ez a jogosultság.
 \end_layout
 
 \begin_layout Description
 
 \series bold
-Network communication, full internet access, view network state
+internet, access network state, read phone state
 \series default
 : A hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
  Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
  frissítéséhez.
- The app will actually stop updating the map if signal strength gets too
- week (below -102 dBm), otherwise it would appear to freeze waiting for
- tile updates.
+ A mérések során a telfon és a hálózat fontos paraméterei is rögzítésre
+ kerülnek, kivéve a kritikus, azonosításra alakalmas paraméterek, mint például
+ az IMEI/ESN szám, telefon szám, SIM széria szám vagy a MAC cím.
+ Ezeket nem rögzíti az alkalmazás, csupán megjeleníti.
+\end_layout
+
+\begin_layout Description
+
+\series medium
+app 
+\series default
+will actually stop updating the map if signal strength gets too week (below
+ -102 dBm), otherwise it would appear to freeze waiting for tile updates.
  :O ???
 \end_layout
 
-\begin_layout Standard
-Storage modify/delete USB storage contents
+\begin_layout Description
+read 
+\series bold
+and write external storage:
+\series default
+ külső tér írása és olvasása szökséges a riport fájlok kiírásához.
+ A felhesználó innen tudja lementeni a mérési eredményeket USB-n keresztül.
+ 
 \end_layout
 
 \begin_layout Standard
-Users need the ability to save recorded data to, and read that and other
- data from, the rfsignaldata directory on the USB storage device (your phone).
- Older data that was recorded and saved can be reloaded and played back
- within the app.
- Also users can load their own custom site location data into the database.
- All of these actions require interacting with the storage device.
- The app ONLY interacts with the rfsignaldata directory.
-\end_layout
-
-\begin_layout Standard
-Phone calls read phone state and identity
-\end_layout
-
-\begin_layout Standard
-This is a critical permission since reading these parameters is at the heart
- of the app's function.
- The app does not save or transmit any of these parameters other than those
- which appear in the recorded data.
- Critical identity parameters such as IMEI/ESN, phone number, SIM serial
- number, and MAC address are never recorded or transmitted by the app.
-\end_layout
-
-\begin_layout Standard
-System tools change Wi-Fi state, prevent phone from sleeping
-\end_layout
-
-\begin_layout Standard
-One of the many features the app monitors is the Wi-Fi state of the device
- as well as the signal strength of other Wi-Fi hotspots within range.
- Turning on and off the feature that listens for hotspots requires the change
- Wi-Fi state permission.
- While hotspots are identified and can be recorded, the Wi-Fi state of the
- device is never transmitted or saved.
+prevent phone from sleeping ??
 \end_layout
 
 \begin_layout Standard
@@ -1006,9 +1026,14 @@ Program használatának bemutatása
 Program telepítése
 \end_layout
 
+\begin_layout Subsubsection*
+Telepítés a mobileszközre
+\end_layout
+
 \begin_layout Standard
-nem lesz elérhető a market-ről, így a felmásolás és telepítés lépéseit fogom
- leírni
+A telepítéshez szükséges a DriveTesting.apk fájl és hogy a mobilkészülék
+ csatlakoztatva legyen a számítógéphez és hozzáférésünk éegzen a telefon
+ fájlrendszeréhez (külső illetve belső tárhoz).
 \end_layout
 
 \begin_layout Subsection
@@ -2842,9 +2867,42 @@ segítségével
 olzan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
 ban, amikhez csak az alakalmazás férhet hozzá és annak eltávolításakor ezek
  a fájlok automatikusan törlődnek.
- A külső tár lehet a telefonhoz csatolt SD kártya, azaz hordozható memória
- egység, melyen olyan fájlokat tárolhatunk, melyekhez a felhasználó is hozzáférh
-et.
+ 
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+külső tár
+\series default
+ lehet a telefonhoz csatolt SD kártya, azaz hordozható memória egység, melyen
+ olyan fájlokat tárolhatunk, melyekhez a felhasználó is hozzáférhet.
+ 
+\end_layout
+
+\begin_layout Standard
+Android alkalmazásokban SQLite 
+\series bold
+adatbázisok
+\series default
+at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
+ más applikációból már nem.
+ Adatbáziskezelés megvalósításához szükség lesz egy osztályra, mely az 
+\shape italic
+SQLiteOpenHelper 
+\shape default
+osztályból számrazik.
+ Ennek az onCreate függvénzét kell felüldefinálni az adatbázist létrhozó
+ implementácioval, melyet SQL parancsal adhatunk meg.
+ Az onUpgrade metódus felüldefiniálásával megadhatjuk a programunk, milzen
+ utasításokat hajtson végre ha a tábla korábbi verziója már létezik az adott
+ eszközön.
+ A helper osztályunk getReadableDatabase() és a getWriteableDatabase() függvénye
+inek segítségével kaphatunk egy SQLiteDatabase obejktumot, melyen keresztül
+ hozzáférhetnk az adatbázis táblákhoz és módosíthatjuk azokat.
+ SQLiteDatabase query() és rawquary() metódusaival futtathatunk lekérdezéseket.
+ Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manüverezh
+etük a lekérdezés eredményének sorai között.
  
 \end_layout
 
