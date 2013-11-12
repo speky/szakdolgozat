@@ -3048,12 +3048,100 @@ Ide kerül annak a leírása, hogy miért nem lettek megvalósítva a hívás in
  miértjei
 \end_layout
 
+\begin_layout Standard
+The TrafficStats class get the information about network traffic from the
+ /proc/uid_stat/<uid> directory.
+ This contains information about the tcp, udp bytes and packets sent and
+ received.
+ If the files are not present the TrafficStats class can't get the network
+ stats.
+ You can check if the files are present, If not you are out of luck and
+ should look for other way.
+\end_layout
+
+\begin_layout Standard
+If the files are present you can try to read it yourself.
+\end_layout
+
+\begin_layout Standard
+Also the getUidTxBytes() and getUIDRxBytes() report only the TCP traffic
+ and miss UDP traffic.
+ So if your app is doing lots of UDP traffic (like voip) then you'll not
+ get any info.
+ There is already a bug filed for this : https://code.google.com/p/android/issues/
+detail?id=32410
+\end_layout
+
 \begin_layout Subsection
 Osztályok bemutatása
 \end_layout
 
 \begin_layout Standard
 A program osztály hierarchiájának az osztályok szerepének bemutatása 
+\end_layout
+
+\begin_layout Subsubsection*
+Hálózati protokollok a programban
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+UDP (User Datagram Protocol): 
+\series default
+kapcsolatnélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
+ Portszámot és checksum-ot is tartalmaz egy csomag.
+ A csomagok nem biztos hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz
+ , mint amilyen sorrendben el lettek küldve.
+ A küldő nem kap visszaigazolást a csomag megérkezéséről.
+ Ez a protokoll nagyon elterjedt a videójátékoknál és a telekommunikációban.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+TCP (Transmission Control Protocol): 
+\series default
+megbízható de ezért lassabb is, mint például az UDP.
+ Folyamként vagy fájlként kezeli a kapcsolatokat.
+ A csomagok megfelelő sorrendjéről gondoskodik, illetve az elveszett csomagok
+ újra küldéséről is gondoskodik.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+HTTP (Hypertext Transfer Protocol):
+\series default
+ a web hálózati protokollja, fájlok és más adatok - azaz erőforrások - továbbítá
+sára használják.
+ Ezek az erőforrások lehetnek HTML fájlok, képek, lekérdezési eredmények,
+ stb.
+ Használhat TCP és UDP protokollokat is.
+ HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
+ a kapcoslatot és küld egy kérést a HTTP szervernek.
+ Amint a szerver visszaküldte a választ lezérja a kapcsolatot.
+ A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
+ pl.: GET /path/to/file/index.html HTTP/1.0 vagy HTTP/1.0 200 OK.
+ A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
+ metódusok még a POST és a HEAD.
+ Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
+ Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
+ Ezek után szerepelhetnek paraméterek PARAMÉTER: érték alakban.
+ Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
+ mint például az erőforrás módosításának ideje: 
+\begin_inset Quotes sld
+\end_inset
+
+Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
+\begin_inset Quotes srd
+\end_inset
+
+.
+ Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
+ Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
 \end_layout
 
 \begin_layout Subsection
@@ -3205,6 +3293,18 @@ limitációk, ToDo-k, tervezett módosítások összegzése.
 \begin_layout Chapter
 \start_of_appendix
 Használt eszközök a fejlesztés során
+\end_layout
+
+\begin_layout Standard
+Irodalomjegyzék
+\end_layout
+
+\begin_layout Standard
+http://www.jmarshall.com/easy/http/
+\end_layout
+
+\begin_layout Standard
+http://www.rfc-editor.org/rfc/rfc1945.txt
 \end_layout
 
 \begin_layout Standard
