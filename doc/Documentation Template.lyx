@@ -2887,6 +2887,12 @@ adatbázisok
 \series default
 at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
  más applikációból már nem.
+ Az SQLite támogatja a hagyományos relációs adatbázis funkciókat, mint az
+ SQL szintaxis és tranzakciók.
+ A futás során az adatbázisnak kevés memóriára van szüksége (kb.
+ 250KByte).
+ Az adatbázisműveletek fájl műveleteket igénzelnek, amik lassúak lehetnek,
+ ezért aszinkron módon kell azokat végrehajtani.
  Adatbáziskezelés megvalósításához szükség lesz egy osztályra, mely az 
 \shape italic
 SQLiteOpenHelper 
@@ -2932,96 +2938,8 @@ A program által használt adatbázis modell bemutatása, mezők jellemzése
 \end_layout
 
 \begin_layout Standard
-SQLite is an Open Source database.
- SQLite supports standard relational database features like SQL syntax,
- transactions and prepared statements.
- The database requires limited memory at runtime (approx.
- 250 KByte) which makes it a good candidate from being embedded into other
- runtimes.
-\end_layout
-
-\begin_layout Standard
-SQLite is embedded into every Android device.
- Using an SQLite database in Android does not require a setup procedure
- or administration of the database.
-\end_layout
-
-\begin_layout Standard
-You only have to define the SQL statements for creating and updating the
- database.
- Afterwards the database is automatically managed for you by the Android
- platform.
-\end_layout
-
-\begin_layout Standard
-Access to an SQLite database involves accessing the file system.
- This can be slow.
- Therefore it is recommended to perform database operations asynchronously.
-\end_layout
-
-\begin_layout Standard
-If your application creates a database, this database is by default saved
- in the directory DATA/data/APP_NAME/databases/FILENAME.
-\end_layout
-
-\begin_layout Standard
-To address the problem of showing accurate serving cell locations, I have
- added (in version 1.1.0) the ability to load your own cell site list into
- the app's database.
- If you have access to cell location data and can place this into a .
-\series bold
-CSV
-\series default
- text file, then you can upload that data to the phone.
- Note ~ this sort of data is proprietary...carriers do not like the competition
- knowing what they do and do not cover, which is why it is so hard to come
- by.
-\end_layout
-
-\begin_layout Standard
-Read the instructions below to learn how the CSV file must be formatted.
-\end_layout
-
-\begin_layout Standard
-The CSV file must be in one of two forms.
- The basic format is:
-\end_layout
-
-\begin_layout Standard
-mcc,mnc,lac,ci,latitude,longitude 310,260,3601,981,48.9929,-122.7473 310,260,3601,
-982,48.99287,-122.74726 310,260,3601,983,48.99287,-122.74728 ...
- 310,260,5509,7123,47.684035,-122.647912 310,260,5509,7211,47.550236,-122.583084
- 310,26,41306,6023,47.15562489,-122.043519
-\end_layout
-
-\begin_layout Standard
-where the first line is the header, and each row after that is a location
- record.
- The order of the data in each row must be:
-\end_layout
-
-\begin_layout Standard
-mobile country code, mobile network code, location area code, cell ID, latitude,
- longitude.
-\end_layout
-
-\begin_layout Standard
-If the phone technology is CDMA then MCC is the Network Operator, MNC is
- the System ID, LAC is the Network ID, and CellID is the Base Station ID.
-\end_layout
-
-\begin_layout Standard
-Introduced in version 2.5.6, an optional cell name may be added to the end
- of each record.
- Example:
-\end_layout
-
-\begin_layout Standard
-mcc,mnc,lac,ci,latitude,longitude,cellname 310,260,3601,981,48.9929,-122.7473,BA23
-44_GYU 310,260,3601,982,48.99287,-122.74726, 310,260,3602,2877,48.86496624,-121.6642
-2, 310,260,3601,983,48.99287,-122.74728,BA23356_OOI ...
- 310,260,5509,7123,47.684035,-122.647912,Corner_bakery 310,260,5509,7211,47.550236,
--122.583084,Libarary_cell 310,26,41304,31341,47.15864796,-122.457171,AINSWRT6
+Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik: DATA/data/Dr
+iveTesting/databases/FILENAME.
 \end_layout
 
 \begin_layout Subsection
@@ -3049,27 +2967,20 @@ Ide kerül annak a leírása, hogy miért nem lettek megvalósítva a hívás in
 \end_layout
 
 \begin_layout Standard
-The TrafficStats class get the information about network traffic from the
- /proc/uid_stat/<uid> directory.
- This contains information about the tcp, udp bytes and packets sent and
- received.
- If the files are not present the TrafficStats class can't get the network
- stats.
- You can check if the files are present, If not you are out of luck and
- should look for other way.
-\end_layout
-
-\begin_layout Standard
-If the files are present you can try to read it yourself.
-\end_layout
-
-\begin_layout Standard
-Also the getUidTxBytes() and getUIDRxBytes() report only the TCP traffic
- and miss UDP traffic.
- So if your app is doing lots of UDP traffic (like voip) then you'll not
- get any info.
- There is already a bug filed for this : https://code.google.com/p/android/issues/
-detail?id=32410
+A hálózati forgalom mérésére, figyelésére használtam volna a TrafficStats
+ osztályt, ez egy Android API által biztosított osztály, mely a hálózati
+ forgalomról nyújt információkat a /proc/uid_stat/<uid> könyvtárból.
+ Ez tartalmazza a TCP vagy UDP protokollokon küldött és fogadott byte-ok
+ és csomagok számát.
+ Ha a fájlok nem léteznek aTrafficStats nem tud nhálózati statisztikával
+ szolgálni.
+ A getUidTxBytes() és a getUIDRxBytes() jelentések csak a TCP forgalmat
+ tartalmazzák az UDP-re vonatkozót nem.
+ Így az UDP forgalomról az alkalmazás nem kap semmilyen adatot.
+ Ezen és hasonló hiábák miatt, nem tudtam érdemben használni a küldött és
+ fogadott csomagok mérésére.
+ Ezért saját csomag figyelő és számoló algoritmust kellett írjak.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -3144,6 +3055,24 @@ Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
  Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+Export Activity
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+A CSV fájl felépítése: az első sor a fejléc, az utánna lévő bejegyzések
+ az adatbázis rekordok.
+\end_layout
+
+\begin_layout Standard
+mobile country code, mobile network code, location area code, cell ID, latitude,
+ longitude.
+\end_layout
+
 \begin_layout Subsection
 Activity-k egymás közti kommunikációja
 \end_layout
@@ -3192,32 +3121,26 @@ Unit teszt
 \end_layout
 
 \begin_layout Standard
-unit tesztek és tesztek lefedettségének leírása (whitebox)
+Az Android tesztek JUnit-on alapszanak.
+ Hagyományos JUnit teszteket is használtam a unit tesztek írásakor, ezek
+ anem használják az Android API-t.
+ Az Android teszt esetekkel az Android komponensek megfelelő viselkedését
+ tesztelem ezek a teszt osztályok az AndroidTestCase-ből öröklődnek, melyek
+ a JUnit keretrendszeren túl Android specifikus setup, teardown, és egyéb
+ segád metódusokat tartalmaznak.
+ A JUnit-beli Assert osztályt használva jeleníthetjük meg a teszt eredményeket.
+ Ezek a metódusok összehasonlítják kapott eredménzeket a tesztben várt eredménze
+kkel és ha nem egyeznek meg akkor hivételt generálnak, mely esetben a teszt
+ eset hibát fog jelezni.
 \end_layout
 
 \begin_layout Standard
-Android test suites are based on JUnit.
- You can use plain JUnit to test a class that doesn't call the Android API,
- or Android's JUnit extensions to test Android components.
+Külön teszt projektet készítettem a DriveTest applikáció teszteléséhez 
+\shape italic
+DriveTestingTest 
+\shape default
+néven.
  
-\end_layout
-
-\begin_layout Standard
-You can use the JUnit TestCase class to do unit testing on a class that
- doesn't call Android APIs.
- TestCase is also the base class for 
-\series bold
-AndroidTestCase
-\series default
-, which you can use to test Android-dependent objects.
- Besides providing the JUnit framework, AndroidTestCase offers Android-specific
- setup, teardown, and helper methods.
-\end_layout
-
-\begin_layout Standard
-You use the JUnit Assert class to display test results.
- The assert methods compare values you expect from a test to the actual
- results and throw an exception if the comparison fails.
 \end_layout
 
 \begin_layout Standard
