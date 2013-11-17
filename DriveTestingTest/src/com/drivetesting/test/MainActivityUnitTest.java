@@ -90,32 +90,32 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity>{
 		map = phoneDataList.get(9);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Signal strength"));		 
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 
 		map = phoneDataList.get(10);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Cdma EcIo"));
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 
 		map = phoneDataList.get(11);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Evdo dBm"));
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 
 		map = phoneDataList.get(12);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Evdo EcIo"));
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 
 		map = phoneDataList.get(13);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Evdo SNR"));
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 
 		map = phoneDataList.get(14);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Bit error rate"));
-		assertTrue(map.get("value").equals("-1"));
+		assertTrue(map.get("value").equals("-"));
 	}
 
 	@SmallTest

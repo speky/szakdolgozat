@@ -8,8 +8,10 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,10 +20,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExportActivity extends Activity {
 
+	private TextView testIdText; 
+	private long testId = 0; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,8 @@ public class ExportActivity extends Activity {
 		ActionBar actionBar = getActionBar();	
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Export");
+
+		testIdText = (TextView)findViewById(R.id.editTestId);
 	}
 
 	public void onResume() {
@@ -44,10 +51,31 @@ public class ExportActivity extends Activity {
 		return true;
 	}
 
-	public void onExportClick(View view) {
-		int testId = 1;
+	public void onExportClick(View view) {		
 		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId);
 		export.execute("");
+	}
+
+	public void onTestClick(View view) {
+		List<String> list = ((DriveTestApp)getApplication()).getTestIds();
+		list.add("All");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Choose Test ID");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				// load road for the testId            	
+				testId = Long.parseLong(items[item].toString());            	
+				if (testId == 0) {
+					testIdText.setText("Test id: Undefined");
+				} else {
+					testIdText.setText("Test id:" + Long.toString(testId));
+				}
+			}                
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	@Override
@@ -83,9 +111,9 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 
 	private Context context ;
 	private DataStorage dbData;
-	private int testId;
+	private long testId;
 
-	ExportToCVS(Context context, DataStorage dbData, int testId) {		 
+	ExportToCVS(Context context, DataStorage dbData, long testId) {		 
 		this.context = context;
 		this.dbData = dbData;
 		this.testId = testId;
@@ -97,6 +125,7 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 		this.dialog.setMessage("Exporting database...");
 		this.dialog.show();
 	}
+
 
 	protected Boolean doInBackground(final String... args) {
 
@@ -124,7 +153,7 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 
 			csvHeader += "\n";
 			Log.d("EXPORTER: ", "header=" + csvHeader);
-			
+
 			FileWriter fileWriter = new FileWriter(file);
 			BufferedWriter out = new BufferedWriter(fileWriter);
 			try {				
@@ -137,26 +166,26 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 			} catch (IOException e) {
 				returnCode = false;
 				Log.d("EXPORT", "IOException: " + e.getMessage());
-			 }
+			}
 			finally {
 				out.close();
 			}         
-		return returnCode;
-	} catch (IOException e) {
-		Log.e("MainActivity", e.getMessage(), e);
-		return false;
-	}
-}
-
-protected void onPostExecute(final Boolean success) {
-	if (this.dialog.isShowing()) { 
-		this.dialog.dismiss(); 
+			return returnCode;
+		} catch (IOException e) {
+			Log.e("MainActivity", e.getMessage(), e);
+			return false;
+		}
 	}
 
-	if (success) {
-		Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
-	} else {
-		Toast.makeText(context, "Export failed", Toast.LENGTH_SHORT).show();
+	protected void onPostExecute(final Boolean success) {
+		if (this.dialog.isShowing()) { 
+			this.dialog.dismiss(); 
+		}
+
+		if (success) {
+			Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(context, "Export failed", Toast.LENGTH_SHORT).show();
+		}
 	}
-}
 }

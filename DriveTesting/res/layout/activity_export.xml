@@ -16,30 +16,39 @@
         android:inputType="text"
         android:ems="10" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
-        <RadioButton
-            android:id="@+id/export_cvs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/cvstext" />
+    	<EditText
+    	    android:id="@+id/editTestId"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentLeft="true"
+    	    android:layout_centerVertical="true"
+    	    android:enabled="false"
+    	    android:layout_toLeftOf="@+id/btn_settestid"
+    	    android:ems="10"
+    	    android:inputType="text"
+    	    
+    	    android:text="@string/testid" />
 
-        <RadioButton
-            android:id="@+id/export_kml"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/kml" />
-    </RadioGroup>
-
+    	<Button
+    	    android:id="@+id/btn_settestid" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" 
+        android:onClick ="onTestClick"
+        android:text="@string/settestid" />
+      
+    </RelativeLayout>
+    
     <Button
         android:id="@+id/export"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/export" 
         android:onClick="onExportClick"/>
-
+    
+	
 </LinearLayout>

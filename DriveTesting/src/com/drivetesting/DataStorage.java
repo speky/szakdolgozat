@@ -158,7 +158,7 @@ public class DataStorage {
 		return dataList;
 	}
 	
-	public CharSequence[] queryTestIds() {
+	public List<String> queryTestIds() {
 		List<String> idList = new ArrayList<String>();		
 		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID+" FROM "+DB_TABLE , null);
 		if (cursor != null) {
@@ -169,9 +169,8 @@ public class DataStorage {
 				cursor.moveToNext();
 			}
 			cursor.close();
-		}
-		CharSequence[] items = idList.toArray(new CharSequence[idList.size()]);
-		return items;
+		}		
+		return idList;
 	}
 	
 	public List<DbData> querySpecifiedTest(String testId) {

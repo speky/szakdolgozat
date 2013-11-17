@@ -239,7 +239,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		}		
 	}
 
-	public  CharSequence[] getTestIds() {
+	public   List<String> getTestIds() {
 		return dataStorage.queryTestIds();
 	}
 

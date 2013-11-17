@@ -173,7 +173,10 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 	
 	public void onTestClick(View view) {
-		final CharSequence[] items = ((DriveTestApp)getApplication()).getTestIds();
+		List<String> list = ((DriveTestApp)getApplication()).getTestIds();
+		list.add("All");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose Test ID");
         builder.setItems(items, new DialogInterface.OnClickListener() {

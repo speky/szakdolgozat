@@ -3,10 +3,8 @@
     <string name="app_name">DriveTesting</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_drive_test">DriveTestActivity</string>
-    <string name="export">Start Export</string>
-    <string name="outputname">Output file name</string>
-    <string name="kml">Export to KML format</string>
-    <string name="cvstext">Export to CVS</string>
+    <string name="export">Export to CVS</string>
+    <string name="outputname">Output file name</string>    
     <string name="menu_export">Export</string>
     <string name="title_activity_osm">OSMActivity</string>
     <string name="menu_map">Map</string>
@@ -21,13 +19,16 @@
     <string name="udp">UDP</string>
     <string name="protocol">Protocol Type</string>
     <string name="direction">Direction</string>
-    <string name="start">Start Test</string>
-    <string name="stop">Stop Test</string>
-    <string name="clean">Clear Text</string>
-    <string name="save">Save</string>
+    <string name="start">Start test</string>
+    <string name="stop">Stop test</string>
+    <string name="clean">Clear logs</string>
+    <string name="save">Save logs</string>
     <string name="telephony_mgr">Telephony Manager Information:</string>
     <string name="description">Description</string>
     <string name="title">Title</string>
     <string name="address">Address</string>
+    <string name="testid">Test ID:</string>
+    <string name="settestid">Set Test ID</string>
+    
     
 </resources>

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true" 
         android:onClick ="onTestClick"
-        android:text="Set Test Id" />
+        android:text="@string/settestid" />
 
     <TextView
         android:id="@+id/testIdText"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:text="Test Id:" />
+        android:text="@string/testid" />
       
     </RelativeLayout>
     

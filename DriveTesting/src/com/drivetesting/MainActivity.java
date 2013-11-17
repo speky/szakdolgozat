@@ -195,12 +195,12 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 		}
 		setHashMapElement(phoneDataList, "Software version", str);
 		setHashMapElement(phoneDataList, "IMSI", getSubscriberId());
-		setHashMapElement(phoneDataList, "Signal strength", "-1");
-		setHashMapElement(phoneDataList, "Cdma EcIo", "-1");
-		setHashMapElement(phoneDataList, "Evdo dBm", "-1");
-		setHashMapElement(phoneDataList, "Evdo EcIo", "-1");
-		setHashMapElement(phoneDataList, "Evdo SNR", "-1");
-		setHashMapElement(phoneDataList, "Bit error rate", "-1");
+		setHashMapElement(phoneDataList, "Signal strength", "-");
+		setHashMapElement(phoneDataList, "Cdma EcIo", "-");
+		setHashMapElement(phoneDataList, "Evdo dBm", "-");
+		setHashMapElement(phoneDataList, "Evdo EcIo", "-");
+		setHashMapElement(phoneDataList, "Evdo SNR", "-");
+		setHashMapElement(phoneDataList, "Bit error rate", "-");
 	}
 
 	private void initNetworkData() {
@@ -311,6 +311,7 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	}
 	@Override
 	public void updateDataDirection(String value) {
+		Log.d(TAG, "DATA DIR UPDATE");
 		setHashMapElement(networkDataList, "Data direction", value);
 		networkDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
