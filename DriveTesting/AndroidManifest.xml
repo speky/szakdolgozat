@@ -39,6 +39,10 @@
         </activity>
         <activity android:name=".ExportActivity"
             android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".TestActivity"
             android:screenOrientation="portrait">            
@@ -46,11 +50,7 @@
         <activity
             android:name=".OSMActivity"
             android:label="@string/title_activity_osm" 
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>            
+            android:screenOrientation="portrait">            
         </activity>
         
         <service android:name=".services.HttpService" >

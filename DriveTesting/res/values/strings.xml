@@ -29,6 +29,6 @@
     <string name="address">Address</string>
     <string name="testid">Test ID:</string>
     <string name="settestid">Set Test ID</string>
-    
+    <string name="choosetestid">Choose Test ID</string>
     
 </resources>

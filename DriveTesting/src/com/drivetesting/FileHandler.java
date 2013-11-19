@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import android.content.Context;
@@ -16,89 +15,84 @@ import android.util.Log;
 public class FileHandler {
 
 	private final String TAG = "Android File Handler: "; 
-	private boolean isAbleToWriteExternalStorage = false;
-	private  String fileName = "log.txt";
-	private File externalDir = null;
-
-	public FileHandler(Context context, final String fileName) {
+	private boolean externalStorageAvailable = false;
+	private boolean externalStorageWriteable = false;
+	private  String fileName;
+	private File externalFile = null;
+	private OutputStreamWriter outWriter;
+	private FileOutputStream fileStream;
+	
+	public FileHandler(Context context, final String fileName, final String directory) {
 		this.fileName = fileName;
 
-		if (isExternalStorageWritable()) {
-			isAbleToWriteExternalStorage = true;
+		init();
+
+		if (externalStorageWriteable) {
+			getExternalFile(context, directory);
 		}
-
-		externalDir = getFileStorageDir(context, "DriveTestFiles");
 	}
 
-	public void info(String message) {
-
-	}
-
-	/* Checks if external storage is available for read and write */
-	public boolean isExternalStorageWritable() {
+	private void init() {
 		String state = Environment.getExternalStorageState();
+
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			return true;
+		    // We can read and write the media
+		    externalStorageAvailable = externalStorageWriteable = true;
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+		    // We can only read the media
+		    externalStorageAvailable = true;
+		    externalStorageWriteable = false;
+		} else {
+			//we can neither read nor write
+		    externalStorageAvailable = externalStorageWriteable = false;
 		}
-		return false;
 	}
 
-	/* Checks if external storage is available to at least read */
-	public boolean isExternalStorageReadable() {
-		String state = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(state) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return true;
+	private void getExternalFile(Context context, final String dirName) {
+		// get directory where the application should store it's files
+		File root = context.getExternalFilesDir(null); 
+	    
+	    File dir = new File (root.getAbsolutePath() + "/" + dirName);
+	    dir.mkdirs();
+	    externalFile = new File(dir, fileName);
+	    
+	}
+	
+	public void deleteExternalFile() {
+		if  (externalFile != null && externalFile.exists()) {
+			externalFile.delete();
 		}
-		return false;
 	}
 
-	public File getFileStorageDir(Context context, String dirName) {
-		// Get the directory for the app's private pictures directory. 
-		File file = new File(context.getExternalFilesDir(null), dirName);
-		if (!file.mkdirs()) {
-			Log.e(TAG, "Directory not created");
-		}
-		return file;
-	}
-
-	public boolean fileIsExist(final String fileName) {
-		if  (externalDir != null) {
-			File file = new File(externalDir, fileName);
-			if (file !=null) {
-				return file.exists();
+	public void closeExternalWrite() {
+		try{
+			if (null != outWriter) {
+				outWriter.close();
 			}
-		}
-		return false;
-	}
-
-	public boolean deleteFile(final String fileName) {
-		if  (externalDir != null) {
-			File file = new File(externalDir, fileName);
-			if (file !=null) {
-				file.delete();
-				Log.i(TAG, "File deleted: "+fileName);
+			if (null != fileStream) {
+				fileStream.close();
 			}
+		}catch (Exception e) {
+			//Toast.makeText(getBaseContext(), e.getMessage(),	Toast.LENGTH_SHORT).show();
+			Log.e(TAG, e.getMessage());
 		}
-		return false;
 	}
-
-	public boolean writeFile(final String fileName, final String text) {
-		if (externalDir == null) {
+	
+	public boolean writeExternalFile(final String text, boolean clean) {
+		if (externalFile == null) {
 			return false;
 		}
+		
+		if (clean) {
+			deleteExternalFile();
+		}
 
-		try {
-			File file = new File(externalDir, fileName);
-			if (file.exists() == false){
-				file.createNewFile();
-			}
-			OutputStream os = new FileOutputStream(file);
-			OutputStreamWriter outWriter = new OutputStreamWriter(os);
+		try {			
+			fileStream = new FileOutputStream(externalFile);
+			outWriter = new OutputStreamWriter(fileStream);
 			outWriter.append(text);
 			outWriter .flush();
-			outWriter.close();
-			os.close();
+			
 			return true;
 		}
 		catch ( IOException ex){
@@ -108,10 +102,9 @@ public class FileHandler {
 
 	}
 	
-	public String readFile(final String fileName){
-		try {
-			File file = new File(externalDir, fileName);
-			FileInputStream in = new FileInputStream(file);
+	public String readExternalFile(){
+		try {			
+			FileInputStream in = new FileInputStream(externalFile);
 			BufferedReader myReader = new BufferedReader(new InputStreamReader(in));
 			String dataRow = "";
 			String buffer = "";

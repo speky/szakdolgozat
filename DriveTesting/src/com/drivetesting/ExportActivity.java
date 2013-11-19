@@ -1,9 +1,5 @@
 package com.drivetesting;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -13,9 +9,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +22,11 @@ import android.widget.Toast;
 public class ExportActivity extends Activity {
 
 	private TextView testIdText; 
-	private long testId = 0; 
-
+	private TextView fileText; 
+	private long testId = 0;
+	private SharedPreferences sharedPreferences;
+	private final String TESTID = "TestId";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,11 +36,41 @@ public class ExportActivity extends Activity {
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Export");
 
+		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		
 		testIdText = (TextView)findViewById(R.id.editTestId);
+		fileText = (TextView)findViewById(R.id.output_file_name);
 	}
 
+	private void save() {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putLong(TESTID, testId);		
+		editor.commit();
+	}
+
+	private void load() {	    	    
+		testId = sharedPreferences.getLong(TESTID, 0);
+		setTestIdString();
+	}
+	
+	private void setTestIdString() {
+		if (testId == 0) {
+			testIdText.setText(getString(R.string.choosetestid));
+		} else if (testId == -1) {
+			testIdText.setText(getString(R.string.testid) + " ALL");
+		} else {
+			testIdText.setText(getString(R.string.testid) + " "+ Long.toString(testId));
+		}
+	}
+	
 	public void onResume() {
 		super.onResume();
+		load();
+	}
+	
+	public void onPause() {
+		super.onPause();
+		save();
 	}
 
 	@Override
@@ -50,9 +79,34 @@ public class ExportActivity extends Activity {
 		menu.findItem(R.id.menu_export).setVisible(false);
 		return true;
 	}
-
-	public void onExportClick(View view) {		
-		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId);
+	
+	private void showAlarm(final String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                //do things
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+	
+	public void onExportClick(View view) {
+		
+		if (testId == 0) {
+			showAlarm("Choose Test ID!");
+			return;
+		}
+		
+		String fileName = fileText.getText().toString();
+		if (fileName.length() == 0) {
+			showAlarm("Set file name!");
+			return;
+		}
+		
+		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId, fileName);
 		export.execute("");
 	}
 
@@ -65,13 +119,14 @@ public class ExportActivity extends Activity {
 		builder.setTitle("Choose Test ID");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
-				// load road for the testId            	
-				testId = Long.parseLong(items[item].toString());            	
-				if (testId == 0) {
-					testIdText.setText("Test id: Undefined");
-				} else {
-					testIdText.setText("Test id:" + Long.toString(testId));
+				// load road for the testId
+				try{
+					testId = Long.parseLong(items[item].toString());
+				}catch (NumberFormatException ex) {
+					// ALL is selected
+					testId = -1;
 				}
+				setTestIdString();
 			}                
 		});
 		AlertDialog alert = builder.create();
@@ -107,18 +162,21 @@ public class ExportActivity extends Activity {
 }
 
 class ExportToCVS extends AsyncTask<String, Void, Boolean> {
-	private final ProgressDialog dialog;
 
+	private final String DIRECTORY = "export";
+	private FileHandler fileHandler;
+	private final ProgressDialog dialog;
 	private Context context ;
 	private DataStorage dbData;
 	private long testId;
 
-	ExportToCVS(Context context, DataStorage dbData, long testId) {		 
+	ExportToCVS(Context context, DataStorage dbData, long testId, String fileName) {		 
 		this.context = context;
 		this.dbData = dbData;
 		this.testId = testId;
 		dialog = new ProgressDialog(context);
-	}
+		fileHandler = new FileHandler(context, DIRECTORY, fileName);
+		Toast.makeText(context, "file path: ", Toast.LENGTH_SHORT).show();		Toast.makeText(context, "file path: ", Toast.LENGTH_SHORT).show();	}
 
 	@Override
 	protected void onPreExecute() {
@@ -128,61 +186,40 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 
 
 	protected Boolean doInBackground(final String... args) {
-
-		List<DbData> datas = dbData.querySpecifiedTest(String.valueOf(testId));
+		List<DbData> datas = null;
+		if (testId == -1) {
+			datas = dbData.queryAll();
+		}else {		
+			datas = dbData.querySpecifiedTest(String.valueOf(testId));
+		}
+		
 		if (datas.size() == 0) {
 			return true;
 		}
 
-		File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-		if (!exportDir.exists()) { 
-			exportDir.mkdirs(); 
-		}
 
-		File file = new File(exportDir, "myfile.csv");
 		Boolean returnCode = true;
-		try {
-			file.createNewFile();
-			String csvHeader = dbData.getColunNames();
-			/*for (i = 0; i < GC.CURCOND_COLUMN_NAMES.length; i++) {
-                if (csvHeader.length() > 0) {
-                    csvHeader += ",";
-                }
-                csvHeader += "\"" + GC.CURCOND_COLUMN_NAMES[i] + "\"";
-            }*/
+		String csvHeader = dbData.getColunNames();
 
-			csvHeader += "\n";
-			Log.d("EXPORTER: ", "header=" + csvHeader);
+		csvHeader += "\n";
+		Log.d("EXPORTER: ", "header=" + csvHeader);
 
-			FileWriter fileWriter = new FileWriter(file);
-			BufferedWriter out = new BufferedWriter(fileWriter);
-			try {				
-				String csvValues = "";			
-				out.write(csvHeader);
-				for (int i  = 0; i < datas.size(); ++i) {
-					csvValues = datas.get(i).toString()+ "\n";
-					out.write(csvValues);
-				}
-			} catch (IOException e) {
-				returnCode = false;
-				Log.d("EXPORT", "IOException: " + e.getMessage());
-			}
-			finally {
-				out.close();
-			}         
-			return returnCode;
-		} catch (IOException e) {
-			Log.e("MainActivity", e.getMessage(), e);
-			return false;
+		
+		String csvValues = "";			
+		fileHandler.writeExternalFile(csvHeader, true);
+		for (int i  = 0; i < datas.size(); ++i) {
+			csvValues = datas.get(i).toString()+ "\n";
+			fileHandler.writeExternalFile(csvValues, false);
 		}
+		fileHandler.closeExternalWrite();
+		
+		return returnCode;
 	}
 
 	protected void onPostExecute(final Boolean success) {
 		if (this.dialog.isShowing()) { 
 			this.dialog.dismiss(); 
-		}
-
-		if (success) {
+		}if (success) {
 			Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, "Export failed", Toast.LENGTH_SHORT).show();

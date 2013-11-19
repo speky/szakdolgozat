@@ -1046,6 +1046,59 @@ A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismerte
  Menüpontok (Activity-k) közti váltás módjának, módjainak leírása
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+Export
+\end_layout
+
+\begin_layout Standard
+A program által generált teszt eredények fájlba menthetőek CSV formátumban.
+ A CSV fájl első sora a fejléc - test id, test name, time, latitude, longitude,
+ signal strength, download speed, upload speed, jitter, lost packets, sum
+ packets, MCC, MNC, LAC, CID.
+ Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
+ Lehetséges kiválasztani egy test id-t, melyet ki akarunk exportálni, de
+ akár az összes elemet is kiexportálhatjuk.
+ Ezt a 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test ID
+\begin_inset Quotes srd
+\end_inset
+
+ nevű gombra kattintva tehetjük meg.
+ Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.
+ fontos megjegyezni, hogy csak a program adatbázisában található teszt azonosító
+k közül választhat afelhasználó.
+ Ha még nem futtatott tesztet, akkor nem lesz bejegyzés és így exportálható
+ adat sem.
+ Továbbiakban meg kell adnunk a fájl nevét az 
+\begin_inset Quotes sld
+\end_inset
+
+Output file name
+\begin_inset Quotes srd
+\end_inset
+
+ szövegmezőben, mely a külső memória egységen lesz letárolva <ITT> illetve,
+ ha ez nem lehtséges akkor az applikáció könyvtárában <ITT>.
+ Az 
+\begin_inset Quotes sld
+\end_inset
+
+Export To CVS
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombra kattintva elkezdődik az adatok kimentése a megadott fájlba.
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
 \begin_layout Subsection
 Teszt típusok ismertetése
 \end_layout
@@ -3064,13 +3117,38 @@ Export Activity
 \end_layout
 
 \begin_layout Standard
-A CSV fájl felépítése: az első sor a fejléc, az utánna lévő bejegyzések
- az adatbázis rekordok.
-\end_layout
+A program által generált teszt eredények fájlba menthetóek CSV formátumban
+ ennek az Activity-nek a segítségével.
+ A 
+\begin_inset Quotes sld
+\end_inset
 
-\begin_layout Standard
-mobile country code, mobile network code, location area code, cell ID, latitude,
- longitude.
+Set Test Id
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kattintva a 
+\shape italic
+onTestClick 
+\shape default
+visszahívó metódus hívódik meg, ami megjelenití test azonosító választó
+ felugróablakot.
+ A test id-kat az adatbázisból kérdezi le a program a , majd egy AlarmDialog-on
+ keresztűl megjelníti azokat.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Export to CVS
+\begin_inset Quotes srd
+\end_inset
+
+ felíratú gombra kattintva a 
+\shape italic
+onExportClick 
+\shape default
+metódus hajtódik végre, ahol leellenőrzi a program a beállított paramétereket,
+ ha valamelyik nincs beállítva, akkor hibát jelez Alarmdialog segítségével.
 \end_layout
 
 \begin_layout Subsection

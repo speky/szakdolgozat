@@ -7,48 +7,44 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-	android:text="@string/outputname"/>
-    
+        android:text="@string/outputname" />
+
     <EditText
         android:id="@+id/output_file_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10" />
+        android:ems="10"
+        android:inputType="text" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
-    	<EditText
-    	    android:id="@+id/editTestId"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignParentLeft="true"
-    	    android:layout_centerVertical="true"
-    	    android:enabled="false"
-    	    android:layout_toLeftOf="@+id/btn_settestid"
-    	    android:ems="10"
-    	    android:inputType="text"
-    	    
-    	    android:text="@string/testid" />
+        <EditText
+            android:id="@+id/editTestId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/btn_settestid"
+            android:ems="10"
+            android:enabled="false"
+            android:inputType="text" />
 
-    	<Button
-    	    android:id="@+id/btn_settestid" 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" 
-        android:onClick ="onTestClick"
-        android:text="@string/settestid" />
-      
+        <Button
+            android:id="@+id/btn_settestid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:onClick="onTestClick"
+            android:text="@string/settestid" />
     </RelativeLayout>
-    
+
     <Button
         android:id="@+id/export"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/export" 
-        android:onClick="onExportClick"/>
-    
-	
+        android:onClick="onExportClick"
+        android:text="@string/export" />
+
 </LinearLayout>
