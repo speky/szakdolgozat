@@ -24,8 +24,10 @@ public class ExportActivity extends Activity {
 	private TextView testIdText; 
 	private TextView fileText; 
 	private long testId = 0;
+	private String fileName = "";
 	private SharedPreferences sharedPreferences;
 	private final String TESTID = "TestId";
+	private final String FILE = "file";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,16 @@ public class ExportActivity extends Activity {
 
 	private void save() {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putLong(TESTID, testId);		
+		editor.putLong(TESTID, testId);
+		editor.putString(FILE, fileName);
 		editor.commit();
 	}
 
 	private void load() {	    	    
 		testId = sharedPreferences.getLong(TESTID, 0);
 		setTestIdString();
+		fileName = sharedPreferences.getString(FILE, "");
+		fileText.setText(fileName);
 	}
 	
 	private void setTestIdString() {
@@ -169,21 +174,20 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 	private Context context ;
 	private DataStorage dbData;
 	private long testId;
-
+	
 	ExportToCVS(Context context, DataStorage dbData, long testId, String fileName) {		 
 		this.context = context;
 		this.dbData = dbData;
 		this.testId = testId;
 		dialog = new ProgressDialog(context);
-		fileHandler = new FileHandler(context, DIRECTORY, fileName);
-		Toast.makeText(context, "file path: ", Toast.LENGTH_SHORT).show();		Toast.makeText(context, "file path: ", Toast.LENGTH_SHORT).show();	}
+		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
+	}
 
 	@Override
 	protected void onPreExecute() {
 		this.dialog.setMessage("Exporting database...");
 		this.dialog.show();
 	}
-
 
 	protected Boolean doInBackground(final String... args) {
 		List<DbData> datas = null;
@@ -197,30 +201,28 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 			return true;
 		}
 
-
-		Boolean returnCode = true;
-		String csvHeader = dbData.getColunNames();
-
-		csvHeader += "\n";
-		Log.d("EXPORTER: ", "header=" + csvHeader);
-
 		
-		String csvValues = "";			
-		fileHandler.writeExternalFile(csvHeader, true);
+		String exportText = dbData.getColunNames();
+
+		exportText += "\n";
+		Log.d("EXPORTER: ", "header=" + exportText);
+						
 		for (int i  = 0; i < datas.size(); ++i) {
-			csvValues = datas.get(i).toString()+ "\n";
-			fileHandler.writeExternalFile(csvValues, false);
+			exportText += datas.get(i).toString()+ "\n";		
 		}
-		fileHandler.closeExternalWrite();
 		
-		return returnCode;
+		if (fileHandler.writeFile(true, exportText, true)) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	protected void onPostExecute(final Boolean success) {
 		if (this.dialog.isShowing()) { 
 			this.dialog.dismiss(); 
 		}if (success) {
-			Toast.makeText(context, "Export successful!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Export successful! File: "+ fileHandler.getFilePath(), Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, "Export failed", Toast.LENGTH_SHORT).show();
 		}

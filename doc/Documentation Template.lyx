@@ -1054,9 +1054,9 @@ Export
 
 \begin_layout Standard
 A program által generált teszt eredények fájlba menthetőek CSV formátumban.
- A CSV fájl első sora a fejléc - test id, test name, time, latitude, longitude,
- signal strength, download speed, upload speed, jitter, lost packets, sum
- packets, MCC, MNC, LAC, CID.
+ A CSV fájl első sora a fejléc -id, test id, test_name, time, lat, lon,
+ signal_strength, up_speed, down_speed, jitter, lost_packet, sum_packet,
+ mcc, mnc, lac, cid, rate, network_type.
  Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
  Lehetséges kiválasztani egy test id-t, melyet ki akarunk exportálni, de
  akár az összes elemet is kiexportálhatjuk.
@@ -1092,7 +1092,20 @@ Export To CVS
 \begin_inset Quotes srd
 \end_inset
 
- feliratú gombra kattintva elkezdődik az adatok kimentése a megadott fájlba.
+ feliratú gombra kattintva elkezdődik az adatok kimentése a megadott fájlba
+ és megjelenik egy dialógus ablak 
+\begin_inset Quotes sld
+\end_inset
+
+Exporting database...
+\begin_inset Quotes srd
+\end_inset
+
+ felirattal.
+ A dialógus ablakban forgó icon jelzi, hogy még tart az exportálási folyamat.
+ A művelet befejeztével az ablak automatikusan bezáródik és egy felugró
+ üzenetablakban megjelnik, hogy sikeres voltüe a művelet vagy sem, illetve
+ a fájl elérésiútja.
 \end_layout
 
 \begin_layout Standard
@@ -3148,7 +3161,13 @@ Export to CVS
 onExportClick 
 \shape default
 metódus hajtódik végre, ahol leellenőrzi a program a beállított paramétereket,
- ha valamelyik nincs beállítva, akkor hibát jelez Alarmdialog segítségével.
+ ha valamelyik nincs beállítva, akkor hibát jelez AlarmDialog segítségével.
+ Az adatok a FileHandler osztály segítségével íródnak ki a külső vagy belső
+ tárra.
+ Ha elérhető (írásra is) a külső tár, akkor oda fog kerülni az fájl, különben
+ a belső tárra.
+ Az exportálás a fájlművelet miatt aszinkron folyamat, ami az AsyncTask
+ osztály segítségével lett megvalósítva.
 \end_layout
 
 \begin_layout Subsection
