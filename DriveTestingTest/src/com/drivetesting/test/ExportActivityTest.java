@@ -54,8 +54,6 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 	}
 	
 	public void testDefaultText() throws Exception {
-		Instrumentation instr = getInstrumentation();
-		
 		assertTrue(textView.getText().equals("Output file name"));
 		String txt = text.getText().toString();
 		assertTrue(txt.equals(""));

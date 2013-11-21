@@ -12,17 +12,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExportActivity extends Activity {
 
 	private TextView testIdText; 
-	private TextView fileText; 
+	private EditText fileText; 
 	private long testId = 0;
 	private String fileName = "";
 	private SharedPreferences sharedPreferences;
@@ -41,7 +44,14 @@ public class ExportActivity extends Activity {
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 		
 		testIdText = (TextView)findViewById(R.id.editTestId);
-		fileText = (TextView)findViewById(R.id.output_file_name);
+		fileText = (EditText)findViewById(R.id.output_file_name);
+		fileText.addTextChangedListener(new TextWatcher(){
+	        public void afterTextChanged(Editable s) {
+	            fileName = s.toString();
+	        }
+	        public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+	        public void onTextChanged(CharSequence s, int start, int before, int count){}
+	    }); 
 	}
 
 	private void save() {
@@ -198,7 +208,7 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 		}
 		
 		if (datas.size() == 0) {
-			return true;
+			return false;
 		}
 
 		
