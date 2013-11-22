@@ -1054,9 +1054,22 @@ Export
 
 \begin_layout Standard
 A program által generált teszt eredények fájlba menthetőek CSV formátumban.
- A CSV fájl első sora a fejléc -id, test id, test_name, time, lat, lon,
+ A CSV fájl első sora a fejléc: id, test_id, test_name, time, lat, lon,
  signal_strength, up_speed, down_speed, jitter, lost_packet, sum_packet,
- mcc, mnc, lac, cid, rate, network_type.
+ mcc, mnc, lac, cid, rate, network_type mezőkkel, ahol az id az adatbázis
+ rekord azonosítója, a test_id a teszt futtatáskor generált teszt azonosító,
+ test_name a teszt neve, amit a felhasználó a beállítások között adott meg,
+ time a bejegyzás ideje, lat avagy latitude szélességi koordináta, a lon
+ azaz longitude a hosszúsági koordinátája amérés helyének, signal_strength
+ a rádió hálózati torony által küldött jel erőssége, up_speed és a down_speed
+ a fel- és letöltési sebesség, jitter az UDP-t használó tesztek esetén van
+ jelentősége és a csomagok közti késést mutatja, a lost_packet és sum_packet
+ szintén UDP teszt esetén jelentős, az elveszett és az eddigi összes csomag
+ számát jelentik, MNC (Mobile Network Code) és az MCC (Mobile Country Code)
+ együtt egyértelmúen meghatározza az operátort az adott országban, LAC (Location
+ Area Code) a hálózat szólgáltatójához tartozó területi azonosító, cid (Cel
+ ID) cella azonosító és a network type pedig a hálózat típusa (UMTS, GSM,
+ stb.).
  Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
  Lehetséges kiválasztani egy test id-t, melyet ki akarunk exportálni, de
  akár az összes elemet is kiexportálhatjuk.
@@ -1082,8 +1095,15 @@ Output file name
 \begin_inset Quotes srd
 \end_inset
 
- szövegmezőben, mely a külső memória egységen lesz letárolva <ITT> illetve,
- ha ez nem lehtséges akkor az applikáció könyvtárában <ITT>.
+ szövegmezőben, mely a külső memória egységen lesz letárolva 
+\begin_inset Quotes sld
+\end_inset
+
+sdcard/Android/com.drivetesting/files/export
+\begin_inset Quotes srd
+\end_inset
+
+ illetve, ha ez nem lehetséges akkor az applikáció könyvtárában <ITT>.
  Az 
 \begin_inset Quotes sld
 \end_inset
