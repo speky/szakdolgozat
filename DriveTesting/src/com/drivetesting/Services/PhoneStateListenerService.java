@@ -21,19 +21,14 @@ import android.widget.Toast;
 
 import com.drivetesting.DriveTestApp;
 
-public class PhoneStateListenerService extends Service{
+public class PhoneStateListenerService extends Service {
 
-	private static final  String TAG = "CustomPhonestateListner";
+	private static final  String TAG = "PhonestateListnerService";
 	
-	private static final int EXCELLENT_LEVEL = 75;
-	private static final int GOOD_LEVEL = 50;
-	private static final int MODERATE_LEVEL = 25;
-	private static final int WEAK_LEVEL = 0;
-
-	private static final String NO_SIGNAL_STRENGTH = "?";
+	private static final String NO_SIGNAL_STRENGTH = "-";
 
 	private TelephonyManager telephonyManager = null;
-	private BroadcastReceiver connectivityBroadcastReceiver = null;
+	private BroadcastReceiver connectivityReceiver = null;
 	private IntentFilter networkStateChangedFilter;	
 	private PhoneStateListenerImpl phoneStateListener = null;
 	private DriveTestApp application; 
@@ -57,7 +52,7 @@ public class PhoneStateListenerService extends Service{
 
 		networkStateChangedFilter = new IntentFilter();
 		networkStateChangedFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-		connectivityBroadcastReceiver = new BroadcastReceiver(){
+		connectivityReceiver = new BroadcastReceiver(){
 			@Override
 			public void onReceive(Context context, Intent intent) {				
 				if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
@@ -81,12 +76,11 @@ public class PhoneStateListenerService extends Service{
 			}
 		};
 
-		registerReceiver(connectivityBroadcastReceiver, networkStateChangedFilter);
+		registerReceiver(connectivityReceiver, networkStateChangedFilter);
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		
+	public int onStartCommand(Intent intent, int flags, int startId) {		
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -99,30 +93,12 @@ public class PhoneStateListenerService extends Service{
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);	
 		}
 		// stop the receiver
-		if (connectivityBroadcastReceiver != null) {
-			unregisterReceiver(connectivityBroadcastReceiver);
+		if (connectivityReceiver != null) {
+			unregisterReceiver(connectivityReceiver);
 		}
 	}
 
-	private String getSignalLevelString(int level) {
-		String signalLevelString = "Weak";
-
-		if (level > EXCELLENT_LEVEL){
-			signalLevelString = "Excellent";
-		}
-		else if (level > GOOD_LEVEL){
-			signalLevelString = "Good";
-		}
-		else if (level > MODERATE_LEVEL){
-			signalLevelString = "Moderate";
-		}
-		else if (level > WEAK_LEVEL){
-			signalLevelString = "Weak";
-		}
-		return signalLevelString;
-	}
-
-	class  PhoneStateListenerImpl extends PhoneStateListener {
+	class PhoneStateListenerImpl extends PhoneStateListener {
 		@Override
 		public void onSignalStrengthsChanged(SignalStrength signalStrength)
 		{
@@ -216,8 +192,6 @@ public class PhoneStateListenerService extends Service{
 			super.onCellLocationChanged(location);
 			Log.d(TAG, "onCellLocationChanged ");
 			application.setCellLocation(getMCC(), getMNC(), getLAC(), getCID());
-			
-			//Toast.makeText(getApplicationContext(), "Cell location changed!  ", Toast.LENGTH_SHORT).show();		
 		}
 
 		private String getDataState(int state){			

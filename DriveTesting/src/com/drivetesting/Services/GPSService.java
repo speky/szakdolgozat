@@ -27,10 +27,9 @@ public class GPSService extends Service implements LocationListener {
 
 	private LocationManager locationManager;
 
-	private static long minTimeMillis = DEFAULT_MIN_TIME_BW_UPDATES ;//2000;
+	private static long minTimeMillis = DEFAULT_MIN_TIME_BW_UPDATES;
 	private static long minDistanceMeters = DEFAULT_MIN_DISTANCE_CHANGE_FOR_UPDATES;
 	private static float minAccuracyMeters = DEFAULT_ACCURACY_CHANGE_FOR_UPDATES;
-
 
 	@Override
 	public void onCreate() {
@@ -48,7 +47,7 @@ public class GPSService extends Service implements LocationListener {
 	//Stop using GPS listener
 	public void stopUsingGPS() {
 		if (locationManager != null) {
-			locationManager.removeUpdates(GPSService.this);
+			locationManager.removeUpdates(this);
 		}       
 	}
 
@@ -59,54 +58,49 @@ public class GPSService extends Service implements LocationListener {
 		((DriveTestApp)getApplication()).setGpsService(false);
 	}
 
-	/*private void broadcast() {
-		System.out.println("***** OUTGOING ******");
-		Intent i = new Intent();
-		i.setAction(CUSTOM_INTENT);
-		getApplication().sendBroadcast(i);
-	}*/
+	private Location getGPSLocation() {
+		//if GPS Enabled get lat/long using GPS Services
+		if (((DriveTestApp)getApplication()).isGPSEnabled) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+					minTimeMillis,
+					minDistanceMeters, 
+					this);
+			Log.d(TAG, "use GPS provider");			
+			return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);						
+		}
+		return null;
+	}
+
+	private Location getNetworkProviderLocation(){
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+				minTimeMillis,
+				minDistanceMeters, 
+				this);
+		Log.d(TAG,  "use Network provider");
+		return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	}
 
 	public void getLocation() {
 		try {
 			// getting GPS status
 			((DriveTestApp)getApplication()).isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);     
-			// getting network status
-			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);				
 			Location location = null;
 			if (((DriveTestApp)getApplication()).isGPSEnabled == false &&  isNetworkEnabled == false) {
 				// no network provider is enabled
 				Log.d(TAG, "Location service not available!");				
-			} else {				
-				// if GPS Enabled get lat/long using GPS Services
-				if (((DriveTestApp)getApplication()).isGPSEnabled) {
-					locationManager.requestLocationUpdates(
-							LocationManager.GPS_PROVIDER,
-							minTimeMillis,
-							minDistanceMeters, this);
-					Log.d(TAG, "use GPS provider");
-					if (locationManager != null) {
-						location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-					}
-				}
-
-				// get location from Network Provider
-				if (isNetworkEnabled && location == null) {
-					locationManager.requestLocationUpdates(
-							LocationManager.NETWORK_PROVIDER,
-							minTimeMillis,
-							minDistanceMeters, this);
-					Log.d(TAG,  "use Network provider");
-					if (locationManager != null) {
-						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-					}
-				}				
-				if (location != null /*&& (location.hasAccuracy() && location.getAccuracy() <= minAccuracyMeters)*/) {					
-					Log.d(TAG, "Update location: Lat: "+ Double.toString(location.getLatitude()) + " Lon: "+ Double.toString(location.getLongitude()));
-					((DriveTestApp)getApplication()).updateLocation(location);
+			} else {
+				location = getGPSLocation();					
+				if (location == null && isNetworkEnabled){
+					location = getNetworkProviderLocation();
 				}
 			}
-		} catch (Exception e) {
+			if (location != null /*&& (location.hasAccuracy() && location.getAccuracy() <= minAccuracyMeters)*/) {					
+				Log.d(TAG, "Update location: Lat: "+ Double.toString(location.getLatitude()) + " Lon: "+ Double.toString(location.getLongitude()));
+				((DriveTestApp)getApplication()).updateLocation(location);
+			}
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			Log.d(TAG, e.getMessage());
 		}		 
@@ -122,14 +116,12 @@ public class GPSService extends Service implements LocationListener {
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Log.d(TAG, "Provider disabled, "+ provider);
-		((DriveTestApp)getApplication()).setGpsService(false);
+		Log.d(TAG, "Provider disabled, "+ provider);	
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Log.d(TAG, "Provider enabled, "+ provider);
-		((DriveTestApp)getApplication()).setGpsService(true);
+		Log.d(TAG, "Provider enabled, "+ provider);		
 	}
 
 	@Override

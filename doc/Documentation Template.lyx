@@ -3640,7 +3640,92 @@ Osztályok bemutatása
 \end_layout
 
 \begin_layout Subsubsection
+Közös osztályok
+\end_layout
+
+\begin_layout Subsubsection
+Szerver oldal osztályai
+\end_layout
+
+\begin_layout Subsubsection
 Mobil alkalmazás osztályai
+\end_layout
+
+\begin_layout Subsubsection*
+GPSService 
+\end_layout
+
+\begin_layout Standard
+Ez a szolgáltatás az Androidüos Service osztályból öröklődik és megvelósítja
+ a LocationListener interfészt.
+ A szolgáltatás indításakor az Application objektumban beállítódik, hogy
+ fut a GPS szolgáltatás, majd az 
+\shape italic
+onStartCommand
+\shape default
+ metóduson keresztűl meghívódik a 
+\shape italic
+getLocation
+\shape default
+ függvény, ahol beregisztrálódik a GPSService osztály, mint LocationListener
+ és így kap értesítést, ha változik a GPS pozíció, illetve, ha a szolgáltatás
+ álllapotának változásáról is.
+ Ehhez meg hívom a LocationManager Android osztály 
+\shape italic
+requestLocationUpdates
+\shape default
+ metódusát és utolsó paraméterként átadom a GPSService példányra mutató
+ this pointert.
+ A GPS koordináta változásakor a 
+\shape italic
+onLocationChanged
+\shape default
+ visszahívó metódussal kap értesítést a szolgáltatás.
+ Ekkor a kapott Location paramétert továbbítja a DriveTestApp objektum felé.
+ Az osztály megszűnésekor leiratkozik a pozíció frissítési szolgáltatásról.
+\end_layout
+
+\begin_layout Subsubsection*
+PhoneStateListenerService
+\end_layout
+
+\begin_layout Standard
+Az Android API által nyújtott dinamikus, időben változó telefon és hálózati
+ információk lekérdezésére vonatkozó szolgáltatásokat valóstom meg itt.
+ A 
+\shape italic
+connectivityReceiver
+\shape default
+ egy BroadcastReceiver, minek segítségével a ConnectivityManager üzeneteit
+ megkapja az alaklamazás és így figyelhető a mobil internet szolgáltatás
+ elérhetősége.
+ A változásról értesül az application objektum is.
+ A készülék és a hálózat adatairól a TelephonyManager segítségével kaphatunk
+ információkat.
+ PhoneStateListenerImpl segédosztály megvalósítja a PhoneStateListener interfész
+t, így kap értesítést az applikáció az adatkapcsolat (data connection) állapotár
+ól és a pozícióhoz kapcsoló MCC, MNC, LAC és CID paraméterekről is.
+ Ezek az értékek az application objektumban lesznek letárolva.
+ A PhoneStateListener a ConnectivityReceiverrel egyetemben a service konstruktor
+ába kerül beregisztrálásra.
+\end_layout
+
+\begin_layout Subsubsection*
+HttpService
+\end_layout
+
+\begin_layout Standard
+Az alkalamazás egyik kulcs osztálya, nagy szerepe van a teszt futtatás során.
+ A 
+\shape italic
+IntentService 
+\shape default
+osztályból származik, mely olyan szolgáltatás, ami csak addig fut amíg az
+ 
+\shape italic
+onHandleInstance
+\shape default
+ metódusában leírtak végrehajtódnak.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -3650,6 +3735,13 @@ DriveTestApp
 \begin_layout Standard
 Ez az Application objektum, ez indul el legelőször a program futtatása során.
  Azon paraméterek tárolódnak itt, melyeket több Activity is használ.
+ Itt történik az adatbázisba való irás is és azokat az adatokat, melyek
+ nem a mérésből származnak (hálózat típúsa, jel erősség, stb) itt tárolódnak
+ el.
+ Továbbá eltárolódik a mobilnet és a GPS használatának be- vagy kikapcsolt
+ állapota, ami a teszt futtatása előtt ellenőrzésre kerűl.
+ Ezen információkat a megfelelő szolgáltatások adják, melyek korábban említésre
+ kerültek.
  
 \end_layout
 
@@ -3710,10 +3802,6 @@ metódus hajtódik végre, ahol leellenőrzi a program a beállított paraméter
 
 \begin_layout Subsubsection*
 PreferenceActivity
-\end_layout
-
-\begin_layout Subsubsection*
-Service-ek 
 \end_layout
 
 \begin_layout Subsection

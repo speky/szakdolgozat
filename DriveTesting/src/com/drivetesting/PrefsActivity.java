@@ -1,6 +1,5 @@
 package com.drivetesting;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,12 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnCreateContextMenuListener;
 import android.widget.Toast;
 
 public class PrefsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
@@ -27,16 +24,12 @@ public class PrefsActivity extends PreferenceActivity implements OnSharedPrefere
 	        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
 	        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
 	        + "|[1-9][0-9]|[0-9]))");
-		 
-	  @Override
-	  public void onBuildHeaders(List<Header> target) {
-		  loadHeadersFromResource(R.xml.preference_headers, target);
-	  }	  
-	  
-	  @Override
+		
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {	
 		super.onCreate(savedInstanceState);
 		app = (DriveTestApp)getApplication();
+		getFragmentManager().beginTransaction().replace(android.R.id.content, new PreferenceFragmentImpl()).commit();
 	}
 
 	@Override

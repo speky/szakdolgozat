@@ -6,12 +6,9 @@ import http.filehandler.UDPReport;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osmdroid.util.GeoPoint;
-
 import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
@@ -129,11 +126,11 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
-	public SharedPreferences  getSharedPreference() {
+	public SharedPreferences getSharedPreference() {
 		return prefs;
 	}
 	
-	public void setSharedPreference(SharedPreferences   pref) {
+	public void setSharedPreference(SharedPreferences pref) {
 		prefs = pref;
 	}
 	
@@ -189,9 +186,18 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 
 
 	public void startGPSService() {
-		startService(new Intent(getApplicationContext(), GPSService.class));
+		startService(new Intent(this, GPSService.class));
 	}
 
+	public void  stopGPSService() {
+		Intent intent = new Intent(this, GPSService.class);		
+		stopService(intent);
+	}
+	
+	public long getTestId() {
+		return testId;
+	}
+	
 	public boolean startHttpClientService(int direction, int type) {
 		clearTestMessage();
 		++testId;
@@ -213,16 +219,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		startService(httpIntent);
 		return true;
 	}
-
-	public long getTestId() {
-		return testId;
-	}
-
-	public void  stopGPSService() {
-		Intent intent = new Intent(this, GPSService.class);		
-		stopService(intent);
-	}
-
+		
 	public void stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
