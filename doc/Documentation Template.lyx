@@ -1041,15 +1041,470 @@ Menü áttekintése
 \end_layout
 
 \begin_layout Standard
-A menüpontok leírása, funkcionalitásaik ismertetése, beállítások ismertetése
- képekkel illusztrálva.
- Menüpontok (Activity-k) közti váltás módjának, módjainak leírása
+A felhasználó a menüpontok segtségével navigálhat az egyes ablakok között.
+ Összesen öt ablakot tartalmaz az alkalmazás.
+ Az applikáció minden ablakban négy menüelem kap helyet.
+ 
 \end_layout
 
 \begin_layout Standard
+Széles telefon kijelző esetén - mint amilyennel egy tablet rendelkezik -
+ az összes menüpont megjelenik a képernyő tetején az aktuális ablak nevével
+ együtt.
+ 
+\end_layout
 
-\series bold
-Export
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename widephone.jpg
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Menü tableten (4.7
+\begin_inset Quotes srd
+\end_inset
+
+, 1280 * 720)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Kesekenyebb kijelző esetén a menüpontoknak csak az ikonja jelenik meg.
+ 
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename smallPhone.jpg
+	scale 80
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Menü kis kijelzőn (4
+\begin_inset Quotes srd
+\end_inset
+
+, 480*800 felbontás)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ikonok listája:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename mobil.png
+
+\end_inset
+
+- Main ablak
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename test.png
+
+\end_inset
+
+- Test ablak
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename map.png
+
+\end_inset
+
+- Térkép ablak
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename export.png
+
+\end_inset
+
+- Export ablak
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename setting.png
+
+\end_inset
+
+- Beálltások
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Ikonok
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Ablakok leirása
+\end_layout
+
+\begin_layout Subsubsection*
+Main (fő) ablak
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename mainablak.jpg
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Main ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az alakalmazás fő ablaka., ez jelenik meg az inditás után.
+ A megjelenitett lista két fő részre bontható: az eslő tartalmazza a telefon
+ adatatit (Phone Data), ezek nagyrésze nem változik, fontos paraméter a
+ jel erősség érték (signal strength), ami a rádió hálózati torony által
+ küldött jel erőssége.
+ A második része a hálózati adatokat tartalmazza (Netwrok Data).
+ Ezen adatok nagyrésze a telefon, illetve a hálózat aktuális állapotától
+ függenek, mint például a hálózat tipusa (Network Type), ami lehet UMTS,
+ EDGE, stb.
+ Ez a telefon helyétől függ és persze az adott területen elérhető mobilhálózat
+ szolgáltatásoktól.
+ A mérések szempontjából fontos adatok a már emlitett szignál erősség, hálózat
+ tipusa, ezeken kivűl az MCC, MNC, LAC és a CID.
+ Utóbbiak azonostják a telefonoperátort az adott országra vonatkozóan, és
+ meghatározzák a mobilkészülék helyét, azaz, hogy az operátor melyik cellájában
+ tartózkodik.
+ MNC (Mobile Network Code) és az MCC (Mobile Country Code) együtt egyértelmúen
+ meghatározza az operátort az adott országban, LAC (Location Area Code)
+ a hálózat szólgáltatójához tartozó területi azonosító, CID (Cel ID) cella
+ azonosító.
+ A lista automatikusan frissűl, ha megváltozik egy érték.
+ A felhasználó csúszka segtségével görgetheti a kijelzőn a táblázatot.
+\end_layout
+
+\begin_layout Subsubsection*
+Test (teszt) ablak
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename testablak.jpg
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Test ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az alkalmazás fő része, ahonnan a felhasználó a teszteket tudja inditani.
+ Egyszerre csak egy mérés futhat, és nem lehet menetközben megváltoztatni
+ a beállitásokat.
+ A beállitások a következőek lehetnek: feltöltés vagy letöltés teszt, azon
+ belül UDP vagy TCP protokollok használatát lehet beállitani rádiógombok
+ segitségével.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Start test
+\begin_inset Quotes sld
+\end_inset
+
+ feliratú gombra kattintva elkezdődik a teszt futtatás.
+ Ez elöbb emlitett gomb kiszürkül, ilyenkor nem fogadja a felhasználói események
+et.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Stop test
+\begin_inset Quotes srd
+\end_inset
+
+ felültű gomb kivilágosodik és fogadja a kattintás eseményet, ezzel lehet
+ lálitani a futó tesztet.
+ A megadott értékek elmentődnek és az ablakok váltása kor megörződik, illetve
+ visszatöltődik, ha a felhasználó visszatér ehhez az ablakhoz.
+ A teszt futtatásához szükséges paraméterek a távoli szerver IP cime jelentés
+ intervalluma, stb.
+ a Settings (Beállitások) ablak részében lesznek bővebben kifejtve.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Teszt futtatás közben
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+A teszt futása során a felhaszáló egy előre megadott intervallumonként jelentést
+ kap, ami tartalmazza a mérések aktuális eredményét: hálózat tipusát, a
+ fel- és letöltési sebbesééget, UDP teszt esetén a jittert és afogadott
+ és az elveszett csomagok számát.
+ Ez a riport a képernyő közepén találhtó lista tartalmazza.
+ Ezt a listát törölheti a felhasználó, a 
+\begin_inset Quotes sld
+\end_inset
+
+Clear logs
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombra kattintva.
+ Az esetleges kapcsolati hibákról is ezen keresztűl értesül a felhasználó.
+ Ezen hibák a 
+\begin_inset Quotes sld
+\end_inset
+
+Hibaüzenetek
+\begin_inset Quotes srd
+\end_inset
+
+ fejezetben lesznek bővebben kifejtve.
+ Az aktuális tartalma ennek a log listának elmentatő a 
+\begin_inset Quotes sld
+\end_inset
+
+Save logs
+\begin_inset Quotes srd
+\end_inset
+
+ gomb seitségével.
+ Az elmentett fájl neve a teszt nevéből és az aktuális idobélyegböl fog
+ állni például: testName_20131103_1130.log.
+ A megadott beálitásoknak megfelelően a külső vagy belső tárra fog elmentésre
+ kerülni az applikáció könyvtárán belül.
+\end_layout
+
+\begin_layout Subsubsection*
+Map (térkép) ablak
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Térkép ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+A térkép megejeleitéséhez szökséges mobil internet kapcsolat és GPS adat
+ használat engedélyezés a pontos pozició meghatározására.
+ A felhasználó kiválaszthatja, hogy melyik teszt eredményeit szeretné látnia
+ térképen megjelnitve.
+ Ha éppen fut a teszt, amikor a felhasználó erre a képernyőre vált, akkor
+ az aktuális tesztre vonatkozó adatokat láthatja.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Export ablak
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Export ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1059,20 +1514,21 @@ A program által generált teszt eredények fájlba menthetőek CSV formátumban
  mcc, mnc, lac, cid, rate, network_type mezőkkel, ahol az id az adatbázis
  rekord azonosítója, a test_id a teszt futtatáskor generált teszt azonosító,
  test_name a teszt neve, amit a felhasználó a beállítások között adott meg,
- time a bejegyzás ideje, lat avagy latitude szélességi koordináta, a lon
- azaz longitude a hosszúsági koordinátája amérés helyének, signal_strength
- a rádió hálózati torony által küldött jel erőssége, up_speed és a down_speed
- a fel- és letöltési sebesség, jitter az UDP-t használó tesztek esetén van
- jelentősége és a csomagok közti késést mutatja, a lost_packet és sum_packet
- szintén UDP teszt esetén jelentős, az elveszett és az eddigi összes csomag
- számát jelentik, MNC (Mobile Network Code) és az MCC (Mobile Country Code)
- együtt egyértelmúen meghatározza az operátort az adott országban, LAC (Location
- Area Code) a hálózat szólgáltatójához tartozó területi azonosító, cid (Cel
- ID) cella azonosító és a network type pedig a hálózat típusa (UMTS, GSM,
- stb.).
- Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
+ time a bejegyzés ideje, lat avagy latitude szélességi koordináta, a lon
+ azaz longitude a hosszúsági koordinátája a mérés helyének, up_speed és
+ a down_speed a fel- és letöltési sebesség, jitter-nek az UDP protokolt
+ használó tesztek esetén van jelentősége és a csomagok közti késést mutatja,
+ a lost_packet és sum_packet szintén UDP teszt esetén jelentős, az elveszett
+ és az eddigi összes csomag számát jelentik, és a network type pedig a hálózat
+ típusa (UMTS, EDGE, stb.), végül a rate a fel ésletöltési sebeség mértékegységét
+ jelölik (Mbits, Kbits, stb.).
+ 
+\end_layout
+
+\begin_layout Standard
+Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
  Lehetséges kiválasztani egy test id-t, melyet ki akarunk exportálni, de
- akár az összes elemet is kiexportálhatjuk.
+ akár az összes elemet is kiexportálhatjuk (ALL).
  Ezt a 
 \begin_inset Quotes sld
 \end_inset
@@ -1082,9 +1538,9 @@ Set Test ID
 \end_inset
 
  nevű gombra kattintva tehetjük meg.
- Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.
- fontos megjegyezni, hogy csak a program adatbázisában található teszt azonosító
-k közül választhat afelhasználó.
+ Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.Ffo
+ntos megjegyezni, hogy csak a program adatbázisában található teszt azonosítók
+ közül választhat a felhasználó.
  Ha még nem futtatott tesztet, akkor nem lesz bejegyzés és így exportálható
  adat sem.
  Továbbiakban meg kell adnunk a fájl nevét az 
@@ -1128,8 +1584,53 @@ Exporting database...
  a fájl elérésiútja.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
+Setting (beállitások) ablak
+\end_layout
 
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Beállitások ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ Az itt megejelnő paraméterek segitségével konfigurálható a teszt futtatás,
+ ileltve a program működése.
+ Ezek a paraméterek a program bezerása után is megmaradnak, nem kell a felhaszná
+lónak újra beállitania ezeket.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Teszt futtatásra voantkozó paraméterek
+\end_layout
+
+\begin_layout Subsubsection*
+Fájl kezelésre vonatkozó beállitások
 \end_layout
 
 \begin_layout Subsection
@@ -2998,6 +3499,71 @@ etük a lekérdezés eredményének sorai között.
  
 \end_layout
 
+\begin_layout Subsection
+Hálózati protokollok a programban
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+UDP (User Datagram Protocol): 
+\series default
+kapcsolatnélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
+ Portszámot és checksum-ot is tartalmaz egy csomag.
+ A csomagok nem biztos hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz
+ , mint amilyen sorrendben el lettek küldve.
+ A küldő nem kap visszaigazolást a csomag megérkezéséről.
+ Ez a protokoll nagyon elterjedt a videójátékoknál és a telekommunikációban.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+TCP (Transmission Control Protocol): 
+\series default
+megbízható de ezért lassabb is, mint például az UDP.
+ Folyamként vagy fájlként kezeli a kapcsolatokat.
+ A csomagok megfelelő sorrendjéről gondoskodik, illetve az elveszett csomagok
+ újra küldéséről is gondoskodik.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+HTTP (Hypertext Transfer Protocol):
+\series default
+ a web hálózati protokollja, fájlok és más adatok - azaz erőforrások - továbbítá
+sára használják.
+ Ezek az erőforrások lehetnek HTML fájlok, képek, lekérdezési eredmények,
+ stb.
+ Használhat TCP és UDP protokollokat is.
+ HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
+ a kapcoslatot és küld egy kérést a HTTP szervernek.
+ Amint a szerver visszaküldte a választ lezérja a kapcsolatot.
+ A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
+ pl.: GET /path/to/file/index.html HTTP/1.0 vagy HTTP/1.0 200 OK.
+ A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
+ metódusok még a POST és a HEAD.
+ Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
+ Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
+ Ezek után szerepelhetnek paraméterek PARAMÉTER: érték alakban.
+ Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
+ mint például az erőforrás módosításának ideje: 
+\begin_inset Quotes sld
+\end_inset
+
+Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
+\begin_inset Quotes srd
+\end_inset
+
+.
+ Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
+ Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
+ 
+\end_layout
+
 \begin_layout Section
 A program architektúrája
 \end_layout
@@ -3073,80 +3639,32 @@ A hálózati forgalom mérésére, figyelésére használtam volna a TrafficStat
 Osztályok bemutatása
 \end_layout
 
-\begin_layout Standard
-A program osztály hierarchiájának az osztályok szerepének bemutatása 
+\begin_layout Subsubsection
+Mobil alkalmazás osztályai
 \end_layout
 
 \begin_layout Subsubsection*
-Hálózati protokollok a programban
+DriveTestApp
 \end_layout
 
 \begin_layout Standard
-
-\series bold
-UDP (User Datagram Protocol): 
-\series default
-kapcsolatnélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
- Portszámot és checksum-ot is tartalmaz egy csomag.
- A csomagok nem biztos hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz
- , mint amilyen sorrendben el lettek küldve.
- A küldő nem kap visszaigazolást a csomag megérkezéséről.
- Ez a protokoll nagyon elterjedt a videójátékoknál és a telekommunikációban.
+Ez az Application objektum, ez indul el legelőször a program futtatása során.
+ Azon paraméterek tárolódnak itt, melyeket több Activity is használ.
  
 \end_layout
 
-\begin_layout Standard
-
-\series bold
-TCP (Transmission Control Protocol): 
-\series default
-megbízható de ezért lassabb is, mint például az UDP.
- Folyamként vagy fájlként kezeli a kapcsolatokat.
- A csomagok megfelelő sorrendjéről gondoskodik, illetve az elveszett csomagok
- újra küldéséről is gondoskodik.
- 
+\begin_layout Subsubsection*
+MainActivity
 \end_layout
 
-\begin_layout Standard
-
-\series bold
-HTTP (Hypertext Transfer Protocol):
-\series default
- a web hálózati protokollja, fájlok és más adatok - azaz erőforrások - továbbítá
-sára használják.
- Ezek az erőforrások lehetnek HTML fájlok, képek, lekérdezési eredmények,
- stb.
- Használhat TCP és UDP protokollokat is.
- HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
- a kapcoslatot és küld egy kérést a HTTP szervernek.
- Amint a szerver visszaküldte a választ lezérja a kapcsolatot.
- A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
- pl.: GET /path/to/file/index.html HTTP/1.0 vagy HTTP/1.0 200 OK.
- A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
- metódusok még a POST és a HEAD.
- Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
- Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
- Ezek után szerepelhetnek paraméterek PARAMÉTER: érték alakban.
- Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
- mint például az erőforrás módosításának ideje: 
-\begin_inset Quotes sld
-\end_inset
-
-Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
-\begin_inset Quotes srd
-\end_inset
-
-.
- Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
- Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
+\begin_layout Subsubsection*
+TestActivity
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsubsection*
 
 \series bold
 Export Activity
-\series default
-:
 \end_layout
 
 \begin_layout Standard
@@ -3188,6 +3706,14 @@ metódus hajtódik végre, ahol leellenőrzi a program a beállított paraméter
  a belső tárra.
  Az exportálás a fájlművelet miatt aszinkron folyamat, ami az AsyncTask
  osztály segítségével lett megvalósítva.
+\end_layout
+
+\begin_layout Subsubsection*
+PreferenceActivity
+\end_layout
+
+\begin_layout Subsubsection*
+Service-ek 
 \end_layout
 
 \begin_layout Subsection

@@ -1,0 +1,32 @@
+
+Drive testing 
+
+General:
+- has sleep effect on the testing?
+
+- logging into a file on Android (Android fileHandler should be inject into the common logger, maybe)
+
+- orientation problem: tablet portrait is not looks good... 
+-- problem with screen orientation change?
+-- can I distinguish the screen size or device?
+-- not change screen orientation?
+
+- test name search
+
+- snapshot from real phone?
+
+Test Activity
+- default values of protocol and direction not set
+- log havto be look similar then at the main activity
+- log file saving
+
+Map Activity
+- if the test is running then its data should be visible on the map
+- singal strngth take into account when it showed on the map. (UP and DOWN speed too:eg. weak, normal, good)
+- use testname search too
+
+Export 
+- use testname search too
+ 
+Settings
+- be more simple because no more difficult setting hiearchy needed.
