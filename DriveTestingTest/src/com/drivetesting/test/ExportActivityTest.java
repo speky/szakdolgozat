@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -60,7 +62,7 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 		assertTrue(text.isEnabled());
 		
 		String s = editTestId.getText().toString();
-		assertTrue(s.equals("Test ID:"));
+		assertTrue(s.equals("Choose Test ID"));
 		assertTrue(editTestId.isEnabled() == false);
 		
 		assertTrue(setTestId.getText().equals("Set Test ID"));
@@ -68,6 +70,26 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 				
 		assertTrue(export.getText().equals("Export to CVS"));
 		assertTrue(export.isEnabled() );		
+	}
+	
+	public void testExport() throws Exception {
+		 Instrumentation instrumentation = getInstrumentation();
+	      // Register we are interested in the authentication activiry...
+	      Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(ExportActivity.class.getName(), null, false);
+				
+		// Type the filename
+	      View currentView = activity.findViewById(R.id.output_file_name);
+	      assertNotNull(currentView);	      
+	      TouchUtils.clickView(this, currentView);
+	      instrumentation.sendStringSync("testFile");		
+	      assertEquals(text.getText().toString(), "testFile");
+	      
+	   // Click the Id button...
+	      currentView = activity.findViewById(R.id.btn_settestid);
+	      assertNotNull(currentView);	      
+	      TouchUtils.clickView(this, currentView);
+	      
+		
 	}
 	
 	public void testMenuTets() throws Exception {

@@ -1056,14 +1056,17 @@ Széles telefon kijelző esetén - mint amilyennel egy tablet rendelkezik -
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Graphics
 	filename widephone.jpg
-	scale 80
+	scale 50
 
 \end_inset
 
@@ -1100,9 +1103,11 @@ Kesekenyebb kijelző esetén a menüpontoknak csak az ikonja jelenik meg.
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Graphics
 	filename smallPhone.jpg
 	scale 80
@@ -1143,27 +1148,23 @@ Ikonok listája:
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Graphics
 	filename mobil.png
 
 \end_inset
 
-- Main ablak
-\end_layout
-
-\begin_layout Plain Layout
+- Main ablak 
 \begin_inset Graphics
 	filename test.png
 
 \end_inset
 
-- Test ablak
-\end_layout
-
-\begin_layout Plain Layout
+- Test ablak 
 \begin_inset Graphics
 	filename map.png
 
@@ -1173,17 +1174,14 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
+\noindent
+\align center
 \begin_inset Graphics
 	filename export.png
 
 \end_inset
 
-- Export ablak
-\end_layout
-
-\begin_layout Plain Layout
-\noindent
-\align left
+- Export ablak 
 \begin_inset Graphics
 	filename setting.png
 
@@ -1227,11 +1225,14 @@ lines 0
 placement o
 overhang 0in
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\noindent
+\align left
 \begin_inset Graphics
 	filename mainablak.jpg
+	scale 40
 
 \end_inset
 
@@ -1287,11 +1288,14 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\noindent
+\align left
 \begin_inset Graphics
 	filename testablak.jpg
+	scale 50
 
 \end_inset
 
@@ -1360,11 +1364,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
+status open
 
 \begin_layout Plain Layout
 \begin_inset Caption
@@ -1480,7 +1480,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -3232,7 +3232,7 @@ status open
 \begin_layout Plain Layout
 \begin_inset External
 	template JavaCode
-	filename test.java
+	filename manifest.java
 
 \end_inset
 
@@ -3302,7 +3302,7 @@ Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombba
 \begin_layout Standard
 \begin_inset listings
 inline false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 
@@ -3497,6 +3497,35 @@ inek segítségével kaphatunk egy SQLiteDatabase obejktumot, melyen keresztül
  Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manüverezh
 etük a lekérdezés eredményének sorai között.
  
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset External
+	template JavaCode
+	filename test.java
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection

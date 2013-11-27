@@ -41,8 +41,7 @@ public class SeparatedListTest extends AndroidTestCase{
 	public void testPreconditions() {
 		assertNotNull(listAdapter);
 		assertTrue(listAdapter.getViewTypeCount() == 1);
-		assertTrue(listAdapter.getItemViewType(0) == -1);
-				
+		assertTrue(listAdapter.getItemViewType(0) == -1);			
 	}
 
 	public void testAddSection() throws Exception {

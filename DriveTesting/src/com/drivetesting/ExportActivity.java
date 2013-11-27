@@ -30,7 +30,12 @@ public class ExportActivity extends Activity {
 	private String fileName = "";
 	private SharedPreferences sharedPreferences;
 	private final String TESTID = "TestId";
-	private final String FILE = "file";
+	private final String FILE = "file";	
+	private FileHandler testHandler = null;
+	
+	public void setFileHandler(FileHandler handler) {
+		testHandler = handler;
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +126,7 @@ public class ExportActivity extends Activity {
 			return;
 		}
 		
-		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId, fileName);
+		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId, fileName, testHandler);
 		export.execute("");
 	}
 
@@ -185,12 +190,14 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 	private DataStorage dbData;
 	private long testId;
 	
-	ExportToCVS(Context context, DataStorage dbData, long testId, String fileName) {		 
+	ExportToCVS(Context context, DataStorage dbData, long testId, String fileName, FileHandler testHandler) {		 
 		this.context = context;
 		this.dbData = dbData;
 		this.testId = testId;
 		dialog = new ProgressDialog(context);
-		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
+		if (testHandler == null) {
+			fileHandler = new FileHandler(context, fileName, DIRECTORY);
+		}
 	}
 
 	@Override

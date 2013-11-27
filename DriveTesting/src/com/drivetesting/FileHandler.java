@@ -26,6 +26,15 @@ public class FileHandler {
 	private String directory;
 	private String filePath = "";
 
+	// for testing porpuses
+	public void setExternalStorageWriteable(boolean value) {
+		externalStorageWriteable = value;
+	}
+	
+	//for testing porpuses
+	public void setExternalStorageAvailable(boolean value) {
+		externalStorageAvailable = value;
+	}
 	
 	public FileHandler(Context context, final String fileName, final String directory) {
 		this.fileName = fileName;
