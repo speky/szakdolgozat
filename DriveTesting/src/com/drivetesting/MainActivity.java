@@ -55,8 +55,8 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 
 		// create our list and custom adapter  
 		separatedAdapter = new SeparatedListAdapter(this);
-		separatedAdapter .addSection(this.getString(R.string.phone_header), phoneDataAdapter);  
-		separatedAdapter .addSection(this.getString(R.string.network_header), networkDataAdapter );
+		separatedAdapter.addSection(this.getString(R.string.phone_header), phoneDataAdapter);  
+		separatedAdapter.addSection(this.getString(R.string.network_header), networkDataAdapter );
 
 		ListView list = (ListView)findViewById(R.id.listview);
 		list.setAdapter(separatedAdapter);
@@ -69,11 +69,11 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 		separatedAdapter.notifyDataSetChanged();
 	}
 
-	// just for testing purposes	
+	// just for testing purposes
 	public  List<HashMap<String, String>>  getPhoneDataList() {
 		return phoneDataList;
 	}
-
+	// just for testing purposes
 	public  List<HashMap<String, String>>  getNetworkDataList() {
 		return networkDataList;
 	}

@@ -2,7 +2,12 @@
 	<application android:name=".DriveTestApp" ...>
 		<activity android:name=".MainActivity"
          android:label="@string/title_activity_drive_test" ...>
-       </activity>
+		<activity android:name=".MainActivity">
+        	    <intent-filter>
+                	<action android:name="android.intent.action.MAIN" />
+	                <category android:name="android.intent.category.LAUNCHER" />
+	            </intent-filter>
+	        </activity>
 	   ...
 	</application>
 </manifest>
