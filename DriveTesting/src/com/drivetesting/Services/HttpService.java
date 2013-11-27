@@ -85,8 +85,7 @@ public class HttpService extends IntentService implements ReportI {
 
 	public  HttpService() {
 		super("HttpClientIntentService");				
-		logger = new Logger("");
-		logger.addLine(TAG+"test");
+		logger = new Logger("");		
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
 
@@ -94,15 +93,15 @@ public class HttpService extends IntentService implements ReportI {
 		try {			
 			Socket socket = new Socket();			
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);
-			logger.addLine(TAG+" Create new socket");
+			logger.addLine(TAG + " Create new socket");
 			return socket;
 		} catch (UnknownHostException e) {
 			errorMessage  = "Test socket creating problem";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
 			sendMessage("error", errorMessage);			
 		} catch (IOException e) {
 			errorMessage = "Test socket creating problem (I/O)";
-			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
+			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
 			sendMessage("error", errorMessage);			
 		}
 		return null;

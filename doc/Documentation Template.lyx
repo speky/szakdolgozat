@@ -3252,6 +3252,12 @@ Az <activity> elemben az android:name paraméter tartalmazza az Activity
 \end_layout
 
 \begin_layout Standard
+A fenti példában látható <intent-filter> rész utasítja a rendszert, hogy
+ a MainActivity nevű acvtivity objektumot töltse be az alakalmazás elindulása
+ után.
+\end_layout
+
+\begin_layout Standard
 Komponensek deklarációja a manifest fájlban a következők lehetnek:
 \end_layout
 
@@ -3726,6 +3732,7 @@ osztályból származik, mely olyan szolgáltatás, ami csak addig fut amíg az
 onHandleInstance
 \shape default
  metódusában leírtak végrehajtódnak.
+ 
 \end_layout
 
 \begin_layout Subsubsection*
@@ -3745,8 +3752,88 @@ Ez az Application objektum, ez indul el legelőször a program futtatása során
  
 \end_layout
 
+\begin_layout Standard
+A DriveTestApp obejektum értesűl a változásokról a szolgáltatásoktól és
+ értesíti a beregisztrált observer objektumokat.
+ 
+\end_layout
+
 \begin_layout Subsubsection*
 MainActivity
+\end_layout
+
+\begin_layout Standard
+Az alakalmazás fő (main) activity objektuma, vagyis ez az objektum töltődik
+ be az alkaalmazás indulásakor és az ehhez tartozó felület fog megjelenni
+ a képernyőn.
+ A képernyőn megjelenő paraméter lista két fő részből tevődik össze.
+ A telefon adataiból - ezek nagyrészt statikus adatok -, melyeket egyszer
+ kérdez le az osztály a TelephonyManager segítségével, ezek a phoneDataList
+ változóban tárolódnak.
+ A másik rész pedig a mobil hálózatra vonatkozó információk, melyek dinamikusan
+ változhatnak, ezen információkat a networkDataList változó tartalmazza.
+ Ezek értékeit a PhonestateListenerService-től kapja az osztály.
+ Ehhez megvalósítja a PhoneStateObserver interfészt és beregisztrálja magát
+ az application objektumba, mint observer (megfigyelő) objektum: ((DriveTestApp)
+getApplication()).registerPhoneStateObserver(this); 
+\end_layout
+
+\begin_layout Standard
+A SimpleAdapter segítségével lehet táblázatos formába rendezni az adatokat,
+ ehhez szükséges egy layout xml fájl, ami leírja az elrendezést.
+ A két listához tartozó adapter neve phoneDataAdapter és networkDataAdapter.
+ A 
+\shape italic
+setHashMapElement 
+\shape default
+metódus használatával adhatunk hozzá elemet a listákhoz, illetve módosíthatjuk
+ egy bejegyzés értékét.
+ A módosítást követően az adapter objektum 
+\shape italic
+notifyDataSetChanged
+\shape default
+ metódusával frssíthetjük a kijelzőn megjelenő listát.
+ A SeparatedListAdapter segédosztály segítségével jeleníthetjük meg ezeket
+ a listákat fejléccel, összefűzve.
+ Ennek segítségével rendelhetünk különböző színt a lista soraihoz.
+ 
+\end_layout
+
+\begin_layout Standard
+Az osztály 
+\shape italic
+OnCreate 
+\shape default
+metódusában inicializálódnak a lista attribútumok az 
+\shape italic
+initPhoneData
+\shape default
+, illetve az 
+\shape italic
+initNetworkData
+\shape default
+ függvények segítségével.
+ A TelephonzManager segítségével kiolvassuk a megfelelő értéket az állandó
+ paraméterekhez, a változó értékekhez 
+\begin_inset Quotes sld
+\end_inset
+
+-
+\begin_inset Quotes srd
+\end_inset
+
+ jel írodik be, mely rögtön megváltozik, ha az adott paramétert érintő változás
+ következik be.
+\end_layout
+
+\begin_layout Standard
+Az osztály OnPause esemény bekövetkeztekor aremovePhoneStateObserver metódus
+ segítségével kitörölteti magát a PhoneStateObeserverek listájáról.
+ Ez az esemény akkor következik, be mikor a felhasnzáló másik activityre
+ vált át vagy bezárja az applikációt.
+ Az OnResume esemény következik be, amint újra ez az activity kerül előtérbe.
+ Iyenkor beregisztrálódik újra a PhoneStateObeserverek listájára és értesítést
+ kap az értékek változásokról.
 \end_layout
 
 \begin_layout Subsubsection*
