@@ -170,7 +170,6 @@ public class HttpService extends IntentService implements ReportI {
 		pool.shutdownNow();
 	}
 
-
 	private void addConnectionInstance(ConnectionInstance instance) {
 		connectionInstances.add(instance);		
 		Future<Integer> future = pool.submit(instance);
@@ -388,19 +387,5 @@ public class HttpService extends IntentService implements ReportI {
 		gmtFormat = new java.text.SimpleDateFormat( "E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
 		gmtFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 	}
-
-	private static class SpeedInfo{
-		public double kilobits=0;
-		public double megabits=0;
-		public double bps=0;
-
-		public String getSpeedString() {
-			if (megabits > 1.0) {
-				return "speed: "+ Double.toString(bps)+ " bps" +" Current speed: " + Double.toString(megabits)+ " Mbit/s";
-			} else {
-				return "speed: "+ Double.toString(bps)+ " bps" +" Current speed: " + Double.toString(kilobits) + " Kbit/s";
-			}		
-		}
-	}
-
+	
 }

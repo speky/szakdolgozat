@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
- *
  * @author Specker Zsolt
  */
 
@@ -37,9 +36,9 @@ class ServerThread extends Thread{
 	private final int ReportPort = 5000;
 	private final int FirstPort = 5500;
 	private final int MaxPort = 5600;
-	private final int SOCKET_TIMEOUT = 10000; //in milisec	
+	private final int SOCKET_TIMEOUT = 5000; //in milisec	
 
-	private int id = -1;
+	private int id = 1;
 	private Logger logger = null;
 	private HttpParser parser = null;	
 	private Properties HeaderProperty = null;
@@ -55,11 +54,10 @@ class ServerThread extends Thread{
 	private ServerSocket serverSocket = null;
 	private PrintWriter printWriter;
 
-	public ServerThread(Logger logger, Socket socket, final int id) {
+	public ServerThread(Logger logger, Socket socket) {
 		super();
-		this.logger = logger;
-		this.id = id;
-		logger.addLine("Start new ServerThread, id: " + id + " IP: " + socket.getInetAddress().getHostAddress());
+		this.logger = logger;		
+		logger.addLineAndPrint("Start new ServerThread, id: " + id + " IP: " + socket.getInetAddress().getHostAddress());
 		parser = new HttpParser(logger);
 		HeaderProperty = new Properties();
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
@@ -68,13 +66,23 @@ class ServerThread extends Thread{
 			scanner = new Scanner( commandSocket.getInputStream());
 			printWriter = new PrintWriter(commandSocket.getOutputStream());
 		} catch (IOException e) {
-			logger.addLine(TAG + id +"Error at scanner creation: "+e.getMessage());
+			logger.addLineAndPrint(TAG + id +"Error at scanner creation: "+e.getMessage());
 			e.printStackTrace();
 		}
 		// the thread start itself 
 		start();
 	}	
 
+	private int getNextFreePort() {
+		int nextPort = FirstPort + portOffset;
+		++portOffset;
+		if (nextPort > MaxPort) {
+			nextPort = FirstPort;
+			portOffset = 1;
+		}
+		return nextPort;
+	}
+	
 	protected int createSocket() {		
 		int port = -1;
 		try {
@@ -82,9 +90,8 @@ class ServerThread extends Thread{
 			serverSocket = new ServerSocket(port);			
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
-
 		} catch (Exception e) {			
-			logger.addLine(TAG+id+" ERROR in run() " + e.getMessage());
+			logger.addLineAndPrint(TAG + id + " ERROR in run() " + e.getMessage());
 			return -1;
 		}
 		return port;
@@ -94,7 +101,7 @@ class ServerThread extends Thread{
 		try {   
 			while (true) {
 				if  (scanner.hasNextLine()){
-					logger.addLine(TAG+id+" Get message from client");
+					logger.addLineAndPrint(TAG+id+" Get message from client");
 					StringBuffer buffer = new StringBuffer();
 					String readedLine = scanner.nextLine();
 					buffer.append(readedLine);
@@ -110,12 +117,12 @@ class ServerThread extends Thread{
 					if (parser.getMethod().equals("GET")) {		
 						int port = 0;
 						do {
-							port = createSocket();							
+							port = createSocket();
 							HeaderProperty.put("PORT", Integer.toString(port));
 						} while (port == -1);
-
-						makeFileHandlingThread(port);
-
+						
+						makeTestHandlingThread(port);
+						
 					} else if (parser.getMethod().equals("STOP")) {
 						for (ConnectionInstance instance : connectionInstances ) {
 							instance.stop();
@@ -128,44 +135,37 @@ class ServerThread extends Thread{
 				}
 			}
 		} catch (Exception e) {            
-			logger.addLine("ERROR in run() " + e.getMessage()+" ( id: " + id+" )");
+			logger.addLineAndPrint("ERROR in run() " + e.getMessage()+" ( id: " + id+" )");
 		} 
 	}
-
-	private int getNextFreePort() {
-		int nextPort = FirstPort+portOffset;
-		++portOffset;
-		if (nextPort > MaxPort) {
-			nextPort = FirstPort;
-			portOffset = 0;
-		}
-		return nextPort;
-	}
-
+	
 	private void addConnectionInstance(ConnectionInstance instance) {
 		connectionInstances.add(instance);
 		Future<Integer> future = pool.submit(instance);
 		threadSet.add(future);
 	}
 
-	private boolean makeFileHandlingThread(int port) {
-		boolean retValue = true;
+	private boolean checkAndSendResponse(final int port) {
 		if (port <= 0) {
-			logger.addLine("Error: Invalid port number!");
+			logger.addLineAndPrint("Error: Invalid port number!");
 			parser.setErrorText("Invalid port number");
-			retValue = false;
+			return false;
 		}
 
 		if (!parser.getHeadProperty("MODE").equals("DL") && !parser.getHeadProperty("MODE").equals("UL") ||
 				!parser.getHeadProperty("CONNECTION").equals("TCP") && !parser.getHeadProperty("CONNECTION").equals("UDP")) {
-			logger.addLine("ERROR: wrong connction parameter received!");
+			logger.addLineAndPrint("ERROR: wrong connction parameter received!");
 			parser.setErrorText("Wrong connction parameter received");
-			retValue = false;
+			
 		}
 		sendResponse();
+		return true;
+	}
+	
+	private void makeTestHandlingThread(final int port) {
 
-		if (retValue == false)	{
-			return false;
+		if (checkAndSendResponse(port) == false)	{
+			return ;
 		}
 
 		try {
@@ -173,24 +173,25 @@ class ServerThread extends Thread{
 			serverSocket.setSoTimeout(0);
 		}
 		catch (SocketTimeoutException e) {
-			logger.addLine(TAG+e.getMessage());
+			logger.addLineAndPrint(TAG+e.getMessage());
 			e.printStackTrace();
 		}
 		catch (SocketException e) {
-			logger.addLine(TAG+e.getMessage());			
+			logger.addLineAndPrint(TAG+e.getMessage());			
 			e.printStackTrace();
 		}
 		catch (IOException e) {
-			logger.addLine(TAG+e.getMessage());
+			logger.addLineAndPrint(TAG+e.getMessage());
 			e.printStackTrace();
 		}
-
+		
 		reporter = new ReportSender(logger, ReportPort);
-
+		
 		if (reporter.isSocketConnected() == false) {
 			reporter = null;
-			return false;
+			return;
 		}
+		
 		int bufferSize = 1000; // 8kb
 		String bufferString = parser.getHeadProperty("URI");
 		if (bufferString != null) {
@@ -229,7 +230,6 @@ class ServerThread extends Thread{
 				}
 			}
 		}		
-		return true;
 	}
 
 	private boolean sendResponse() {
@@ -263,7 +263,7 @@ class ServerThread extends Thread{
 			sendMessageToClient(responseText);
 			return true;
 		}catch (Exception e){
-			logger.addLine("response error: " + e.getMessage());
+			logger.addLineAndPrint("response error: " + e.getMessage());
 		}
 		return false;
 	}
@@ -287,43 +287,28 @@ public class HttpServer {
 
 	private static ServerSocket serverSocket = null;
 	private static Logger logger = null;
-	private static int activeConnections;
 
-
-	public static  void decreaseConnectounCount() {
-		if  (activeConnections > 0) {
-			--activeConnections;
-			logger.addLine(TAG+" decrease connections: "+ activeConnections);
-		}
-	}
-
-	public static void inreaseConnectionCount() {		
-		++activeConnections;
-		logger.addLine(TAG+" increase connections: "+ activeConnections);
-	}
-
-	public static void main(String[] args) {
-		activeConnections = 0;
-		logger = new Logger("");		
+	public static void main(String[] args) {		
+		logger = new Logger("server.log");		
 		try	{
-			serverSocket = new ServerSocket(SERVER_PORT);			
+			serverSocket = new ServerSocket(SERVER_PORT);	
 			while (true) {
 				// wait for client connection
+				logger.addLineAndPrint(TAG+"Waiting for connection on port:"+ SERVER_PORT +"\n");
 				Socket socket = serverSocket.accept();	
 				//figure out what is the ip-address of the client
 				InetAddress client = socket.getInetAddress();
 				//and print it to log
-				logger.addLine(TAG+client + " connected to server.\n");
+				logger.addLineAndPrint(TAG+client + " connected to server.\n");
 				// start thread for handling a client
-				new Thread(new ServerThread(logger, socket, activeConnections));
-				inreaseConnectionCount();
+				new Thread(new ServerThread(logger, socket));				
 			}
 		} catch (Exception e) {
 			System.out.println("Thread hiba: " + e.getMessage());
 		} finally {
 			try {
 				serverSocket.close();
-				logger.addLine("Server socket closed");
+				logger.addLineAndPrint("Server socket closed");
 				logger.closeFile();
 				System.out.println("Connection closed");
 			} catch (Exception e) {

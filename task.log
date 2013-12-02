@@ -13,8 +13,6 @@ General:
 
 - test name search
 
-- snapshot from real phone?
-
 Test Activity
 - default values of protocol and direction not set
 - log havto be look similar then at the main activity

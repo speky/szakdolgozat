@@ -86,6 +86,12 @@ public class Logger {
 		}
 		return false;
 	}
+	
+	public boolean addLineAndPrint(final String logText) {
+		boolean ret = addLine(logText);
+		System.out.print(logText + "\n");
+		return ret;		
+	}	
 
 	public boolean deleteLogFile(){
 		if (file != null){

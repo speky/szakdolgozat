@@ -934,6 +934,29 @@ Szoftver feltételek:
 \end_layout
 
 \begin_layout Standard
+A szerver oldali program fordításához és futtatásához szükséges a JDK (Java
+ Developer Kit) legalább 1.6-os verziója, itt elérhető: 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
+target "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
+
+\end_inset
+
+.
+ Valamint az Apache ant, amit innen tölthetünk le: 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://ant.apache.org/manual/install.html"
+target "http://ant.apache.org/manual/install.html"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
 A feltelepített programban be kell állítani a szerver oldali számítógép
  IP címét, ha router illetve egyéb más hálózati eszköz is érintett a kommunkáció
 ban, ugy biztosítani kell, hogy az applikáció kommunikálni tudjon a 4500-as
@@ -1026,7 +1049,78 @@ Program használatának bemutatása
 Program telepítése
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Subsubsection
+Szerver oldali program futtatása
+\end_layout
+
+\begin_layout Standard
+A program fordításához és futtatásához szükséges legalább a JDK 1.6 verziója.
+ A 
+\series bold
+HttpServer
+\series default
+ mappába található ant 
+\shape italic
+build.xml 
+\shape default
+segítségével könnyedén fordíthatjuk és futtathatjuk az alkalmazást:
+\end_layout
+
+\begin_layout Description
+- Egy tetszőleg linux terminálban menjünk a HttpServer könyvtárba.
+\end_layout
+
+\begin_layout Description
+- Ezután az Apache ant program segítségével tudjuk fordítani az alaklamazást.
+ Ezt a lépést csak egyszer kell végrehajtani, későbbiekben elég lesz csak
+ a futtatásnál leírtakat elvégezni.
+ A terminálban az 
+\shape italic
+ant
+\shape default
+ parancsot kell kiadni és a program fordítása elkezdődik.
+\end_layout
+
+\begin_layout Description
+- Majd a sikeres fordítás végeztével az 
+\shape italic
+ant run 
+\shape default
+parancsal futtathatjuk a programot.
+\end_layout
+
+\begin_layout Description
+- A program indulása után ezt az üzenetet fogja látni:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Htttp szerver indítása
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
 Telepítés a mobileszközre
 \end_layout
 
@@ -3682,17 +3776,108 @@ Közös osztályok
 Szerver oldal osztályai
 \end_layout
 
+\begin_layout Description
+HttpServer a szerver oldali lakalmazás fő osztálya.
+ Ez tartalmazza a 
+\shape italic
+main
+\shape default
+ metódust, ami az alkalmazás belépési pontja.
+ Az indulása után létrehoz egy 
+\shape italic
+ServerSocket
+\shape default
+ objektumot és az előre definiált 4500 porton vár a kliens (mobilegység)
+ csatlakozására.
+ A ServerSocket accept metódusa blokkolja a futást, amíg nem kapcsolódik
+ a kliens, amint ez megtörtént létrhoz egy úh szálat (Thread), amiben a
+ ServerThread osztály egy példánya fog futni.
+ Jelen állapotában csak egy mobilt tud kisozlgálni az opsztály, de könnyedén
+ modosítható, hogy több eszközt is ki tudjon sozlgálni.
+\end_layout
+
+\begin_layout Description
+ServerThread osztály szolgálja ki a klienstől érkező kéréseket.
+ A HttpServertől kapott socket-en keresztül fognak érkezni a klienstől a
+ kérések, ezek kezelésére kell egy Scanner objketum, amit a konstruktorba
+ hozok létre a socket 
+\shape italic
+getInputStream()
+\shape default
+ metódusának segítségével.
+ A válaszok küldésére egy PrintWriter objektumot használok.
+ A Thread osztály leszármazottjaként megörökli a 
+\shape italic
+run
+\shape default
+ metódust, amit felül kell definálni, az ott leírt parancso futnak a szál
+ objektumon meghívott 
+\shape italic
+start 
+\shape default
+függvény után.
+ Az osztály a konstruktorában hívja meg saját magára a start függvényt.
+ A kliens és a szerver HTTP*/1.0 protokol alapján kommunikálnak egymással.
+ A kliens kezdeményezi a kommunikációt, így a 
+\shape italic
+run 
+\shape default
+metódus kezdetén megvárom a kliens üzenetét.
+ Minden üzenetnek 
+\begin_inset Quotes sld
+\end_inset
+
+
+\backslash
+nEND" kell végződnie.
+ Ezután a 
+\shape italic
+HttpParser
+\shape default
+ osztály 
+\shape italic
+parseHttpMessage 
+\shape default
+függvényének segítségével értelmezi a program az üzenetet.
+ Két féle üzenetet fogad a szerver: az egyik a 
+\begin_inset Quotes sld
+\end_inset
+
+GET
+\begin_inset Quotes srd
+\end_inset
+
+ a másik pedig a 
+\begin_inset Quotes sld
+\end_inset
+
+STOP
+\begin_inset Quotes srd
+\end_inset
+
+, minden más esetben hibaüzenetet küld vissza a kliensnek válaszul.
+ GET üzenet esetén létrehozunk egy ServerSocketet-et a következő szabad
+ portszámmal - ez 5500 és 5600 között vehet fel értéket- és 5 másodpercig
+ vár, hogy a kliens oldalon indított teszt csatlakozzon hozzá, ezután a
+ 
+\shape italic
+makeTestHandlingThread
+\shape default
+ metódus ellenőrzi a kapott paramétereket és küld választ a kliensnek, mely
+ tartalmazza a test port számát.
+ Hiba esetén error üzenetet küld vissza a kliensnek.
+ A kliens csatlakozása után inicializálódik a ReportSender objektum, későbbiekbe
+n ezen keresztül tud jelentést küldeni a tesztről az applikáció.
+ Végül
+\end_layout
+
 \begin_layout Subsubsection
 Mobil alkalmazás osztályai
 \end_layout
 
-\begin_layout Subsubsection*
-GPSService 
-\end_layout
-
-\begin_layout Standard
-Ez a szolgáltatás az Androidüos Service osztályból öröklődik és megvelósítja
- a LocationListener interfészt.
+\begin_layout Description
+GPSService Ez a szolgáltatás az Androidüos Service osztályból öröklődik
+ és megvelósítja a LocationListener interfészt.
  A szolgáltatás indításakor az Application objektumban beállítódik, hogy
  fut a GPS szolgáltatás, majd az 
 \shape italic
@@ -3720,13 +3905,10 @@ onLocationChanged
  Az osztály megszűnésekor leiratkozik a pozíció frissítési szolgáltatásról.
 \end_layout
 
-\begin_layout Subsubsection*
-PhoneStateListenerService
-\end_layout
-
-\begin_layout Standard
-Az Android API által nyújtott dinamikus, időben változó telefon és hálózati
- információk lekérdezésére vonatkozó szolgáltatásokat valóstom meg itt.
+\begin_layout Description
+PhoneStateListenerService Az Android API által nyújtott dinamikus, időben
+ változó telefon és hálózati információk lekérdezésére vonatkozó szolgáltatásoka
+t valóstom meg itt.
  A 
 \shape italic
 connectivityReceiver
@@ -3745,12 +3927,9 @@ t, így kap értesítést az applikáció az adatkapcsolat (data connection) ál
 ába kerül beregisztrálásra.
 \end_layout
 
-\begin_layout Subsubsection*
-HttpService
-\end_layout
-
-\begin_layout Standard
-Az alkalamazás egyik kulcs osztálya, nagy szerepe van a teszt futtatás során.
+\begin_layout Description
+HttpService Az alkalamazás egyik kulcs osztálya, nagy szerepe van a teszt
+ futtatás során.
  A 
 \shape italic
 IntentService 
@@ -3764,12 +3943,9 @@ onHandleInstance
  
 \end_layout
 
-\begin_layout Subsubsection*
-DriveTestApp
-\end_layout
-
-\begin_layout Standard
-Ez az Application objektum, ez indul el legelőször a program futtatása során.
+\begin_layout Description
+DriveTestApp Ez az Application objektum, ez indul el legelőször a program
+ futtatása során.
  Azon paraméterek tárolódnak itt, melyeket több Activity is használ.
  Itt történik az adatbázisba való irás is és azokat az adatokat, melyek
  nem a mérésből származnak (hálózat típúsa, jel erősség, stb) itt tárolódnak
@@ -3778,23 +3954,15 @@ Ez az Application objektum, ez indul el legelőször a program futtatása során
  állapota, ami a teszt futtatása előtt ellenőrzésre kerűl.
  Ezen információkat a megfelelő szolgáltatások adják, melyek korábban említésre
  kerültek.
- 
-\end_layout
-
-\begin_layout Standard
-A DriveTestApp obejektum értesűl a változásokról a szolgáltatásoktól és
+ A DriveTestApp obejektum értesűl a változásokról a szolgáltatásoktól és
  értesíti a beregisztrált observer objektumokat.
  
 \end_layout
 
-\begin_layout Subsubsection*
-MainActivity
-\end_layout
-
-\begin_layout Standard
-Az alakalmazás fő (main) activity objektuma, vagyis ez az objektum töltődik
- be az alkaalmazás indulásakor és az ehhez tartozó felület fog megjelenni
- a képernyőn.
+\begin_layout Description
+MainActivity Az alakalmazás fő (main) activity objektuma, vagyis ez az objektum
+ töltődik be az alkaalmazás indulásakor és az ehhez tartozó felület fog
+ megjelenni a képernyőn.
  A képernyőn megjelenő paraméter lista két fő részből tevődik össze.
  A telefon adataiból - ezek nagyrészt statikus adatok -, melyeket egyszer
  kérdez le az osztály a TelephonyManager segítségével, ezek a phoneDataList
@@ -3804,12 +3972,9 @@ Az alakalmazás fő (main) activity objektuma, vagyis ez az objektum töltődik
  Ezek értékeit a PhonestateListenerService-től kapja az osztály.
  Ehhez megvalósítja a PhoneStateObserver interfészt és beregisztrálja magát
  az application objektumba, mint observer (megfigyelő) objektum: ((DriveTestApp)
-getApplication()).registerPhoneStateObserver(this); 
-\end_layout
-
-\begin_layout Standard
-A SimpleAdapter segítségével lehet táblázatos formába rendezni az adatokat,
- ehhez szükséges egy layout xml fájl, ami leírja az elrendezést.
+getApplication()).registerPhoneStateObserver(this); A SimpleAdapter segítségével
+ lehet táblázatos formába rendezni az adatokat, ehhez szükséges egy layout
+ xml fájl, ami leírja az elrendezést.
  A két listához tartozó adapter neve phoneDataAdapter és networkDataAdapter.
  A 
 \shape italic
@@ -3825,11 +3990,7 @@ notifyDataSetChanged
  A SeparatedListAdapter segédosztály segítségével jeleníthetjük meg ezeket
  a listákat fejléccel, összefűzve.
  Ennek segítségével rendelhetünk különböző színt a lista soraihoz.
- 
-\end_layout
-
-\begin_layout Standard
-Az osztály 
+ Az osztály 
 \shape italic
 OnCreate 
 \shape default
@@ -3853,10 +4014,7 @@ initNetworkData
 
  jel írodik be, mely rögtön megváltozik, ha az adott paramétert érintő változás
  következik be.
-\end_layout
-
-\begin_layout Standard
-Az osztály OnPause esemény bekövetkeztekor aremovePhoneStateObserver metódus
+ Az osztály OnPause esemény bekövetkeztekor aremovePhoneStateObserver metódus
  segítségével kitörölteti magát a PhoneStateObeserverek listájáról.
  Ez az esemény akkor következik, be mikor a felhasnzáló másik activityre
  vált át vagy bezárja az applikációt.
@@ -3865,18 +4023,16 @@ Az osztály OnPause esemény bekövetkeztekor aremovePhoneStateObserver metódus
  kap az értékek változásokról.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Description
 TestActivity
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Description
 
 \series bold
 Export Activity
-\end_layout
-
-\begin_layout Standard
-A program által generált teszt eredények fájlba menthetóek CSV formátumban
+\series default
+ A program által generált teszt eredények fájlba menthetóek CSV formátumban
  ennek az Activity-nek a segítségével.
  A 
 \begin_inset Quotes sld
@@ -3916,7 +4072,7 @@ metódus hajtódik végre, ahol leellenőrzi a program a beállított paraméter
  osztály segítségével lett megvalósítva.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Description
 PreferenceActivity
 \end_layout
 
