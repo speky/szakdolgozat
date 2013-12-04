@@ -247,16 +247,10 @@ class ServerThread extends Thread{
 				return false;
 			}
 
-			if (!(parser.getMethod().equals("PING") || parser.getMethod().equals("GET"))) {
+			if (!(parser.getMethod().equals("GET"))) {
 				String responseText = response.setResponseText(HttpParser.HTTP_BADREQUEST, HttpResponse.MIME_PLAINTEXT, null);
 				sendMessageToClient(responseText);
 				return false;
-			}
-
-			if (parser.getMethod().equals("PING")) {
-				String responseText = response.setResponseText("200 PONG", null, null);			
-				sendMessageToClient(responseText);
-				return true;
 			}
 
 			String responseText = response.setResponseText(HttpParser.HTTP_OK, HttpResponse.MIME_PLAINTEXT, HeaderProperty);

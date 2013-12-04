@@ -3698,8 +3698,12 @@ A program architektúrája
 \end_layout
 
 \begin_layout Standard
-alrendszerek, rétegek kapcsolatainak bemutatása, a fentebb definiált komponensek
- összekapcsolásának terve
+A szerver oldali és a mobil alaklamazás is használja a 
+\shape italic
+HttpFileHandler.jar
+\shape default
+ fájlt, ami tartalmazza a közösen használt osztályokat.
+ Ezen osztályok nagy része a tesztek futtatásában játszik szerepet.
 \end_layout
 
 \begin_layout Subsection
@@ -3772,6 +3776,76 @@ Osztályok bemutatása
 Közös osztályok
 \end_layout
 
+\begin_layout Description
+ConnectionInstance megvalósítja a Java 
+\shape italic
+Callable 
+\shape default
+interfészt.
+ Ez szolgál ősosztályként a TCP-s és UDP-s osztályoknak.
+\end_layout
+
+\begin_layout Description
+HttpParser a HTTP üzenetek feldolgozását végzi.
+ A 
+\shape italic
+parseHttpMessage
+\shape default
+ metódusának kell átadni az üzenetet és függvény true (igaz) értékkel tér
+ vissza, ha sikeres volt a feldolgozás.
+ Egyébként az üzenet szintaktikai vagy szemantikai hibás, amitől a nem tudja
+ értelmezni a paraméterként kapott szöveget.
+ A feldolgozott értékek Java 
+\shape italic
+Properties
+\shape default
+ típusú attribútumokba kerülnek eltárolásra.
+\end_layout
+
+\begin_layout Description
+Logger
+\end_layout
+
+\begin_layout Description
+MessageI
+\end_layout
+
+\begin_layout Description
+ReceiverReportI
+\end_layout
+
+\begin_layout Description
+ReportI
+\end_layout
+
+\begin_layout Description
+ReportReceiver
+\end_layout
+
+\begin_layout Description
+ReportSender
+\end_layout
+
+\begin_layout Description
+TCPReceiver
+\end_layout
+
+\begin_layout Description
+TCPSender
+\end_layout
+
+\begin_layout Description
+UDPReceiver
+\end_layout
+
+\begin_layout Description
+UDPSender
+\end_layout
+
+\begin_layout Description
+Utility
+\end_layout
+
 \begin_layout Subsubsection
 Szerver oldal osztályai
 \end_layout
@@ -3806,12 +3880,16 @@ getInputStream()
 \shape default
  metódusának segítségével.
  A válaszok küldésére egy PrintWriter objektumot használok.
- A Thread osztály leszármazottjaként megörökli a 
+ A Java
+\shape italic
+Thread
+\shape default
+(szál) osztályának leszármazottjaként megörökli a 
 \shape italic
 run
 \shape default
- metódust, amit felül kell definálni, az ott leírt parancso futnak a szál
- objektumon meghívott 
+ metódust, amit felüldefinál.
+ Az ott leírt parancsok futnak a szál objektumon meghívott 
 \shape italic
 start 
 \shape default
@@ -3829,7 +3907,7 @@ metódus kezdetén megvárom a kliens üzenetét.
 
 
 \backslash
-nEND" kell végződnie.
+nEND" kell végződnie, addig fűzi össze soronként a klienstől kapott üzeneteket.
  Ezután a 
 \shape italic
 HttpParser
@@ -3856,6 +3934,11 @@ STOP
 \end_inset
 
 , minden más esetben hibaüzenetet küld vissza a kliensnek válaszul.
+ Az válaszüzenetet a 
+\shape italic
+sendResponse 
+\shape default
+metódus segítségével küldi ki az applikáció.
  GET üzenet esetén létrehozunk egy ServerSocketet-et a következő szabad
  portszámmal - ez 5500 és 5600 között vehet fel értéket- és 5 másodpercig
  vár, hogy a kliens oldalon indított teszt csatlakozzon hozzá, ezután a
@@ -3868,7 +3951,30 @@ makeTestHandlingThread
  Hiba esetén error üzenetet küld vissza a kliensnek.
  A kliens csatlakozása után inicializálódik a ReportSender objektum, későbbiekbe
 n ezen keresztül tud jelentést küldeni a tesztről az applikáció.
- Végül
+ Végül a beállításoknak megfelelően létrejön és inicializálódik a megfelelő
+ teszt osztály, amit egy 
+\shape italic
+ExecutorService
+\shape default
+ objektumba tároljuk, mely segítségével visszajelzést kaphatunk az aszinkron
+ futó szálak befejeződéséről és visszatérés értékükről.
+ A ExecutorService 
+\shape italic
+pool
+\shape default
+ metódusának hívsakor a szál futása is elkezdődik.
+ STOP típusú üzenet akkor érkezik, mikor a felhasználó leállítja a tesztfuttatás
+t.
+ Ilyenkor az összes futó szál 
+\shape italic
+stop
+\shape default
+ metódusa meghívódik és leáll a futásuk, beleértve a 
+\shape italic
+report
+\shape default
+ osztályt is.
+ 
 \end_layout
 
 \begin_layout Subsubsection
