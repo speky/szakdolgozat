@@ -223,8 +223,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	public void stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
-		isTestRunning = false;
-		clearTestMessage();		
+		isTestRunning = false;				
 		//		dataStorage.close();
 	}
 

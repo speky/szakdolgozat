@@ -15,8 +15,9 @@ General:
 
 Test Activity
 - default values of protocol and direction not set
-- log havto be look similar then at the main activity
 - log file saving
+- time stamp in the logs
+- store the server connection socket
 
 Map Activity
 - if the test is running then its data should be visible on the map

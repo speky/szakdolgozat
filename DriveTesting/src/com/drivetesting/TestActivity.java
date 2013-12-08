@@ -1,6 +1,11 @@
 package com.drivetesting;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,9 +21,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView.Tokenizer;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SimpleAdapter;
 
 import com.drivetesting.observers.TestObserver;
 
@@ -35,12 +43,17 @@ public class TestActivity extends Activity implements TestObserver {
 	private RadioGroup typeGroup = null;
 	private int typeGroupIndex = 0;
 		
-	private EditText text = null;
-	
 	private ProgressBar progressBar = null;
 	
 	private SharedPreferences sharedPreferences;
-		
+	
+	private String[] from = new String[] { "value"};
+	private int[] to = new int[] {R.id.column_value};
+
+	private List<HashMap<String, String>> messageList  = null;
+	private SeparatedListAdapter separatedAdapter = null;
+	private SimpleAdapter messageAdapter = null;
+	
 	private DriveTestApp application = null;
 	
 	@Override
@@ -55,6 +68,16 @@ public class TestActivity extends Activity implements TestObserver {
 				
 		setContentView(R.layout.activity_test);
 
+		messageList  = new ArrayList<HashMap<String, String>>();					
+		messageAdapter = new SimpleAdapter(this, messageList, R.layout.grid_test, from, to);
+		// create list and custom adapter  
+		separatedAdapter = new SeparatedListAdapter(this);
+		separatedAdapter.addSection(this.getString(R.string.message_header), messageAdapter);		
+		ListView list = (ListView)findViewById(R.id.listview);
+		list.setAdapter(separatedAdapter);		
+		messageAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+		
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 
 		directionGroup = (RadioGroup)findViewById(R.id.dir_group);
@@ -62,9 +85,6 @@ public class TestActivity extends Activity implements TestObserver {
 
 		typeGroup = (RadioGroup)findViewById(R.id.type_group);
 		typeGroupIndex = typeGroup.getCheckedRadioButtonId();
-		
-		text = ((EditText)findViewById(R.id.editOutput));
-		text.setText("") ;
     	
 		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -164,8 +184,29 @@ public class TestActivity extends Activity implements TestObserver {
 		findViewById(R.id.bt_stopTest).setEnabled(false);
 	}
 
+	private void setMessage(String message){
+		messageList.clear();		
+		StringTokenizer tokens = new StringTokenizer(message, "\n");
+		
+		while (tokens.hasMoreTokens()) {
+			String line = tokens.nextToken();
+			// add new element
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("value", line);
+			messageList .add(map);
+		}
+		messageAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	
+	private void deleteMessages() {
+		messageList.clear();
+		messageAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	
 	public void onClearClick(View view) {
-		text.setText(" ".toCharArray(), 0, 1);
+		deleteMessages();
 		application.clearTestMessage();
 	}
 	
@@ -208,7 +249,7 @@ public class TestActivity extends Activity implements TestObserver {
 		
 		load();
 		
-		text.setText(application.getTestMessage());
+		setMessage(application.getTestMessage());
 		
 		if (application.isTestRunning()) {
 			progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -221,7 +262,7 @@ public class TestActivity extends Activity implements TestObserver {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
-		editor.putString(MESSAGE, text.getText().toString());
+	//	editor.putString(MESSAGE, messageList.get(0).get("value"));
 		editor.putBoolean(STARTON, findViewById(R.id.bt_startTest).isEnabled());
 		editor.commit();
 	}
@@ -233,7 +274,7 @@ public class TestActivity extends Activity implements TestObserver {
 		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
 		directionGroup.check(directionGroupIndex);
 		
-		text.setText(sharedPreferences.getString(MESSAGE, ""));
+		setMessage(sharedPreferences.getString(MESSAGE, ""));
 		
 		Boolean isStarted = sharedPreferences.getBoolean(STARTON, true);
 		findViewById(R.id.bt_startTest).setEnabled(isStarted);
@@ -276,11 +317,12 @@ public class TestActivity extends Activity implements TestObserver {
 
 	@Override
 	public void update(int action, String str) {
-    	text.setText(str) ;
-    	if (action == 1) {
-    		progressBar.setVisibility(ProgressBar.VISIBLE);    		
-    	}  	else {
-    		progressBar.setVisibility(ProgressBar.INVISIBLE);    		
+		setMessage(str) ;
+    	// error happened or test ended
+    	if (action == 0) {  		
+    		progressBar.setVisibility(ProgressBar.INVISIBLE);
+    		findViewById(R.id.bt_startTest).setEnabled(true);
+    		findViewById(R.id.bt_stopTest).setEnabled(false);    		
     	}		
 	}
 

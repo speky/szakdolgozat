@@ -30,5 +30,6 @@
     <string name="testid">Test ID:</string>
     <string name="settestid">Set Test ID</string>
     <string name="choosetestid">Choose Test ID</string>
+    <string name="message_header">Messages</string>
     
 </resources>

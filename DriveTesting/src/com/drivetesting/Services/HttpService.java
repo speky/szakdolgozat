@@ -98,11 +98,11 @@ public class HttpService extends IntentService implements ReportI {
 		} catch (UnknownHostException e) {
 			errorMessage  = "Test socket creating problem";
 			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
-			sendMessage("error", errorMessage);			
+			//sendMessage("error", errorMessage);			
 		} catch (IOException e) {
 			errorMessage = "Test socket creating problem (I/O)";
 			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
-			sendMessage("error", errorMessage);			
+			//sendMessage("error", errorMessage);			
 		}
 		return null;
 	}
@@ -137,7 +137,7 @@ public class HttpService extends IntentService implements ReportI {
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
-			socket = new Socket(serverAddress, ServerPort);
+			socket = createSocket(ServerPort);			
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
 
