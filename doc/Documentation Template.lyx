@@ -3782,7 +3782,7 @@ ConnectionInstance megvalósítja a Java
 Callable 
 \shape default
 interfészt.
- Ez szolgál ősosztályként a TCP-s és UDP-s osztályoknak.
+ Ez szolgál ősosztályként a TCP és UDP teszt osztályoknak.
 \end_layout
 
 \begin_layout Description
@@ -3791,43 +3791,138 @@ HttpParser a HTTP üzenetek feldolgozását végzi.
 \shape italic
 parseHttpMessage
 \shape default
- metódusának kell átadni az üzenetet és függvény true (igaz) értékkel tér
+ metódusnak kell átadni az üzenetet és a függvény true (igaz) értékkel tér
  vissza, ha sikeres volt a feldolgozás.
- Egyébként az üzenet szintaktikai vagy szemantikai hibás, amitől a nem tudja
+ Egyébként az üzenet szintaktikai vagy szemantikai hibás, amitől nem tudja
  értelmezni a paraméterként kapott szöveget.
  A feldolgozott értékek Java 
 \shape italic
 Properties
 \shape default
  típusú attribútumokba kerülnek eltárolásra.
+ A 
+\shape italic
+methodProperty
+\shape default
+ tartalmazza az üzenet típusát, egy paramétert, ami a buffer méretét adja
+ meg vagy egy azonosító tartalmaz, és a HTTP verziót, a 
+\shape italic
+headerProperty 
+\shape default
+pedig az opcionális paramétereket tartalmazza.
+ 
 \end_layout
 
 \begin_layout Description
-Logger
+Logger osztály segítségével különféle üzeneteket menthetünk el egy fájlba.
+ A programban főleg a hibaüzeneteket eltárolásásra használom, ami a hiba
+ keresésést könnyíti meg.
+ Az üzenet a sztenderd kimenetre is kiiratható a 
+\shape italic
+addLineAndPrint 
+\shape default
+metódus segítségével.
+ Ez utóbbit szerver oldali komponensben használható ki, mert ott a parancsorban
+ is olvashatóak ezek az üzenetek.
+ A log fájl nevét a konstruktorban adhatjuk meg, alapértelmezetten 
+\begin_inset Quotes sld
+\end_inset
+
+log.txt" névvel fog létrejönni a fájl a bináris fájl mellett.
+ Az addLine metódus hívásával az átadott szöveg ki fog íródni a fájlbe és
+ az elejére egy időbélyeg fog hozzáadódni.
 \end_layout
 
 \begin_layout Description
-MessageI
+MessageI egy interfész, ami egyetlen sendReportMessage függgvény fejlécét
+ tartalmazza.
+ Ennek segítségével tud a TCPSender és UDPSender osztály jelentést küldeni
+ - a ReportSender osztályon keresztül - a teszt és a csomagok állapotáról
+ a ReportReceiver osztály egy példányának.
 \end_layout
 
 \begin_layout Description
+ReceiverReportI a ReportReceiver osztály interfésze, melyet jelentések küldésére
+ használ.
+ Külön metódus tartozik a TCP és UDP teszthez kapcsolódó jelentéshez.
+ 
+\end_layout
+
+\begin_layout Description
+ReportI interfészt megvalósítja a HttpService osztály és segítségével tud
+ a ReportReceiver osztály példánya üzenetet továbbitani, illetve küldeni
+ a Test Activity felé a felhasználónak.
+ A 
+\shape italic
+sendMessage
+\shape default
+ metódussal lehet üzenetet küldeni.
+\end_layout
+
+\begin_layout Description
+ReportReceiver osztály példánya a mobilkészüléken fut - egy külön szálon
+ - és fogadja a jelentéseket, riportokat, majd továbbítja a HttpService
+ példánynak.
+ A TCP- és UDPReceiver osztályoktól kapott értékek a 
+\shape italic
 ReceiverReportI
+\shape default
+ interfészen keresztül a 
+\shape italic
+setReceivedBytes 
+\shape default
+metódus segítségével továbbítódnak, ha a receiver (fogadó) osztálypéldányok
+ a mobil alakalmazáson futnak - azaz a mobilkészülék a fogadó, így a mobil
+ letöltési sebessségét vizsgljuk.
+ Egyébként a szerver által fogadott csomagokról a ReportSender osztálytól
+ kap üzenetet, amit a 
+\shape italic
+receiveReport
+\shape default
+ függvényben található Scanner objektum vár és olvas be.
+ A 
+\shape italic
+parseReport
+\shape default
+ és 
+\shape italic
+checkProperty 
+\shape default
+metódusok értelmezik a kapott üzenetet és küldenek jelentést a HttpService-nek
+ a ReportI interfészen keresztűl, ahogy a korábban említett 
+\shape italic
+setReceivedBytes 
+\shape default
+függvény
+\shape italic
+.
+ 
+\shape default
+A sebesség adatok is itt kerülnek kiszámolásra a calcSpeed függvényben.
+ 
 \end_layout
 
 \begin_layout Description
-ReportI
+ReportSender a szerver oldali programban fut az osztály egy példánya, külön
+ szálon.
+ A megadott porton létrehoz egy ServerSocket-et, ahova a klien oldalon futó
+ ReportReceiver osztálypéldánya tud csatlakozni.
+ Ezen keresztül kap értesítést a kliens a szerver oldali csomagok érekzéséről,
+ a teszt állapotáról.
+ A sendReportMessage függvény segítségével küld HTTP üzenetet ami tartalmazza
+ a jelentés paramétereit.
+ 
 \end_layout
 
 \begin_layout Description
-ReportReceiver
-\end_layout
-
-\begin_layout Description
-ReportSender
-\end_layout
-
-\begin_layout Description
-TCPReceiver
+TCPReceiver fogadja a TCP típusú teszt során a TCP csomagokat és számolja
+ a kapott üzeneteket és azok méretét és erről jelentést küld egy előre megadott
+ idő intervallumonként, ezt a 
+\shape italic
+setReportInterval
+\shape default
+ függvény segítségével lehet megadni.
+ 
 \end_layout
 
 \begin_layout Description

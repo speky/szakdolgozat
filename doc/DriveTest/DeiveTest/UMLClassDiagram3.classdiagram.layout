@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="UMLClassDiagram3">
+  <logicalClassDesignerModelMoniker Id="b5476dc6-6dbb-41a9-aad7-a3e4baad4745" />
+  <nestedChildShapes>
+    <classShape Id="ccdb3461-f436-4345-aa09-0047daffa495" absoluteBounds="0.5, 0.625, 3.375, 5.2265623509883872" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="7cb2a492-a8b7-45c9-9482-30151fda0f8b" LastKnownName="DataStorage" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="e348ad95-a581-4639-9763-d5e126e559d4" absoluteBounds="0.515, 1.0150000000000001, 3.3449999999999998, 2.9238280331095057" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="23794e02-d4b7-4b69-a84a-5655f66b1165" absoluteBounds="0.515, 3.9488280331095056, 3.3449999999999998, 1.8027343178788819" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3a0ef4e8-69f9-4444-bd09-e28a02fb39ed" absoluteBounds="4.375, 2.25, 2.625, 1.3828124701976776" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="00e6b349-55f8-4458-91d7-065020cf82b9" LastKnownName="DbHelper" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="bb3c54d3-dc2a-49d1-b723-8f46377e0b03" absoluteBounds="4.39, 2.64, 2.5949999999999998, 0.2011718675494194" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="11fecb5f-53a7-490c-b2b0-42c7cc8b4716" absoluteBounds="4.39, 2.8511718675494193, 2.5949999999999998, 0.68164060264825821" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8c952135-684a-4113-9be6-9dc921bb9343" absoluteBounds="4.375, 0.5, 1.5, 0.90234373509883881" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="caa70c94-3427-4663-aa80-13de7b4f71e7" LastKnownName="SQLiteOpenHelper" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="6bd15c4c-d1e0-4e67-a431-4aa2fef02ea8" absoluteBounds="4.39, 0.89000000000000012, 1.4700000000000002, 0.2011718675494194" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="c21f58b6-4eb3-4449-aec0-d19650e1d37c" absoluteBounds="4.39, 1.1011718675494193, 1.4700000000000002, 0.2011718675494194" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <packageShape Id="1b0adb08-7e66-4e02-bd68-35a80c5c56fe" absoluteBounds="7.25, 1.25, 1.5, 1" customColor="255, 249, 230" hideQualifiedName="false">
+      <packageMoniker Id="64b59c62-5ee9-405a-afb1-0e23e337b603" LastKnownName="Package1" />
+    </packageShape>
+  </nestedChildShapes>
+</logicalClassDesignerDiagram>

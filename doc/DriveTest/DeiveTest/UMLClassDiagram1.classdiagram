@@ -1,0 +1,694 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="dd8a4a5f-0c4f-4feb-a4e9-622e48ea9378" name="HttpServer" linkedPackageId="90791101-9e66-4bf5-ac7d-7c6dad4b3ad9" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="5fa25a55-d099-498f-a836-88f4a1538765">
+      <profileInstance Id="dca4fc27-af46-4a24-8644-abf2f30746d0" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="25a7005b-7ff6-4ae2-83c1-9691f7f91528">
+      <profileInstance Id="e471412b-b7e4-49cb-8aef-e2eeaa5110d8" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="3d50d24f-9440-4ac1-aac1-f9313e8d7a3b" name="HttpServer" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="594551d6-f08a-4c50-941a-634c43429657" />
+        <targetEnds>
+          <association Id="84377420-a77d-41a8-a3ca-afe0008345ea" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="be99f79c-1ec0-4adb-9e13-878b9f8111d7" LastKnownName="ServerThread" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="85180847-98dd-4974-8ac5-ed49ddc75896" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="08d2b5a9-a9b0-4d44-b308-aeed070036e2" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="82e6dcc1-9493-478e-ae58-b19e3f0206ba" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="51de388c-3369-40e7-a944-810c6196f916" name="Lower" value="*">
+                      <elementDefinition Id="4d5ae9bc-c43e-4f4c-888e-a51e7969cda7" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="bc832654-0d19-4f1b-b6fa-7205da3ddb2a" name="Upper" value="*">
+                      <elementDefinition Id="6b70f178-16dc-4019-bf6f-2718b1d1707e" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="ceee6897-7a29-46db-8065-4025824c3d06" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="cbfcccaa-04d5-4c05-9034-7e5bc124ba4d" />
+          </association>
+        </targetEnds>
+        <ownedAttributesInternal>
+          <property Id="c84b48ac-ebc4-44ec-aa36-4552ab71dd05" name="SERVER_PORT" visibility="Private" isLeaf="false" isStatic="true" isReadOnly="true" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="de176467-0080-44ae-baf5-0a6fe136f04c" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+            </type_NamedElement>
+            <defaultValue>
+              <literalString Id="e8f6a78c-ca71-4553-9afa-8bb2d936ba15" name="DefaultValue" value="4500">
+                <elementDefinition Id="c94e6bcf-f23b-49da-8edd-634914cf2631" />
+              </literalString>
+            </defaultValue>
+          </property>
+          <property Id="c1422e1b-2fbe-4883-83a7-84ea2e124a84" name="serverSocket" visibility="Private" isLeaf="false" isStatic="true" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="0daf75c2-d156-422e-81a0-f6d8af0da7ca" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="10df4e4d-1f61-4e4e-b8c2-e583bdbb1b5d" LastKnownName="ServerSocket" />
+            </type_NamedElement>
+          </property>
+          <property Id="32d22586-99c7-4c58-9d5c-86f158ea73c9" name="activeConnections" visibility="Private" isLeaf="false" isStatic="true" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="deacad43-2ec8-44d0-a674-a4da9581b4a0" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="225d9c81-82a3-42b6-8e92-0ddd68057568" LastKnownName="Integer" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation Id="fa43434c-1c03-4240-ad5e-1bc3b06f287d" name="inreaseConnectionCount" isLeaf="false" isStatic="true" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="aa6d6f83-9cd6-4958-8d13-8e71cacc76b7" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="56cbf7f0-4fb2-4669-ba80-fc8979c3861e" direction="Return">
+                  <elementDefinition Id="5c52790f-0e86-4b2b-a050-773dde04af37" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c9452a97-7235-4572-a8e7-a0b43e23f38c" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="408017ce-a86b-4a84-a142-c3cee31f8892" name="decreaseConnectounCount" isLeaf="false" isStatic="true" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="982c493c-9b72-4855-ae3c-4014b64818b9" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="2f1cbaad-ede2-41f9-a50b-8d926ccd9f7d" direction="Return">
+                  <elementDefinition Id="a7f50c00-9187-4b3b-b915-27d9614b647a" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="ebb13f50-55d1-46e7-a96a-3389ce2d1584" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="44df90c9-dfa3-4bae-93c9-afc2451e9019" name="main" isLeaf="false" isStatic="true" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="3a424b1b-9ea9-48a9-ba1d-a6adc5e4367c" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="9bf1c8b8-7008-447d-8adb-f2fae34d3cc1" direction="Return">
+                  <elementDefinition Id="524e049a-5491-4f81-a5cc-c866c809023d" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="b5ea2054-8479-4af0-9578-e0d2d0e3373b" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="7ab836dc-007d-40cf-8477-5e25f979b8ff" name="args" direction="In" isUnique="false">
+                  <elementDefinition Id="229d6121-8cce-4dd9-a327-3d4c86408e45" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="b1e902d9-11d0-40b1-8e1f-68405a552067" LastKnownName="String[]" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="be99f79c-1ec0-4adb-9e13-878b9f8111d7" name="ServerThread" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="a8c793e2-619d-4ffd-bdce-36b88a4545f8" />
+        <targetEnds>
+          <association Id="080a2448-b6f6-4448-b546-d327d566e6b9" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="54578c2a-f9ee-4ddb-a774-fd887a035e5d" LastKnownName="HttpResponse" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="79911278-ee80-4181-bbea-957ff9cdcf21" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e1ee3e5a-a340-4a62-8ed4-f43a16df259e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="735a88d9-5806-47fc-895c-61a379b459bf" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="535ff7f1-2c9f-4a2e-b3f6-bbacc0f26355" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d3ea24cf-5f9e-4d23-bafd-344818701077" />
+          </association>
+          <association Id="fca191d4-3c86-44c8-ac69-5e1e684ad60e" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="bb0aa022-59a5-4847-be14-1f87c64dd8a6" LastKnownName="Logger" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c467898f-6362-4873-8fe6-c08f67b85d38" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="a8bcbb6f-9bfa-4faa-becd-f0dc899f7008" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="33abef1f-6abf-40e9-9192-276fbdda02d7" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5bb4f0ff-008e-457c-9f53-007edaecd08a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="641153da-dc17-4a13-b4fe-249ab5b83267" />
+          </association>
+          <association Id="251277ff-de46-4b8c-931e-4f6dd1f08cca" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="db08ec1f-bfa7-4bad-b552-1f1b863d790e" LastKnownName="ReportSender" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="9e38e022-4c61-4658-ab54-759c5fd6f860" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="b42cc220-bc5f-4273-be3d-fb876af86497" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="42ceaef0-6f24-4bc2-93ea-ed5abee4f469" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="8c4d1d3a-d088-4b35-9dfa-b2c7f3e83019" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="7a4055bf-a66b-4568-9a89-836c68f97602" />
+          </association>
+          <association Id="ab2e50d6-ef5e-439a-9f8f-542b66b34dac" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="02205d62-f927-4c09-8a2a-2749cdb76815" LastKnownName="HttpParser" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="1a1d808b-218f-4bd4-8fd8-428f7a2d3e7c" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="74998eca-09f9-4200-b576-ae2f982651d6" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="2cbc4f28-4a16-4daa-89a7-856089125aef" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="caa6e154-709e-485b-8a83-9419ca0d107e" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="24c2a186-cab2-49d8-9b11-dd31d2c29d14" />
+          </association>
+          <association Id="9ec7589b-66b1-47a0-ad4b-ac1ed9988602" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="d62ce00b-8bcb-496e-8fdc-80bfd76f6e6e" LastKnownName="ConnectionInstance" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="2d714a79-1120-4e8d-b3f0-301150c05ac0" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="4b3362bb-2487-43f5-b30e-a1757252bf9a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="08490531-5ed5-4de7-9476-626e81468440" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <lowerValueInternal>
+                    <literalString Id="f0f8f27d-9418-46f1-b079-50edfaece658" name="Lower" value="*">
+                      <elementDefinition Id="d1e8874f-59d4-45b5-9ce9-2c3303802cb6" />
+                    </literalString>
+                  </lowerValueInternal>
+                  <upperValueInternal>
+                    <literalString Id="a2053db5-fc78-4cfc-87cf-175917671ed2" name="Upper" value="*">
+                      <elementDefinition Id="fe24d45a-17dd-4035-9e36-9c2f3b588926" />
+                    </literalString>
+                  </upperValueInternal>
+                  <elementDefinition Id="5748c397-7e81-4e3e-9199-298515365a9f" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="3b203a7b-a8d7-4319-8ea2-765b22be3392" />
+          </association>
+        </targetEnds>
+        <ownedAttributesInternal>
+          <property Id="30a1816c-42ab-4788-8bf5-e685c35a73d7" name="ReportPort" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="true" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="5b649ac0-5d36-4e45-80e9-dacf70741485" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="18157d2b-f729-4559-9aba-cf98d5b03152" LastKnownName="Integer" />
+            </type_NamedElement>
+            <defaultValue>
+              <literalString Id="61e31f62-8927-491f-87d4-f60727db4deb" name="DefaultValue" value="5000">
+                <elementDefinition Id="f2d3a3c9-2402-44c6-ab85-5afae9fbc0ab" />
+              </literalString>
+            </defaultValue>
+          </property>
+          <property Id="7a36ff5d-e730-4aa8-ad00-1d284df4c3fc" name="FirstPort" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="true" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="1f35fd1d-b4d8-402d-b933-54fcb0251841" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+            </type_NamedElement>
+            <defaultValue>
+              <literalString Id="2d061614-fcd8-4d6d-a557-0a6d42f1fb34" name="DefaultValue" value="5500">
+                <elementDefinition Id="2132b29c-58d9-4394-8fc3-b1a7d9ed4cd4" />
+              </literalString>
+            </defaultValue>
+          </property>
+          <property Id="da1070ec-276e-4ae2-9274-9315ffe109e2" name="MaxPort" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="true" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="882d9cf8-460d-4177-b076-5906b34df482" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+            </type_NamedElement>
+            <defaultValue>
+              <literalString Id="2b3bab49-1e33-4efd-944f-44cf26974913" name="DefaultValue" value="6000">
+                <elementDefinition Id="a8528d3a-7a87-40e8-a23e-0b3832c845e1" />
+              </literalString>
+            </defaultValue>
+          </property>
+          <property Id="f10d7fac-c3d3-4f32-9b26-1cf5c2cb495e" name="SOCKET_TIMEOUT" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="true" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="a32926d6-cba7-4ec4-a21b-04cf2afa623e" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+            </type_NamedElement>
+          </property>
+          <property Id="60e4a04a-0c51-48ad-a200-90dccb8f5320" name="parser" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="6ebba3b5-c8bb-4a9f-89e2-4217cfd1f37e" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="66ba3932-c384-4ff3-bc6d-b8c2b38f6fa3" LastKnownName="HttpParser" />
+            </type_NamedElement>
+          </property>
+          <property Id="77454112-3b18-42f4-ab0b-9d718b9ec765" name="reporter" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="be4ad337-4897-48cc-a086-5e81818b6346" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="bc6657fd-7cc5-4efd-a266-76dc8977a3ca" LastKnownName="ReportSender" />
+            </type_NamedElement>
+          </property>
+          <property Id="aa1ce031-781f-44c7-9cd0-0dee6f156545" name="commandSocket" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="bb794b60-ca95-4233-9775-c73232568d79" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="30e0d15e-850b-4722-9109-0e5484d78e4a" LastKnownName="Socket" />
+            </type_NamedElement>
+          </property>
+          <property Id="9bd8a6c6-7095-4a9e-9671-95d43a10868c" name="testSocket" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="15f8ee7f-6d2e-464a-a20d-bbd857acac79" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="30e0d15e-850b-4722-9109-0e5484d78e4a" LastKnownName="Socket" />
+            </type_NamedElement>
+          </property>
+          <property Id="9ff4c041-aa53-4083-888d-32aa3807f25e" name="connectionInstances" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="501700cc-b309-44fe-9ece-50991e32e89a" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="64e151d0-9544-461a-bb9e-1d52c3ae7b70" LastKnownName="Vector&lt;ConnectionInstance&gt;" />
+            </type_NamedElement>
+          </property>
+          <property Id="76c459de-6cf8-4820-aac7-def82575718d" name="serverSocket" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="453ca29a-4f1c-461a-b7b5-d2487301c7a9" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="10df4e4d-1f61-4e4e-b8c2-e583bdbb1b5d" LastKnownName="ServerSocket" />
+            </type_NamedElement>
+          </property>
+          <property Id="f744346c-ad84-4f20-a369-510e839bbd73" name="portOffset" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="4980d6d5-4506-42a4-9afc-36b669a2c132" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+            </type_NamedElement>
+          </property>
+          <property Id="c8148fb2-2c50-4b3f-b916-144a9ffbff00" name="logger" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="ab603b40-4036-4708-bcbb-f74b8b723f34" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="ba278808-5144-4667-946d-0dfd35b2ab6c" LastKnownName="Logger" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation Id="99e84e3d-ed3f-445a-ab2e-ad33362ca137" name="ServerThread" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="5c22d862-3348-4f48-b568-c92f05637d96" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="aa08a13b-0adc-4446-abca-0143ff8c9a0d" name="logger" direction="In" isUnique="false">
+                  <elementDefinition Id="ab0a162c-f2ee-4657-a83e-0862caf0c75b" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="a7f6d5b1-1926-4ed9-9eb6-2fb71ad907da" LastKnownName="Logger" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="f6f48870-9cab-49bc-8326-6f5704886e1c" name="socket" direction="In" isUnique="false">
+                  <elementDefinition Id="da4dbed3-6ff3-4f7e-863e-982976df13a7" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="30e0d15e-850b-4722-9109-0e5484d78e4a" LastKnownName="Socket" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="d17f121e-398b-454c-adb5-97f5b6867062" name="id" direction="In" isUnique="false">
+                  <elementDefinition Id="113a80ea-1619-47e5-906f-f97b4b46606b" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="0a8a62af-2603-4b11-859a-3cbedbae2749" name="createSocket" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="efe0418d-69ab-4fd4-a01b-02206d19724b" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="13e8aec5-7121-4b76-a285-2a833339c644" direction="Return" isUnique="false">
+                  <elementDefinition Id="08c7161b-f40b-4a71-a172-cb79cbccafc7" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="c614f8c7-5a32-4e27-aa8d-baf427a4fd70" name="run" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="72c749f7-8ed3-4455-a121-ccfd87d9657d" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="53e7ba0b-128b-4530-a0e3-dce2dafeef14" direction="Return" isUnique="false">
+                  <elementDefinition Id="fc0787db-8ff0-4610-96b2-832682354613" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c9452a97-7235-4572-a8e7-a0b43e23f38c" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="45de7e94-58b6-4b2d-9eb6-fabde4cded73" name="getNextFreePort" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="0b1b228f-a62d-4a8f-ab9e-94bb8d78753b" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="37636d26-7bfe-4a78-9a25-61866dc46768" direction="Return" isUnique="false">
+                  <elementDefinition Id="f5e98abb-0049-443e-8a58-4d6481b1c269" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="020b7cdd-787d-4426-9457-51459f2feb1b" name="makeFileHandlingThread" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="24323d58-c6e0-4cd2-9882-c1c7cdbecc72" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="e26bef74-60a7-49c9-b15f-f4af63176975" name="port" direction="In" isUnique="false">
+                  <elementDefinition Id="c311fdb1-7611-47b7-acc4-045591969fe4" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" LastKnownName="Integer" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="30486637-e17d-4ed2-9fc5-8713452e24e0" direction="Return" isUnique="false">
+                  <elementDefinition Id="d9f37701-2f03-4384-9f7b-b5c3357e0ed3" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="f38c5574-130c-477a-a237-53d8500ae85c" LastKnownName="Boolean" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="ee27dd3e-2813-4ae3-8938-df696473aa0d" name="sendResponse" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="34df4206-529c-4d96-a8c7-2613946956fe" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="501bd1ac-298e-48ea-8f3e-e62293e1e7dc" direction="Return" isUnique="false">
+                  <elementDefinition Id="3634d207-29bc-4522-a304-1f1599a807ec" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="f38c5574-130c-477a-a237-53d8500ae85c" LastKnownName="Boolean" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="07fb8e89-2565-4ba3-8976-4b335b634476" name="parseClientRequest" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="e7ac169b-ecaa-4535-ad46-e29b4ed36c85" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="b5f1691f-06f1-4175-a1ec-ddf668dbccaa" direction="Return" isUnique="false">
+                  <elementDefinition Id="acfcf00f-eea8-473d-abf1-d65aca82ae64" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c9452a97-7235-4572-a8e7-a0b43e23f38c" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="a8887c30-310a-48a2-9e28-b6959b2cf07a" name="readedLine" direction="In" isUnique="false">
+                  <elementDefinition Id="44fca81b-34c9-46e8-9123-cb3f624725ca" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="be67eed1-c028-4965-8304-dcf143e6d10b" name="sendMEssageToClient" visibility="Private" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="fc8fd778-358f-4f1e-94f9-43bea4cdffdf" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="2e35d642-aec1-49cb-be5a-1d19063dd45e" direction="Return" isUnique="false">
+                  <elementDefinition Id="904eef6b-105b-4c57-8040-f2c50567b8a8" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="f38c5574-130c-477a-a237-53d8500ae85c" LastKnownName="Boolean" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="1b483509-6f7b-46c2-a8fa-aa53ac502f9c" name="message" direction="In" isUnique="false">
+                  <elementDefinition Id="63f97398-e190-4876-ac33-6822469c02f2" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="d43f9778-9d2f-45bd-ae8b-11ac57a77563" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="10df4e4d-1f61-4e4e-b8c2-e583bdbb1b5d" name="ServerSocket" isAbstract="false" isLeaf="false" cachedFullName="ServerSocket">
+        <elementDefinition Id="e0764d29-f896-4297-a089-b2951d9c6a37" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="225d9c81-82a3-42b6-8e92-0ddd68057568" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="c9452a97-7235-4572-a8e7-a0b43e23f38c" name="void" isAbstract="false" isLeaf="false" cachedFullName="void">
+        <elementDefinition Id="aa0a8b62-38ae-4439-852f-150e0140b32a" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="ebb13f50-55d1-46e7-a96a-3389ce2d1584" name="void" isAbstract="false" isLeaf="false" cachedFullName="void">
+        <elementDefinition Id="aa0a8b62-38ae-4439-852f-150e0140b32a" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="b5ea2054-8479-4af0-9578-e0d2d0e3373b" name="void" isAbstract="false" isLeaf="false" cachedFullName="void">
+        <elementDefinition Id="aa0a8b62-38ae-4439-852f-150e0140b32a" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="b1e902d9-11d0-40b1-8e1f-68405a552067" name="String[]" isAbstract="false" isLeaf="false" cachedFullName="String[]">
+        <elementDefinition Id="2e1ea51a-80cf-4434-8697-81301e48a851" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="18157d2b-f729-4559-9aba-cf98d5b03152" name="Integer" isAbstract="false" isLeaf="false" cachedFullName="Integer">
+        <elementDefinition Id="220a3521-e091-4221-bae9-3ef9018e845c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="66ba3932-c384-4ff3-bc6d-b8c2b38f6fa3" name="HttpParser" isAbstract="false" isLeaf="false" cachedFullName="HttpParser">
+        <elementDefinition Id="fd85bb73-c57e-473e-85f8-d8c84676d9d8" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="bc6657fd-7cc5-4efd-a266-76dc8977a3ca" name="ReportSender" isAbstract="false" isLeaf="false" cachedFullName="ReportSender">
+        <elementDefinition Id="f26edc55-a31e-4e4e-ba98-01c1a212a3fa" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="30e0d15e-850b-4722-9109-0e5484d78e4a" name="Socket" isAbstract="false" isLeaf="false" cachedFullName="Socket">
+        <elementDefinition Id="3cf749dd-9ca8-4316-aa42-559dbb353fd8" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="64e151d0-9544-461a-bb9e-1d52c3ae7b70" name="Vector&lt;ConnectionInstance&gt;" isAbstract="false" isLeaf="false" cachedFullName="Vector&lt;ConnectionInstance&gt;">
+        <elementDefinition Id="ae757b62-59ed-4d8b-a165-40e74ebbd7b2" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="a7f6d5b1-1926-4ed9-9eb6-2fb71ad907da" name="Logger" isAbstract="false" isLeaf="false" cachedFullName="Logger">
+        <elementDefinition Id="01c8b62d-fef1-4717-ad50-2c4a4f57ab03" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="f38c5574-130c-477a-a237-53d8500ae85c" name="Boolean" isAbstract="false" isLeaf="false" cachedFullName="Boolean">
+        <elementDefinition Id="8943dc84-709e-4f62-b15a-a3273aa6f165" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="240e8026-d208-43df-a0ab-18387b8b4fb5" name="String" isAbstract="false" isLeaf="false" cachedFullName="String">
+        <elementDefinition Id="59259974-6d55-42c6-b7bd-763d77ac8ef9" />
+      </referencedType>
+    </packageHasNamedElement>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="54578c2a-f9ee-4ddb-a774-fd887a035e5d" name="HttpResponse" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="4da6564e-895e-4991-86a7-102b01eebf16" />
+        <targetEnds>
+          <association Id="70d21b86-179c-4a86-b79d-4d0fada30af9" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="bb0aa022-59a5-4847-be14-1f87c64dd8a6" LastKnownName="Logger" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c579d488-ded9-4cb2-9a01-d89fc06c75f6" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="b2279af8-c1c3-45fd-87a5-ed1f3e8d0e68" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="3c92fc95-b734-4efa-a348-f808c8a4b627" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5a038c1d-bdb4-4c8e-99f8-a62a8fc6ca22" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="f2d629e8-c4e7-4213-b8ff-f9dc3e48918c" />
+          </association>
+        </targetEnds>
+        <ownedAttributesInternal>
+          <property Id="b7449bad-b929-4e43-a86c-aa410425063f" name="logger" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="eaaefe2b-37b4-4f97-b732-77bf281a8d96" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="a7f6d5b1-1926-4ed9-9eb6-2fb71ad907da" LastKnownName="Logger" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation Id="17e93542-67cf-4ea6-b079-cb9f7fd76504" name="HttpResponse" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="be9feae2-a1e7-4f64-a8ea-8fd271cd1e86" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="601e472c-8b0f-4738-8cdb-1a0fbcb639c8" name="logger" direction="In" isUnique="false">
+                  <elementDefinition Id="2dccff88-99c5-478c-8e6f-74721d0743a9" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="a7f6d5b1-1926-4ed9-9eb6-2fb71ad907da" LastKnownName="Logger" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="0d85fd1d-2400-4552-8a3b-ad8e13e40f88" name="setResponseText" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="68ada4b2-b10a-49f6-9251-10a6be4d34e6" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="304b6974-8504-4edf-8d1f-ed06a21299a1" direction="Return" isUnique="false">
+                  <elementDefinition Id="eec676a1-69df-423f-8952-343c11a932d1" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="9af04fa4-8fe2-4b6e-9292-bd50ceb9607c" name="status" direction="In" isUnique="false">
+                  <elementDefinition Id="c26fb3b5-6b85-4f10-8dcd-1e550fc9cbcc" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="5fcffb41-ab55-45ae-8011-d7e9fded08b9" name="mime" direction="In" isUnique="false">
+                  <elementDefinition Id="2b842046-9c08-4450-8558-0593669518fa" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="67d6ab26-b79d-417d-80b9-d336fa261063" name="header" direction="In" isUnique="false">
+                  <elementDefinition Id="4a4aa17f-559d-4f8f-8139-7954bb0233a1" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c8dace93-fa01-4e59-b491-70806a291da0" LastKnownName="Properties" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation Id="3c0ed9f0-271b-47fb-a470-54ce41a523bf" name="printProperties" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="a00e87d6-67ce-4540-87ec-43001590215e" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="0208d84b-c79e-442b-b5d7-4b1f6c0e300b" direction="Return" isUnique="false">
+                  <elementDefinition Id="4967bc2d-a526-4ad8-81f8-b7fb457300fe" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c9452a97-7235-4572-a8e7-a0b43e23f38c" LastKnownName="void" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="888a67b3-345f-4c24-9a65-46707a2b568c" name="uri" direction="In" isUnique="false">
+                  <elementDefinition Id="7def1d60-4c78-4878-bd1a-910adb432908" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="6c94eef8-bf60-4fb2-beb0-25e5b10771ab" name="method" direction="In" isUnique="false">
+                  <elementDefinition Id="a8311b9a-7550-490d-8253-09b665bca7ec" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="240e8026-d208-43df-a0ab-18387b8b4fb5" LastKnownName="String" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="3aa158d4-7d2c-4773-9c1b-faa25b8f44d3" name="header" direction="In" isUnique="false">
+                  <elementDefinition Id="5d0038cd-3c5d-40d0-8bc3-5122ee21a0f5" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c8dace93-fa01-4e59-b491-70806a291da0" LastKnownName="Properties" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="34db3b71-cd45-44ef-affa-13b46d93a759" name="files" direction="In" isUnique="false">
+                  <elementDefinition Id="dc403935-760b-4038-aad9-f0b465ad6fe6" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="c8dace93-fa01-4e59-b491-70806a291da0" LastKnownName="Properties" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="c8dace93-fa01-4e59-b491-70806a291da0" name="Properties" isAbstract="false" isLeaf="false" cachedFullName="Properties">
+        <elementDefinition Id="884ecd81-dc9c-442e-b8d3-f4fa677aaa0a" />
+      </referencedType>
+    </packageHasNamedElement>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="bb0aa022-59a5-4847-be14-1f87c64dd8a6" name="Logger" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="71caad72-8ef7-47d1-a340-2735b22cab76" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="ba278808-5144-4667-946d-0dfd35b2ab6c" name="Logger" isAbstract="false" isLeaf="false" cachedFullName="DeiveTest::Logger">
+        <elementDefinition Id="71caad72-8ef7-47d1-a340-2735b22cab76" />
+      </referencedType>
+    </packageHasNamedElement>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="db08ec1f-bfa7-4bad-b552-1f1b863d790e" name="ReportSender" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="61ed5fa6-9515-438f-ae2a-a63fc2206e27" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="02205d62-f927-4c09-8a2a-2749cdb76815" name="HttpParser" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="e88c7ae2-8128-487e-a548-6f63aee33b29" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="d62ce00b-8bcb-496e-8fdc-80bfd76f6e6e" name="ConnectionInstance" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="b1df12cf-6f4d-41f0-bd9b-d402405afc2d" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+  </packagedElements>
+  <package Id="90791101-9e66-4bf5-ac7d-7c6dad4b3ad9" name="DeiveTest">
+    <elementDefinition Id="053579a5-3b97-4d66-b6e9-169405cb0e7a" />
+  </package>
+</logicalClassDesignerModel>
