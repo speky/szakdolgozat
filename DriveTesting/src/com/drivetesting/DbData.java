@@ -1,8 +1,8 @@
 package com.drivetesting;
 
-import http.filehandler.TCPReport;
-import http.filehandler.ReportReceiver.DataType;
-import http.filehandler.ReportReceiver.RateType;
+import http.testhandler.TCPReport;
+import http.testhandler.ReportReceiver.DataType;
+import http.testhandler.ReportReceiver.RateType;
 
 
 public class DbData {

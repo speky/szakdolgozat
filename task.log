@@ -15,8 +15,7 @@ General:
 
 Test Activity
 - default values of protocol and direction not set
-- log file saving
-- time stamp in the logs
+- log file saving -- nem kell mobilon
 - store the server connection socket
 
 Map Activity

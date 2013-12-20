@@ -1,8 +1,8 @@
 package httpserver;
 
 
-import http.filehandler.HttpParser;
-import http.filehandler.Logger;
+import http.testhandler.HttpParser;
+import http.testhandler.Logger;
 
 import java.io.File;
 import java.util.Date;

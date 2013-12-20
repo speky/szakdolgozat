@@ -17,7 +17,7 @@
     <path id="HttpServer.classpath">
         <pathelement location="bin"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="libs/HttpFileHandler.jar"/>
+        <pathelement location="libs/HttpTestHandler.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>

@@ -1,9 +1,12 @@
 package com.drivetesting;
 
-import http.filehandler.TCPReport;
-import http.filehandler.UDPReport;
+import http.testhandler.TCPReport;
+import http.testhandler.UDPReport;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Application;
@@ -61,6 +64,12 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	public boolean isGPSEnabled = false;
 	private Location location = null;
 
+	private String getTimeStamp() {
+		Date date = Calendar.getInstance().getTime();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);		
+		return dateFormat.format(date);
+	}
+	
 	private Handler handler = new Handler() { 
 		@Override 
 		public void handleMessage(Message msg) {
@@ -70,12 +79,12 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				action = 0;
 				Log.d(TAG, message.toString());
 			}
-
+			
 			if ( msg.getData().containsKey("TCP")) {            	
 				String data = msg.getData().getString("TCP");
 				TCPReport report = new TCPReport();
 				report.parseReport(data);
-				message.insert(0, data +"\n");
+				message.insert(0, getTimeStamp()+": "+data +"\n");
 				action = 1;
 				Log.d(TAG, "get data" + message.toString());
 				storeTCPReportItem(report.dlSpeed, report.ulSpeed);
@@ -84,7 +93,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				String data = msg.getData().getString("UDP");
 				UDPReport report = new UDPReport();
 				report.parseReport(data);
-				message.insert(0, data +"\n");
+				message.insert(0, getTimeStamp()+": "+data +"\n");
 				action = 1;
 				Log.d(TAG, "get data" + message.toString());
 				storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);

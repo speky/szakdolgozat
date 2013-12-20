@@ -1,18 +1,19 @@
 
 package httpserver;
 
-import http.filehandler.ConnectionInstance;
-import http.filehandler.HttpParser;
-import http.filehandler.Logger;
-import http.filehandler.ReportSender;
-import http.filehandler.TCPReceiver;
-import http.filehandler.TCPSender;
-import http.filehandler.UDPReceiver;
-import http.filehandler.UDPSender;
+import http.testhandler.ConnectionInstance;
+import http.testhandler.HttpParser;
+import http.testhandler.Logger;
+import http.testhandler.ReportSender;
+import http.testhandler.TCPReceiver;
+import http.testhandler.TCPSender;
+import http.testhandler.UDPReceiver;
+import http.testhandler.UDPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -285,7 +286,11 @@ public class HttpServer {
 	public static void main(String[] args) {		
 		logger = new Logger("server.log");		
 		try	{
-			serverSocket = new ServerSocket(SERVER_PORT);	
+			// re-use the port thus  HttpService instances could attach to this port many times
+			serverSocket = new ServerSocket();
+			serverSocket.setReuseAddress(true);
+			serverSocket.bind(new InetSocketAddress(SERVER_PORT));
+			
 			while (true) {
 				// wait for client connection
 				logger.addLineAndPrint(TAG+"Waiting for connection on port:"+ SERVER_PORT +"\n");

@@ -1,8 +1,8 @@
 package httpserver;
 
 import static org.junit.Assert.assertTrue;
-import http.filehandler.HttpParser;
-import http.filehandler.Logger;
+import http.testhandler.HttpParser;
+import http.testhandler.Logger;
 
 import java.util.Date;
 import java.util.Properties;

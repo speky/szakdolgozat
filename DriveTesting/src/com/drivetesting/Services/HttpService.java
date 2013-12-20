@@ -1,15 +1,15 @@
 package com.drivetesting.services;
 
-import http.filehandler.ConnectionInstance;
-import http.filehandler.Logger;
-import http.filehandler.ReportI;
-import http.filehandler.ReportReceiver;
-import http.filehandler.ReportReceiver.DataType;
-import http.filehandler.ReportReceiver.RateType;
-import http.filehandler.TCPReceiver;
-import http.filehandler.TCPSender;
-import http.filehandler.UDPReceiver;
-import http.filehandler.UDPSender;
+import http.testhandler.ConnectionInstance;
+import http.testhandler.Logger;
+import http.testhandler.ReportI;
+import http.testhandler.ReportReceiver;
+import http.testhandler.ReportReceiver.DataType;
+import http.testhandler.ReportReceiver.RateType;
+import http.testhandler.TCPReceiver;
+import http.testhandler.TCPSender;
+import http.testhandler.UDPReceiver;
+import http.testhandler.UDPSender;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,7 +72,7 @@ public class HttpService extends IntentService implements ReportI {
 		if (messenger != null) {
 			Message m = Message.obtain();			
 			Bundle b = new Bundle();
-			b.putString(key, value); 
+			b.putString(key, value);
 			m.setData(b);
 			try {
 				Log.d(TAG, key + " "+ value);
@@ -91,7 +91,7 @@ public class HttpService extends IntentService implements ReportI {
 
 	protected Socket createSocket(int port) {
 		try {			
-			Socket socket = new Socket();			
+			Socket socket = new Socket();
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);
 			logger.addLine(TAG + " Create new socket");
 			return socket;
@@ -137,7 +137,7 @@ public class HttpService extends IntentService implements ReportI {
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
-			socket = createSocket(ServerPort);			
+			socket = createSocket(ServerPort);
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
 
@@ -178,8 +178,9 @@ public class HttpService extends IntentService implements ReportI {
 
 	public void makeNewThread() {
 		try {
+			
 			logger.addLine(TAG+"makeNewThread" );
-
+			
 			boolean isUpload = false;
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {

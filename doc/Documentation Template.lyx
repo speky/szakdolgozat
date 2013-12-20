@@ -3926,11 +3926,19 @@ setReportInterval
 \end_layout
 
 \begin_layout Description
-TCPSender
+TCPSender 
 \end_layout
 
 \begin_layout Description
-UDPReceiver
+UDPReceiver fogadja a UDP típusú teszt során a csomagokat és számolja a
+ kapott üzenetek méretét, figyeli a csomagok sorrendjét és az elveszett
+ csomagokat is számolja.
+ Erről jelentést küld előre megadott idő intervallumonként, ezt a 
+\shape italic
+setReportInterval
+\shape default
+ függvény segítségével lehet megadni.
+ 
 \end_layout
 
 \begin_layout Description
