@@ -3,7 +3,6 @@ package com.drivetesting;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
@@ -50,9 +49,9 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private final String LAT = "latitude";
 	private final String LON = "longitude";
 	private final String TESTID = "testId";
+	private final String TESTNAME = "testName";
 	private final String ZOOM = "zoom";
-	private final String CENTER = "center";
-	
+		
 	private RoadManager roadManager = new OSRMRoadManager();
 	private MapView mapView;
 	private int noOfPoints;
@@ -66,6 +65,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private ItemizedOverlayWithBubble<ExtendedOverlayItem> roadNodeMarkers;	
 	private TextView testIdText;
 	private long testId = -1;
+	private String testName = "";
 	
 	private SharedPreferences sharedPreferences;
 	
@@ -112,17 +112,24 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
 		mapView.getOverlays().add( roadNodeMarkers);
 
-		if (savedInstanceState == null) {               
+		//if (savedInstanceState == null) {               
 			//no location known, we put a hard-coded map position:
 			osmvController.setZoom(15);
 			osmvController.setCenter(new GeoPoint(47.497147, 19.070567));
-			testId = ((DriveTestApp)getApplication()).getTestId();			
-		} else {
+			testId = ((DriveTestApp)getApplication()).getTestId();
+			testName = ((DriveTestApp)getApplication()).getTestName();
+		/*} else {
 			osmvController.setZoom(savedInstanceState.getInt("zoom_level"));
 			osmvController.setCenter((GeoPoint)savedInstanceState.getParcelable("map_center"));			
 			testId = savedInstanceState.getLong("test_id");
+			testName = savedInstanceState.getString("test_name");
+		}*/
+		
+		if (testName.equals("") ) {
+			setTestNameString();
+		} else {
+			setTestIdString();
 		}
-		setTestString();
 		
 		/* /blaha
 		viaPoints.add(new GeoPoint(47.497147, 19.070567));
@@ -140,56 +147,104 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		updateLoc(loc);	
 	}
 	
-	private void setTestString() {
+	private void setTestIdString() {
 		if (testId == 0) {
-			testIdText.setText("Test id: Undefined");
+			testIdText.setText("Test undefined");
 		} else {
-			testIdText.setText("Test id:" + Long.toString(testId));
+			if (-1 == testId) {
+				testIdText.setText("Test id: ALL");
+			} else {
+				testIdText.setText("Test id:" + Long.toString(testId));
+			}
 			loadRoadForTestId();
+		}
+	}
+	
+	private void setTestNameString() {
+		if (testName.equals("")) {
+			testIdText.setText("Test: undefined");
+		} else {
+			testIdText.setText("Test name: " + testName);
+			loadRoadForTestName();
 		}
 	}
 	
 	private void loadRoadForTestId() {		
 		List<DbData> data = ((DriveTestApp)getApplication()).queryTestData(testId);
+		loadRoad(data);
+	}
+	
+	private void loadRoadForTestName() {		
+		List<DbData> data = ((DriveTestApp)getApplication()).queryTestDataByName(testName);
+		loadRoad(data);
+	}
+	
+	private void loadRoad(List<DbData> data) {
 		List<RoadNode> nodes = new ArrayList<RoadNode>();
-		if (data != null) {	
-			roadNodeMarkers.removeAllItems();
-			for (int i = 0; i < data.size(); ++i) {
-				RoadNode node = new RoadNode();				
-				node.mLocation = new GeoPoint(data.get(i).lat, data.get(i).lon);
-				node.mInstructions = data.get(i).toInstrustionString(); 
-				nodes.add(node);
-				++noOfPoints;
-				addRoadNode(node);
-			}
+		if (data == null) {
+			return;
 		}
+		
+		roadNodeMarkers.removeAllItems();
+		for (int i = 0; i < data.size(); ++i) {
+			RoadNode node = new RoadNode();				
+			node.mLocation = new GeoPoint(data.get(i).lat, data.get(i).lon);
+			node.mInstructions = data.get(i).toInstrustionString(); 
+			nodes.add(node);
+			++noOfPoints;
+			addRoadNode(node);
+		}
+	
 		isAddNodes = false;
 		firstNode = nodes.get(0);
 		firstNode.mDuration = -1;
 		roadNode = nodes.get(nodes.size()-1);
 		getRoadAsync(roadNode.mLocation);
 		osmvController.setCenter(firstNode.mLocation);
-		mapView.postInvalidate();
+		mapView.postInvalidate();	
 	}
 	
 	public void onTestClick(View view) {
 		List<String> list = ((DriveTestApp)getApplication()).getTestIds();
-		list.add("All");
+		list.add("ALL");
 		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
 		
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose Test ID");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-            	// load road for the testId            	
-                testId = Long.parseLong(items[item].toString());
-                setTestString();                
+            	// load road for the testId
+            	try{
+            		testId = Long.parseLong(items[item].toString());
+            	}catch (NumberFormatException ex) {
+            		// ALL is selected
+            		testId = -1;
+            	}
+                setTestIdString();
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
 	}
 
+	public void onTestNameClick(View view) {
+		List<String> list = ((DriveTestApp)getApplication()).getTestNames();
+		list.add("ALL");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Test Name");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	// load road for the testName
+                testName = items[item].toString();
+                setTestNameString();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -211,12 +266,18 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		float lon = sharedPreferences.getFloat(LON, 0.0f);
 		osmvController.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
-		setTestString();
+		testName = sharedPreferences.getString("TESTNAME", "");
+		if (testName.equals("")) {
+			setTestIdString();
+		} else {
+			setTestNameString();
+		}
 	}	
 	
 	private void save() {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putLong(TESTID, testId);		
+		editor.putLong(TESTID, testId);
+		editor.putString("TESTNAME", testName);
 		editor.putInt(ZOOM, mapView.getZoomLevel());
 		GeoPoint c = (GeoPoint) mapView.getMapCenter();
 		editor.putFloat(LAT, c.getLatitudeE6());

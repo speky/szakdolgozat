@@ -3776,6 +3776,15 @@ Osztályok bemutatása
 Közös osztályok
 \end_layout
 
+\begin_layout Standard
+A közösen használt és a teszteléssel összefüggő osztályok a HttpTestHandler
+ projekt tartalmazza.
+ Ezen osztályok és interfészek tisztán Java alapúak, nem tartalmaznak Android
+ specifikus megoldásokat, ezért használhatóak a szerver oldali programban
+ is.
+ 
+\end_layout
+
 \begin_layout Description
 ConnectionInstance megvalósítja a Java 
 \shape italic
@@ -3922,7 +3931,47 @@ TCPReceiver fogadja a TCP típusú teszt során a TCP csomagokat és számolja
 setReportInterval
 \shape default
  függvény segítségével lehet megadni.
- 
+ A 
+\shape italic
+TimerTask 
+\shape default
+osztály segítségével lehet meghatározni, hogy milyen művelet hajtódjon végre
+ az időzítő lejártakor.
+ Az időzítést a Timer osztály 
+\shape italic
+scheduleAtFixedRate
+\shape default
+ metódusával lehet megadni.
+ Az osztály konstuktora képes MessageI és ReceiverReportI interfészeket
+ fogadni attól függően hogy szerver oldalon fut, így a ReportSenderen keresztűl
+ tud jelentést küldeni, vagy a mobil oldalon, amikor a ReportReceiver osztály
+ példányát használja.
+ A 
+\shape italic
+setSocket 
+\shape default
+segítségével állítható be a socket, amin keresztül érkeznek majd az adatok,
+ üzenetek.
+ A 
+\shape italic
+readPackets
+\shape default
+ végzi az üzenetek figyelését és kiolvassa az InputStream objektum segítségével
+ a kapott adatokat.
+ A 
+\shape italic
+totalReadedBytes
+\shape default
+ változó tartalmazza az eddig fogadott adatok mennyiségét byte-ban.
+ A ConnectionInstance osztály leszármazottjaként tartalmaz egy stop metódust
+ is, ami a teszt leállításakor hívódik meg és leállítja az időzítőt és a
+ socket-et.
+\end_layout
+
+\begin_layout Description
+TCPReport a TCP teszt mérési eredményeinek eltárolására szolgál.
+ Tartalmazza: a reporter objektum azonosítóját, a jelentés intervallumát,
+ az átvitt adatokat és a le- vagy feltöltési sebességet.
 \end_layout
 
 \begin_layout Description
@@ -3939,6 +3988,10 @@ setReportInterval
 \shape default
  függvény segítségével lehet megadni.
  
+\end_layout
+
+\begin_layout Description
+UDPReport
 \end_layout
 
 \begin_layout Description

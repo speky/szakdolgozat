@@ -32,7 +32,7 @@ import java.util.concurrent.Future;
  */
 
 class ServerThread extends Thread{	
-	private static final int MAX_THREAD = 10;
+	private static final int MAX_THREAD = 5;
 	private static final String TAG = "ServerThread id: ";
 	private final int ReportPort = 5000;
 	private final int FirstPort = 5500;
@@ -88,7 +88,11 @@ class ServerThread extends Thread{
 		int port = -1;
 		try {
 			port = getNextFreePort();
-			serverSocket = new ServerSocket(port);			
+			// re-use the port thus  test instances could attach to this port many times
+			serverSocket = new ServerSocket();
+			serverSocket.setReuseAddress(true);
+			serverSocket.bind(new InetSocketAddress(port));
+			
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 		} catch (Exception e) {			

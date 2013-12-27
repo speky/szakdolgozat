@@ -13,7 +13,7 @@ public class TCPReceiver extends ConnectionInstance {
 	private Socket socket = null;
 	private int reportInterval = 0;
 	private Timer timer = null;
-	private int totalReadedBytes = 0;
+	private int readedBytes = 0;
 	private MessageI reportSender = null;
 	private ReceiverReportI reportReceiver = null;
 	
@@ -51,10 +51,11 @@ public class TCPReceiver extends ConnectionInstance {
 					  @Override
 					  public void run() {
 						  if (reportReceiver  != null ) {								
-							  reportReceiver.setReceivedBytes(id, reportInterval, totalReadedBytes);
+							  reportReceiver.setReceivedBytes(id, reportInterval, readedBytes);
 						  } else if (null != reportSender){
-							  reportSender.sendReportMessage(Integer.toString(id), "TCP", Integer.toString(totalReadedBytes));
+							  reportSender.sendReportMessage(Integer.toString(id), "TCP", Integer.toString(readedBytes));
 						  }
+						  readedBytes = 0;
 					  }
 					}, reportInterval, reportInterval);
 			}
@@ -116,13 +117,10 @@ public class TCPReceiver extends ConnectionInstance {
 						
 		//socket.setReceiveBufferSize(1024);//1KB
 		//logger.addLine(TAG + "rec buff size: "+ socket.getReceiveBufferSize());
-		
-		int readedBytes = 0;
 				
 		try {
 			while (reading && inputStream != null) {
-				readedBytes = inputStream.read(byteBuffer);
-				totalReadedBytes += readedBytes;		
+				readedBytes += inputStream.read(byteBuffer);		
 				//logger.addLine(TAG+"Readed Bytes: "+readedBytes);								
 			}					
 		} catch (IOException e) {

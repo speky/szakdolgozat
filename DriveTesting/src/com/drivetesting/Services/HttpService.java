@@ -52,7 +52,7 @@ public class HttpService extends IntentService implements ReportI {
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
-	private Socket socket;
+	private static Socket socket = null;
 	private Scanner scanner;
 	private PrintWriter printWriter = null;
 	private Properties answerProperty = new Properties();
@@ -137,7 +137,9 @@ public class HttpService extends IntentService implements ReportI {
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
-			socket = createSocket(ServerPort);
+			if (null == socket ) {
+				socket = createSocket(ServerPort);
+			}
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
 
@@ -225,7 +227,7 @@ public class HttpService extends IntentService implements ReportI {
 				reportReceiver.setData(DataType.MB);
 				reportReceiver.setRate(RateType.MBITS);				
 				break;
-			}
+			}			
 			reportReceiver.start();
 
 			if (type == DriveTestApp.TCP) {

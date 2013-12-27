@@ -37,6 +37,7 @@ public class TestActivity extends Activity implements TestObserver {
 	private final String TYPE_GROUP = "TypeGroup";
 	private final String MESSAGE = "message";
 	private final String STARTON = "start";
+	private final String DIRECTORY = "logs";
 	
 	private RadioGroup directionGroup = null;
 	private int directionGroupIndex = 0;	
@@ -173,7 +174,7 @@ public class TestActivity extends Activity implements TestObserver {
 		progressBar.setVisibility(ProgressBar.VISIBLE);
 		findViewById(R.id.bt_startTest).setEnabled(false);
 		findViewById(R.id.bt_stopTest).setEnabled(true);
-		application.startHttpClientService(direction, type);		
+		application.startHttpClientService(direction, type);
 	}
 		
 	public void onStopTestClick(View view) {

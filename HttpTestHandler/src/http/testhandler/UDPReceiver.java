@@ -18,7 +18,7 @@ public class UDPReceiver extends ConnectionInstance {
 	private InetAddress senderAddress = null;
 	private int senderPort = 0;
 	private final int bufferSize;
-	private int totalReadedBytes = 0;	
+	private int readedBytes = 0;	
 	private double lastTransit = 0.0;
 	private double jitter = 0.0;
 	private int packetCount = 0;
@@ -131,14 +131,15 @@ public class UDPReceiver extends ConnectionInstance {
 			@Override
 			public void run() {
 				if (reportReceiver  != null ) {								
-					reportReceiver.setReceivedBytes(id, reportInterval, totalReadedBytes, jitter, lost, cntOutofOrder, sum);
+					reportReceiver.setReceivedBytes(id, reportInterval, readedBytes, jitter, lost, cntOutofOrder, sum);
 				} else if (null != reportSender){
-					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(totalReadedBytes)+ " "+
+					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(readedBytes)+ " "+
 																																	 Double.toString(jitter)+ " "+
 																																	 Integer.toString(lost)+ " "+
 																																	 Integer.toString(cntOutofOrder)+" "+
 																																	 Integer.toString(sum)+ " ");
 				}
+				readedBytes = 0;
 			}
 		}, reportInterval, reportInterval);
 
@@ -149,8 +150,8 @@ public class UDPReceiver extends ConnectionInstance {
 		while (running && socket != null) {
 			try {
 				socket.receive(datagramPacket);
-				byte[] bytes = datagramPacket.getData();				
-				totalReadedBytes += bytes.length;								
+				byte[] bytes = datagramPacket.getData();
+				readedBytes += bytes.length;								
 			} catch (IOException e) {
 				logger.addLine(TAG+ " Error: " + e.getMessage());
 				return id;

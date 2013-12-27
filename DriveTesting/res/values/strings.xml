@@ -29,6 +29,7 @@
     <string name="address">Address</string>
     <string name="testid">Test ID:</string>
     <string name="settestid">Set Test ID</string>
+    <string name="settestname">Set Test Name</string>
     <string name="choosetestid">Choose Test ID</string>
     <string name="message_header">Messages</string>
     

@@ -47,7 +47,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private int CID = 0;
 	private double signalStrength = 0.0;
 	private int testId = 0;
-	private String testName = "-";	
+	private String testName = "";	
 	private int rateType = 0;
 	private boolean networkConnected = false;
 	private String networkType = ""; 
@@ -203,6 +203,10 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		stopService(intent);
 	}
 	
+	public String getTestName() {
+		return testName;
+	}
+	
 	public long getTestId() {
 		return testId;
 	}
@@ -215,7 +219,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 			httpIntent.putExtra("handler", new Messenger(handler));						
 		}
 
-		testName = prefs.getString("testName", "-");		
+		testName = prefs.getString("testName", "");		
 		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);				
@@ -236,6 +240,19 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		//		dataStorage.close();
 	}
 
+	
+	public List<DbData> queryTestDataByName(String name) {
+		if (name == null  || name.equals("ALL")) {
+			return dataStorage.queryAll();
+		}else {
+			return dataStorage.querySpecifiedTestByName(name);
+		}		
+	}
+
+	public   List<String> getTestNames() {
+		return dataStorage.queryTestNames();
+	}
+	
 	public List<DbData> queryTestData(long id) {
 		if (id < 0) {
 			return dataStorage.queryAll();

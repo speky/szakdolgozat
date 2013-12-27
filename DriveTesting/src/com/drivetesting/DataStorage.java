@@ -160,12 +160,26 @@ public class DataStorage {
 	
 	public List<String> queryTestIds() {
 		List<String> idList = new ArrayList<String>();		
-		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID+" FROM "+DB_TABLE , null);
+		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID +" FROM "+DB_TABLE , null);
 		if (cursor != null) {
 			cursor.moveToFirst();	
 			while (cursor.isAfterLast() == false) {
 				long id = cursor.getLong(cursor.getColumnIndexOrThrow(TESTID));
 				idList.add(Long.toString(id));
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}		
+		return idList;
+	}
+	
+	public List<String> queryTestNames() {
+		List<String> idList = new ArrayList<String>();		
+		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTNAME +" FROM "+DB_TABLE , null);
+		if (cursor != null) {
+			cursor.moveToFirst();	
+			while (cursor.isAfterLast() == false) {				
+				idList.add(cursor.getString(cursor.getColumnIndexOrThrow(TESTNAME)));
 				cursor.moveToNext();
 			}
 			cursor.close();
@@ -180,6 +194,26 @@ public class DataStorage {
 				testId
 		};
 		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
+
+		if (cursor != null) {
+			cursor.moveToFirst();		
+			while (cursor.isAfterLast() == false) {
+				DbData data = cursorToData(cursor);
+				dataList.add(data);
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+		return dataList;		
+	}
+
+	public List<DbData> querySpecifiedTestByName(String testName) {
+		List<DbData> dataList = new ArrayList<DbData>();
+
+		String[] whereArgs = new String[] {
+				testName
+		};
+		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE + " WHERE " + TESTNAME +"  = ?", whereArgs);
 
 		if (cursor != null) {
 			cursor.moveToFirst();		
