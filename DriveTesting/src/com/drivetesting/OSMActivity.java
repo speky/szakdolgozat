@@ -267,10 +267,15 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		osmvController.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString("TESTNAME", "");
-		if (testName.equals("")) {
-			setTestIdString();
-		} else {
+		// set active test id as active and show it on the map
+		if (((DriveTestApp)getApplication()).isTestRunning()) {
+			testId = ((DriveTestApp)getApplication()).getTestId();			
+		}
+		
+		if (testId == 0){
 			setTestNameString();
+		} else {
+			setTestIdString();			
 		}
 	}	
 	

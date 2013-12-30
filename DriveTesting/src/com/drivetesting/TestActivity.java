@@ -1,7 +1,10 @@
 package com.drivetesting;
 
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -9,24 +12,25 @@ import java.util.StringTokenizer;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.MultiAutoCompleteTextView.Tokenizer;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.drivetesting.observers.TestObserver;
 
@@ -37,8 +41,7 @@ public class TestActivity extends Activity implements TestObserver {
 	private final String TYPE_GROUP = "TypeGroup";
 	private final String MESSAGE = "message";
 	private final String STARTON = "start";
-	private final String DIRECTORY = "logs";
-	
+		
 	private RadioGroup directionGroup = null;
 	private int directionGroupIndex = 0;	
 	private RadioGroup typeGroup = null;
@@ -211,8 +214,9 @@ public class TestActivity extends Activity implements TestObserver {
 		application.clearTestMessage();
 	}
 	
-	public void onSaveClick(View view) {
-		
+	public void onSaveClick(View view) {		
+		SaveFileTask task = new SaveFileTask(this, messageList);
+		task.execute("");
 	}
 	
 	public void onDirectionChoosed(View view) {
@@ -325,6 +329,62 @@ public class TestActivity extends Activity implements TestObserver {
     		findViewById(R.id.bt_startTest).setEnabled(true);
     		findViewById(R.id.bt_stopTest).setEnabled(false);    		
     	}		
+	}	
+}
+
+class SaveFileTask extends AsyncTask<String, Void, Boolean> {
+
+	private final String DIRECTORY = "logs";
+	private FileHandler fileHandler;
+	private final ProgressDialog dialog;
+	private Context context ;	
+	private String fileName;
+	private List<HashMap<String, String>> log;
+	
+	SaveFileTask(Context context, List<HashMap<String, String>> logs) {		 
+		this.context = context;
+		log = logs;
+		dialog = new ProgressDialog(context);
+		
+				
+		fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date());
+		 
+		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
 	}
 
+	@Override
+	protected void onPreExecute() {
+		this.dialog.setMessage("Saving log...");
+		this.dialog.show();
+	}
+
+	protected Boolean doInBackground(final String... args) {
+		if (fileName.equals("")) {
+			return false;
+		}
+		
+		String logString =  "";
+		
+		for (HashMap<String, String> map : log) {
+			for (HashMap.Entry<String, String> entry : map.entrySet()) {
+				logString  += entry.getValue()+ "\n";
+			}			
+		}
+		
+		if (fileHandler.writeFile(true, logString, true)) {
+			return true;
+		}
+		
+		return false;
+	}
+
+	protected void onPostExecute(final Boolean success) {
+		if (this.dialog.isShowing()) { 
+			this.dialog.dismiss(); 
+		}if (success) {
+			Toast.makeText(context, "Log saving successful! File: "+ fileHandler.getFilePath(), Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(context, "Log saving failed", Toast.LENGTH_SHORT).show();
+		}
+	}
 }

@@ -27,9 +27,11 @@ public class ExportActivity extends Activity {
 	private TextView testIdText; 
 	private EditText fileText; 
 	private long testId = 0;
+	private String testName = "";
 	private String fileName = "";
 	private SharedPreferences sharedPreferences;
 	private final String TESTID = "TestId";
+	private final String TESTNAME = "TestName";
 	private final String FILE = "file";	
 	private FileHandler testHandler = null;
 	
@@ -62,24 +64,38 @@ public class ExportActivity extends Activity {
 	private void save() {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putLong(TESTID, testId);
+		editor.putString(TESTNAME, testName);
 		editor.putString(FILE, fileName);
 		editor.commit();
 	}
 
 	private void load() {	    	    
 		testId = sharedPreferences.getLong(TESTID, 0);
-		setTestIdString();
+		testName = sharedPreferences.getString(TESTNAME, "");
+		if (testId == 0) {
+			setTestNameString();
+		} else {
+			setTestIdString();
+		}
 		fileName = sharedPreferences.getString(FILE, "");
 		fileText.setText(fileName);
 	}
 	
 	private void setTestIdString() {
 		if (testId == 0) {
-			testIdText.setText(getString(R.string.choosetestid));
+			testIdText.setText("Test: undefined");
 		} else if (testId == -1) {
 			testIdText.setText(getString(R.string.testid) + " ALL");
 		} else {
 			testIdText.setText(getString(R.string.testid) + " "+ Long.toString(testId));
+		}
+	}
+	
+	private void setTestNameString() {
+		if (testName.equals("")) {
+			testIdText.setText("Test: undefined");
+		} else {
+			testIdText.setText("Test name: " + testName);
 		}
 	}
 	
@@ -115,8 +131,8 @@ public class ExportActivity extends Activity {
 	
 	public void onExportClick(View view) {
 		
-		if (testId == 0) {
-			showAlarm("Choose Test ID!");
+		if (testId == 0 && testName.equals("")) {
+			showAlarm("Choose Test!");
 			return;
 		}
 		
@@ -126,13 +142,38 @@ public class ExportActivity extends Activity {
 			return;
 		}
 		
-		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId, fileName, testHandler);
+		ExportToCVS export = new ExportToCVS(this, ((DriveTestApp)getApplication()).getDataStorage(), testId, testName,
+																	fileName, testHandler);
 		export.execute("");
+	}
+
+	public void onTestNameClick(View view) {
+		List<String> list = ((DriveTestApp)getApplication()).getTestNames();
+		list.add("ALL");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Choose Test Name");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				// load road for the testId
+				try{
+					testName = items[item].toString();
+				}catch (NumberFormatException ex) {
+					// ALL is selected
+					testName = "ALL";
+				}
+				testId = 0;
+				setTestNameString();
+			}                
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	public void onTestClick(View view) {
 		List<String> list = ((DriveTestApp)getApplication()).getTestIds();
-		list.add("All");
+		list.add("ALL");
 		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -146,13 +187,14 @@ public class ExportActivity extends Activity {
 					// ALL is selected
 					testId = -1;
 				}
+				testName = "";
 				setTestIdString();
-			}                
+			}
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -189,11 +231,13 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 	private Context context ;
 	private DataStorage dbData;
 	private long testId;
+	private String testName;
 	
-	ExportToCVS(Context context, DataStorage dbData, long testId, String fileName, FileHandler testHandler) {		 
+	ExportToCVS(Context context, DataStorage dbData, long testId, String testName, String fileName, FileHandler testHandler) {		 
 		this.context = context;
 		this.dbData = dbData;
 		this.testId = testId;
+		this.testName = testName;
 		dialog = new ProgressDialog(context);
 		if (testHandler == null) {
 			fileHandler = new FileHandler(context, fileName, DIRECTORY);
@@ -208,16 +252,17 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 
 	protected Boolean doInBackground(final String... args) {
 		List<DbData> datas = null;
-		if (testId == -1) {
-			datas = dbData.queryAll();
-		}else {		
+		if (testId == 0 && testName.equals("")) {
+				datas = dbData.queryAll();
+		} else  if (testId != 0 ) {		
 			datas = dbData.querySpecifiedTest(String.valueOf(testId));
+		}	else {
+				datas = dbData.querySpecifiedTestByName(testName);
 		}
 		
 		if (datas.size() == 0) {
 			return false;
 		}
-
 		
 		String exportText = dbData.getColunNames();
 

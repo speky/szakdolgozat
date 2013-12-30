@@ -35,9 +35,19 @@
             android:id="@+id/btn_settestid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/btn_testname"
             android:layout_alignParentRight="true"
             android:onClick="onTestClick"
             android:text="@string/settestid" />
+
+        <Button
+            android:id="@+id/btn_testname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/btn_settestid"
+            android:onClick="onTestNameClick"
+            android:text="@string/settestname" />
     </RelativeLayout>
 
     <Button

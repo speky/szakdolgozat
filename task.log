@@ -6,13 +6,7 @@ General:
 
 - logging into a file on Android (Android fileHandler should be inject into the common logger, maybe)
 
-Test Activity
-- save logs
-
 Map Activity
-- if the test is running then its data should be visible on the map
 - singal strngth take into account when it showed on the map. (UP and DOWN speed too:eg. weak, normal, good)
 
-Export 
-- use testname search too
 
