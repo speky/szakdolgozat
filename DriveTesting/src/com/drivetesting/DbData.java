@@ -13,6 +13,7 @@ public class DbData {
 	public double lat;
 	public double lon;		
 	public double signalStrength;
+	public int signalLevel;
 	public double up;
 	public double down;
 	public double jitter;
@@ -36,6 +37,7 @@ public class DbData {
 		lat= 0.0;
 		lon= 0.0;		
 		signalStrength = 0.0;
+		signalLevel = 0;
 		up= 0.0;
 		down= 0.0;
 		jitter = 0.0;
@@ -59,6 +61,7 @@ public class DbData {
 		exportText.append(lat +",");
 		exportText.append(lon +",");
 		exportText.append(signalStrength +",");
+		exportText.append(signalLevel +",");
 		exportText.append(up +",");
 		exportText.append(down +",");
 		exportText.append(jitter +",");
@@ -95,6 +98,7 @@ public class DbData {
 		str.append("Time: "+ time.toString() +"\n");
 		str.append("Network Type: "+ networkType+"\n");
 		str.append("Signal Strength: " + signalStrength +"\n");
+		str.append("Signal Level: " + signalLevel +"\n");
 		str.append("Upload: "+ Double.toString(up) + "\n");
 		str.append("Download: "+ Double.toString(down) + "\n");
 		str.append("MCC: "+ mcc +"\n");

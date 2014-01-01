@@ -118,7 +118,7 @@ public class PhoneStateListenerService extends Service {
 					Log.d(TAG, " Signal strength changed:  " + dbm +" Dbm");
 				} else {
 					// asu = 99 is a special case, where the signal strength is unknown.
-					application.setSignalStrength("-");
+					application.setSignalStrength("0");
 					Log.d(TAG, " Signal strength changed: unknown");
 				}
 				

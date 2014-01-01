@@ -14,7 +14,6 @@ import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -55,18 +54,19 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private RoadManager roadManager = new OSRMRoadManager();
 	private MapView mapView;
 	private int noOfPoints;
+	private int nodeCount;
 	private IMapController osmvController;
-	
-	private boolean isAddNodes = true;
+	private ItemizedOverlayWithBubble<ExtendedOverlayItem> roadNodeMarkers;
+	private ScaleBarOverlay scaleBarOverlay = null;
 	private List<RoadNode> nodes = null; 
-	private RoadNode roadNode = null;
-	private RoadNode firstNode = null;
+	private RoadNode nodeA = null;
+	private RoadNode nodeB = null;	
 	private Road road = null;
-	private PathOverlay roadOverlay;
-	private ItemizedOverlayWithBubble<ExtendedOverlayItem> roadNodeMarkers;	
+	private List<DbData> data = null;
 	private TextView testIdText;
 	private long testId = -1;
 	private String testName = "";
+	
 	private DriveTestApp application = null;
 	private SharedPreferences sharedPreferences;
 	
@@ -90,20 +90,19 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		mapView = (MapView) findViewById(R.id.mapView);
 		
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-		
-		roadNode = new RoadNode();
+				
 		noOfPoints = 0;
+		nodeCount = 0;
 		setHardwareAccelerationOff();		
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
-
+		
 		osmvController = mapView.getController();		
 		mapView.setTileSource(TileSourceFactory.MAPNIK);		
 		
 		//Add Scale Bar
-		ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(this);
-		mapView.getOverlays().add(scaleBarOverlay);
-
+		scaleBarOverlay = new ScaleBarOverlay(this);
+				
 		/*DefaultResourceProxyImpl defaultResourceProxyImpl = new DefaultResourceProxyImpl(this);
 		locationOverlay =  new CustomItemizedIconOverlay(this, null, defaultResourceProxyImpl);
 		//locationOverlay =  new MyLocationOverlay(getApplicationContext(), mapView);
@@ -111,8 +110,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		 */
 		final ArrayList<ExtendedOverlayItem> roadItems = new ArrayList<ExtendedOverlayItem>();
 		roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
-		mapView.getOverlays().add( roadNodeMarkers);
-
+						
 		osmvController.setZoom(15);		
 		testId = application.getTestId();
 		testName = application.getTestName();
@@ -136,109 +134,8 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		Location loc = new Location("dummyprovider");
 		loc.setLongitude(19.070567);
 		loc.setLatitude(47.497147);
+		// set camera to the location
 		updateLoc(loc);	
-	}
-	
-	private void setTestIdString() {
-		if (testId == 0) {
-			testIdText.setText("Test undefined");
-		} else {
-			if (-1 == testId) {
-				testIdText.setText("Test id: ALL");
-			} else {
-				testIdText.setText("Test id:" + Long.toString(testId));
-			}
-			loadRoadForTestId();
-		}
-	}
-	
-	private void setTestNameString() {
-		if (testName.equals("")) {
-			testIdText.setText("Test: undefined");
-		} else {
-			testIdText.setText("Test name: " + testName);
-			loadRoadForTestName();
-		}
-	}
-	
-	private void loadRoadForTestId() {		
-		List<DbData> data = application.queryTestData(testId);
-		loadRoad(data);
-	}
-	
-	private void loadRoadForTestName() {		
-		List<DbData> data = application.queryTestDataByName(testName);
-		loadRoad(data);
-	}
-	
-	private void loadRoad(List<DbData> data) {		
-		if (data == null) {
-			return;
-		}
-		nodes = new ArrayList<RoadNode>();
-		roadNodeMarkers.removeAllItems();
-		// make all node item based on the query from the database 
-		for (int i = 0; i < data.size(); ++i) {
-			RoadNode node = new RoadNode();
-			node.mLocation = new GeoPoint(data.get(i).lat, data.get(i).lon);
-			node.mInstructions = data.get(i).toInstrustionString(); 
-			nodes.add(node);
-			++noOfPoints;
-			// fill up the roadNodeMarkers 
-			addRoadNode(node);
-		}
-	
-		isAddNodes = false;
-		// begining of the road
-		firstNode = nodes.get(0);
-		firstNode.mDuration = -1;
-		// end of the road
-		roadNode = nodes.get(nodes.size()-1);
-		
-		getRoadAsync(roadNode.mLocation);
-		osmvController.setCenter(firstNode.mLocation);
-		mapView.postInvalidate();	
-	}
-	
-	public void onTestClick(View view) {
-		List<String> list = application.getTestIds();
-		list.add("ALL");
-		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
-		
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Test ID");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-            	// load road for the testId
-            	try{
-            		testId = Long.parseLong(items[item].toString());
-            	}catch (NumberFormatException ex) {
-            		// ALL is selected
-            		testId = -1;
-            	}
-                setTestIdString();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-	}
-
-	public void onTestNameClick(View view) {
-		List<String> list = application.getTestNames();
-		list.add("ALL");
-		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
-		
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Test Name");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-            	// load road for the testName
-                testName = items[item].toString();
-                setTestNameString();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
 	}
 	
 	@Override
@@ -286,18 +183,222 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		
 		editor.commit();
 	}
+
+	public void onTestClick(View view) {
+		List<String> list = application.getTestIds();
+		list.add("ALL");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Test ID");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	// load road for the testId
+            	try{
+            		testId = Long.parseLong(items[item].toString());
+            	}catch (NumberFormatException ex) {
+            		// ALL is selected
+            		testId = -1;
+            	}
+                setTestIdString();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+	}
+
+	public void onTestNameClick(View view) {
+		List<String> list = application.getTestNames();
+		list.add("ALL");
+		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
+		
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Test Name");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+            	// load road for the testName
+                testName = items[item].toString();
+                setTestNameString();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+	}
 	
+	private void setTestIdString() {
+		if (testId == 0) {
+			testIdText.setText("Test undefined");
+		} else {
+			if (-1 == testId) {
+				testIdText.setText("Test id: ALL");
+			} else {
+				testIdText.setText("Test id:" + Long.toString(testId));
+			}
+			loadRoadForTestId();
+		}
+	}
+	
+	private void setTestNameString() {
+		if (testName.equals("")) {
+			testIdText.setText("Test: undefined");
+		} else {
+			testIdText.setText("Test name: " + testName);
+			loadRoadForTestName();
+		}
+	}
+	
+	private void loadRoadForTestId() {		
+		data = application.queryTestData(testId);
+		nodeCount = data.size();
+		clearMap();
+		loadRoad();
+	}
+	
+	private void loadRoadForTestName() {		
+		data = application.queryTestDataByName(testName);
+		nodeCount = data.size();
+		clearMap();
+		loadRoad();
+	}
+	
+	private void clearMap() {
+		noOfPoints = 0;
+		nodes = new ArrayList<RoadNode>();
+		roadNodeMarkers.removeAllItems();
+		mapView.getOverlays().clear();		
+	}
+	
+	private RoadNode addRoadNode(DbData data) {
+		RoadNode node = new RoadNode();
+		node.mLocation = new GeoPoint(data.lat, data.lon);
+		node.mInstructions = data.toInstrustionString();
+		node.mDuration = data.signalLevel;
+		nodes.add(node);		
+		return node;
+	}
+	
+	private void loadRoad() {		
+		if (data == null || nodeCount == 0) {
+			return;
+		}
+		
+		nodeA = nodeB;
+		// handle the first node on the map
+		if (0 == noOfPoints) {
+			nodeA = addRoadNode(data.get(noOfPoints++));
+			addRoadMarker(nodeA);
+			--nodeCount;
+		}		
+		// make all node item based on the query from the database 
+		if (nodeCount > 0) {
+			nodeB = addRoadNode(data.get(noOfPoints++));			
+			ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();		
+			waypoints.add(nodeA.mLocation);
+			waypoints.add(nodeB.mLocation);			
+			UpdateRoadTask task = new UpdateRoadTask();
+			task.execute(waypoints);			
+		} else {
+			setOverlays();
+		}
+				
+	}
+
+	// Async task to get the road in a separate thread.
+	class UpdateRoadTask extends AsyncTask<Object, Void, Road> {		
+		
+		protected Road doInBackground(Object... params) {
+			@SuppressWarnings("unchecked")
+			ArrayList<GeoPoint> waypoints = (ArrayList<GeoPoint>)params[0];		
+			road = roadManager.getRoad(waypoints);
+			return road;
+		}
+
+		@Override
+		protected void onPostExecute(Road result) {
+			drawRoadOnMap();
+			--nodeCount;
+			// set the camera at the last point and set the overlays on top of the roads 
+			if (0 == nodeCount) {
+				setOverlays();
+			}else {
+				loadRoad();
+			}
+		}		
+	}
+	
+	private void setOverlays(){
+		osmvController.setCenter(nodeA.mLocation);						
+		mapView.getOverlays().add(roadNodeMarkers);
+		mapView.getOverlays().add(scaleBarOverlay);				
+		mapView.postInvalidate();
+		mapView.invalidate();
+	}
+	
+	private void drawRoadOnMap() {
+		if (road == null){
+			return;
+		}
+		if (road.mStatus == Road.STATUS_DEFAULT) {
+			Toast.makeText(mapView.getContext(), "We have a problem to get the route", Toast.LENGTH_SHORT).show();
+		}
+		
+		PathOverlay roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
+		//set the road line color
+		roadOverlay.setColor(Color.GREEN);
+
+		mapView.getOverlays().add(roadOverlay);
+		setProperLocationOnNodes();
+	}
+	
+	private void setProperLocationOnNodes(){
+		if (null == road){
+			return;
+		}
+		
+		nodeB.mLocation = road.mNodes.get(road.mNodes.size()-1).mLocation;
+		addRoadMarker(nodeB);
+	}
+
+	// add a  new road marker
+	private void addRoadMarker(RoadNode node) {
+		if (node != null) {
+			Drawable marker = null;
+
+			switch ((int)node.mDuration) {
+			case DriveTestApp.SIGNAL_UNKOWN :
+				marker = getResources().getDrawable(R.drawable.marker_unknown);
+				break;
+			case DriveTestApp.SIGNAL_WEAK :
+				marker = getResources().getDrawable(R.drawable.marker_weak);
+				break;
+			case DriveTestApp.SIGNAL_MODERATE :
+				marker = getResources().getDrawable(R.drawable.marker_moderate);
+				break;
+			case DriveTestApp.SIGNAL_GOOD :
+				marker = getResources().getDrawable(R.drawable.marker_good);
+				break;
+			case DriveTestApp.SIGNAL_GREAT :
+				marker = getResources().getDrawable(R.drawable.marker_great);
+				break;
+			}
+			ExtendedOverlayItem nodeMarker = new ExtendedOverlayItem("Step " + noOfPoints, node.mInstructions, node.mLocation, this);
+			nodeMarker.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
+			nodeMarker.setMarker(marker);
+			roadNodeMarkers.addItem(nodeMarker);
+		}
+	}
+
 	@Override
-	public void update(Location location) {		
+	public void update(Location location) {
 		updateLoc(location);
-		Log.d(TAG, "location update");		
+		Log.d(TAG, "location update");
 	}
 
 	private void updateLoc(Location location){
 		GeoPoint geoPoint = new GeoPoint(location);
-		osmvController.setCenter(geoPoint);	
+		osmvController.setCenter(geoPoint);
 		//locationOverlay.setLocation(geoPoint);		
-		mapView.postInvalidate();			
+		mapView.postInvalidate();
 	}
 
 	@Override
@@ -305,118 +406,13 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 
 	}
 
-	private void putRoadNodes(){
-		if (null == road){
-			return;
-		}
-		
-		// finalize the first node of he road when two node have already exist
-		if (firstNode.mDuration == -1) {
-			firstNode.mDuration = 0;
-			firstNode.mLocation = road.mNodes.get(0).mLocation;
-			addRoadNode(firstNode);
-		}
-		
-		// correct the last point location which is fit on the road
-		GeoPoint location = getLastPoint();
-		if (location != null) {
-			roadNode.mLocation = location;
-			addRoadNode(roadNode);
-		}
-	}
-
-	private GeoPoint  getLastPoint() {
-		if (null == road){ 
-			return null;
-		}
-		int size = road.mNodes.size();
-		if (size == 0) {
-			return null;
-		}		
-		return road.mNodes.get(size-1).mLocation;		
-	}
-
-	// add a  new road marker 
-	private void addRoadNode(RoadNode node) {
-		if (node != null) {
-			Drawable marker = getResources().getDrawable(R.drawable.marker_node);
-			ExtendedOverlayItem nodeMarker = new ExtendedOverlayItem("Step " + noOfPoints, node.mInstructions, node.mLocation, this);
-			nodeMarker.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
-			nodeMarker.setMarker(marker);
-			roadNodeMarkers.addItem(nodeMarker);
-		}
-	}
-	
-	public void getRoadAsync(GeoPoint newPoint){
-		++noOfPoints;
-		// make the first node if no other is exists
-		if (road == null && firstNode == null) {
-			firstNode = new RoadNode();
-			firstNode.mInstructions = roadNode.mInstructions;
-			firstNode.mLocation = newPoint;
-			firstNode.mDuration = -1;
-			return;
-		}
-		// set the two end points of the road
-		ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();		
-		waypoints.add(firstNode.mLocation);		
-		waypoints.add(newPoint); 
-		
-		new UpdateRoadTask().execute(waypoints);
-		mapView.postInvalidate();
-	}
-
-	void drawRoadOnMap(){		
-		List<Overlay> mapOverlays = mapView.getOverlays();
-		// if it exist re draw the road overlay
-		if (roadOverlay != null) {
-			mapOverlays.remove(roadOverlay);
-		}
-		if (road == null){
-			return;
-		}
-
-		if (road.mStatus == Road.STATUS_DEFAULT) {
-			Toast.makeText(mapView.getContext(), "We have a problem to get the route", Toast.LENGTH_SHORT).show();
-		}
-		roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
-		//set the road line color
-		roadOverlay.setColor(Color.GREEN);
-		// Set the road overlay at the "bottom", just above the MapEventsOverlay to avoid covering the other overlays
-		Overlay removedOverlay = mapOverlays.set(0, roadOverlay);		 
-		mapOverlays.add(1, removedOverlay);
-		
-		if (isAddNodes) {
-			putRoadNodes();
-		} else {
-			isAddNodes = true;
-		}
-		mapView.postInvalidate();
-	}
-
-	// Async task to get the road in a separate thread.
-	class UpdateRoadTask extends AsyncTask<Object, Void, Road> {		
-		
-		protected Road doInBackground(Object... params) {	
-			@SuppressWarnings("unchecked")
-			ArrayList<GeoPoint> waypoints = (ArrayList<GeoPoint>)params[0];		
-			return roadManager.getRoad(waypoints);
-		}
-
-		protected void onPostExecute(Road result) {
-			road = result;			
-			drawRoadOnMap();                    
-		}
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);
 		menu.findItem(R.id.menu_map).setVisible(false);
-	
 		return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 

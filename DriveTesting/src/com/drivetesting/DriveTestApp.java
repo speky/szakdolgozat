@@ -135,12 +135,12 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		dataStorage.open();	
 
 		dataStorage.deleteAll();
-		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, "networkType");
+		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, "networkType");
 		
-		dataStorage.insert(1, "testName1", 47.497147, 19.070567, 1.1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
-		dataStorage.insert(1, "testName1", 47.497219, 19.069383, 2.2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
-		dataStorage.insert(1, "testName1", 47.497994, 19.068972, 3.3, 3.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
-		dataStorage.insert(1, "testName1", 47.495769, 19.070244, 4.4, 4.4, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
+		dataStorage.insert(1, "testName1", 47.497147, 19.070567, 1.1, 1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
+		dataStorage.insert(1, "testName1", 47.497219, 19.069383, 5.2, 2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
+		dataStorage.insert(1, "testName1", 47.497994, 19.068972, 8.3, 3, 9.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
+		//dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
 		 
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
@@ -166,6 +166,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				lat, 
 				lon,
 				signalStrength,
+				signalLevel,
 				ulSpeed,
 				dlSpeed,
 				0.0,
@@ -190,7 +191,8 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				testName, 
 				lat, 
 				lon,
-				signalStrength,													 
+				signalStrength,
+				signalLevel,
 				ulSpeed,
 				dlSpeed,
 				jitter,
@@ -367,7 +369,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		if (index > 0 ) {
 			testObservers.remove(index);
 		}
-	}
+	}	
 	@Override
 	public void notifyReportObservers() {
 		for (TestObserver testObserver :testObservers) {
@@ -376,7 +378,6 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 			}
 		}
 	}
-
 
 	// phoneStateObserver methods
 	public void registerPhoneStateObserver(PhoneStateObserver observer) {

@@ -29,6 +29,7 @@ public class DataStorage {
 	public static final String LAT= "lat";
 	public static final String LON= "lon";
 	public static final String SIGNAL = "signal_strenght";
+	public static final String LEVEL = "signal_level";
 	public static final String UPSPEED = "up_speed";
 	public static final String DOWNSPEED = "down_speed";
 	public static final String JITTER = "jitter";
@@ -71,7 +72,7 @@ public class DataStorage {
 		return df.format(c.getTime());
 	}
 
-	public void insert(long testId, String testName, double lat, double lon, double signalStrength, double up, 
+	public void insert(long testId, String testName, double lat, double lon, double signalStrength, int signalLevel,  double up, 
 			double down, double jitter, int lost, int sum,	 int mcc, int mnc, int lac, int cid, int rate, String networkType) {		
 		String date = currentTime();
 		ContentValues values = new ContentValues();
@@ -81,6 +82,7 @@ public class DataStorage {
 		values.put(LAT, lat);
 		values.put(LON, lon);
 		values.put(SIGNAL, signalStrength);
+		values.put(LEVEL, signalLevel);
 		values.put(UPSPEED, up);
 		values.put(DOWNSPEED, down);
 		values.put(JITTER, jitter);
@@ -104,6 +106,7 @@ public class DataStorage {
 		row.testName= cursor.getString(cursor.getColumnIndexOrThrow(TESTNAME));
 		row.time = cursor.getString(cursor.getColumnIndexOrThrow(TIME));
 		row.signalStrength = cursor.getDouble(cursor.getColumnIndexOrThrow(SIGNAL));
+		row.signalLevel = cursor.getInt(cursor.getColumnIndexOrThrow(LEVEL));
 		row.lat = cursor.getDouble(cursor.getColumnIndexOrThrow(LAT));
 		row.lon = cursor.getDouble(cursor.getColumnIndexOrThrow(LON));
 		row.up = cursor.getDouble(cursor.getColumnIndexOrThrow(UPSPEED));
@@ -129,6 +132,7 @@ public class DataStorage {
 		columns.append(LAT+",");
 		columns.append(LON+",");
 		columns.append(SIGNAL+",");
+		columns.append(LEVEL+",");
 		columns.append(UPSPEED+",");
 		columns.append(DOWNSPEED+",");
 		columns.append(JITTER+",");
@@ -241,8 +245,8 @@ public class DataStorage {
 		public void onCreate(SQLiteDatabase db) {
 			String sql = 
 					String.format("create table %s (%s integer primary key autoincrement, %s integer, %s varchar(100), %s varchar(100), %s varchar(15), " +
-							"%s varchar(15),  %s varchar(15),  %s varchar(15), %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s varchar(30))", 
-							DB_TABLE , ID, TESTID, TESTNAME, TIME,  LAT, LON, SIGNAL, UPSPEED, DOWNSPEED, JITTER, PACKETLOST, SUMPACKET, 
+							"%s varchar(15),  %s varchar(15),  %s varchar(15),%s varchar(15), %s varchar(15), %s varchar(15), %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s integer, %s varchar(30))", 
+							DB_TABLE , ID, TESTID, TESTNAME, TIME,  LAT, LON, SIGNAL, LEVEL, UPSPEED, DOWNSPEED, JITTER, PACKETLOST, SUMPACKET, 
 							MCC, MNC, LAC, CID, RATE, NETWORKTYPE);
 
 			Log.d(TAG, "onCreate Sql:"+sql);
