@@ -5,6 +5,8 @@ General:
 - has sleep effect on the testing?
 
 - logging into a file on Android (Android fileHandler should be inject into the common logger, maybe)
+- handoff - torony váltások logolása
+- network tipus váltés logolása (umts, edge, ..)
 
 Map Activity
 - singal strngth take into account when it showed on the map. (UP and DOWN speed too:eg. weak, normal, good)

@@ -4190,6 +4190,13 @@ t, így kap értesítést az applikáció az adatkapcsolat (data connection) ál
 \end_layout
 
 \begin_layout Description
+The values are defined in the GSM standard TS 27.007, section 8.5 (Google
+ it, or see here) From the standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
+ -53 dBm 31 -51 dBm or greater 99 not known or not detectable Which means
+ - 0 is low, 31 is good.
+\end_layout
+
+\begin_layout Description
 HttpService Az alkalamazás egyik kulcs osztálya, nagy szerepe van a teszt
  futtatás során.
  A 
@@ -4493,6 +4500,14 @@ http://www.jmarshall.com/easy/http/
 
 \begin_layout Standard
 http://www.rfc-editor.org/rfc/rfc1945.txt
+\end_layout
+
+\begin_layout Standard
+http://en.wikipedia.org/wiki/Mobile_phone_signal
+\end_layout
+
+\begin_layout Standard
+http://en.wikipedia.org/wiki/DBm
 \end_layout
 
 \begin_layout Standard

@@ -37,7 +37,17 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	public static final int TCP = 1;
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
+	
+	public static final int SIGNAL_UNKOWN = 0;
+	public static final int SIGNAL_WEAK = 1;
+	public static final int SIGNAL_MODERATE = 2;
+	public static final int SIGNAL_GOOD = 3;
+	public static final int SIGNAL_GREAT = 4;
 
+	public static final int GSM_SIGNAL_STRENGTH_GREAT = 12;
+	public static final int GSM_SIGNAL_STRENGTH_GOOD = 8;
+	public static final int GSM_SIGNAL_STRENGTH_MODERATE = 5;
+    
 	private DataStorage dataStorage;
 	private SharedPreferences prefs;
 
@@ -46,6 +56,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private int LAC = 0;
 	private int CID = 0;
 	private double signalStrength = 0.0;
+	private int signalLevel = SIGNAL_UNKOWN;
 	private int testId = 0;
 	private String testName = "";	
 	private int rateType = 0;
@@ -154,7 +165,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				testName, 
 				lat, 
 				lon,
-				signalStrength,													 
+				signalStrength,
 				ulSpeed,
 				dlSpeed,
 				0.0,
@@ -286,6 +297,9 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		signalStrength = Double.parseDouble(value);
 		notifySignalStrengthChange(value);
 	}
+	public void setSignalLevel(final int value) {
+		signalLevel = value;		
+	}
 	public void setCdmaEcio(final String value) {
 		notifyCdmaEcioChange(value);
 	}	
@@ -378,7 +392,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		for (PhoneStateObserver observer :phoneStateObservers) {			
 			observer.updateSignalStrength(value);
 		}        
-	}
+	}	
 	public void notifyCdmaEcioChange(String value){
 		for (PhoneStateObserver observer :phoneStateObservers) {
 			observer.updateCdmaEcio(value);			

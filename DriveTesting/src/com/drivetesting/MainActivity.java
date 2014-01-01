@@ -253,7 +253,7 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 		setHashMapElement(phoneDataList, "Signal strength", value + getApplicationContext().getString(R.string.unit_dbm));
 		phoneDataAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();	
-	}
+	}	
 	@Override
 	public void updateCdmaEcio(String value) {
 		setHashMapElement(phoneDataList, "Cdma EcIo", value);
@@ -365,4 +365,5 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 			return false;			
 		}
 	}
+	
 }

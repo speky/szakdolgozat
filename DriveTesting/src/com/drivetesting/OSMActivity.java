@@ -58,6 +58,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private IMapController osmvController;
 	
 	private boolean isAddNodes = true;
+	private List<RoadNode> nodes = null; 
 	private RoadNode roadNode = null;
 	private RoadNode firstNode = null;
 	private Road road = null;
@@ -66,7 +67,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private TextView testIdText;
 	private long testId = -1;
 	private String testName = "";
-	
+	private DriveTestApp application = null;
 	private SharedPreferences sharedPreferences;
 	
 	private void setHardwareAccelerationOff(){
@@ -79,7 +80,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_osm);
-		 
+		application = ((DriveTestApp)getApplication());
 		testIdText = (TextView)this.findViewById(R.id.testIdText);
 		
 		ActionBar actionBar = getActionBar();	
@@ -107,24 +108,15 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		locationOverlay =  new CustomItemizedIconOverlay(this, null, defaultResourceProxyImpl);
 		//locationOverlay =  new MyLocationOverlay(getApplicationContext(), mapView);
 		mapView.getOverlays().add(locationOverlay);
-*/
+		 */
 		final ArrayList<ExtendedOverlayItem> roadItems = new ArrayList<ExtendedOverlayItem>();
 		roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
 		mapView.getOverlays().add( roadNodeMarkers);
 
-		//if (savedInstanceState == null) {               
-			//no location known, we put a hard-coded map position:
-			osmvController.setZoom(15);
-			osmvController.setCenter(new GeoPoint(47.497147, 19.070567));
-			testId = ((DriveTestApp)getApplication()).getTestId();
-			testName = ((DriveTestApp)getApplication()).getTestName();
-		/*} else {
-			osmvController.setZoom(savedInstanceState.getInt("zoom_level"));
-			osmvController.setCenter((GeoPoint)savedInstanceState.getParcelable("map_center"));			
-			testId = savedInstanceState.getLong("test_id");
-			testName = savedInstanceState.getString("test_name");
-		}*/
-		
+		osmvController.setZoom(15);		
+		testId = application.getTestId();
+		testName = application.getTestName();
+			
 		if (testName.equals("") ) {
 			setTestNameString();
 		} else {
@@ -170,42 +162,46 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 	
 	private void loadRoadForTestId() {		
-		List<DbData> data = ((DriveTestApp)getApplication()).queryTestData(testId);
+		List<DbData> data = application.queryTestData(testId);
 		loadRoad(data);
 	}
 	
 	private void loadRoadForTestName() {		
-		List<DbData> data = ((DriveTestApp)getApplication()).queryTestDataByName(testName);
+		List<DbData> data = application.queryTestDataByName(testName);
 		loadRoad(data);
 	}
 	
-	private void loadRoad(List<DbData> data) {
-		List<RoadNode> nodes = new ArrayList<RoadNode>();
+	private void loadRoad(List<DbData> data) {		
 		if (data == null) {
 			return;
 		}
-		
+		nodes = new ArrayList<RoadNode>();
 		roadNodeMarkers.removeAllItems();
+		// make all node item based on the query from the database 
 		for (int i = 0; i < data.size(); ++i) {
-			RoadNode node = new RoadNode();				
+			RoadNode node = new RoadNode();
 			node.mLocation = new GeoPoint(data.get(i).lat, data.get(i).lon);
 			node.mInstructions = data.get(i).toInstrustionString(); 
 			nodes.add(node);
 			++noOfPoints;
+			// fill up the roadNodeMarkers 
 			addRoadNode(node);
 		}
 	
 		isAddNodes = false;
+		// begining of the road
 		firstNode = nodes.get(0);
 		firstNode.mDuration = -1;
+		// end of the road
 		roadNode = nodes.get(nodes.size()-1);
+		
 		getRoadAsync(roadNode.mLocation);
 		osmvController.setCenter(firstNode.mLocation);
 		mapView.postInvalidate();	
 	}
 	
 	public void onTestClick(View view) {
-		List<String> list = ((DriveTestApp)getApplication()).getTestIds();
+		List<String> list = application.getTestIds();
 		list.add("ALL");
 		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
 		
@@ -228,7 +224,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 
 	public void onTestNameClick(View view) {
-		List<String> list = ((DriveTestApp)getApplication()).getTestNames();
+		List<String> list = application.getTestNames();
 		list.add("ALL");
 		final CharSequence[] items = list.toArray(new CharSequence[list.size()]);
 		
@@ -248,15 +244,15 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	@Override
 	protected void onResume() {
 		super.onResume();
-		((DriveTestApp)getApplication()).registerReportObserver(this);
-		((DriveTestApp)getApplication()).startGPSService();
+		application.registerReportObserver(this);
+		application.startGPSService();
 		load();
 	} 
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		((DriveTestApp)getApplication()).removeReportObserver(this);
+		application.removeReportObserver(this);
 		save();
 	}
 
@@ -266,10 +262,10 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		float lon = sharedPreferences.getFloat(LON, 0.0f);
 		osmvController.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
-		testName = sharedPreferences.getString("TESTNAME", "");
+		testName = sharedPreferences.getString(TESTNAME, "");
 		// set active test id as active and show it on the map
-		if (((DriveTestApp)getApplication()).isTestRunning()) {
-			testId = ((DriveTestApp)getApplication()).getTestId();			
+		if (application.isTestRunning()) {
+			testId = application.getTestId();			
 		}
 		
 		if (testId == 0){
@@ -282,7 +278,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private void save() {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putLong(TESTID, testId);
-		editor.putString("TESTNAME", testName);
+		editor.putString(TESTNAME, testName);
 		editor.putInt(ZOOM, mapView.getZoomLevel());
 		GeoPoint c = (GeoPoint) mapView.getMapCenter();
 		editor.putFloat(LAT, c.getLatitudeE6());
@@ -303,18 +299,25 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		//locationOverlay.setLocation(geoPoint);		
 		mapView.postInvalidate();			
 	}
-		
+
+	@Override
+	public void update(int action, String reports) {
+
+	}
+
 	private void putRoadNodes(){
-		if (null == road){ 
-			return;		
+		if (null == road){
+			return;
 		}
 		
+		// finalize the first node of he road when two node have already exist
 		if (firstNode.mDuration == -1) {
 			firstNode.mDuration = 0;
 			firstNode.mLocation = road.mNodes.get(0).mLocation;
 			addRoadNode(firstNode);
 		}
 		
+		// correct the last point location which is fit on the road
 		GeoPoint location = getLastPoint();
 		if (location != null) {
 			roadNode.mLocation = location;
@@ -333,10 +336,11 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		return road.mNodes.get(size-1).mLocation;		
 	}
 
+	// add a  new road marker 
 	private void addRoadNode(RoadNode node) {
 		if (node != null) {
 			Drawable marker = getResources().getDrawable(R.drawable.marker_node);
-			ExtendedOverlayItem nodeMarker = new ExtendedOverlayItem("Step " + noOfPoints, node.mInstructions, node.mLocation, this);		
+			ExtendedOverlayItem nodeMarker = new ExtendedOverlayItem("Step " + noOfPoints, node.mInstructions, node.mLocation, this);
 			nodeMarker.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
 			nodeMarker.setMarker(marker);
 			roadNodeMarkers.addItem(nodeMarker);
@@ -345,6 +349,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	
 	public void getRoadAsync(GeoPoint newPoint){
 		++noOfPoints;
+		// make the first node if no other is exists
 		if (road == null && firstNode == null) {
 			firstNode = new RoadNode();
 			firstNode.mInstructions = roadNode.mInstructions;
@@ -352,7 +357,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 			firstNode.mDuration = -1;
 			return;
 		}
-		
+		// set the two end points of the road
 		ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();		
 		waypoints.add(firstNode.mLocation);		
 		waypoints.add(newPoint); 
@@ -361,9 +366,9 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		mapView.postInvalidate();
 	}
 
-	void drawRoadOnMap(){
-		
+	void drawRoadOnMap(){		
 		List<Overlay> mapOverlays = mapView.getOverlays();
+		// if it exist re draw the road overlay
 		if (roadOverlay != null) {
 			mapOverlays.remove(roadOverlay);
 		}
@@ -375,13 +380,14 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 			Toast.makeText(mapView.getContext(), "We have a problem to get the route", Toast.LENGTH_SHORT).show();
 		}
 		roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
+		//set the road line color
 		roadOverlay.setColor(Color.GREEN);
-		Overlay removedOverlay = mapOverlays.set(0, roadOverlay);
-		//Set the road overlay at the "bottom", just above the MapEventsOverlay to avoid covering the other overlays 
+		// Set the road overlay at the "bottom", just above the MapEventsOverlay to avoid covering the other overlays
+		Overlay removedOverlay = mapOverlays.set(0, roadOverlay);		 
 		mapOverlays.add(1, removedOverlay);
 		
 		if (isAddNodes) {
-			putRoadNodes();	
+			putRoadNodes();
 		} else {
 			isAddNodes = true;
 		}
@@ -390,6 +396,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 
 	// Async task to get the road in a separate thread.
 	class UpdateRoadTask extends AsyncTask<Object, Void, Road> {		
+		
 		protected Road doInBackground(Object... params) {	
 			@SuppressWarnings("unchecked")
 			ArrayList<GeoPoint> waypoints = (ArrayList<GeoPoint>)params[0];		
@@ -437,11 +444,6 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 			mapView.setTileSource(tileSource);               
 		}
 		return false;
-	}
-
-	@Override
-	public void update(int action, String reports) {
-
 	}
 
 }

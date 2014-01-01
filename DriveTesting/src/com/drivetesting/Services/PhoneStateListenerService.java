@@ -24,7 +24,7 @@ import com.drivetesting.DriveTestApp;
 public class PhoneStateListenerService extends Service {
 
 	private static final  String TAG = "PhonestateListnerService";
-	
+
 	private static final String NO_SIGNAL_STRENGTH = "-";
 
 	private TelephonyManager telephonyManager = null;
@@ -111,11 +111,18 @@ public class PhoneStateListenerService extends Service {
 				Log.d(TAG, " Signal strength changed:  CdmaDbm" + dbm);
 				break;
 			case TelephonyManager.PHONE_TYPE_GSM:
-				int rssi = signalStrength.getGsmSignalStrength();
-				int rssi_dbm = -113 + 2 *  rssi;
-				dbm = String.valueOf(rssi_dbm);
-				application.setSignalStrength(dbm);
-				Log.d(TAG, " Signal strength changed:  Rssi Dbm" + dbm);
+				int asu = signalStrength.getGsmSignalStrength();
+				if (99 != asu) {					
+					dbm = String.valueOf( -113 + 2 *  asu);
+					application.setSignalStrength(dbm);
+					Log.d(TAG, " Signal strength changed:  " + dbm +" Dbm");
+				} else {
+					// asu = 99 is a special case, where the signal strength is unknown.
+					application.setSignalStrength("-");
+					Log.d(TAG, " Signal strength changed: unknown");
+				}
+				
+				application.setSignalLevel(getLevel(asu));
 				break;
 			case TelephonyManager.PHONE_TYPE_NONE:
 			default:
@@ -125,12 +132,29 @@ public class PhoneStateListenerService extends Service {
 			}
 
 			application.setCdmaEcio(String.valueOf(signalStrength.getCdmaEcio()));
-			application.setEvdoDbm(String.valueOf(signalStrength.getEvdoDbm())/*+ getApplicationContext() .getString(R.string.unit_dbm)*/);
+			application.setEvdoDbm(String.valueOf(signalStrength.getEvdoDbm()));
 			application.setEvdoEcio(String.valueOf(signalStrength.getEvdoEcio()));
 			application.setEvdoSnr(String.valueOf(signalStrength.getEvdoSnr()));
 			application.setGsmBitErrorRate(String.valueOf(signalStrength.getGsmBitErrorRate()));
 
 			//Toast.makeText(context, "Signal strength changed!  ", Toast.LENGTH_SHORT).show();
+		}				  
+		public int getLevel(int asu) {
+			int level = DriveTestApp.SIGNAL_UNKOWN;
+			// ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
+			// asu = 0 (-113dB or less) is very weak
+			// signal, its better to show 0 bars to the user in such cases.
+			// asu = 99 is a special case, where the signal strength is unknown.
+			if  (asu >= DriveTestApp.GSM_SIGNAL_STRENGTH_GREAT) {
+				level = DriveTestApp.SIGNAL_GREAT;
+			} else if (asu >= DriveTestApp.GSM_SIGNAL_STRENGTH_GOOD) {
+				level = DriveTestApp.SIGNAL_GOOD;
+			} else if (asu >= DriveTestApp.GSM_SIGNAL_STRENGTH_MODERATE) {
+				level = DriveTestApp.SIGNAL_MODERATE;
+			}  else level = DriveTestApp.SIGNAL_WEAK;
+
+			Log.d(TAG, " Signal Level= " + level);
+			return level;
 		}
 
 		@Override
@@ -186,7 +210,7 @@ public class PhoneStateListenerService extends Service {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public void onCellLocationChanged(CellLocation location)	{			
 			super.onCellLocationChanged(location);
@@ -270,7 +294,7 @@ public class PhoneStateListenerService extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-				return null;
+		return null;
 	}
 
 
