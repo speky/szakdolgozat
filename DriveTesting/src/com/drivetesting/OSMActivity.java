@@ -21,6 +21,7 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,7 +63,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private RoadNode nodeA = null;
 	private RoadNode nodeB = null;	
 	private Road road = null;
-	private List<DbData> data = null;
+	private List<DbData> dataList = null;
 	private TextView testIdText;
 	private long testId = -1;
 	private String testName = "";
@@ -135,7 +136,8 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		loc.setLongitude(19.070567);
 		loc.setLatitude(47.497147);
 		// set camera to the location
-		updateLoc(loc);	
+		osmvController.setCenter(new GeoPoint(loc));						
+		mapView.postInvalidate();			
 	}
 	
 	@Override
@@ -200,6 +202,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
             		// ALL is selected
             		testId = -1;
             	}
+            	testName = "";
                 setTestIdString();
             }
         });
@@ -218,6 +221,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
             public void onClick(DialogInterface dialog, int item) {
             	// load road for the testName
                 testName = items[item].toString();
+                testId = 0;
                 setTestNameString();
             }
         });
@@ -248,15 +252,15 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 	
 	private void loadRoadForTestId() {		
-		data = application.queryTestData(testId);
-		nodeCount = data.size();
+		dataList = application.queryTestData(testId);
+		nodeCount = dataList.size();
 		clearMap();
 		loadRoad();
 	}
 	
-	private void loadRoadForTestName() {		
-		data = application.queryTestDataByName(testName);
-		nodeCount = data.size();
+	private void loadRoadForTestName() {
+		dataList = application.queryTestDataByName(testName);
+		nodeCount = dataList.size();
 		clearMap();
 		loadRoad();
 	}
@@ -278,20 +282,21 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 	
 	private void loadRoad() {		
-		if (data == null || nodeCount == 0) {
+		if (dataList == null || nodeCount == 0) {
 			return;
 		}
 		
 		nodeA = nodeB;
 		// handle the first node on the map
 		if (0 == noOfPoints) {
-			nodeA = addRoadNode(data.get(noOfPoints++));
+			nodeA = addRoadNode(dataList.get(noOfPoints++));
 			addRoadMarker(nodeA);
 			--nodeCount;
 		}		
 		// make all node item based on the query from the database 
 		if (nodeCount > 0) {
-			nodeB = addRoadNode(data.get(noOfPoints++));			
+			nodeB = addRoadNode(dataList.get(dataList.size() - nodeCount));
+			++noOfPoints;
 			ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();		
 			waypoints.add(nodeA.mLocation);
 			waypoints.add(nodeB.mLocation);			
@@ -390,7 +395,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 
 	@Override
 	public void update(Location location) {
-		updateLoc(location);
+		/*updateLoc(location);
 		Log.d(TAG, "location update");
 	}
 
@@ -399,13 +404,35 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		osmvController.setCenter(geoPoint);
 		//locationOverlay.setLocation(geoPoint);		
 		mapView.postInvalidate();
+		*/
 	}
 
 	@Override
 	public void update(int action, String reports) {
-
+		if (application.ACTION_END == action ) {
+			return;		
+		}
+	
+		if (application.getTestId() == testId || application.getTestName().equals(testName)) {		
+			DbData data = application.queryLastInsertedRow();
+			if (null != data) {
+				// add to the existing road
+				dataList.clear();
+				dataList.add(data);
+				nodeCount = 1;		
+				loadRoad();
+			}
+		}
 	}
-
+	
+/*/ test
+	public void onClick(View view) {
+		application.fakeinsert();
+		application.testName = "testName1";
+		update(1, "s");
+	}
+*/
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);

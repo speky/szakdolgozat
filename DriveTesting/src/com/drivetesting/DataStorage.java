@@ -190,6 +190,18 @@ public class DataStorage {
 		}		
 		return idList;
 	}
+
+	public DbData queryLastInsertedRow() {
+		DbData data= null;		
+		Cursor cursor = db.rawQuery("SELECT * FROM "+ DB_TABLE +" ORDER BY "+ ID +" DESC LIMIT 1", null);
+	
+		if (cursor != null) {
+			cursor.moveToFirst();
+			data = cursorToData(cursor);				
+			cursor.close();
+		}
+		return data;		
+	}
 	
 	public List<DbData> querySpecifiedTest(String testId) {
 		List<DbData> dataList = new ArrayList<DbData>();
@@ -197,7 +209,7 @@ public class DataStorage {
 		String[] whereArgs = new String[] {
 				testId
 		};
-		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
+		Cursor cursor = db.rawQuery("SELECT * FROM  "+DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
 
 		if (cursor != null) {
 			cursor.moveToFirst();		

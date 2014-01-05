@@ -38,6 +38,9 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
 	
+	public static final int ACTION_END = 0;
+	public static final int ACTION_REPORT = 1;
+	
 	public static final int SIGNAL_UNKOWN = 0;
 	public static final int SIGNAL_WEAK = 1;
 	public static final int SIGNAL_MODERATE = 2;
@@ -58,7 +61,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private double signalStrength = 0.0;
 	private int signalLevel = SIGNAL_UNKOWN;
 	private int testId = 0;
-	private String testName = "";	
+	private String testName = "";
 	private int rateType = 0;
 	private boolean networkConnected = false;
 	private String networkType = ""; 
@@ -69,7 +72,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private ArrayList<LocationObserver> locationObservers;
 
 	private StringBuilder message = new StringBuilder();
-	private int action = 0;
+	private int action = ACTION_END;
 
 	public boolean isGpsServiceRun = false;
 	public boolean isGPSEnabled = false;
@@ -87,32 +90,33 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 			if ( msg.getData().containsKey("error")) {        		
 				stopHttpClientService();
 				message.append(msg.getData().getString("error") +"\n");
-				action = 0;
+				action = ACTION_END;
 				Log.d(TAG, message.toString());
 			}
 			
 			if ( msg.getData().containsKey("TCP")) {            	
 				String data = msg.getData().getString("TCP");
-				TCPReport report = new TCPReport();
-				report.parseReport(data);
 				message.insert(0, getTimeStamp()+": "+data +"\n");
-				action = 1;
-				Log.d(TAG, "get data" + message.toString());
+				action = ACTION_REPORT;
+				TCPReport report = new TCPReport();
+				report.parseReport(data);				
+				Log.d(TAG, "report data: " + message.toString());
 				storeTCPReportItem(report.dlSpeed, report.ulSpeed);
 
 			} else if ( msg.getData().containsKey("UDP")) {            	
 				String data = msg.getData().getString("UDP");
-				UDPReport report = new UDPReport();
-				report.parseReport(data);
 				message.insert(0, getTimeStamp()+": "+data +"\n");
-				action = 1;
+				action = ACTION_REPORT;
+				
+				UDPReport report = new UDPReport();
+				report.parseReport(data);				
 				Log.d(TAG, "get data" + message.toString());
 				storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);
 			}
 
 			if ( msg.getData().containsKey("end")) {
 				message.append(msg.getData().getString("end")+"\n");      	
-				action = 0;
+				action = ACTION_END;
 				Log.d(TAG, message.toString());
 			}
 			notifyReportObservers();
@@ -146,6 +150,10 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
+	public void fakeinsert() {
+		dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
+	}
+	
 	public SharedPreferences getSharedPreference() {
 		return prefs;
 	}
@@ -253,6 +261,9 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		//		dataStorage.close();
 	}
 
+	public DbData queryLastInsertedRow() {
+		return dataStorage.queryLastInsertedRow();
+	}
 	
 	public List<DbData> queryTestDataByName(String name) {
 		if (name == null  || name.equals("ALL")) {

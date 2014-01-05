@@ -34,9 +34,16 @@
     </target>
     <target name="clean">
         <delete dir="bin"/>
+		<delete file="libs/HttpTestHandler.jar"/>
     </target>
     <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
+    <target depends="build-jar,build-subprojects,build-project" name="build"/>
+	<target name="build-jar">
+		 <subant target="build-jar">
+			<fileset dir="${basedir}/../HttpTestHandler" includes="build.xml"/>
+		</subant>
+		<copyfile src="${basedir}/../HttpTestHandler/HttpTestHandler.jar" dest="${basedir}/libs/HttpTestHandler.jar"/>
+	</target>
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>

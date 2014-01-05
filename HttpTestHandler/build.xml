@@ -8,24 +8,28 @@
 
    <target name="clean">
         <delete dir="${build.dir}"/>
+		<delete file="HttpTestHandler.jar"/>
     </target>
 
     <target name="compile">
-        <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+        <mkdir dir="${classes.dir}"/>		
+        <javac srcdir="${src.dir}" destdir="${build.dir}"/>
     </target>
 
-    <target name="jar" depends="compile">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${ant.project.name}.jar" basedir="${classes.dir}">
-        </jar>
+    <target name="build-jar" depends="compile">        
+        <jar destfile="${ant.project.name}.jar" >
+			<fileset dir="${build.dir}">			  
+                <include name="**/*.class" />                
+			</fileset>
+		</jar>
+        
     </target>
 
-    <target name="run" depends="jar">
+    <target name="run" depends="build-jar">
         <java jar="${ant.project.name}.jar" fork="true"/>
     </target>
 
-    <target name="clean-build" depends="clean,jar"/>
+    <target name="clean-build" depends="clean,build-jar"/>
 
     <target name="main" depends="clean,run"/>
 

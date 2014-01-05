@@ -1,0 +1,8 @@
+d:\HttpServer>ant run
+Buildfile: d:\HttpServer\build.xml
+
+run:
+     [java] Log file: d:\HttpServer\server.log
+     [java] Log fileWriter created
+     [java] HTTP_Server: Waiting for connection on port:4500
+     [java]

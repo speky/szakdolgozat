@@ -1,6 +1,6 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  <PreferenceCategory android:title="Simple Preferences">
+  <PreferenceCategory android:title="Test Preferences">
     <EditTextPreference
       android:key="serverIp"
       android:title="Server IP address"
@@ -41,7 +41,7 @@
                       android:entryValues="@array/listValues" />
   </PreferenceCategory>
   
-  <PreferenceCategory android:title="Other Preferences">
+  <PreferenceCategory android:title="File Preferences">
       <CheckBoxPreference
       android:key="checkbox"
       android:title="Checkbox Preference"

@@ -147,9 +147,9 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	}
 
 	private String getRoaming(){
-		String roaming = "Nincs";
+		String roaming = "None";
 		if (telephonyManager.isNetworkRoaming()){
-			roaming = "Van";
+			roaming = "Active";
 		}
 		return roaming;
 	}

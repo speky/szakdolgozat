@@ -690,27 +690,27 @@ Probléma leírása
 
 \begin_layout Standard
 A Drive testing egyfajta mérési módszere és értékelése a mobiltelefon hálózatok
- lefedettségének, kapacitásának és minőségének.
- Ez a teszt fontos szerepet kap a telefonhálózatokat üzemeltető cégek hálózat
- tervezési, üzemeltetési stratégiáiban és nem utolsó sorban a hibák felderítéséb
-en.
- Drive test felszerelés tipikusan az alábbi adatokat gyűjti a hálózatról:
+ teljesítményének, kapacitásának, lefedettségének és minőségének.
+ Ez a teszt fontos szerepet kap a telefonhálózatokat üzemeltető cégek -
+ operátorok - hálózat tervezési, üzemeltetési stratégiáiban és nem utolsó
+ sorban a hálózati hibák felderítésében.
+ A drive test tipikusan az alábbi adatokat gyűjti össze a hálózatról:
 \end_layout
 
 \begin_layout Itemize
-Jel intenzitás, erősség 
+Jel intenzitás, erősség
 \end_layout
 
 \begin_layout Itemize
-Elutasított hívások
+Adat fel- ls letöltési sebesség
 \end_layout
 
 \begin_layout Itemize
-Blokkolt hívások
+Elutasított és blokkolt hívások
 \end_layout
 
 \begin_layout Itemize
-Handover információk 
+Handover információk (ez egyes tornyok, cellák közötti váltás)
 \end_layout
 
 \begin_layout Itemize
@@ -746,7 +746,7 @@ status open
 \begin_layout Plain Layout
 
 \size small
-Drive Test felszerelés
+Egy Drive Test felszerelés
 \end_layout
 
 \end_inset
@@ -763,11 +763,11 @@ Drive Test felszerelés
 \noindent
 A manapság használt megoldások nagyon költségesek a drága eszközök és szakembere
 k miatt.
- A mérés során a teszter -aki általában egy mérnök- egy speciálisan felszerelt
- autóval kivonul a megadott területre, ahol a tesztet el kell végeznie.
+ A mérés során a tesztelő - aki általában egy mérnök - egy speciálisan felszerel
+t autóval kivonul a megadott területre, ahol a tesztet el kell végeznie.
  Majd bekonfigurálja az eszközöket a méréshez.
  Egy egyszerűbb felszerelés látható a jobb oldali képen.
- A mérés típusától függően egyre bonyolultabb és költségesebb eszközökre,
+ A mérés típusától függően lehet, hogy bonyolultabb és költségesebb eszközökre,
  felszerelésekre van szükség.
  Majd az autóval végigjárja a kijelölt útvonalat - akár többször is - miközben
  a mérési eredményeket rögzíti a számítógép egy speciálisan erre a célra
@@ -787,11 +787,11 @@ A szakdolgozatom célja egy
 \begin_inset Quotes sld
 \end_inset
 
-Drive testing" alkalmazás megvalósítása, egy kis költségvetésű mobilkészülék
- segítségével.
+Drive testing" alkalmazás megvalósítása, egy kis költségvetésű Android operációs
+rendszerű mobilkészülék segítségével.
  Nagy előnye ennek a megoldásnak a meglévő technológiával szemben, hogy
- a teszt elvégzéséhez elég egy mobiltelefon készülék és a teszt elvégzéshez
- nem kell egy mérnököt alkalmazni.
+ a teszt elvégzéséhez elég egy mobiltelefon készülék és nem kell drága felszerel
+ést és mérnököt alkalmazni.
  Az Android platform lehetőséget nyújt arra, hogy az alkalmazás információkat
  gyűjtsön a telefonról, valamint a mobilhálózatról.
  Ezen információk segítségével egy olyan program készíthető, amely képes
@@ -810,16 +810,11 @@ target "http://en.wikipedia.org/wiki/Mobile_operating_system"
 
 \end_inset
 
-adatai szerint ezt használják a legtöbben a világon, így akár a felhasználók
- által gyűjtött teszt adatokat is felhasználhatják a telefon szolgáltatók,
- operátorok.
- 
-\end_layout
-
-\begin_layout Standard
-A szakdolgozatom leginkább a mobil adat hívások tesztelésével és elemzésével
- foglalkozik., mivel a jövőben ez a terület különösen fontos szerepet fog
- játszani a mobil kommunikációban.
+ adatai szerint ezt használják a legtöbben a világon.
+ Így akár a felhasználók által gyűjtött teszt adatokat is felhasználhatják
+ a telefon szolgáltatók, operátorok, mivel a program használata egyszerű,
+ nem igényel szaktudást.
+ Csak az adatok értelmezéséhez, feldolgozásához kell szakember.
 \end_layout
 
 \begin_layout Standard
@@ -827,7 +822,7 @@ A szakdolgozatom leginkább a mobil adat hívások tesztelésével és elemzés�
 lines 0
 placement l
 overhang 0in
-width "70col%"
+width "60col%"
 status open
 
 \begin_layout Plain Layout
@@ -835,6 +830,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename globalDataTraffic.jpg
+	lyxscale 60
 
 \end_inset
 
@@ -855,11 +851,18 @@ Mobil adatforgalom 2012-2017
 
 \end_inset
 
-Kimutatások szerint egyre növekszik a mobilhálózatok adatforgalma és 2017-re
+
+\end_layout
+
+\begin_layout Standard
+A szakdolgozatom leginkább a mobil adathívások tesztelésével és elemzésével
+ foglalkozik, mivel a jövőben - 4G-s hálózatok esetén is - ez a terület
+ különösen fontos szerepet fog játszani a mobilkommunikációban.
+ Kimutatások szerint egyre növekszik a mobilhálózatok adatforgalma és 2017-re
  elérheti a havi 11,2 exabyte-nyi mennyiséget.
- A mobil készülékek fejlődésével teret hódítanak a különféle szolgáltatások,
- mint a videó telefonálás, internetes böngészés, stb.
- melyek növelik az adatforgalmat.
+ A mobilkészülékek és hálózatok fejlődésével teret hódítanak a különféle
+ szolgáltatások, mint a videó telefonálás, melyek növelik az adatforgalmat
+ és szükségessé teszik a gyors és megbízható adatszolgáltatást.
  A felhasználók gyakrabban használják ezeket a szolgáltatásokat, mint a
  hagyományos hanghívást.
  Így a szolgáltatóknak is alkalmazkodniuk kell a megváltozott igényekhez,
@@ -871,20 +874,6 @@ Kimutatások szerint egyre növekszik a mobilhálózatok adatforgalma és 2017-r
 Felhasználói dokumentáció
 \end_layout
 
-\begin_layout Standard
-A Felhasználói dokumentáció tartalmazza
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a felhasznált módszerek rövid leírását,
-\end_layout
-
-\begin_layout Labeling
-\labelwidthstring 00.00.0000
-- a program használatához szükséges összes információt.
-\end_layout
-
 \begin_layout Section
 Program bemutatása
 \end_layout
@@ -892,16 +881,15 @@ Program bemutatása
 \begin_layout Standard
 A Drive Testing applikáció egy Android készüléken futtatható program, mely
  a telefon hálózatról tud különféle statisztikai adatokat gyűjteni.
- Ehhez tartozik egy szerver oldali program is, melyel a mobil alakalmazás
+ Ehhez tartozik egy szerver oldali program is, mellyel a mobil alakalmazás
  a mérések során aktívan kommunikál.
- Az alkalamazással futtatható tesztek adatoakt gyűjtenek a szerver programmal
- való kommunikáció során, melyek fontos információkkal szolgálhatnak a telefon
- hálózatot üzemeltető operátoroknak.
+ Az alkalamazással futtatható tesztek adatokat gyűjtenek a telefonhálózatról
+ és a készülékről a szerver programmal történő kommunikáció során, melyek
+ fontos információkkal szolgálhatnak a telefonhálózatot üzemeltető operátoroknak.
  A tesztelő akár menetközben, autóban ülve tudja futtatni a teszteket futtani.
  A mérések során az adatok grafikus térképen is megtekinthetőek és a futtatás
- végeztével az eredmények ki is exportálhatóak az adatbázisból egy tetszőleges
- fájlba CSV formátumban.
- 
+ végeztével az eredmények ki is exportálhatóak az adatbázisból CSV formátumban
+ egy tetszőleges fájlba.
 \end_layout
 
 \begin_layout Subsection
@@ -911,20 +899,29 @@ Program használatának feltételei
 \begin_layout Standard
 
 \series bold
-Hardver feltételek:
+Hardver feltételek
 \end_layout
 
 \begin_layout Standard
-Az alkalmzás futtatásához szükséges egy legalább 4.0.4 verziójú Android operációsr
-endszerű telefonkészülék.
- Továbbá egy asztali számítógép, melyen található JVM (Java virtuális gép)
- a szerver oldali program futtatásához.
- Ennek internet hozáférést kell biztosítani.
- A mobilkészüléken be kell kapcsolni a mobilhálózaton keresztüli adatelérést
+Az alkalmazás futtatásához szükséges legalább 4.0.4 verziójú Android operációsrend
+szerű telefonkészülék.
+ Korábbi verziójú rendszeren lehetséges, hogy egyes funkciók nem működnek
+ megfelelően, illetve el se indul a program.
+\end_layout
+
+\begin_layout Standard
+A mobilkészüléken be kell kapcsolni a mobilhálózaton keresztüli adatelérést
  (Beállítások -> Vezeték nélküli és mobilhálózatok ->Mobilhálózatok-> Adatok
  engedélyezve jelölőnégyzetet kell bepipálni), illetve a GPS pozíciók eléréséhez
  a Helyszolgáltatások menüpontban a GPS-műholdak jelölőnégyzet segítségével
  aktiválhatjuk.
+\end_layout
+
+\begin_layout Standard
+Továbbá egy asztali számítógép, melyen található JVM (Java virtuális gép)
+ a szerver oldali program futtatásához.
+ Ennek internet hozáférést kell biztosítani.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -938,16 +935,20 @@ A szerver oldali program fordításához és futtatásához szükséges a JDK (J
  Developer Kit) legalább 1.6-os verziója, itt elérhető: 
 \begin_inset CommandInset href
 LatexCommand href
-name "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
+name "JDK letöltés"
 target "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
 
 \end_inset
 
 .
- Valamint az Apache ant, amit innen tölthetünk le: 
+ 
+\end_layout
+
+\begin_layout Standard
+Valamint az Apache ant, amit innen tölthetünk le: 
 \begin_inset CommandInset href
 LatexCommand href
-name "http://ant.apache.org/manual/install.html"
+name "ant letöltés"
 target "http://ant.apache.org/manual/install.html"
 
 \end_inset
@@ -957,16 +958,16 @@ target "http://ant.apache.org/manual/install.html"
 \end_layout
 
 \begin_layout Standard
-A feltelepített programban be kell állítani a szerver oldali számítógép
- IP címét, ha router illetve egyéb más hálózati eszköz is érintett a kommunkáció
-ban, ugy biztosítani kell, hogy az applikáció kommunikálni tudjon a 4500-as
- porton keresztűl.
- Továbbá a program használhatja még a 5000, illetve a 5500 és 6000 közötti
- portokat a mobileszközzel való kommunkáció során.
+A feltelepített Drive Test programban be kell állítani a szerver oldali
+ számítógép IP címét, ha router illetve egyéb más hálózati eszköz is érintett
+ a kommunkációban, úgy biztosítani kell, hogy az applikációk kommunikálni
+ tudjanak a 4500-as porton keresztűl.
+ Továbbá a programok használhatják még a 5000, illetve a 5500 és 5600 közötti
+ portokat a kommunkáció során.
 \end_layout
 
 \begin_layout Standard
-Az alábbi lista tartalmazza a jogokat (permission) amit a mobilalkalmazás
+Az alábbi lista tartalmazza a jogokat (permission), amit a mobilalkalmazás
  használ:
 \end_layout
 
@@ -988,7 +989,7 @@ access coarse location:
 \series bold
 access fine location (GPS):
 \series default
- A szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatároz
+ a szabadban megfelelően erős a GPS műhold jele, ahhoz, hogy pontosan meghatároz
 zuk a telefon helyzetét, ehhez a szolgáltatáshoz szükséges ez a jogosultság.
 \end_layout
 
@@ -997,7 +998,7 @@ zuk a telefon helyzetét, ehhez a szolgáltatáshoz szükséges ez a jogosultsá
 \series bold
 internet, access network state, read phone state
 \series default
-: A hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
+: a hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
  Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
  frissítéséhez.
  A mérések során a telfon és a hálózat fontos paraméterei is rögzítésre
@@ -1007,38 +1008,13 @@ internet, access network state, read phone state
 \end_layout
 
 \begin_layout Description
-
-\series medium
-app 
-\series default
-will actually stop updating the map if signal strength gets too week (below
- -102 dBm), otherwise it would appear to freeze waiting for tile updates.
- :O ???
-\end_layout
-
-\begin_layout Description
 read 
 \series bold
 and write external storage:
 \series default
- külső tér írása és olvasása szökséges a riport fájlok kiírásához.
+ külső tér írása és olvasása szökséges a jelentések, logok kiírásához.
  A felhesználó innen tudja lementeni a mérési eredményeket USB-n keresztül.
  
-\end_layout
-
-\begin_layout Standard
-prevent phone from sleeping ??
-\end_layout
-
-\begin_layout Standard
-Because of the way the app will be used it is necessary to keep the device
- awake, so a "wake-lock" is held to prevent the device from sleeping.
- This does not apply if you start recording and press the Back button to
- get out of the app.
- In this case, the app will continue to record, but the device may go to
- sleep (if it has been setup to do that).
- If this happens then signal strength updates will stop and not resume until
- the device awakes.
 \end_layout
 
 \begin_layout Section
@@ -1067,7 +1043,7 @@ segítségével könnyedén fordíthatjuk és futtathatjuk az alkalmazást:
 \end_layout
 
 \begin_layout Description
-- Egy tetszőleg linux terminálban menjünk a HttpServer könyvtárba.
+- Egy tetszőleg terminálban menjünk a HttpServer könyvtárba.
 \end_layout
 
 \begin_layout Description
@@ -1094,25 +1070,55 @@ parancsal futtathatjuk a programot.
 \end_layout
 
 \begin_layout Standard
-\begin_inset Float figure
-wide false
-sideways false
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Htttp szerver indítása
-\end_layout
-
-\end_inset
-
-
+d:
+\backslash
+HttpServer>ant run
 \end_layout
 
 \begin_layout Plain Layout
+Buildfile: d:
+\backslash
+HttpServer
+\backslash
+build.xml
+\end_layout
 
+\begin_layout Plain Layout
+run:
+\end_layout
+
+\begin_layout Plain Layout
+[java] Log file: d:
+\backslash
+HttpServer
+\backslash
+server.log
+\end_layout
+
+\begin_layout Plain Layout
+[java] Log fileWriter created
+\end_layout
+
+\begin_layout Plain Layout
+[java] HTTP_Server: Waiting for connection on port:4500
+\end_layout
+
+\begin_layout Plain Layout
+[java]
 \end_layout
 
 \end_inset
@@ -1126,8 +1132,148 @@ Telepítés a mobileszközre
 
 \begin_layout Standard
 A telepítéshez szükséges a DriveTesting.apk fájl és hogy a mobilkészülék
- csatlakoztatva legyen a számítógéphez és hozzáférésünk éegzen a telefon
- fájlrendszeréhez (külső illetve belső tárhoz).
+ csatlakoztatva legyen a számítógéphez és hozzáférésünk legyen a telefon
+ SD kártyájához.
+ A telepítés menete:
+\end_layout
+
+\begin_layout Standard
+1.
+ A külső program telepítéséhez kell egy fájlkezelő program, mint a Total
+ Commander vagy az Apps Installer nevű program, amivel tudunk manuálisan
+ telepíteni.
+ 
+\end_layout
+
+\begin_layout Standard
+2.
+ Engedélyezni kell a telefonon az ismeretlen forrásból való telepítést.
+ Ehhez menjünk a 
+\begin_inset Quotes sld
+\end_inset
+
+Beállítások
+\begin_inset Quotes srd
+\end_inset
+
+ menüben, ott válasszuk az 
+\begin_inset Quotes sld
+\end_inset
+
+Biztonság" részt.
+ Majd pipáljuk be az “Ismeretlen források” opciót.
+ Ezek után már képesek leszünk külső programokat is telepíteni.
+ 
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename telepites1.png
+	lyxscale 60
+	scale 60
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Telepítés
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename telepit2.png
+	lyxscale 80
+	scale 80
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Program ikonja
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+3.
+ Kapcsoljuk össze a telefont és a számítógépet USB kábellel.
+ A telefonon az értesítési területen válasszuk ki az USB részt, és csatlakoztass
+uk a memóriakártyát.
+ Ekkor a telefon leválasztja az SD kártyát, és lehetővé teszi hogy a számítógépü
+nkkel elérjük azt.
+\end_layout
+
+\begin_layout Standard
+4.
+ Másoljuk fel a programot egy tetszőleges mappába, majd válasszuk le az
+ SD kártyát a pc-ről, és csatlakoztassuk a telefonon.
+ Indítsuk el a fájlkezelő programot, és keressük meg a megfelelő fájlt.
+ Válasszuk ki az apk filet, ekkor feljön egy opció, hogy megnyitjuk a fájlt,
+ vagy telepítjük.
+ Mi most az utóbbit válasszuk, az ablak a bal oldali képen látható.
+ A következő ablakban átnézhetjük a program legfontosabb tulajdonságait,
+ majd az 
+\begin_inset Quotes sld
+\end_inset
+
+Telepítés
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kattintva telepíthetjük.
+\end_layout
+
+\begin_layout Standard
+5.
+ A sikeres telepítést követően az alkalmazások között megjlenik a program
+ ikonja, mellyel futtathatjuk azt.
+ Az ikon a bal alsó képen látható.
+ 
+\end_layout
+
+\begin_layout Standard
+6.
+ Az indítást követően meg kell adni a programnak a szerver gép publikus
+ IP címét.
 \end_layout
 
 \begin_layout Subsection
@@ -1160,7 +1306,8 @@ status open
 \align center
 \begin_inset Graphics
 	filename widephone.jpg
-	scale 50
+	lyxscale 70
+	scale 80
 
 \end_inset
 
@@ -1173,7 +1320,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Menü tableten (4.7
+Menü tablet-en (4.7
 \begin_inset Quotes srd
 \end_inset
 
@@ -1204,7 +1351,6 @@ status open
 \align center
 \begin_inset Graphics
 	filename smallPhone.jpg
-	scale 80
 
 \end_inset
 
@@ -1212,7 +1358,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Menü kis kijelzőn (4
+Menü kis kijelzőn a készülék alján jelenik meg (4
 \begin_inset Quotes srd
 \end_inset
 
@@ -1221,10 +1367,6 @@ Menü kis kijelzőn (4
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
@@ -1260,7 +1402,7 @@ status open
 
 - Test ablak 
 \begin_inset Graphics
-	filename map.png
+	filename m.png
 
 \end_inset
 
@@ -1296,10 +1438,6 @@ Ikonok
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
@@ -1314,6 +1452,15 @@ Main (fő) ablak
 \end_layout
 
 \begin_layout Standard
+Az alakalmazás fő ablaka, ez jelenik meg az inditás után.
+ A megjelenitett lista két fő részre bontható: az eslő tartalmazza a telefon
+ adatatit (Phone Data), ezek nagyrésze nem változik, fontos paraméter a
+ jel erősség érték (signal strength), ami a rádió hálózati torony által
+ küldött jel erőssége.
+ A második része a hálózati adatokat tartalmazza (Network Data).
+\end_layout
+
+\begin_layout Standard
 \begin_inset Wrap figure
 lines 0
 placement o
@@ -1325,8 +1472,9 @@ status open
 \noindent
 \align left
 \begin_inset Graphics
-	filename mainablak.jpg
-	scale 40
+	filename mainablak.png
+	lyxscale 70
+	scale 70
 
 \end_inset
 
@@ -1344,23 +1492,14 @@ Main ablak
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
-Az alakalmazás fő ablaka., ez jelenik meg az inditás után.
- A megjelenitett lista két fő részre bontható: az eslő tartalmazza a telefon
- adatatit (Phone Data), ezek nagyrésze nem változik, fontos paraméter a
- jel erősség érték (signal strength), ami a rádió hálózati torony által
- küldött jel erőssége.
- A második része a hálózati adatokat tartalmazza (Netwrok Data).
- Ezen adatok nagyrésze a telefon, illetve a hálózat aktuális állapotától
+Ezen adatok nagyrésze a telefon, illetve a hálózat aktuális állapotától
  függenek, mint például a hálózat tipusa (Network Type), ami lehet UMTS,
  EDGE, stb.
  Ez a telefon helyétől függ és persze az adott területen elérhető mobilhálózat
  szolgáltatásoktól.
  A mérések szempontjából fontos adatok a már emlitett szignál erősség, hálózat
- tipusa, ezeken kivűl az MCC, MNC, LAC és a CID.
+ tipusa, ezeken kivűl az MCC, MNC, LAC és a CID, ezen értékek változása
+ esetén a képernyő autómatikusan frissül a képernyőn is.
  Utóbbiak azonostják a telefonoperátort az adott országra vonatkozóan, és
  meghatározzák a mobilkészülék helyét, azaz, hogy az operátor melyik cellájában
  tartózkodik.
@@ -1369,7 +1508,7 @@ Az alakalmazás fő ablaka., ez jelenik meg az inditás után.
  a hálózat szólgáltatójához tartozó területi azonosító, CID (Cel ID) cella
  azonosító.
  A lista automatikusan frissűl, ha megváltozik egy érték.
- A felhasználó csúszka segtségével görgetheti a kijelzőn a táblázatot.
+ A felhasználó az ujja segtségével fel és le görgetheti a kijelzőn a táblázatot.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1377,19 +1516,56 @@ Test (teszt) ablak
 \end_layout
 
 \begin_layout Standard
+Az alkalmazás fő része, ahonnan a felhasználó a teszteket tudja inditani.
+ Egyszerre csak egy mérés futhat, és nem lehet menetközben megváltoztatni
+ a beállitásokat.
+ A beállitások a következőek lehetnek: feltöltés vagy letöltés teszt, azon
+ belül UDP vagy TCP protokollok használatát lehet beállitani rádiógombok
+ segitségével.
+ A megadott értékek, beállítások elmentődnek és az ablakok közti váltáskor
+ megörződik, illetve visszatöltődik, ha a felhasználó visszatér ehhez az
+ ablakhoz.
+ 
+\end_layout
+
+\begin_layout Standard
+A 
+\begin_inset Quotes sld
+\end_inset
+
+Start test
+\begin_inset Quotes sld
+\end_inset
+
+ feliratú gombra kattintva elkezdődik a teszt futtatás.
+ Ez elöbb emlitett gomb beszürkül, ilyenkor nem fogadja a felhasználói események
+et.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Stop test
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gomb kivilágosodik és fogadja a kattintás eseményet, ezzel lehet
+ lálitani a futó tesztet.
+ A teszt autmatikusan leáll ha nem siekrül elinditani a tesztelést valamilyen
+ beállítási vagy hálózati oknál fogva.
 \begin_inset Wrap figure
 lines 0
 placement o
 overhang 0col%
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
 \align left
 \begin_inset Graphics
-	filename testablak.jpg
-	scale 50
+	filename testablak.png
+	lyxscale 70
+	scale 70
 
 \end_inset
 
@@ -1408,83 +1584,20 @@ Test ablak
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Az alkalmazás fő része, ahonnan a felhasználó a teszteket tudja inditani.
- Egyszerre csak egy mérés futhat, és nem lehet menetközben megváltoztatni
- a beállitásokat.
- A beállitások a következőek lehetnek: feltöltés vagy letöltés teszt, azon
- belül UDP vagy TCP protokollok használatát lehet beállitani rádiógombok
- segitségével.
- A 
-\begin_inset Quotes sld
-\end_inset
-
-Start test
-\begin_inset Quotes sld
-\end_inset
-
- feliratú gombra kattintva elkezdődik a teszt futtatás.
- Ez elöbb emlitett gomb kiszürkül, ilyenkor nem fogadja a felhasználói események
-et.
- A 
-\begin_inset Quotes sld
-\end_inset
-
-Stop test
-\begin_inset Quotes srd
-\end_inset
-
- felültű gomb kivilágosodik és fogadja a kattintás eseményet, ezzel lehet
- lálitani a futó tesztet.
- A megadott értékek elmentődnek és az ablakok váltása kor megörződik, illetve
- visszatöltődik, ha a felhasználó visszatér ehhez az ablakhoz.
- A teszt futtatásához szükséges paraméterek a távoli szerver IP cime jelentés
- intervalluma, stb.
- a Settings (Beállitások) ablak részében lesznek bővebben kifejtve.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
-status open
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Teszt futtatás közben
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
  
 \end_layout
 
 \begin_layout Standard
+A teszt futtatásához szükséges paraméterek a távoli szerver IP címe és a
+ jelentés gyakoriságát módosíthatjuk a Settings (Beállitások) ablaknál.
+\end_layout
+
+\begin_layout Standard
 A teszt futása során a felhaszáló egy előre megadott intervallumonként jelentést
  kap, ami tartalmazza a mérések aktuális eredményét: hálózat tipusát, a
- fel- és letöltési sebbesééget, UDP teszt esetén a jittert és afogadott
+ fel- és letöltési sebbesééget, UDP teszt esetén a jittert és a fogadott
  és az elveszett csomagok számát.
  Ez a riport a képernyő közepén találhtó lista tartalmazza.
  Ezt a listát törölheti a felhasználó, a 
@@ -1506,7 +1619,11 @@ Hibaüzenetek
 \end_inset
 
  fejezetben lesznek bővebben kifejtve.
- Az aktuális tartalma ennek a log listának elmentatő a 
+ 
+\end_layout
+
+\begin_layout Standard
+Az aktuális tartalma ennek a log listának elmentatő a 
 \begin_inset Quotes sld
 \end_inset
 
@@ -1515,10 +1632,11 @@ Save logs
 \end_inset
 
  gomb seitségével.
- Az elmentett fájl neve a teszt nevéből és az aktuális idobélyegböl fog
- állni például: testName_20131103_1130.log.
- A megadott beálitásoknak megfelelően a külső vagy belső tárra fog elmentésre
- kerülni az applikáció könyvtárán belül.
+ Az elmentett fájl neve a az aktuális időbélyegből fog generálódni, például:
+ 201311031130.txt.
+ A megadott beálitásoknak megfelelően és a tárolók elérhetőségétől föggően
+ a külső vagy belső tárra fog elmentésre kerülni az applikáció könyvtárán
+ belül.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1526,6 +1644,60 @@ Map (térkép) ablak
 \end_layout
 
 \begin_layout Standard
+A térkép megejeleitéséhez szükséges mobil internet kapcsolat és GPS adat
+ használat engedélyezés a pontos pozició meghatározására.
+ A felhasználó kiválaszthatja, hogy melyik teszt eredményeit szeretné látnia
+ térképen megjelenítve.
+ Erre szolgál a két oldalsó gomb: a "Set Test ID
+\begin_inset Quotes srd
+\end_inset
+
+ és a 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Name
+\begin_inset Quotes srd
+\end_inset
+
+ gombok.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test ID
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombbal a felhasználó egy listából kiválaszthatja, hogy melyik
+ teszt futást szeretné látni, annak azonosítója alapján.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Name
+\begin_inset Quotes srd
+\end_inset
+
+ gomb segítségével a teszt elnevezése alapján adhatja meg a látni kívánt
+ tesztet.
+ 
+\end_layout
+
+\begin_layout Standard
+Ha a felhasználó az 
+\begin_inset Quotes sld
+\end_inset
+
+ALL
+\begin_inset Quotes srd
+\end_inset
+
+ -t választja - akár test id-ként, akár test névként - a térképen az összes
+ pont megjelenik és össze lesznek kötve úttal, akkor is ha valójában nem
+ egy méréshez tartoztak.
+ Ez megkönnyíti a pontok megkeresését a térképen.
+ 
 \begin_inset Wrap figure
 lines 0
 placement o
@@ -1534,6 +1706,15 @@ width "50col%"
 status collapsed
 
 \begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename map.png
+	lyxscale 70
+	scale 70
+
+\end_inset
+
 
 \end_layout
 
@@ -1549,18 +1730,25 @@ Térkép ablak
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
-\end_inset
+\begin_layout Standard
+Ha éppen fut egy teszt, amikor ez az aktív képernyő, akkor a futó tesztre
+ vonatkozó adatokat láthatja a felhasználó és újabb jelentések érkezésekor
+ a térkép frissül és az új mérések is láthatóak lesznek.
+ 
+\end_layout
 
-A térkép megejeleitéséhez szökséges mobil internet kapcsolat és GPS adat
- használat engedélyezés a pontos pozició meghatározására.
- A felhasználó kiválaszthatja, hogy melyik teszt eredményeit szeretné látnia
- térképen megjelnitve.
- Ha éppen fut a teszt, amikor a felhasználó erre a képernyőre vált, akkor
- az aktuális tesztre vonatkozó adatokat láthatja.
+\begin_layout Standard
+A térképen a színes pontok mérési pontokat jelölnek, a jelentés rögzítésének
+ idejében az adott helyen volt a mobil készülék.
+ Az egyes pontokra kattintva részletes információt kap a felhasználó egy
+ felugró ablak segítségével.
+ Ez tartalmazza többek között a jelerősséget, le és feltöltési sebességet
+ és cella információkat.
  
 \end_layout
 
@@ -1569,36 +1757,8 @@ Export ablak
 \end_layout
 
 \begin_layout Standard
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
-status open
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Export ablak
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
+Az ablak tetején található mezőbe írható be a kimeneti fájl neve.
+ Ezt mindenképpen ki kell tölteni.
 \end_layout
 
 \begin_layout Standard
@@ -1616,13 +1776,12 @@ A program által generált teszt eredények fájlba menthetőek CSV formátumban
  és az eddigi összes csomag számát jelentik, és a network type pedig a hálózat
  típusa (UMTS, EDGE, stb.), végül a rate a fel ésletöltési sebeség mértékegységét
  jelölik (Mbits, Kbits, stb.).
- 
+ Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
 \end_layout
 
 \begin_layout Standard
-Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
- Lehetséges kiválasztani egy test id-t, melyet ki akarunk exportálni, de
- akár az összes elemet is kiexportálhatjuk (ALL).
+Lehetséges kiválasztani egy teszt ID-t, vagy teszt nevet, melyet ki akarunk
+ exportálni, de akár az összes elemet is kiexportálhatjuk (ALL).
  Ezt a 
 \begin_inset Quotes sld
 \end_inset
@@ -1631,9 +1790,51 @@ Set Test ID
 \begin_inset Quotes srd
 \end_inset
 
+ vagy a 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Name
+\begin_inset Quotes srd
+\end_inset
+
  nevű gombra kattintva tehetjük meg.
- Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.Ffo
-ntos megjegyezni, hogy csak a program adatbázisában található teszt azonosítók
+ Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename exporting.png
+	lyxscale 70
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Export ablak
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Fontos megjegyezni, hogy csak a program adatbázisában található teszt azonosítók
  közül választhat a felhasználó.
  Ha még nem futtatott tesztet, akkor nem lesz bejegyzés és így exportálható
  adat sem.
@@ -1653,7 +1854,15 @@ sdcard/Android/com.drivetesting/files/export
 \begin_inset Quotes srd
 \end_inset
 
- illetve, ha ez nem lehetséges akkor az applikáció könyvtárában <ITT>.
+ illetve, ha ez nem lehetséges akkor az applikáció könyvtárában 
+\begin_inset Quotes sld
+\end_inset
+
+data/data/com.drivetesting/export
+\begin_inset Quotes srd
+\end_inset
+
+.
  Az 
 \begin_inset Quotes sld
 \end_inset
@@ -1663,7 +1872,7 @@ Export To CVS
 \end_inset
 
  feliratú gombra kattintva elkezdődik az adatok kimentése a megadott fájlba
- és megjelenik egy dialógus ablak 
+ és megjelenik egy ablak 
 \begin_inset Quotes sld
 \end_inset
 
@@ -1673,9 +1882,12 @@ Exporting database...
 
  felirattal.
  A dialógus ablakban forgó icon jelzi, hogy még tart az exportálási folyamat.
- A művelet befejeztével az ablak automatikusan bezáródik és egy felugró
- üzenetablakban megjelnik, hogy sikeres voltüe a művelet vagy sem, illetve
- a fájl elérésiútja.
+\end_layout
+
+\begin_layout Standard
+A művelet befejeztével az ablak automatikusan bezáródik és egy felugró üzenetabl
+akban megjelnik, hogy sikeres volt-e a művelet vagy sem.
+ Sikeres exportálás esetén a fájl elérésiútja us megjelenik.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1683,65 +1895,48 @@ Setting (beállitások) ablak
 \end_layout
 
 \begin_layout Standard
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
-status collapsed
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Beállitások ablak
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
- Az itt megejelnő paraméterek segitségével konfigurálható a teszt futtatás,
+Az itt megejelnő paraméterek segitségével konfigurálható a teszt futtatás,
  ileltve a program működése.
  Ezek a paraméterek a program bezerása után is megmaradnak, nem kell a felhaszná
 lónak újra beállitania ezeket.
  
 \end_layout
 
-\begin_layout Subsubsection*
-Teszt futtatásra voantkozó paraméterek
+\begin_layout Standard
+Teszt futtatásra vonatkozó paraméterek:
 \end_layout
 
-\begin_layout Subsubsection*
-Fájl kezelésre vonatkozó beállitások
+\begin_layout Itemize
+Server IP address - szerver publikus IP címe
 \end_layout
 
-\begin_layout Subsection
-Teszt típusok ismertetése
+\begin_layout Itemize
+Buffer size - egy-egy átküldött adatmennyiség mérete
+\end_layout
+
+\begin_layout Itemize
+Report period - jelentés gyakoriságának ideje
+\end_layout
+
+\begin_layout Itemize
+Test Name - teszt neve
+\end_layout
+
+\begin_layout Itemize
+Units - sebesség és a fogadott adatok mennyiségének mértékegységét álíthatóak
+ be
 \end_layout
 
 \begin_layout Standard
-Tesztek bemutatása (UDP, TCP, gyors teszt stb.) tesztek működésének ismertetése
-\end_layout
-
-\begin_layout Subsection
-Teszt futtatása
+Fájl kezelésre vonatkozó beállitások:
 \end_layout
 
 \begin_layout Standard
-tesztek futtatásának leírása, eredmények értelmezésének, mentésének leírása,
- képekkel illusztrálva
+?
+\end_layout
+
+\begin_layout Subsection
+Program hasnzálata és teszt futtatás
 \end_layout
 
 \begin_layout Subsection
@@ -1801,10 +1996,6 @@ Első mobil telefonok egyike
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Plain Layout
 
 \end_layout
 
