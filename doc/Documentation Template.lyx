@@ -1936,7 +1936,49 @@ Fájl kezelésre vonatkozó beállitások:
 \end_layout
 
 \begin_layout Subsection
-Program hasnzálata és teszt futtatás
+Program használata és teszt futtatás
+\end_layout
+
+\begin_layout Standard
+A fő ablakban is nyomon lehet követni a jel erősség, hálózat típúsának és
+ a cella információk változását, de ilyenkor sajnos nem kerül eltárolásra
+ a változás, így nem lehet viszakövetni sem.
+ A teszt ablakban van lehetőség tesztek futtatására.
+ Választhatunk UDP vagy TCP protokollok és fel- vagy letöltés között a rádiógomb
+ok segítségével.
+ A teszt futtatása előtt győzödjön meg róla, hogy a szerver oldali program
+ a HttpServer fut és elérhető a szerver és a fentebb említett portok szabadok.
+ A szerver publikus IP címét be kell álítani a Beállítások menüponban.
+ A teszt futtatásához a 
+\begin_inset Quotes sld
+\end_inset
+
+Start test
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kell kattintani.
+ Ezután elindul az adatok fel vagy letöltése a beállításoknak megfelelően.
+ A teszt addig fut amíg le nem állítják a 
+\begin_inset Quotes sld
+\end_inset
+
+Stop test
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombbal.
+ A jelentések belekerülnek az adatbázisba és a 
+\begin_inset Quotes sld
+\end_inset
+
+Messages
+\begin_inset Quotes srd
+\end_inset
+
+ fejlécű listában megjelennek ezek a bejegyzések, melyek tartalmazzák a
+ különböző mérési eredményeket.
+ 
 \end_layout
 
 \begin_layout Subsection
