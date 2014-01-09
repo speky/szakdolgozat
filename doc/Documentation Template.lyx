@@ -1968,7 +1968,8 @@ Stop test
 \end_inset
 
  feliratú gombbal.
- A jelentések belekerülnek az adatbázisba és a 
+ Az előre megadott időközönként (report intervallum) a program megvizsgálja
+ és kiírja az aktuális értékeket az adatbázisba és mejelennek a 
 \begin_inset Quotes sld
 \end_inset
 
@@ -1976,8 +1977,14 @@ Messages
 \begin_inset Quotes srd
 \end_inset
 
- fejlécű listában megjelennek ezek a bejegyzések, melyek tartalmazzák a
- különböző mérési eredményeket.
+ fejlécű listában a teszt ablakban.
+ Ezek a bejegyzések tartalmazzák a különböző mérési eredményeket.
+ A térképen látható az épp futó teszt és méréseknek megfelelően frissülnek
+ az adatok rajta.
+ Lehetőség van korábbi tesztek eredményeit is megjeleníteni a térképen teszt
+ azonosító vagy teszt név alapján.
+ Bármely tesztet ki lehet exportálni CSV formátumba az adatbázisból név
+ vagy azonosító alapján.
  
 \end_layout
 
@@ -2002,12 +2009,12 @@ Mobilhálózatok bemutatása
 \begin_layout Subsubsection*
 
 \series bold
-Mobil hálózat kezdete, története
+Mobilhálózatok kialakulása
 \end_layout
 
 \begin_layout Standard
-Már a második világháborúban képesek voltak rádió telefonos kapcsolatot
- kiépíteni katonai használatra.
+Már a második világháborúban képesek voltak rádiótelefonos kapcsolatot kiépíteni
+ katonai használatra.
  Kézi rádió adó-vevők már az 1940-es évektől elérhetőek voltak, pár telefon
  társaságnak volt gépkocsiban is használható mobil telefon készüléke.
  A korai készülékek testesek voltak és sok áramot fogyasztottak, a hálózat
@@ -2046,19 +2053,19 @@ Első mobil telefonok egyike
 Az egyesült államokbeli Bell laboratórium mérnökei olyan rendszeren dolgoztak,
  ami képessé teszi a mobil felhasználókat hívások kezdeményezésére és fogadására
  akár az autójukból.
- Az AT&T vállalat 1947 megalkotta az első mobil telefon hálózatot a Mobile
+ Az AT&T vállalat 1947-ben megalkotta az első mobiltelefon hálózatot a Mobile
  Telephon Service-t (MTS).
  5,000 ügyféle volt és körülbelül heti 30 000 hívást bonyolítottak rajta.
  A cella technológia bevezetése lehetővé tette a frekvenciák sokszori újrahaszno
 sítását kis szomszédos területeken, melyeket alacsony teljesítményű adók
  segítségével fedtek le.
- Ez lehetővé tette gazdaságilag megvalósítható módon a mobil telefonok széles
+ Ez lehetővé tette gazdaságilag megvalósítható módon a mobiltelefonok széles
  körben való elterjedését.
 \end_layout
 
 \begin_layout Standard
 A mobil telefonok fejlődése jól nyomon követhető az egymást követő generációkon,
- a korai "0G" szolgáltatásokon keresztül (MTS) az első generációs (1G) analóg
+ a korai "0G" szolgáltatásokon keresztül az első generációs (1G) analóg
  cellás hálózatok és második generációs (2G) digitális mobil hálózatokon
  át a harmadik generációs (3G) szélessávú adat szolgáltatásokig.
  Napjainkban fejlődnek és egyre inkább elterjednek a negyedik generációs
@@ -2074,13 +2081,13 @@ Cellák koncepciója
 \begin_layout Standard
 1947-ben Douglas H.
  Ring és W.
- Rae Young a Bell laboratórium mérnökei egy javasolták a hatszögletű cellák
+ Rae Young a Bell laboratórium mérnökei javasolták a hatszögletű cellák
  használatát a mobil hálózatokban.
- Akkoriban ez még nem volt megvalósítható csupán két évtizeddel később mikor
- Richard H.
+ Akkoriban ez még nem volt megvalósítható csupán két évtizeddel később,
+ mikor Richard H.
  Frenkiel, Joel S.
  Engel és Philip T.
- Porter mérnökök kiterjesztették a korai javaslatot és egy sokkal részletesebb
+ Porter mérnökök kiterjesztették a korábbi javaslatot és egy sokkal részletesebb
  tervet dolgoztak ki.
  Porter volt, aki először javasolta, hogy az adótornyok használják a már
  jól ismert irányított antennákat, annak érdekében, hogy redukálják az interfere
@@ -2121,9 +2128,9 @@ Többirányú mobilhálózati antenna
 \end_layout
 
 \begin_layout Standard
-Ezekben a korai időkben a mobil készüléknek az adótorony által lefedett
- körzetben kellett maradnia, ahhoz hogy szolgáltatás folyamatos maradjon,
- vagyis a szolgáltatás nem volt folytonos, átjárható az egyes cellák között.
+Ezekben a korai időkben a mobilkészüléknek az adótorony által lefedett körzetben
+ kellett maradnia, ahhoz hogy szolgáltatás folyamatos maradjon, vagyis a
+ szolgáltatás nem volt folytonos, átjárható az egyes cellák között.
  A koncepciók, mint a frekvencia újrahasználás és az átadás (handoff vagy
  handover) számos új mobiltelefon hálózati koncepciók alapját képezték.
  1970-ben Amos E.
