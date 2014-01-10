@@ -2154,11 +2154,13 @@ Hozzáférési Technológiák
 FDMA
 \series default
 : Frequency Division Multiple Access a leggyakoribb analóg rendszer.
- Ez a technika a spektrum frekvencia tartományokra való feldarabolásán alapszik
- és egy frekvencia sávot allokál egy felhasználóhoz.
- Egy csatornát egy időben csak egy előfizető használhat.
- Egy csatorna így lezárul a beszélgetés idejére más felhasználók elől, amíg
- le nem teszik, vagy át nem adódik a beszélgetés egy másik csatornára.
+ Ez a technika a spektrum frekvenciatartományokra való feldarabolásán alapszik
+ és egy frekvenciasávot t'rs
+\backslash
+t egy felhasználóhoz.
+ Egy csatornát egy időben csak egy előfizető használhat, így egy csatorna
+ lezárul a beszélgetés idejére más felhasználók elől, amíg le nem teszik,
+ vagy át nem adódik a beszélgetés egy másik csatornának.
  A "full-duplex" FDMA átvitelnek két csatornára van szüksége, egy az adatok
  küldésére és egy másik a fogadására.
  FDMA technikát az első generációs analóg rendszerekben használták.
@@ -2171,7 +2173,7 @@ TDMA
 \series default
 : Time Division Multiple Access nagyobb kapacitásra volt képes, mert az
  egyes frekvenciákat időszeletekre (time slot) osztotta.
- TDMA rendszerben a felhasználók az egész frekvencia tartományt használhatták,
+ TDMA rendszerben a felhasználók az egész frekvenciatartományt használhatták,
  több felhasználó osztozott ugyanazon a frekvencia csatornán amiből egy-egy
  időszeletet kaptak.
  TDMA a második generációs mobil hálózatok domináns technológiája.
@@ -2203,14 +2205,14 @@ Mobil hálózati szabványok
 \series bold
 PSTN
 \series default
- (Public Switched Telephone Network) nyilvános vonalkapcsolt telefon hálózat.
+ (Public Switched Telephone Network) nyilvános vonalkapcsolt telefonhálózat.
  Telefon vezetékek, optikai kábelek, mikrohullámú átviteli állomások, kommunikác
 iós műholdak és tengeralatti telefon kábelek kötik össze a kapcsolási központoka
-t, hogy bármely telefon készülékkel fel vehessük a kapcsolatot a világon.
+t, hogy bármely telefon készülékkel felvehessük a kapcsolatot a világon.
  Eredetileg a hálózat analóg, vezetékes telefon rendszer volt, PSTN majdnem
- teljesen digitális, mobil és vezetékes telefonokat is tartalmaz.Egyetlen
- globális címtartománya van a telefonszámoknak, melyet a E.163 és E.164 szabványok
- írnak le.
+ teljesen digitális, mobil és vezetékes telefonokat is tartalmaz.
+ Egyetlen globális címtartománya van a telefonszámoknak, melyet a E.163 és
+ E.164 szabványok írnak le.
  Az összekapcsolt hálózatok és az egységes számozásnak köszönhetően bármely
  telefonról hívható bármely másik készülék.
 \end_layout
@@ -2220,16 +2222,16 @@ t, hogy bármely telefon készülékkel fel vehessük a kapcsolatot a világon.
 \series bold
 GSM 
 \series default
-(Global System for Mobile communication): az ETSI (European Telecommunications
- Standards Institute) dolgozta ki ezt a szabványt a második generációs (2G)
- mobil hálózati protokollok leírására.
- A GSM sztenderd váltotta le az első generációs (1G) analóg hálózatot, és
- egy új, digitális, teljes kétirányú kommunikációt lehetővé tevő, vonalkapcsolt
+(Global System for Mobile communication) ezt a szabványt az ETSI (European
+ Telecommunications Standards Institute) a második generációs (2G) mobilhálózati
+ protokollok leírására.
+ A GSM sztenderd váltotta le az első generációs (1G) analóg hálózatot egy
+ új, digitális, teljes kétirányú kommunikációt lehetővé tevő, vonalkapcsolt
  hálózat bevezetésével.
- Ezt később kiegészítették azzal, hogy belevették az adat kommunikációt
- is a szabványba, először vonalkapcsolt átvitellel, majd csomagkapcsolt
- átvitellel: GPRS (General Packet Radio Services) és EDGE (Enhanced Data
- rates for GSM Evolution vagy EGPRS).
+ Ezt később kiegészítették azzal, hogy belevették az adatkommunikációt is
+ a szabványba, először vonalkapcsolt átvitellel, majd csomagkapcsolt átvitellel:
+ GPRS (General Packet Radio Services) és EDGE (Enhanced Data rates for GSM
+ Evolution vagy EGPRS).
 \end_layout
 
 \begin_layout Standard
@@ -2237,20 +2239,20 @@ GSM
 \series bold
 GPRS 
 \series default
-(General Packet Radio Service): csomagkapcsolt szolgáltatás 2G és 3G kommunikáci
-ós rendszerekben.
+(General Packet Radio Service) egy csomagkapcsolt szolgáltatás 2G és 3G
+ kommunikációs rendszerekben.
  A GPRS-t az ETSI szabványosította, napjainkban a 3GPP (3rd Generation Partnersh
 ip Project) tartja karban a szabványt.
  A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
- mértéke rendszert egyidejűleg használók számától függ.
- A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége(Quality
+ mértéke a rendszert egyidejűleg használók számától függ.
+ A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége (Quality
  of Service) biztositott a kapcsolat ideje alatt.
  2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
  A 2G és GPRS technológiák kombinációját néha 2.5G-nek szokták hívni, ami
  a 2G és a 3G mobil technológiák között helyezkedik el.
- Mérsékelt sebességű adat átvitelt biztosít a GSM rendszerben eddig kihasználatl
-an több csatornás idő osztásos (TDMA: Time division multiple acces) technológia
- segítségével.
+ Mérsékelt sebességű adatátvitelt biztosít a GSM rendszerben, az addig kihasznál
+atlan több csatornás idő osztásos (TDMA: Time division multiple acces) technológ
+ia segítségével.
 \end_layout
 
 \begin_layout Standard
@@ -2258,13 +2260,13 @@ an több csatornás idő osztásos (TDMA: Time division multiple acces) technol�
 \series bold
 EDGE
 \series default
- (Enhanced Data rates for GSM Evolution): más néven EGPRS (Enhanced GPRS)
- mobil telefon technológia, ami nagyobb adat átviteli sebességet tesz lehetővé.
- EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.A 3GPP szabványosíto
-tta és GSM család részévé vált.
- Kifinomult kódolási eljárások bevezetésének köszönhetően megnőtt a rádió
- csatornánként elérhető bitráta, háromszoros kapacitás és teljesítmény beli
- növekedést eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
+ (Enhanced Data rates for GSM Evolution), más néven EGPRS (Enhanced GPRS)
+ mobiltelefon technológia, ami nagyobb adatátviteli sebességet tesz lehetővé.
+ EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.
+ A 3GPP szabványosította és GSM család részévé vált.
+ Kifinomult kódolási eljárások bevezetésének köszönhetően megnőtt a csatornánkén
+t elérhető bitráta, háromszoros kapacitás és teljesítmény beli növekedést
+ eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
  A továbbfejlesztett EDGE kisebb késést és több mint kétszeres teljesítmény
  növekedést biztosít.
  A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
@@ -2275,7 +2277,7 @@ tta és GSM család részévé vált.
 \series bold
 W-CDMA
 \series default
- (Wideband Code Division Multiple Access) egy 3G mobil hálózati rádiós interfész
+ (Wideband Code Division Multiple Access) egy 3G mobilhálózati rádiós interfész
  sztenderd.
  A leggyakrabban használt tagja az Universal Mobile Telecommunications System
  (UMTS) családnak és néha az UMTS szinonimájaként használják.
@@ -2291,7 +2293,7 @@ Code Division Multiple Access kommunikációs hálózat sok cég közreműködé
  jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
  a Qualcomm dominált.
  Qualcomm volt az első cég, akinek sikerült alkalmazható és költséghatékony
- megoldást találnia: ez volt a korai IS-95 rádió interface sztenderd, melyből
+ megoldást találnia: ez volt a korai IS-95 rádióinterface sztenderd, melyből
  a CDMA2000 (IS-856/IS-2000) fejlődött ki.
  CDMA2000 hálózatok széles körben elterjedtek különösen Amerikában.
  Azonban az eltérő követelmények és felépítés megakadályozta a globális
@@ -2303,15 +2305,13 @@ Code Division Multiple Access kommunikációs hálózat sok cég közreműködé
 \begin_layout Standard
 A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
  vagy több pár 1.25 MHz rádió csatornát.
- Habár a W-CDMA szintén CDMA átviteli technikát alkalmaz akár a CDMA2000,
+ Habár a W-CDMA szintén CDMA átviteli technikát alkalmaz, akár a CDMA2000,
  a W-CDMA nem egyszerűen egy széles sávú verziója a CDMA2000-nak.
  Mérnöki szempontból a W-CDMA különböző optimalizálási lehetőséget nyújt
- költség, kapacitás, teljesítmény,és tömörség között.
- Jobban telepíthető Európa és Ázsia sűrűn lakott városaiba.
+ költség, kapacitás és teljesítmény között.
  Specifikációk egész halmazát tartalmazza, melyek részletesen definiálják
- a protokollokat, hogy hogyan kommunikáljanak a készülékek a tornyokkal,
- hogyan kell modulálni a szignálokat, hogy kell az adatokat strukturálni
- stb.
+ a protokollokat, a kommunikációt a készülékek és a tornyok között, hogyan
+ kell modulálni a szignálokat és azt is hogyan kell az adatokat strukturálni.
 \end_layout
 
 \begin_layout Standard
@@ -2322,7 +2322,7 @@ UMTS
  (The Universal Mobile Telecommunications System) harmadik generációs mobil
  hálózati rendszer.
  A 3GPP (3rd Generation Partnership Project) fejlesztette ki és tartja karban.
- W-CDMA hozzáférési technológiát használ a jobb hálózat kihasználtság és
+ W-CDMA hozzáférési technológiát használ a jobb hálózati kihasználtság és
  sávszélesség miatt.
  UMTS specifikál egy teljes hálózati rendszert, melybe beletartozik a hozzáférés
 i hálózat (UMTS Terrestrial Radio Access Network, UTRAN), a központi hálózat
@@ -2353,11 +2353,9 @@ HSUPA
 \series default
 ).
  Az első UMTS hálózatot 2002-ben indították be, nagy hangsúlyt fektetve
- az olyan mobil alkalmazásokra, mint a mobil TV és videóhívás.A nagy adat
- átviteli sebességet gyakran Internet elérésre használják: Japánban és máshol
- is azt tapasztalták, hogy a felhasználóknak nincs nagy igényük a videóhívásokra
-, és a telekommunikációs társaság által nyújtott audió/videó tartalomra
- is csökkent az igény a nagy sebességű internet hozzáférés miatt.
+ az olyan mobil alkalmazásokra, mint a mobil TV és videóhívás.
+ A nagy adatátviteli sebességet gyakran Internet elérésre használják.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -2366,12 +2364,12 @@ HSUPA
 LTE
 \series default
  (Long-Term Evolution) 4G LTE, a legújabb sztenderd a mobiltelefonok és
- adat terminálok közötti nagy sebességű vezeték nélküli adat kommunikációra.
+ adat terminálok közötti nagy sebességű vezeték nélküli adatkommunikációra.
  GSM/EDGE és UMTS/HSPA hálózati technológiákon alapszik, de nagyobb kapacitást
  és sebességet nyújt különböző rádiós interfészek együttes alkalmazásával.
- A világ első publikus LTE szolgáltatója a TeliaSonera Oslo-ban és Stockholm-ban.
+ A világ első publikus LTE szolgáltatója a TeliaSonera Osloban és Stockholmban.
  Várhatóan az LTE lesz az első igazán globális mobiltelefon sztenderd, habár
- a országonként különböző frekvencia sávok használata miatt csak a többsávos
+ a országonként különböző frekvenciasávok használata miatt csak a többsávos
  telefonok lesznek képesek kihasználni minden országban az LTE szolgáltatást.
  Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogatták, az
  LTE 326 Mbit átvételére lesz képes másodpercenként, 20 MHz széles frekvenciatar
@@ -2391,10 +2389,10 @@ Az LTE sztenderd csak IP hálózatokat támogatja.
 VoLTE 
 \series default
 (Voice Over LTE) megközelítés IP Multimedia Subsystem (IMS) hálózaton alapszik.
- Ezzel a megoldással a hang szolgáltatás adat folyamként továbbítódik az
- LTE állomáson keresztül.
- Ez azt jelenti, hogy nem kell módosítani a a hagyományos vonalkapcsolt
- hálózatot, képes lesz a 4güs hívást adat csomagként továbbítani.
+ Ezzel a megoldással a hangszolgáltatás adatfolyamként továbbítódik az LTE
+ állomáson keresztül.
+ Ez azt jelenti, hogy nem kell módosítani a hagyományos vonalkapcsolt hálózatot,
+ képes lesz a 4G-s hívást adatcsomagként továbbítani.
 \end_layout
 
 \begin_layout Standard
@@ -2403,8 +2401,8 @@ Másik megközelítés a
 CSFB 
 \series default
 (Circuit Switched Fallback).
- Eben az esetben az LTE csak adat csomag szolgáltatást nyújt, és a hang
- hívások vonal kapcsolt hálózatban dolgozódnak fel.
+ Eben az esetben az LTE csak adatcsomag szolgáltatást nyújt, és a hanghívások
+ vonalkapcsolt hálózatban dolgozódnak fel.
  Ezt a megoldást használva az operátoroknak csak az MSC-t kell frissíteniük
  IMS telepítés helyett.
  Hátránya a hosszabb hívás kiépítési idő.
@@ -2420,7 +2418,139 @@ A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-N
 \begin_layout Subsubsection*
 
 \series bold
-Mobil hálózat szolgáltatások, technológiák
+Mobil hálózat elemei
+\end_layout
+
+\begin_layout Description
+BSC (Base Station Controller) több tíz esetleg több száz BTS-t irányít.
+ A BSC rádió csatornák kiosztásáért felelős, mérési eredményeket fogad a
+ mobil készülékektől és a BTS-ek közötti handover-eket kezeli.
+ BSC fő funkciója összekötőként viselkedik a BTS-ek és a Mobile Switching
+ Center (MSC) között.
+ Általában a hálózatokban gyakorta úgy strukturálják, hogy számos BSC-t
+ elosztanak a régiókban közel a BTS-ekhez, melyek egy nagy központosított
+ MSC site-al állnak kapcsolatban.
+ MSC-ket és Service GPRS Support Node-okat (SGSN) is kiszolgál (abban az
+ esetben ha GPRS-t használ).
+ 
+\end_layout
+
+\begin_layout Description
+BSS (Base Station Subsystem) része a hagyományos mobilhálózatnak (2G, GSM)
+ és a kommunikációt biztosítja a mobiltelefon és a hálózati kapcsolóalrendszer
+ között.
+ A BSS transzkódolást végez, rádió csatornákat rendel a mobiltelefonokhoz,
+ lapozást kezel, és még sok más feladatot ellát a rádiós hálózatban.
+\end_layout
+
+\begin_layout Description
+BTS (Base Transceiver Station) tartalmazza a rádió szignálok átviteléhez
+ és fogadásához szükséges berendezéseket, antennákat, valamint a bázisállomással
+ (BSC) történő kommunikáció dekódoláshoz és titkosításhoz szükséges eszközöket.
+ Valójában nem más, mint egy pikócella sok rádió adó-vevővel (TRX), amik
+ lehetővé teszik különböző frekvenciák kiszolgálását.
+ Egy BTS-t a "szülő
+\begin_inset Quotes srd
+\end_inset
+
+ bázis állomás (BSC) vezérel.
+\end_layout
+
+\begin_layout Description
+MS (Mobile Station) azaz maga a mobil készülék, amivel a felhasználó hívást
+ kezdeményezhet és fogadhat.
+ Ez a terminológia 2G rendszerekre vonatkozik, mint a GSM.
+ 3G rendszerekeben a mobile station helyett 
+\begin_inset Quotes sld
+\end_inset
+
+user equipment
+\begin_inset Quotes srd
+\end_inset
+
+-ként (UE) hivatkoznak rá.
+\end_layout
+
+\begin_layout Description
+RNC (Radio Network Controller) az UMTS mobil hálózat (UTRAN) irányító egysége
+ és a hozzá kapcsolt 
+\begin_inset Quotes sld
+\end_inset
+
+Node B
+\begin_inset Quotes srd
+\end_inset
+
+-k kontrollálásáért felelős.
+ BSC-nek 3G-s hálózati megfelelője, hasonló munkát végez: az üzenetek encryptálá
+sa és erőforrás kezelés.
+ Az RNC kapcsolatban áll a Circuit Switched Core Network-hez a Media Gateway-en
+ (MGW) keresztül és az Serving GPRS Support Node-en (SGSN) keresztül a Packet
+ Switched Core Network-höz.
+\end_layout
+
+\begin_layout Description
+Node-B Ezt a terminust az UMTS hálózatban használják és megfelel a BTS-nek
+ a GSM-ben.
+ A mobil készülékek Node B-n tudnak egymással kommunikálni.
+ Az RNC kontrollálja ezt a hálózati elemet.
+\end_layout
+
+\begin_layout Description
+VLR (Visitor Location Register) egy adatbázis azon előfizetők számára, akik
+ beléptek az adott VLR-hez tartozó Mobile Switching Center (MSC) területére.
+ Minden egyes bázisállomáshoz pontosan egy VLR tartozik, így az előfizető
+ egy időben mindig csak egy VLR-ben szerepel.
+ Az adatok vagy a mobil készülékről (MS), vagy a HLR-től érkeznek.
+ Amint érzékel egy új MS-t az MSC, azonnal készít egy új bejegyzést a VLR-jében
+ és frissíti a HLR-ben az előfizető helyzetét.
+\end_layout
+
+\begin_layout Description
+HLR (Home Location Register) egy központi adatbázis, ami tartalmazza az
+ összes mobiltelefon előfizetője adatát, akik használhatják hálózatot.
+ 
+\end_layout
+
+\begin_layout Description
+M-MGW (Mobile Media Gateway) egy olyan eszköz, ami a digitális média folyamokat
+ konvertálja (transzkódolja) a különböző telekommunikációs hálózatok között
+ (PSTN, 2G, 3G, stb.), illetve lehetővé teszi a különféle átviteli protokollok
+ használatát (ATM, IP, TDM) .
+ Általában az egyes hálózatok határán helyezkedik el, hogy biztosítsa az
+ adatok konvertálását egyik hálózatból a másikba.
+\end_layout
+
+\begin_layout Description
+SGSN (Serving GPRS Support Node) felelős a mobileszközök és kiszolgáló állomások
+ közötti adat csomagok szállításáért.
+ A feladatai közé tartozik az irányítás (routing), a helymeghatározás és
+ a felhasználók azonosítása (authentication).
+ 
+\end_layout
+
+\begin_layout Description
+GGSN (Gateway GPRS Support Node) központi eleme a GPRS hálózatnak, az internet
+ elérését biztosítja a GPRS hálózat és a külső hálózatok között.
+ Kívülről nézve a GGSN egy router, aki elrejti a GPRS hálózat infrastruktúráját
+ a külső hálózattól.
+ Mikor adat csomagokat kap megvizsgálja, hogy a felhasználó aktív-e és,
+ ha igen akkor továbbítja a csomagot az SGSN-nek, aki kiszolgálja a mobil
+ felhasználót.
+\end_layout
+
+\begin_layout Description
+MSC (Mobil Softswitch Controller) elsődleges eleme a GSM/CDMA hálózatoknak,
+ a hanghívások route-olásáért és az SMS, valamint más szolgáltatásokért
+ felelős, mint a konferencia hívások, FAX, stb.
+ Kiépíti, majd lebontja a kapcsolatokat, hívásokat, valamint kezeli a handover-e
+ket.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Mobil hálózat szolgáltatások
 \end_layout
 
 \begin_layout Standard
@@ -2428,10 +2558,10 @@ Mobil hálózat szolgáltatások, technológiák
 \series bold
 SIM
 \series default
- (Subscriber Identity Module): Az egyik fő jellemzője a GSM-nek a SIM bevezetése
-, a legtöbben SIM kárty néven ismerik.
- A SIM egy cserélhető okos kártya, mely az előfizető információt és a telefonkön
-yvet tartalmazza.
+ (Subscriber Identity Module) egyik fő jellemzője a GSM-nek a SIM bevezetése,
+ a legtöbben SIM kártya néven ismerik.
+ A SIM egy cserélhető okoskártya, mely az előfizető információt és telefonkönyve
+t tartalmazhat.
  Lehetővé teszi a felhasználónak, hogy információkat tároljon és egy másik
  telefonban is fel tudja használni azokat.
  Ezentúl lehetővé teszi, hogy szolgáltatót váltson a felhasználó a készülék
@@ -2445,13 +2575,13 @@ yvet tartalmazza.
 \series bold
 WAP
 \series default
- (Wireless Application Protocol): egy sztenderd technika a mobil vezeték
- nélküli hálózatokon keresztül történő információ cserének.
+ (Wireless Application Protocol): egy sztenderd technika a vezetéknélküli
+ hálózatokon keresztül történő információ cserének.
  A WAP böngésző egy webböngésző a mobil készülékekhez.
  A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
- az interaktív adat szolgáltatásra.
+ az interaktív adatszolgáltatásra.
  Interaktivitást követelt az Internet és Web alkalmazások támogatása pl.:
- Email kezelés mobil készüléken, tőzsdei árak vagy a sporteredmények követése.
+ email kezelés, tőzsdei árak vagy a sporteredmények követése.
  A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
 bilitást a WAP és más különböző hálózati technológiák között, mint a GSM
  és a CDMA.
@@ -2464,7 +2594,7 @@ Roaming
 \series default
  egy általános kifejezés a mobil szolgáltatás kiterjesztésére olyan helyre,
  amely különbözik a szolgáltatás regisztrált helyétől.
- Roaming biztosítja a kapcsolatot vezeték nélküli eszköz és a hálózat között,
+ Roaming biztosítja a kapcsolatot vezetéknélküli eszköz és a hálózat között,
  a kapcsolat elvesztése nélkül.
  Hagyományos GSM Roaming definició szerint (GSM Association Permanent Reference
  Document AA.39) a cella felhasználó képes automatikusan hívást indítani
@@ -2480,124 +2610,13 @@ Handover
 \series default
  kifejezés (vagy handoff) arra a folyamatra utal, mikor egy folyamatban
  lévő hívást, vagy adat folyamot átviszünk az egyik csatornáról a másikra.
- 
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Mobil hálózat elemei
-\end_layout
-
-\begin_layout Description
-BSC - Base Station Controller, egy BSC több tíz esetleg több száz BTS-t
- irányít.
- A BSC rádió csatornák kiosztásáért felelős, mérési eredményeket fogad a
- mobil készülékektől és a BTS-ek közötti handover-eket kezeli.
- BSC fő funkciója összekötőként viselkedik a BTS-ek és a Mobile Switching
- Center (MSC) között.
- Általában a hálózatokban gyakorta úgy strukturálják, hogy számos BSC-t
- elosztanak a régiókban közel a BTS-ekhez,melyek egy nagy központosított
- MSC site-al állnak kapcsolatban.
- MSC-ket és Service GPRS Support Node-okat (SGSN) is kiszolgál (abban az
- esetben ha GPRS-t használ).
- 
-\end_layout
-
-\begin_layout Description
-BSS - Base Station Subsystem, része a hagyományos mobilhálózatnak (2G, GSM)
- és a kommunikációt biztosítja a mobiltelefon és a ahálózati kapcsoló alrendszer
- között.
- A BSS transzkódolást végez, rádió csatornákat rendel a mobiltelefonokhoz,lapozá
-st kezel, éa még sok más feladatot ellát a rádiós hálózatban.
-\end_layout
-
-\begin_layout Description
-BTS - Base Transceiver Station, tartalmazza a rádió szignálok átviteléhez
- és fogadásához szükséges berendezéseket, antennákat, valamint a bázisállomással
- (BSC) történő kommunikáció dekódoláshoz és titkosításhoz szükséges eszközöket.
- Valójában nem más, mint egy pikócella sok rádi adó-vevővel (TRX), amik
- lehetővé teszik különböző frekvenciák kiszolgálását.
- Egy BTS-t a "szülő
-\begin_inset Quotes srd
-\end_inset
-
- bázis állomás (BSC) vezérel.
-\end_layout
-
-\begin_layout Description
-MS - Mobile Station azaz maga a mobil készülék, amivel a felhasználó hívást
- kezdeményezhet és fogadhat.
- Ez a terminológia 2G rendszerekre vonatkozik, mint a GSM.
- 3G rendszerekeben a mobile station helyett user equipment-ként (UE) hivatkoznak
- rá.
-\end_layout
-
-\begin_layout Description
-RNC - Radio Network Controller az UMTS mobil hálózat (UTRAN) irányító egysége
- és a hozzá kapcsolt Node B-k kontrollálásáért felelős.
- BSC-nek 3G-s hálózati megfelelője, hasonló munkát végez: az üzenetek encryptálá
-sa és erőforrás kezelés.
- Az RNC kapcsolatban áll a Circuit Switched Core Network-hez a Media Gateway-en
- (MGW) keresztül és az Serving GPRS Support Node-en (SGSN) keresztül a Packet
- Switched Core Network-höz.
-\end_layout
-
-\begin_layout Description
-Node-B - Ezt a terminust az UMTS hálózatban használják és megfelel a BTS-nek
- a GSM-ben.
- A mobil készülékek Node B-n tudnak egymással kommunikálni.
- Az RNC kontrollálja ezt a node-ot.
-\end_layout
-
-\begin_layout Description
-VLR - Visitor Location Register, egy adatbázis azon előfizetők számára,
- akik be barangoltak az adott VLR-hez tartozó Mobile Switching Center (MSC)
- területére.
- minden egyes bázis állomáshoz pontosan egy VLR tartozik, így az előfizető
- egy időben mindig csak egy VLR-ben szerepel.
- Az adatok vagy a mobil készülékről (MS), vagy a HLR-től érkeznek.
- Amint érzékel egy új MS-t az MSC azonnal készít egy új bejegyzést a VLR-jében
- és frissíti a HLR-ben az előfizető helyzetét.
-\end_layout
-
-\begin_layout Description
-HLR - Home Location Register, egy központi adatbázis, ami tartalmazza az
- összes mobil telefon előfizetője adatát, akik használhatják GSM hálózatot.
- 
-\end_layout
-
-\begin_layout Description
-M-MGW - Mobile Media Gateway egy olyan eszköz, ami a digitális média folyamokat
- konvertálja (transzkódolja) a különböző telekommunikációs hálózatok között
- (PSTN, 2G, 3G, stb.), illetve lehetővé teszi a különféle átviteli protokollok
- használatát (ATM, IP, TDM) a hálózatok között.
-\end_layout
-
-\begin_layout Description
-SGSN - serving GPRS support node felelős a mobil eszközök és kiszolgáló
- állomások közötti adat csomagok szállításáért.
- A feladatai közé tartozik az irányítás (routing), a helymeghatározás és
- a felhasználók azonosítása (authentication).
- 
-\end_layout
-
-\begin_layout Description
-GGSN - gateway GPRS support node központi eleme a GPRS hálózatnak, az internet
- elérését biztosítja a GPRS hálózat és a külső hálózatok között.
- Kívülről nézve a GGSN egy router, aki elrejti a GPRS hálózat infrastruktúráját
- a külső hálózattól.
- Mikor adat csomagokat kap megvizsgálja, hogy a felhasználó aktív-e és,
- ha igen akkor továbbítja a csomagot az SGSN-nek, aki kiszolgálja a mobil
- felhasználót.
-\end_layout
-
-\begin_layout Description
-MSC - Mobil Softswitch Controller ) elsődleges eleme a GSM/CDMA hálózatoknak,
- a hang hívások route-olásáért és az SMS, valamint más szolgáltatásokért
- felelős(mint a konferencia hívások, FAX).
- Kiépíti, majd lebontja a kapcsolatokat, hívásokat, valamint kezeli a hand-over-
-eket.
+ Erre akkor van szükség, mikor a készülék átlépi a cella határát, vagyis
+ kilép az eddigi adótorony körzetéből és egy másik veszi át a kiszolgálását.
+ Több féle handover létezik, attól föggően, hogy a telefon melyik cellát,
+ milyen irányba lépi át.
+ Például abban az esetben, mikor a készülék nem csak egy celle határán van,
+ hanem egy tartomány határán is, akkor nem csak egy másik toronyhoz (BTS
+ vagy Node B) kerül át , hanem egy másik BSC vagy RNC-hez is.
 \end_layout
 
 \begin_layout Subsection
@@ -2606,15 +2625,15 @@ Mobilhálózatok fejlődése
 
 \begin_layout Standard
 Az első rádiótelefon szolgáltatás '40es végén vezették be Amerikában, ez
- azt jelentette, hogy mobil használók autóból tudtak kapcsolódni a meglévő
- publikus telefonhálózathoz.
+ azt jelentette, hogy a mobil használók akár autóból is tudtak kapcsolódni
+ a meglévő publikus telefonhálózathoz.
  1960-ban új rendszert indított a Bell Systems, amit IMTS-nek (Improved
  Mobile Telephone Service) hívtak, mely számos újítást hozott, például szélesebb
  sávszélességet.
  Az első analóg cellás rendszer ezen az IMTS rendszeren alapult és a 1970-es
  évek elején fejlesztették ki.
- A rendszert "cellás" volt, mert a lefedett területeket felosztották kisebb
- részekre, avagy "cellákra".
+ A rendszer "cellás" volt, mert a lefedett területeket felosztották kisebb
+ részekre, avagy cellákra.
  
 \end_layout
 
@@ -2640,7 +2659,8 @@ Második generáció
 \begin_layout Standard
 2G digitális cellás rendszer, melyet az 1980-as évek végén fejlesztették
  ki.
- Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak.
+ Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak
+ az analóg 1G rendszerhez képest.
  GSM (Global system for mobile communication) volt az első kereskedelemben
  működtetett digitális cellás rendszer, mely TDMA (Time division multiple
  acces) alapú.
@@ -2678,13 +2698,19 @@ status open
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+A 2G technológiák biztosítanak különböző szolgáltatásokat, mint szöveges
+ üzenet, kép üzenet és MMS (multi media messages) küldését.
+ Az összes szöveges üzenet digitálisan titkosított, így csak a megfelelő
+ címzett tudja fogadni és elolvasni az üzenetet.
+ Idővel sokat fejlesztettek a rendszeren, így alakult ki a korábban már
+ említett GPRS és az EDGE technológiák.
+ 
 \end_layout
 
 \begin_layout Subsubsection
@@ -2696,17 +2722,17 @@ Harmadik generáció
 \end_layout
 
 \begin_layout Standard
-3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefon hálózatok
+3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefonhálózatok
  operátoraitól.
  A fejlesztés 1996-ban kezdődött a Nippon Telephone & Telegraph (NTT) és
  az Ericsson vezetésével; 1997-ben az amerikai Telecommunications Industry
  Association (TIA) a CDMA-t választotta 3G technológiájának; 1998-ban az
  European Telecommunications Standards Institute (ETSI) ugyan ezt tette
- és végül a széles sávú CDMA (W-CDMA) és a cdma2000 adaptálták az UMTS-hez
+ és végül a széles sávú CDMA (W-CDMA) és a CDMA 2000 adaptálták az UMTS-hez
  (Universal Mobile Telecommunications System).
  W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
  A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
- 2000 CDM-e (Code Division Multiplexing) eljárást használ.
+ 2000 CDM-et (Code Division Multiplexing) eljárást használ.
 \end_layout
 
 \begin_layout Standard
@@ -2752,9 +2778,9 @@ status open
 \begin_layout Standard
 3G rendszer gyorsabb kommunikációs szolgáltatást nyújt, beleértve a hang,
  fax és Internet szolgáltatásokat, melyek bármikor és bárhonnan elérhetőek.
- Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk
- pl.: multimédiás szorakoztatás, információ és helymeghatározás szolgáltatások
- elterjedését a felhasználók között.
+ Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk,
+ például multimédiás szorakoztatás, információ és helymeghatározás szolgáltatáso
+k elterjedését a felhasználók között.
  Az első 3G hálózatot Japánban építették ki 2001-ben.
  2.5G hálózatok, mint a GPRS (Global Packet Radio Service) már elérhetőek
  voltak Europa bizonyos országaiban.
@@ -2775,8 +2801,8 @@ Negyedik generáció
 Napjainkban a letöltési sebesség download speed limitált 9.6 kbit/sec-ra,
  mely 6-szor lassabb, mint egy ISDN (Integrated services digital network)
  kapcsolat esetén.
- Valójában ez a sebesség sokkal lassab,főleg zsúfolt helyeken, vagy ha hálózat
- nagyon leterhelt.
+ Valójában ez a sebesség sokkal lassab, főleg zsúfolt helyeken, vagy ha
+ hálózat nagyon leterhelt.
  Negyedik generációs (4G) mobil kommunikáció nagyobb adat átvitelre lesz
  képes, mint a 3G.
  Az adatráta tervezett mértéke 20 Mbps.
