@@ -284,7 +284,7 @@
             <classMoniker
               Id="71caad72-8ef7-47d1-a340-2735b22cab76"
               LastKnownName="Logger"
-              LastKnownLocation="DeiveTest.uml" />
+              LastKnownLocation="Package_1501.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
@@ -321,7 +321,7 @@
             <classMoniker
               Id="61ed5fa6-9515-438f-ae2a-a63fc2206e27"
               LastKnownName="ReportSender"
-              LastKnownLocation="DeiveTest.uml" />
+              LastKnownLocation="Package_1501.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
@@ -358,7 +358,7 @@
             <classMoniker
               Id="e88c7ae2-8128-487e-a548-6f63aee33b29"
               LastKnownName="HttpParser"
-              LastKnownLocation="DeiveTest.uml" />
+              LastKnownLocation="Package_1501.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
@@ -395,7 +395,7 @@
             <classMoniker
               Id="b1df12cf-6f4d-41f0-bd9b-d402405afc2d"
               LastKnownName="ConnectionInstance"
-              LastKnownLocation="DeiveTest.uml" />
+              LastKnownLocation="Package_1501.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
@@ -423,13 +423,13 @@
                     <literalString
                       Id="d1e8874f-59d4-45b5-9ce9-2c3303802cb6"
                       name="Lower"
-                      value="*" />
+                      value="100" />
                   </lowerValueInternal>
                   <upperValueInternal>
                     <literalString
                       Id="fe24d45a-17dd-4035-9e36-9c2f3b588926"
                       name="Upper"
-                      value="*" />
+                      value="100" />
                   </upperValueInternal>
                 </memberEnd>
               </associationHasOwnedEnds>
@@ -680,7 +680,7 @@
               <classMoniker
                 Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                 LastKnownName="Logger"
-                LastKnownLocation="DeiveTest.uml" />
+                LastKnownLocation="Package_1501.uml" />
             </type_NamedElement>
           </property>
         </ownedAttributesInternal>
@@ -1025,7 +1025,7 @@
             <classMoniker
               Id="71caad72-8ef7-47d1-a340-2735b22cab76"
               LastKnownName="Logger"
-              LastKnownLocation="DeiveTest.uml" />
+              LastKnownLocation="Package_1501.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
@@ -1256,38 +1256,6 @@
     </packageHasNamedElement>
     <packageHasNamedElement>
       <class
-        Id="71caad72-8ef7-47d1-a340-2735b22cab76"
-        name="Logger"
-        isAbstract="false"
-        isLeaf="false"
-        isActiveClass="false" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <class
-        Id="61ed5fa6-9515-438f-ae2a-a63fc2206e27"
-        name="ReportSender"
-        isAbstract="false"
-        isLeaf="false"
-        isActiveClass="false" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <class
-        Id="e88c7ae2-8128-487e-a548-6f63aee33b29"
-        name="HttpParser"
-        isAbstract="false"
-        isLeaf="false"
-        isActiveClass="false" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <class
-        Id="b1df12cf-6f4d-41f0-bd9b-d402405afc2d"
-        name="ConnectionInstance"
-        isAbstract="false"
-        isLeaf="false"
-        isActiveClass="false" />
-    </packageHasNamedElement>
-    <packageHasNamedElement>
-      <class
         Id="be4dccca-0df5-44d9-8ee5-03974f5c01cd"
         name="ConnectionInstance"
         isAbstract="true"
@@ -1396,7 +1364,7 @@
               <classMoniker
                 Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                 LastKnownName="Logger"
-                LastKnownLocation="DeiveTest.uml" />
+                LastKnownLocation="Package_1501.uml" />
             </type_NamedElement>
           </property>
         </ownedAttributesInternal>
@@ -1448,7 +1416,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -1968,7 +1936,7 @@
               <classMoniker
                 Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                 LastKnownName="Logger"
-                LastKnownLocation="DeiveTest.uml" />
+                LastKnownLocation="Package_1501.uml" />
             </type_NamedElement>
           </property>
           <property
@@ -2569,7 +2537,7 @@
           <association
             Id="9b9b43ee-1a99-4a94-a731-9f846781909b"
             isDerived="false"
-            sourceEndRoleName="reporter"
+            sourceEndRoleName=""
             targetEndRoleName=""
             isLeaf="false"
             isAbstract="false">
@@ -2581,7 +2549,6 @@
               <associationHasOwnedEnds>
                 <memberEnd
                   Id="340281f5-a4a3-47d1-ae05-a10935b2e046"
-                  name="reporter"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -2594,6 +2561,43 @@
               <associationHasOwnedEnds>
                 <memberEnd
                   Id="352c5f5d-3517-40bd-9b46-919d6c4df33a"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="30d67a4c-4ea2-478f-bfe7-e10083da82f0"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="ed80085c-ce0b-4acb-9864-e37cf4fe9377"
+              LastKnownName="HttpParser"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="87ffa99b-360a-4765-bf41-556517bea135"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="7359a6e6-4939-41e6-8e7e-6ef19c23ac33"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -2660,7 +2664,7 @@
               <classMoniker
                 Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                 LastKnownName="Logger"
-                LastKnownLocation="DeiveTest.uml" />
+                LastKnownLocation="Package_1501.uml" />
             </type_NamedElement>
           </property>
           <property
@@ -3024,7 +3028,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -3185,7 +3189,7 @@
                     <classMoniker
                       Id="e88c7ae2-8128-487e-a548-6f63aee33b29"
                       LastKnownName="HttpParser"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -3471,17 +3475,53 @@
               LastKnownName="MessageI"
               LastKnownLocation="DeiveTest.uml" />
           </interfaceRealization>
+          <interfaceRealization
+            Id="f00e71e8-e416-4a63-83a5-d975fb0640e7">
+            <interfaceMoniker
+              Id="afe23d6f-db1b-48a9-be63-35fbbce4131d"
+              LastKnownName="ReceiverReportI"
+              LastKnownLocation="DeiveTest.uml" />
+          </interfaceRealization>
         </suppliersInternal>
-        <generalsInternal>
-          <generalization
-            Id="86a1af4c-9c02-401c-8ba4-7d0a242f5c57"
-            isSubstitutable="false">
+        <targetEnds>
+          <association
+            Id="dbd9d382-a1bb-4ec1-9f18-071081328dba"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
             <classMoniker
               Id="ffd79a11-8005-49d1-8aad-77cbce76815a"
               LastKnownName="Logger"
               LastKnownLocation="DeiveTest.uml" />
-          </generalization>
-        </generalsInternal>
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="fcc3176f-e898-4420-9161-8012834ad571"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="de8a0994-5c3b-4d83-82a1-b0f6319095b6"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="b014102e-e892-4d61-8292-4a9fb3595288"
@@ -3499,7 +3539,7 @@
               <classMoniker
                 Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                 LastKnownName="Logger"
-                LastKnownLocation="DeiveTest.uml" />
+                LastKnownLocation="Package_1501.uml" />
             </type_NamedElement>
           </property>
           <property
@@ -3646,7 +3686,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -3685,7 +3725,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -3778,6 +3818,194 @@
               </operationHasOwnedParameters>
             </ownedParameters>
           </operation>
+          <operation
+            Id="c02c8661-6c38-469b-a2d1-d2839e0141b4"
+            name="setReceivedBytes"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="c9808c6c-42e8-413e-bf32-d3f4fa69ce94"
+                  name="id"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="cded02c9-cbc2-4657-98b1-355a62762cea"
+                  name="interval"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="0d2247c6-9ce5-4f18-9cce-26ac4b12d2b7"
+                  name="bytes"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="38703b1b-ac97-417b-8b85-2ec0e5e8c558"
+                  direction="Return"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="aa0a8b62-38ae-4439-852f-150e0140b32a"
+                      LastKnownName="void"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation
+            Id="36639b01-f745-4973-ab72-39412d44fb04"
+            name="setReceivedBytes"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="false"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="bf883a7b-c73c-4a43-9061-18b2a009390b"
+                  name="id"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="e50e1b0e-7345-44f0-a0cb-14967cbeb0f7"
+                  name="interva"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="70dd25c5-7a16-40dd-9d82-c30fbe300f96"
+                      LastKnownName="intl"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2947582c-4ff2-4729-b2e7-1f0ae3cfed49"
+                  name="bytes"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="5c798944-4230-4a22-8cc5-7fa116a71ebc"
+                  name="jitter"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="2060117a-5f14-49f6-aca4-3881965e00c3"
+                      LastKnownName="double"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="7b93d257-bbd5-4cae-8a59-f0a8529f9d70"
+                  name="lost"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="1d91879f-5b8e-4b77-8817-41c9f61c1b9f"
+                  name="outOfOrdered"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2d5ea3ba-9c08-48c9-b48c-7e9dde5d28fc"
+                  name="sum"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="e6b74c2d-c776-40ee-b0ee-7cf2281ad7de"
+                  direction="Return"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="aa0a8b62-38ae-4439-852f-150e0140b32a"
+                      LastKnownName="void"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
         </ownedOperationsInternal>
       </class>
     </packageHasNamedElement>
@@ -3790,7 +4018,7 @@
         isActiveClass="false">
         <generalsInternal>
           <generalization
-            Id="f08c3d0d-c1b3-4004-a4a4-eb619f99c3e2"
+            Id="4b3575b0-c0ae-4557-89cd-6d9f1ec8e91b"
             isSubstitutable="false">
             <classMoniker
               Id="be4dccca-0df5-44d9-8ee5-03974f5c01cd"
@@ -3802,7 +4030,7 @@
           <association
             Id="00928c5d-0ea7-4c2d-83c6-38184c98b1d6"
             isDerived="false"
-            sourceEndRoleName="reportSender"
+            sourceEndRoleName=""
             targetEndRoleName=""
             isLeaf="false"
             isAbstract="false">
@@ -3814,7 +4042,6 @@
               <associationHasOwnedEnds>
                 <memberEnd
                   Id="aab5ac35-a9ce-40e2-921a-3c2cc02da5ca"
-                  name="reportSender"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -3840,7 +4067,7 @@
           <association
             Id="b67596fc-bdee-45c8-81a0-36441f2d6a0e"
             isDerived="false"
-            sourceEndRoleName="TCPReceiver"
+            sourceEndRoleName=""
             targetEndRoleName=""
             isLeaf="false"
             isAbstract="false">
@@ -3852,7 +4079,6 @@
               <associationHasOwnedEnds>
                 <memberEnd
                   Id="d60c2379-99ef-4725-a12c-a484d108136f"
-                  name="TCPReceiver"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -3865,6 +4091,43 @@
               <associationHasOwnedEnds>
                 <memberEnd
                   Id="34c3c119-ee85-4f0b-a33d-01e6a625d771"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="03d92011-f5c7-466a-9734-6b29e125d8c8"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <interfaceMoniker
+              Id="afe23d6f-db1b-48a9-be63-35fbbce4131d"
+              LastKnownName="ReceiverReportI"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="285fba24-378f-4776-8f14-70914a47e098"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="724547b8-47ee-4e68-8291-f0edf4e52179"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -4012,7 +4275,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -4322,7 +4585,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -4497,6 +4760,82 @@
               LastKnownLocation="DeiveTest.uml" />
           </generalization>
         </generalsInternal>
+        <targetEnds>
+          <association
+            Id="d0360b4e-3a79-4ef2-825a-613dfb69422b"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <interfaceMoniker
+              Id="80f70b29-690d-4c24-a279-d76ce1643529"
+              LastKnownName="MessageI"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="733f6d16-1661-40a3-a0c9-24fff65e04d6"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="2638b5b4-922b-435a-8878-34ec2f4f8643"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="db1727f2-0298-4f08-b351-1ec4c81275e5"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <interfaceMoniker
+              Id="afe23d6f-db1b-48a9-be63-35fbbce4131d"
+              LastKnownName="ReceiverReportI"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="4c386036-4e7c-46e9-82e8-2d8184907d16"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="4ab4478a-f8c1-4485-acde-5d68fe14f1c2"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="b30fcee0-3274-4964-8fa3-2d9d65612c91"
@@ -4799,7 +5138,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -5048,6 +5387,7 @@
           <operation
             Id="fc25d7bf-8e9d-4c5d-a18e-23f20618aa54"
             name="sendAddressToSenderThroughNAT"
+            visibility="Private"
             isLeaf="false"
             isStatic="false"
             isAbstract="false"
@@ -5271,7 +5611,7 @@
                     <classMoniker
                       Id="71caad72-8ef7-47d1-a340-2735b22cab76"
                       LastKnownName="Logger"
-                      LastKnownLocation="DeiveTest.uml" />
+                      LastKnownLocation="Package_1501.uml" />
                   </type_NamedElement>
                 </parameter>
               </operationHasOwnedParameters>
@@ -5532,6 +5872,45 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="bf000740-165a-45d6-9496-30068759ecc6"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="94879d8e-e3d6-4787-999b-3ebada2530d1"
+              LastKnownName="ReportReceiver"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="564dfe1d-4841-4daf-b287-c6bd6c8894e5"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="fd590bdb-e8fc-4255-934c-cef9a8a5a5ba"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="c7145479-e5ef-46d8-bbc0-86c4cf9385b5"
@@ -6026,6 +6405,45 @@
               LastKnownLocation="DeiveTest.uml" />
           </generalization>
         </generalsInternal>
+        <targetEnds>
+          <association
+            Id="a06cd3c1-6b46-4d7d-b359-57346c278481"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="94879d8e-e3d6-4787-999b-3ebada2530d1"
+              LastKnownName="ReportReceiver"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="529ab95b-9af7-4fb0-a326-8c4a016448f9"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1cd7969e-632e-4e22-b59c-597889e2df5c"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="f50f0ed8-cc54-4b03-b516-fbb31a907de9"
@@ -7193,6 +7611,228 @@
         Id="312841bf-dcb0-4ff0-967b-54ba7f7d4b14"
         LastKnownName="Package1"
         LastKnownLocation="Package_1845.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="eccff467-95de-4583-87e0-1fbcb8c4d2b2"
+        LastKnownName="HttpTestHandler"
+        LastKnownLocation="Package_1501.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="2aeed03a-859e-4081-b77f-3ee09cc50870"
+        name="Logger1"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <Interface
+        Id="afe23d6f-db1b-48a9-be63-35fbbce4131d"
+        name="ReceiverReportI"
+        isAbstract="false"
+        isLeaf="false">
+        <ownedOperations>
+          <operation
+            Id="b0f1d01f-2f1a-452d-b38f-0b5f8ab626ed"
+            name="setReceivedBytes"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="true"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="0040993d-4586-4e29-9271-7621b73e0ff6"
+                  direction="Return"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="aa0a8b62-38ae-4439-852f-150e0140b32a"
+                      LastKnownName="void"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="8f02f59a-43b6-4b44-a29c-41377eca225f"
+                  name="id"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="2594bcfa-a419-47f6-9b88-2dcc16368994"
+                  name="interval"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="91bac78e-6da6-4044-a9ac-4b61bc0b0755"
+                  name="bytes"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+          <operation
+            Id="b4d3cfe3-ad6c-448b-8dc9-257b907952e9"
+            name="setReceivedBytes"
+            isLeaf="false"
+            isStatic="false"
+            isAbstract="true"
+            concurrency="Sequential"
+            isQuery="false">
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="66404419-c3eb-46ff-a43d-983a5585dc52"
+                  direction="Return"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="aa0a8b62-38ae-4439-852f-150e0140b32a"
+                      LastKnownName="void"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="59af5fb5-2e5b-4ed6-aede-1bffe69f6a3f"
+                  name="id"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="b10c1bfe-bd43-4369-9c44-e261f55dd44d"
+                  name="interva"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="70dd25c5-7a16-40dd-9d82-c30fbe300f96"
+                      LastKnownName="intl"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="333d44e8-b4d8-41ad-99af-d0ca2e9a1b88"
+                  name="bytes"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="18968704-e148-439c-9894-e0982ab2c479"
+                  name="jitter"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="2060117a-5f14-49f6-aca4-3881965e00c3"
+                      LastKnownName="double"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="7f3e4d33-ede2-43b0-bff6-a527d940862a"
+                  name="lost"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="a54e7b35-6e70-4b84-b83b-09b2e72b89e5"
+                  name="outOfOrdered"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+              <operationHasOwnedParameters>
+                <parameter
+                  Id="ddd8e55d-3f83-480e-bd77-44501db24baa"
+                  name="sum"
+                  direction="In"
+                  isUnique="false">
+                  <type_NamedElement>
+                    <undefinedTypeMoniker
+                      Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+                      LastKnownName="int"
+                      LastKnownLocation="DeiveTest.uml" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperations>
+      </Interface>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <undefinedType
+        Id="4cc87c6f-2c5d-4837-afcd-271b0e3ee50d"
+        name="int" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <undefinedType
+        Id="70dd25c5-7a16-40dd-9d82-c30fbe300f96"
+        name="intl" />
     </packageHasNamedElement>
   </packagedElements>
   <primitiveType

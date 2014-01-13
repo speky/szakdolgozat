@@ -1,19 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="dd8a4a5f-0c4f-4feb-a4e9-622e48ea9378" name="HttpServer" linkedPackageId="90791101-9e66-4bf5-ac7d-7c6dad4b3ad9" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
-  <profileInstances>
-    <packageHasProfileInstances Id="5fa25a55-d099-498f-a836-88f4a1538765">
-      <profileInstance Id="dca4fc27-af46-4a24-8644-abf2f30746d0" name="StandardProfileL2">
-        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
-      </profileInstance>
-      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
-    </packageHasProfileInstances>
-    <packageHasProfileInstances Id="25a7005b-7ff6-4ae2-83c1-9691f7f91528">
-      <profileInstance Id="e471412b-b7e4-49cb-8aef-e2eeaa5110d8" name="StandardProfileL3">
-        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
-      </profileInstance>
-      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
-    </packageHasProfileInstances>
-  </profileInstances>
   <packagedElements>
     <logicalClassDesignerModelHasTypes>
       <class Id="3d50d24f-9440-4ac1-aac1-f9313e8d7a3b" name="HttpServer" isAbstract="false" isLeaf="false" isActiveClass="false">
@@ -201,12 +187,12 @@
               <associationHasOwnedEnds>
                 <memberEnd Id="08490531-5ed5-4de7-9476-626e81468440" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
                   <lowerValueInternal>
-                    <literalString Id="f0f8f27d-9418-46f1-b079-50edfaece658" name="Lower" value="*">
+                    <literalString Id="f0f8f27d-9418-46f1-b079-50edfaece658" name="Lower" value="100">
                       <elementDefinition Id="d1e8874f-59d4-45b5-9ce9-2c3303802cb6" />
                     </literalString>
                   </lowerValueInternal>
                   <upperValueInternal>
-                    <literalString Id="a2053db5-fc78-4cfc-87cf-175917671ed2" name="Upper" value="*">
+                    <literalString Id="a2053db5-fc78-4cfc-87cf-175917671ed2" name="Upper" value="100">
                       <elementDefinition Id="fe24d45a-17dd-4035-9e36-9c2f3b588926" />
                     </literalString>
                   </upperValueInternal>
@@ -662,33 +648,54 @@
         <elementDefinition Id="884ecd81-dc9c-442e-b8d3-f4fa677aaa0a" />
       </referencedType>
     </packageHasNamedElement>
-    <logicalClassDesignerModelHasTypes>
-      <class Id="bb0aa022-59a5-4847-be14-1f87c64dd8a6" name="Logger" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="71caad72-8ef7-47d1-a340-2735b22cab76" />
-      </class>
-    </logicalClassDesignerModelHasTypes>
     <packageHasNamedElement>
-      <referencedType Id="ba278808-5144-4667-946d-0dfd35b2ab6c" name="Logger" isAbstract="false" isLeaf="false" cachedFullName="DeiveTest::Logger">
+      <referencedType Id="ba278808-5144-4667-946d-0dfd35b2ab6c" name="Logger" isAbstract="false" isLeaf="false" cachedFullName="DeiveTest::Package2::Logger">
         <elementDefinition Id="71caad72-8ef7-47d1-a340-2735b22cab76" />
       </referencedType>
     </packageHasNamedElement>
-    <logicalClassDesignerModelHasTypes>
-      <class Id="db08ec1f-bfa7-4bad-b552-1f1b863d790e" name="ReportSender" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="61ed5fa6-9515-438f-ae2a-a63fc2206e27" />
-      </class>
-    </logicalClassDesignerModelHasTypes>
-    <logicalClassDesignerModelHasTypes>
-      <class Id="02205d62-f927-4c09-8a2a-2749cdb76815" name="HttpParser" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="e88c7ae2-8128-487e-a548-6f63aee33b29" />
-      </class>
-    </logicalClassDesignerModelHasTypes>
-    <logicalClassDesignerModelHasTypes>
-      <class Id="d62ce00b-8bcb-496e-8fdc-80bfd76f6e6e" name="ConnectionInstance" isAbstract="false" isLeaf="false" isActiveClass="false">
-        <elementDefinition Id="b1df12cf-6f4d-41f0-bd9b-d402405afc2d" />
-      </class>
-    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="a9a757af-22e0-47db-9373-62297e86e142" name="HttpTestHandler">
+        <elementDefinition Id="eccff467-95de-4583-87e0-1fbcb8c4d2b2" />
+        <packagedElements>
+          <packageHasNamedElement>
+            <class Id="bb0aa022-59a5-4847-be14-1f87c64dd8a6" name="Logger" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="71caad72-8ef7-47d1-a340-2735b22cab76" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="db08ec1f-bfa7-4bad-b552-1f1b863d790e" name="ReportSender" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="61ed5fa6-9515-438f-ae2a-a63fc2206e27" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="02205d62-f927-4c09-8a2a-2749cdb76815" name="HttpParser" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="e88c7ae2-8128-487e-a548-6f63aee33b29" />
+            </class>
+          </packageHasNamedElement>
+          <packageHasNamedElement>
+            <class Id="d62ce00b-8bcb-496e-8fdc-80bfd76f6e6e" name="ConnectionInstance" isAbstract="false" isLeaf="false" isActiveClass="false">
+              <elementDefinition Id="b1df12cf-6f4d-41f0-bd9b-d402405afc2d" />
+            </class>
+          </packageHasNamedElement>
+        </packagedElements>
+      </package>
+    </logicalClassDesignerModelHasPackages>
   </packagedElements>
   <package Id="90791101-9e66-4bf5-ac7d-7c6dad4b3ad9" name="DeiveTest">
     <elementDefinition Id="053579a5-3b97-4d66-b6e9-169405cb0e7a" />
+    <profileInstances>
+      <packageHasProfileInstances Id="5fa25a55-d099-498f-a836-88f4a1538765">
+        <profileInstance Id="dca4fc27-af46-4a24-8644-abf2f30746d0" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="25a7005b-7ff6-4ae2-83c1-9691f7f91528">
+        <profileInstance Id="e471412b-b7e4-49cb-8aef-e2eeaa5110d8" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
   </package>
 </logicalClassDesignerModel>

@@ -2148,12 +2148,12 @@ Mobilhálózatokban gyakran használt kifejezések leírása
 Hozzáférési Technológiák
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 FDMA
 \series default
-: Frequency Division Multiple Access a leggyakoribb analóg rendszer.
+ (Frequency Division Multiple Access) a leggyakoribb analóg rendszer.
  Ez a technika a spektrum frekvenciatartományokra való feldarabolásán alapszik
  és egy frekvenciasávot t'rs
 \backslash
@@ -2166,12 +2166,12 @@ t egy felhasználóhoz.
  FDMA technikát az első generációs analóg rendszerekben használták.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 TDMA
 \series default
-: Time Division Multiple Access nagyobb kapacitásra volt képes, mert az
+ (Time Division Multiple Access) nagyobb kapacitásra volt képes, mert az
  egyes frekvenciákat időszeletekre (time slot) osztotta.
  TDMA rendszerben a felhasználók az egész frekvenciatartományt használhatták,
  több felhasználó osztozott ugyanazon a frekvencia csatornán amiből egy-egy
@@ -2179,12 +2179,12 @@ TDMA
  TDMA a második generációs mobil hálózatok domináns technológiája.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 CDMA
 \series default
-: Code Division Multiple Access szórt spektrumú technológián alapul.
+ (Code Division Multiple Access) szórt spektrumú technológián alapul.
  Titkosított adat átvitelt is lehetővé tette, ezért régóta használják katonai
  célokra.
  CDMA megnövelte a spektrum teljesítő képességét azzal, hogy a felhasználók
@@ -2200,7 +2200,7 @@ CDMA
 Mobil hálózati szabványok
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 PSTN
@@ -2217,7 +2217,7 @@ t, hogy bármely telefon készülékkel felvehessük a kapcsolatot a világon.
  telefonról hívható bármely másik készülék.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 GSM 
@@ -2234,7 +2234,7 @@ GSM
  Evolution vagy EGPRS).
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 GPRS 
@@ -2255,7 +2255,7 @@ atlan több csatornás idő osztásos (TDMA: Time division multiple acces) techn
 ia segítségével.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 EDGE
@@ -2272,7 +2272,7 @@ t elérhető bitráta, háromszoros kapacitás és teljesítmény beli növeked�
  A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 W-CDMA
@@ -2285,11 +2285,7 @@ W-CDMA
  nagyobb sebességre legyen képes és több felhasználót tudjon kiszolgálni
  a TDMA és TDD (time division duplex) rendszerekhez képest.
  Ugyanazt a központi hálózatot használja, mint a 2G GSM hálózat.
- 
-\end_layout
-
-\begin_layout Standard
-Code Division Multiple Access kommunikációs hálózat sok cég közreműködésével
+ Code Division Multiple Access kommunikációs hálózat sok cég közreműködésével
  jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
  a Qualcomm dominált.
  Qualcomm volt az első cég, akinek sikerült alkalmazható és költséghatékony
@@ -2300,10 +2296,7 @@ Code Division Multiple Access kommunikációs hálózat sok cég közreműködé
  elterjedését.
  A a meglévő rádiós interfészekkel való inkompatibilitás és a nagy költséggel
  járó fejleszthetőség ellenére a W-CDMA egy meghatározó szabvánnyá vált.
-\end_layout
-
-\begin_layout Standard
-A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
+ A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
  vagy több pár 1.25 MHz rádió csatornát.
  Habár a W-CDMA szintén CDMA átviteli technikát alkalmaz, akár a CDMA2000,
  a W-CDMA nem egyszerűen egy széles sávú verziója a CDMA2000-nak.
@@ -2314,7 +2307,7 @@ A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
  kell modulálni a szignálokat és azt is hogyan kell az adatokat strukturálni.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 UMTS
@@ -2329,17 +2322,11 @@ i hálózat (UMTS Terrestrial Radio Access Network, UTRAN), a központi hálóza
  (core network) és a felhasználók SIM általi azonosítása.
  Az EDGE és a CDMA2000 ellentétben az UMTS új bázis állomást és frekvencia
  allokációs módszert igényel.
-\end_layout
-
-\begin_layout Standard
-Az UMTS által támogatott maximális adat átviteli ráta 42 Mbit/s, ha HSPA+
+ Az UMTS által támogatott maximális adat átviteli ráta 42 Mbit/s, ha HSPA+
  alkalmaznak a hálózatban és 7.2 Mbit/s HSDPA használat esetén.
  Ezek a sebességek szignifikánsan gyorsabbak , mint a GSM 9.6 kbit/s-os hibajavít
 ásos vonalkapcsolt adatátvitele, vagy a CDMAOne csatornák 14.4 kbit/s rátája.
-\end_layout
-
-\begin_layout Standard
-2006 óta UMTS hálózatokat számos országban feljavították a High Speed Downlink
+ 2006 óta UMTS hálózatokat számos országban feljavították a High Speed Downlink
  Packet Access (
 \series bold
 HSDPA
@@ -2358,7 +2345,7 @@ HSUPA
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 LTE
@@ -2374,16 +2361,13 @@ LTE
  Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogatták, az
  LTE 326 Mbit átvételére lesz képes másodpercenként, 20 MHz széles frekvenciatar
 tományon.
-\end_layout
-
-\begin_layout Standard
-Az LTE sztenderd csak IP hálózatokat támogatja.
+ Az LTE sztenderd csak IP hálózatokat támogatja.
  A GSM, UMTS és CDMA2000 hagyományos vonalkapcsolt hálózatok, így az LTE-vel
  való együtt működés miatt át kell tervezni a hálózatokat.
  Erre több fél megoldást dolgoztak ki:
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 VoLTE 
@@ -2393,10 +2377,7 @@ VoLTE
  állomáson keresztül.
  Ez azt jelenti, hogy nem kell módosítani a hagyományos vonalkapcsolt hálózatot,
  képes lesz a 4G-s hívást adatcsomagként továbbítani.
-\end_layout
-
-\begin_layout Standard
-Másik megközelítés a 
+ Másik megközelítés a 
 \series bold
 CSFB 
 \series default
@@ -2406,11 +2387,7 @@ CSFB
  Ezt a megoldást használva az operátoroknak csak az MSC-t kell frissíteniük
  IMS telepítés helyett.
  Hátránya a hosszabb hívás kiépítési idő.
- 
-\end_layout
-
-\begin_layout Standard
-A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-NB
+ A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-NB
  kodek (narrow band) használatát, de a javasolt beszéd kodek VoLTE-hoz az
  Adaptive Multi-Rate Wideband, avagy a HD Voice.
 \end_layout
@@ -3166,6 +3143,21 @@ A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerőss
  okát.
 \end_layout
 
+\begin_layout Standard
+A jitter a csomagok megérkezési ideje közötti különbség, amit a hálzati
+ torlódásból, időzítési problémából vagy útvonal váltásból eredhet.
+ Ez akkor jó, ha kicsi az érték, azaz a csomagok sűrűn követik egymást és
+ a csomagok beérkezési idejei között nem nagy a különbség.
+ A jitter nagysága, illetve nagy, sűrű változása okozhatja a telefonbeszélgetése
+k közbeni hangkiesést, akadozást, illetve a videolejeátszás során a képek
+ kiesését, szagatást.
+ Az UDP-t használó tesztek során a jelentések tartalmazzák az aktuális jitter
+ értéket.
+ Ezen értékeket figyelve derülhet ki a magas jitter érték, illetve a gyakori,
+ nagy különbségek is problémát jelezhetnek a hálózatban.
+ 
+\end_layout
+
 \begin_layout Section
 Android platform bemutatása
 \end_layout
@@ -3188,8 +3180,8 @@ Android komponensek
 \begin_layout Standard
 Az Android fejlesztőkörnyezetnek több komponense létezik, mindegyiknek különböző
  célja és szerepe van a programban.
- Ezek általában egymástól függenek, de önálló példányban léteznek és saját
- életciklusuk van.
+ Ezek általában egymással szoros kapcsolatban állnak, de önálló példányban
+ léteznek és saját életciklusuk van.
 \end_layout
 
 \begin_layout Subsubsection
@@ -3201,7 +3193,7 @@ Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nev
  Például egy zenelejátszó program Activity-je lehet, ami megjeleníti a lejátszó
  felületet, és egy másik, ahol kiválaszthatja a felhasználó a lejátszandó
  zenéket.
- Minden alkalmazásnak van egy kitüntet "main
+ Minden alkalmazásnak van egy kitüntet "fő
 \begin_inset Quotes srd
 \end_inset
 
@@ -3215,12 +3207,15 @@ Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nev
 \begin_layout Standard
 A hagyományos applikációkkal ellentétben az Android programoknak nincs kontrollj
 uk az életciklusuk felett.
- Így az alkalmazás komponenseinek figyelnie kell a program állapot változására
+ Így az alkalmazás komponenseinek figyelnie kell a program állapotváltozására
  és aszerint reagálni.
  A komponensek állapota befolyásolja a program állapotát, mely meghatározza
  a program prioritását a rendszerben.
- Az Activity-k úgynevezett Activity stack-en, azaz egy Last-In-First-Out
- adatszerkezetben tárolódnak.
+ Az Activity-k úgynevezett "Activity stack
+\begin_inset Quotes srd
+\end_inset
+
+-en, azaz egy Last-In-First-Out adatszerkezetben tárolódnak.
  Mikor egy új Activity elindul, az előtte futó kerül a stack tetejére.
  Ha az előtérben lévő, aktív Activity bezáródik vagy a felhasználó megnyomja
  a Vissza gombot, akkor a verem tetején lévő kerül előtérbe.
@@ -3275,7 +3270,7 @@ Az Activity-nek négy állapota lehet:
 Aktív 
 \series default
 (Active), ebben az állapotban a verem tetején lévő Activity lehet, ilyenkor
- az ablak az előtérben van és képes fogadni a felhasználói utasításokat.
+ az ablak előtérben van és képes fogadni a felhasználói utasításokat.
  Az Android rendszer mindent megtesz annak érdekében, hogy ez az Activity
  futhasson.
  Így, ha kevés az erőforrás, a memória, akkor leállítja a verem alján lévőket
@@ -3378,7 +3373,7 @@ Az Activity létrejöttekor hívódik meg.
 \series bold
 onRestart() 
 \series default
-egy leállított Activity újraindítása előtt hívódik meg.
+egy leállított Activity újraindítása során hívódik meg.
  OnStart() metódus követi.
 \end_layout
 
@@ -3435,8 +3430,8 @@ finish()
  metódust.
 \end_layout
 
-\begin_layout Subsubsection
-Service TODO: intent service
+\begin_layout Subsubsection*
+Service 
 \end_layout
 
 \begin_layout Standard
@@ -3455,7 +3450,7 @@ startService()
  metódus hívással, ami akkor is fut, ha a hívó komponens megszűnik.
  Service automatikusan leáll, ha a feladatát befejezte.
  Ez a feladat lehet például egy fájl feltöltése.
- Másik működési módja a service -nek az úgynevezett kötött (bound) service.
+ Másik működési módja a service-nek az úgynevezett kötött (bound) service.
  Egy komponens a 
 \shape italic
 bindService()
@@ -3528,8 +3523,31 @@ onDestroy()
  Itt kell felszabadítani a foglalt erőforrásokat, szálakat.
 \end_layout
 
+\begin_layout Subsubsection*
+IntentService
+\end_layout
+
+\begin_layout Standard
+Az IntentService a Service osztályból öröklődik és aszinkron kéréseket kezel
+ (Intent-eken keresztül).
+ Kliens külkd egy kérést a startService(Intent) híváson keresztül és a szolgálta
+tás elindul, és leállítja magát, ha végre hajtotta a feladatát.
+ Egyszerre csak egy kérést szolgál ki, ha több érkezik be, akkor egymás
+ után lesznek kiszolgálva.
+ Ez a módszer gyakran használt eljárás, annak érdekében, hogy tehermentesítsük
+ az applikáció fő szálát.
+ A használatához az IntentService osztályból kell származtatni és implementálni
+ az 
+\shape italic
+onHandleIntent(Intent)
+\shape default
+ metódust.
+ Az IntentService meg fogja kapni ezt az Intent-et, elindítja az új szálat,
+ és megállítja szolgáltatást.
+\end_layout
+
 \begin_layout Subsubsection
-Broadcast receiver TODO: ehelyett application object
+Broadcast receiver
 \end_layout
 
 \begin_layout Standard
@@ -3543,7 +3561,7 @@ A broadcast receiver egy olyan komponens, amely válaszol a rendszerszintű
 \end_layout
 
 \begin_layout Standard
-Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni amit Inetent-nek
+Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni, amit Inetent-nek
  neveznek.
  Ez kapcsol össze komponenseket futási időben, akkor is, ha a komponens
  egy másik applikációhoz tartozik.
@@ -3559,11 +3577,38 @@ Intent
 Az intent üzenetekkel futás idejü kapcsolatot, kötést létesíthetünk Android
  komponensek között.
  Intent objektum egy adatstruktúra, ami általában a végrehajtandó művelet
- absztrakt leírását tartalmazza, illetve a fogadó komponens számár a fontos
+ absztrakt leírását tartalmazza, illetve a fogadó komponens számára fontos
  információkat is tartalmazhat.
- Ezen felül tartalmaz a rendszer számár a lényeges információkat pl.: a fogadó
- komponens kategóriáját.
+ Ezen felül tartalmaz a rendszer számár a lényeges információkat például:
+ a fogadó komponens kategóriáját.
  
+\end_layout
+
+\begin_layout Subsubsection
+Application 
+\end_layout
+
+\begin_layout Standard
+Ezen osztály segítségével lehet figyelni, karbantartani az egész applikáció
+ állapotát.
+ A saját application obektumunkat az AndroidManifest.xml fájl <application>
+ tagja írja le, ami azt jelenti, hogy az osztály példánya létrejön az applikáció
+ indulása elején.
+ Álatlában nincs szükség erre az objektumra.
+ A többi Android obejktumból elérhető az Application objektum a 
+\shape italic
+getApplication()
+\shape default
+ metódus segítségével.
+\end_layout
+
+\begin_layout Standard
+Ha szükség van egy globáls Context objektumra (például BroadcastReceiver
+ objektum beregisztrálásához), itt található a 
+\shape italic
+getApplicationContext()
+\shape default
+ függvény, mely visszaadja ezt a Context objektumot.
 \end_layout
 
 \begin_layout Subsection
@@ -3571,8 +3616,8 @@ Futási környezet és konfigurációs fájlok
 \end_layout
 
 \begin_layout Standard
-Az Android tartalmaz egy alap könyvtárat mely megvalósítja a Java programozási
- nyelv túlnyomó részét.
+Az Android SDK tartalmaz egy alap könyvtárat, mely megvalósítja a Java programoz
+ásinyelv túlnyomó részét.
  
 \end_layout
 
@@ -3662,7 +3707,7 @@ Komponensek deklarációja a manifest fájlban a következők lehetnek:
 \end_layout
 
 \begin_layout Itemize
-<activity> elemek az Activity -ból származó osztályokhoz
+<activity> elemek az Activity-ból származó osztályokhoz
 \end_layout
 
 \begin_layout Itemize
@@ -3687,9 +3732,15 @@ Az Android rendszerben az Activity objektumok rendelkeznek felhasználói
  XML fájlokban.
  Ezek a fájlok az alkalmazás könyvtárán belül a 
 \shape italic
-res
-\backslash
-layout
+
+\begin_inset Quotes sld
+\end_inset
+
+res/layout
+\begin_inset Quotes srd
+\end_inset
+
+
 \shape default
  könyvtárban találhatóak.
  Egy XML elem neve ebben az esetben egy Java objektum nevét tükrözi, tehát
@@ -3708,7 +3759,7 @@ Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombba
 \begin_layout Standard
 \begin_inset listings
 inline false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 
@@ -3717,7 +3768,7 @@ status collapsed
 
 \begin_layout Plain Layout
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas..."
 \end_layout
 
 \begin_layout Plain Layout
@@ -3782,7 +3833,8 @@ status collapsed
 
 \begin_layout Standard
 Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
- Eclips-be ágyazott grafikus szerkesztőfelület segítségével is.
+ Eclipse fejlesztőeszközbe ágyazott grafikus szerkesztőfelület segítségével
+ is.
  Különféle Layout objektumok segítségével meghatározhatjuk az egyes elemek
  (gombok, szövegmezők, stb.) elhelyezkedését.
  A felhasználóval való interakciókra különféle elemek állnak rendelkezésre
@@ -3793,7 +3845,7 @@ Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
  Ezeket az XML elemek android:on<valami> (pl.: android:onClick=<metódus_név>)
  paraméterében tudjuk meghatározni.
  A felhasználói felületet leíró fájlt használó Activity osztályban kell
- definiálni az XML elemekhez tartozó visszahívó metódusokat melyek meghívódnak,
+ definiálni az XML elemekhez tartozó visszahívó metódusokat, melyek meghívódnak,
  ha az adott eseményt kiváltja egy felhasználói esemény.
  
 \end_layout
@@ -3805,9 +3857,15 @@ Menü leírása
 \begin_layout Standard
 Menüket külön leíró XML fájl(ok)ban definiálhatunk, melyekben meg kell határozni
  az egyes menüpontokat.
- Ezen leíró fájlok a program könyvtárán belül a res
-\backslash
-menu mappában találhatóak.
+ Ezen leíró fájlok a program könyvtárán belül a 
+\begin_inset Quotes sld
+\end_inset
+
+res/menu
+\begin_inset Quotes srd
+\end_inset
+
+ mappában találhatóak.
  A felhasználó a menün keresztül navigálhat a user interface-el rendelkező
  Activity-k között és elérheti a beállításokat.
  Az Activity osztályokhoz az onCreateoptionMenu metódus megvalósításával
@@ -3824,7 +3882,7 @@ Adattárolás
 \begin_layout Standard
 Az Android számos lehetőséget kínál az adatok perzisztens tárolására.
  Ezek lehetnek megosztott preferenciák (Shared preference), mely primitív
- adatokat tarol kulcs érték párok alapján, külső illetve belső tároló, illetve
+ adatokat tarol kulcs-érték párok alapján, külső illetve belső tároló, illetve
  SQLite adatbázis.
  
 \end_layout
@@ -3837,14 +3895,22 @@ Megosztott preferenciák
  segítségével tárolhatjuk el egyszerűen az alakalmazás, illetve az egyes
  Activity objektumok állapotát, mivel az adatok megmaradnak az alakalmazás
  megszünése után is.
- Kulcs-árták párok segítségével el tudjuk menteni az objektumok változóinak
- értékét, majd visszaolvasni ha szükséges.
+ Kulcs-érték párok segítségével el tudjuk menteni az objektumok változóinak
+ értékét, majd visszaolvasni, ha szükséges.
  Az eltárolt attribútumok float, int, long, boolean és string típusúak lehetnek.
- A getSharedPreferences metódus segítségével névvel ellátott preferenciát
- kapunk, melzet első paraméterként kell megadnunk, és arra hivatkozva bárhonnan
- el tudjuk érni az alaklamzásból.
- A getPreferences függvény segítségével Az Activitz objektumokhoy rendelhetünk
- egy preferenciát, amiben az adott tevékenzség objektum adatait tárolhatjuk.
+ A 
+\shape italic
+getSharedPreferences()
+\shape default
+ metódus segítségével névvel ellátott preferenciát kapunk, melyet első paraméter
+ként kell megadnunk, és arra hivatkozva bárhonnan el tudjuk érni az alaklamzásbó
+l.
+ A 
+\shape italic
+getPreferences()
+\shape default
+ függvény segítségével az Activity objektumokhoz rendelhetünk egy preferenciát,
+ amiben az adott tevékenység objektum adatait tárolhatjuk.
  
 \end_layout
 
@@ -3857,7 +3923,7 @@ segítségével
 \series bold
  
 \series default
-olzan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
+olyan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
 ban, amikhez csak az alakalmazás férhet hozzá és annak eltávolításakor ezek
  a fájlok automatikusan törlődnek.
  
@@ -3883,7 +3949,7 @@ at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
  Az SQLite támogatja a hagyományos relációs adatbázis funkciókat, mint az
  SQL szintaxis és tranzakciók.
  A futás során az adatbázisnak kevés memóriára van szüksége (kb.
- 250KByte).
+ 250 KByte).
  Az adatbázisműveletek fájl műveleteket igénzelnek, amik lassúak lehetnek,
  ezért aszinkron módon kell azokat végrehajtani.
  Adatbáziskezelés megvalósításához szükség lesz egy osztályra, mely az 
@@ -3891,17 +3957,39 @@ at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
 SQLiteOpenHelper 
 \shape default
 osztályból számrazik.
- Ennek az onCreate függvénzét kell felüldefinálni az adatbázist létrhozó
- implementácioval, melyet SQL parancsal adhatunk meg.
- Az onUpgrade metódus felüldefiniálásával megadhatjuk a programunk, milzen
- utasításokat hajtson végre ha a tábla korábbi verziója már létezik az adott
- eszközön.
- A helper osztályunk getReadableDatabase() és a getWriteableDatabase() függvénye
-inek segítségével kaphatunk egy SQLiteDatabase obejktumot, melyen keresztül
- hozzáférhetnk az adatbázis táblákhoz és módosíthatjuk azokat.
- SQLiteDatabase query() és rawquary() metódusaival futtathatunk lekérdezéseket.
- Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manüverezh
-etük a lekérdezés eredményének sorai között.
+ Ennek az 
+\shape italic
+onCreate() 
+\shape default
+függvényét kell felüldefinálni az adatbázist létrhozó implementácioval,
+ melyet SQL parancsal adhatunk meg.
+ Az 
+\shape italic
+onUpgrade()
+\shape default
+ metódus felüldefiniálásával megadhatjuk a programunk, milyen utasításokat
+ hajtson végre, ha a tábla korábbi verziója már létezik az adott eszközön.
+ A helper osztályunk 
+\shape italic
+getReadableDatabase()
+\shape default
+ és a 
+\shape italic
+getWriteableDatabase()
+\shape default
+ függvényeinek segítségével kaphatunk egy SQLiteDatabase obejktumot, melyen
+ keresztül hozzáférhetünk az adatbázis táblákhoz és módosíthatjuk azokat.
+ SQLiteDatabase 
+\shape italic
+query()
+\shape default
+ és 
+\shape italic
+rawquary()
+\shape default
+ metódusaival futtathatunk lekérdezéseket.
+ Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manőverezh
+etünk a lekérdezés eredményének sorai között.
  
 \end_layout
 
@@ -3938,33 +4026,34 @@ status open
 Hálózati protokollok a programban
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 UDP (User Datagram Protocol): 
 \series default
 kapcsolatnélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
  Portszámot és checksum-ot is tartalmaz egy csomag.
- A csomagok nem biztos hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz
- , mint amilyen sorrendben el lettek küldve.
+ A csomagok nem biztos, hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz,
+ mint amilyen sorrendben el lettek küldve.
  A küldő nem kap visszaigazolást a csomag megérkezéséről.
  Ez a protokoll nagyon elterjedt a videójátékoknál és a telekommunikációban.
  
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 TCP (Transmission Control Protocol): 
 \series default
 megbízható de ezért lassabb is, mint például az UDP.
  Folyamként vagy fájlként kezeli a kapcsolatokat.
- A csomagok megfelelő sorrendjéről gondoskodik, illetve az elveszett csomagok
- újra küldéséről is gondoskodik.
- 
+ A csomagok megfelelő sorrendjéről, illetve az elveszett csomagok újra küldésérő
+l is gondoskodik.
+ A csomagok bufferrelésével eléri, hogy az átviteli sebesség is közel állandó
+ legyen az adat küldése, továbbítása során.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Description
 
 \series bold
 HTTP (Hypertext Transfer Protocol):
@@ -3978,12 +4067,36 @@ sára használják.
  a kapcoslatot és küld egy kérést a HTTP szervernek.
  Amint a szerver visszaküldte a választ lezérja a kapcsolatot.
  A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
- pl.: GET /path/to/file/index.html HTTP/1.0 vagy HTTP/1.0 200 OK.
+ pl.: 
+\begin_inset Quotes sld
+\end_inset
+
+GET /path/to/file/index.html HTTP/1.0
+\begin_inset Quotes srd
+\end_inset
+
+ vagy 
+\begin_inset Quotes sld
+\end_inset
+
+HTTP/1.0 200 OK
+\begin_inset Quotes srd
+\end_inset
+
+.
  A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
  metódusok még a POST és a HEAD.
  Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
  Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
- Ezek után szerepelhetnek paraméterek PARAMÉTER: érték alakban.
+ Ezek után szerepelhetnek paraméterek 
+\begin_inset Quotes sld
+\end_inset
+
+PARAMÉTER: érték
+\begin_inset Quotes srd
+\end_inset
+
+ alakban.
  Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
  mint például az erőforrás módosításának ideje: 
 \begin_inset Quotes sld
@@ -3997,6 +4110,11 @@ Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
  Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
  Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
  
+\end_layout
+
+\begin_layout Description
+HTTP* egy specializált HTTP protokolt, melyet a ebben a programban használok
+ az Android applikáció és a szerveren futó alkalamazás kommunikációjában.
 \end_layout
 
 \begin_layout Section
