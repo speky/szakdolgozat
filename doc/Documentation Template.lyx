@@ -2547,6 +2547,15 @@ MSC (Mobil Softswitch Controller) elsődleges eleme a GSM/CDMA hálózatoknak,
 ket.
 \end_layout
 
+\begin_layout Description
+IMS (IP Multimedia Subsystem) egy architektúra az IP alapú multimédiás szolgálta
+tásokhoz.
+ Kezdetben a 3GPP arra fejlesztette ki, hogy terjesszék ki a GPRS-t Internet
+ alapú szolgáltatásokkal.
+ A könnyebb integrálhatóság miatt IETF protokollokat használnak ahol csak
+ lehetcségs, ilyen például a SIP (Session Initiation Protocol) .
+\end_layout
+
 \begin_layout Subsubsection*
 
 \series bold
@@ -2798,20 +2807,35 @@ Negyedik generáció
 \end_layout
 
 \begin_layout Standard
-Napjainkban a letöltési sebesség download speed limitált 9.6 kbit/sec-ra,
- mely 6-szor lassabb, mint egy ISDN (Integrated services digital network)
- kapcsolat esetén.
- Valójában ez a sebesség sokkal lassab, főleg zsúfolt helyeken, vagy ha
- hálózat nagyon leterhelt.
- Negyedik generációs (4G) mobil kommunikáció nagyobb adat átvitelre lesz
- képes, mint a 3G.
- Az adatráta tervezett mértéke 20 Mbps.
+Negyedik generációs (4G) mobil kommunikáció nagyobb adatátvitelre lesz képes,
+ mint a 3G.
+ Az adatráta tervezett mértéke 100 Mbps .
 \end_layout
 
 \begin_layout Standard
 A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
- sebességű adat átvitelt; lehetővé teszi a jó minőségű videó megjelenítést,
- háromdimenziós animációs játék és 5.1-es hang szolgáltatást.
+ sebességű adatátvitelt, így lehetővé teszi többek között a jó minőségű,
+ nagy felbontású videótelefonálást.
+ A 2008-as ITU szabvány szerint legfeljebb 100 Mbit/s átviteli sebesség
+ elérése lesz képes egy gyorsan mozgó készülék esetén (például: kocsiban,
+ vonaton) és akár 1Gbit/s adatráta is elérhető egyéb esetekben.
+ Két 4G rendszertervet dolgoztak ki, amit már kereskedelmi forgalmoban is
+ használnak, ez a Mobile WiMAx és az LTE.
+ Egyik megoldás sem telejesen teljesíti az ITU szabványt, ezért ezeket még
+ 
+\begin_inset Quotes sld
+\end_inset
+
+hivatalosan
+\begin_inset Quotes srd
+\end_inset
+
+ nem tartják a szakemberek negyedik generációs hálózatnak, habár az operátorok
+ már annak hírdetik.
+ Mindkét technológiát fejelsztik, hogy megfeleljen a 4G szabvány elverásainak,
+ főleg az adatátviteli sebesség kapcsán.
+ Egzáltalán nem támogatja már a hagzományos vonalkapcsolt szolgáltatásokat,
+ csak az internet protokollra (IP) épülőket, mint amilyen az IP telefonálás.
 \end_layout
 
 \begin_layout Standard
@@ -2834,7 +2858,7 @@ status open
 \begin_inset Caption
 
 \begin_layout Plain Layout
-4G hálózat architektúrája
+4G és 3G hálózat architektúrája
 \end_layout
 
 \end_inset
@@ -2856,11 +2880,14 @@ A hálózatok vizsgált adatai
 \end_layout
 
 \begin_layout Standard
-A lenti táblázat tartalmazza az átviteli sebességeket különféle technológiák
+A lenti táblázat tartalmazza az átvitelisebességeket különféle technológiák
  esetén.
- Amint látható, a 3G és a későbbi hálózatok adat rátája egyre inkább növekszik,
- így lehetővé téve a nagyobb sávszélesség igényű szolgáltatások bevezetését,
- mint a HD audió és videó szolgáltatások.
+ Ezek a sebesség adatok módosulhatnak attól függően, hogy milyen rádiótechnológi
+át használ a telefonhálózat operátora (CDMA, FDD, stb.) Amint látható, a
+ 2G és 3G hálózatok adatrátája egyre inkább növekszik, így lehetővé téve
+ a nagyobb sávszélességigényű szolgáltatások bevezetését, mint a HD audió
+ és videó szolgáltatások.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -3109,7 +3136,7 @@ le 1 Gbps, fel 500 Mbps.
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Technológia és elérhető adatráták
+Technológiák és az elérhető adatráták
 \end_layout
 
 \end_inset
@@ -3117,13 +3144,26 @@ Technológia és elérhető adatráták
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerősség
+ és UDP tesztek esetén a jitter.
+ A jelerősség - amit dBm-be mérnek - indikálja a szolgáltataás minőségét.
+ Az értéke sok paramétertől függ, többek között az adótoronztól való távolságtól
+, a természeti akadájoktól, amik a készülék és a torony között vannak (erdő,
+ hegy, stb.) és az időjárástól is függhet.
+ A telefonkészüléken 5 darab kis osztás szokta jelezni a jelerősséget.
+ Minél több osztás aktív, annál erősebb a jel, annál jobb a szolgáltatás.
+ Ha kicsi a jel erősség, akkor probléma léphet fel a szolgáltatások minőségében,
+ például akadozik a hangátvitel, nagyon ingadozik az átviteli sebesség.
+ A ritkán lakott területeken is kicsi szokott lenni a jelerősség.
+ A mérésekből kiderülhet, hogy olyan helyen is rossz a jel minősége, ahol
+ ezt nem is várnánk, és az operátorok feladata, hogy kiderítsék ennek az
+ okát.
 \end_layout
 
 \begin_layout Section
