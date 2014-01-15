@@ -4215,7 +4215,7 @@ ConnectionInstance megvalósítja a Java
 Callable 
 \shape default
 interfészt.
- Ez szolgál ősosztályként a TCP és UDP teszt osztályoknak.
+ Ez szolgál ősosztályként a TCP és UDP sender és receiver osztályoknak.
 \end_layout
 
 \begin_layout Description
@@ -4232,18 +4232,54 @@ parseHttpMessage
 \shape italic
 Properties
 \shape default
- típusú attribútumokba kerülnek eltárolásra.
+ típusú attribútumaiban tárolódnak.
  A 
 \shape italic
 methodProperty
 \shape default
  tartalmazza az üzenet típusát, egy paramétert, ami a buffer méretét adja
- meg vagy egy azonosító tartalmaz, és a HTTP verziót, a 
+ meg vagy egy azonosítót tartalmaz és a HTTP verziót.
+ A 
 \shape italic
 headerProperty 
 \shape default
-pedig az opcionális paramétereket tartalmazza.
- 
+pedig az opcionális paramétereket tartalmazza, ezek a tesztek paramétereit
+ írja le: a 
+\begin_inset Quotes sld
+\end_inset
+
+MODE
+\begin_inset Quotes srd
+\end_inset
+
+ az adatforgalom irányát határozza meg, hogy a syerver küldi-e az adatokat
+ (ez a letöltés, 
+\begin_inset Quotes sld
+\end_inset
+
+DL
+\begin_inset Quotes srd
+\end_inset
+
+), vagy a mobiltelefon (ez a feltöltés, 
+\begin_inset Quotes sld
+\end_inset
+
+UL
+\begin_inset Quotes srd
+\end_inset
+
+).
+ A másik paraméter a 
+\begin_inset Quotes sld
+\end_inset
+
+CONNECTION
+\begin_inset Quotes srd
+\end_inset
+
+ a kapcsolat típusát határozza meg, miszerint UDP, vagz TCP protokollt fog
+ használni a teszt.
 \end_layout
 
 \begin_layout Description
@@ -4262,14 +4298,14 @@ metódus segítségével.
 \end_inset
 
 log.txt" névvel fog létrejönni a fájl a bináris fájl mellett.
- Az addLine metódus hívásával az átadott szöveg ki fog íródni a fájlbe és
- az elejére egy időbélyeg fog hozzáadódni.
+ Az addLine metódus hívásával az átadott szöveg ki fog íródni a fájlba és
+ az elejére egy időbélyeg kerül.
 \end_layout
 
 \begin_layout Description
 MessageI egy interfész, ami egyetlen sendReportMessage függgvény fejlécét
  tartalmazza.
- Ennek segítségével tud a TCPSender és UDPSender osztály jelentést küldeni
+ Ennek segítségével tud a TCPSender és UDPSender osztály jelentéseket küldeni
  - a ReportSender osztályon keresztül - a teszt és a csomagok állapotáról
  a ReportReceiver osztály egy példányának.
 \end_layout
@@ -4295,7 +4331,9 @@ sendMessage
 \begin_layout Description
 ReportReceiver osztály példánya a mobilkészüléken fut - egy külön szálon
  - és fogadja a jelentéseket, riportokat, majd továbbítja a HttpService
- példánynak.
+ példánynak, ami továbbitja a TestActivitynek az Application obejktumon
+ keresztül.
+ Így láthatóvá válik és folyamatosan frussül a TestActivity üzenetlistája.
  A TCP- és UDPReceiver osztályoktól kapott értékek a 
 \shape italic
 ReceiverReportI
@@ -4305,7 +4343,7 @@ ReceiverReportI
 setReceivedBytes 
 \shape default
 metódus segítségével továbbítódnak, ha a receiver (fogadó) osztálypéldányok
- a mobil alakalmazáson futnak - azaz a mobilkészülék a fogadó, így a mobil
+ a mobil alakalmazáson futnak - azaz a mobilkészülék a fogadó-, így a mobil
  letöltési sebessségét vizsgljuk.
  Egyébként a szerver által fogadott csomagokról a ReportSender osztálytól
  kap üzenetet, amit a 
@@ -4322,7 +4360,7 @@ parseReport
 checkProperty 
 \shape default
 metódusok értelmezik a kapott üzenetet és küldenek jelentést a HttpService-nek
- a ReportI interfészen keresztűl, ahogy a korábban említett 
+ a ReportI interfészen keresztül, ahogy a korábban említett 
 \shape italic
 setReceivedBytes 
 \shape default
@@ -4331,26 +4369,34 @@ függvény
 .
  
 \shape default
-A sebesség adatok is itt kerülnek kiszámolásra a calcSpeed függvényben.
+A sebesség adatok is itt kerülnek kiszámolásra a 
+\shape italic
+calcSpeed
+\shape default
+ függvényben.
  
 \end_layout
 
 \begin_layout Description
 ReportSender a szerver oldali programban fut az osztály egy példánya, külön
  szálon.
- A megadott porton létrehoz egy ServerSocket-et, ahova a klien oldalon futó
- ReportReceiver osztálypéldánya tud csatlakozni.
+ A megadott porton létrehoz egy ServerSocket-et, ahova a kliens oldalon
+ futó ReportReceiver osztálypéldánya tud csatlakozni.
  Ezen keresztül kap értesítést a kliens a szerver oldali csomagok érekzéséről,
  a teszt állapotáról.
- A sendReportMessage függvény segítségével küld HTTP üzenetet ami tartalmazza
- a jelentés paramétereit.
+ A 
+\shape italic
+sendReportMessage
+\shape default
+ függvény segítségével küld HTTP üzenetet, ami tartalmazza a jelentés paramétere
+it.
  
 \end_layout
 
 \begin_layout Description
 TCPReceiver fogadja a TCP típusú teszt során a TCP csomagokat és számolja
- a kapott üzeneteket és azok méretét és erről jelentést küld egy előre megadott
- idő intervallumonként, ezt a 
+ a kapott üzeneteket, azok méretét és erről jelentést küld egy előre megadott
+ időintervallumonként, ezt a 
 \shape italic
 setReportInterval
 \shape default
@@ -4367,9 +4413,9 @@ scheduleAtFixedRate
 \shape default
  metódusával lehet megadni.
  Az osztály konstuktora képes MessageI és ReceiverReportI interfészeket
- fogadni attól függően hogy szerver oldalon fut, így a ReportSenderen keresztűl
- tud jelentést küldeni, vagy a mobil oldalon, amikor a ReportReceiver osztály
- példányát használja.
+ fogadni attól függően, hogy szerver oldalon fut - így a ReportSenderen
+ keresztűl tud jelentést küldeni-, vagy a mobil oldalon, amikor a ReportReceiver
+ osztály példányát használja.
  A 
 \shape italic
 setSocket 
@@ -4399,7 +4445,19 @@ TCPReport a TCP teszt mérési eredményeinek eltárolására szolgál.
 \end_layout
 
 \begin_layout Description
-TCPSender 
+TCPSender a ConnectionInstance osztályből származik és a konstruktorában
+ megadott méretű buffert tölt fel véletlenszerü adatokkal.
+ A buffer adatát foylamatosan küldi a 
+\shape italic
+setSocket
+\shape default
+ függvényen keresztül megadott socket-en keresztül egy OutputStream objektum
+ segítségével.
+ A küldést addig folytatja, amíg a 
+\shape italic
+stop
+\shape default
+ metódusát meghívva le nem állítjuk.
 \end_layout
 
 \begin_layout Description
@@ -4614,8 +4672,8 @@ t, így kap értesítést az applikáció az adatkapcsolat (data connection) ál
 \end_layout
 
 \begin_layout Description
-The values are defined in the GSM standard TS 27.007, section 8.5 (Google
- it, or see here) From the standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
+The values are defined in the GSM standard TS 27.007, section 8.5 From the
+ standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
  -53 dBm 31 -51 dBm or greater 99 not known or not detectable Which means
  - 0 is low, 31 is good.
 \end_layout
