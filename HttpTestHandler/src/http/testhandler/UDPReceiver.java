@@ -73,7 +73,6 @@ public class UDPReceiver extends ConnectionInstance {
 		if (socket != null) {
 			socket.close();
 		}
-			
 	}
 
 	private void parsePackage(String packet, long receivedTime) {
@@ -109,7 +108,7 @@ public class UDPReceiver extends ConnectionInstance {
 			// Buffer for receiving incoming data
 			byte[] inboundDatagramBuffer = new byte[bufferSize];
 			DatagramPacket datagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length, senderAddress, senderPort);
-			socket.send(datagram );
+			socket.send(datagram);
 			DatagramPacket data = new DatagramPacket(inboundDatagramBuffer, bufferSize);
 			socket.receive(data);
 			//InetAddress adr = data.getAddress();
@@ -134,10 +133,10 @@ public class UDPReceiver extends ConnectionInstance {
 					reportReceiver.setReceivedBytes(id, reportInterval, readedBytes, jitter, lost, cntOutofOrder, sum);
 				} else if (null != reportSender){
 					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(readedBytes)+ " "+
-																																	 Double.toString(jitter)+ " "+
-																																	 Integer.toString(lost)+ " "+
-																																	 Integer.toString(cntOutofOrder)+" "+
-																																	 Integer.toString(sum)+ " ");
+																	 Double.toString(jitter)+ " "+
+																	 Integer.toString(lost)+ " "+
+																	 Integer.toString(cntOutofOrder)+" "+
+																	 Integer.toString(sum)+ " ");
 				}
 				readedBytes = 0;
 			}
@@ -159,14 +158,13 @@ public class UDPReceiver extends ConnectionInstance {
 			++packetCount;
 			long time = Calendar.getInstance().getTimeInMillis();
 			String received = new String(datagramPacket.getData(), 0, datagramPacket.getLength()) + ", from address: "
-					+ datagramPacket.getAddress() + ", port: " + datagramPacket.getPort();
+										+ datagramPacket.getAddress() + ", port: " + datagramPacket.getPort();
 			//logger.addLine(TAG+received);
 			parsePackage(received, time);
 
 		}
 		logger.addLine(TAG+ "exited!");
 		return id;
-
 	}
 
 }

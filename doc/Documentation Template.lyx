@@ -4442,6 +4442,13 @@ totalReadedBytes
 TCPReport a TCP teszt mérési eredményeinek eltárolására szolgál.
  Tartalmazza: a reporter objektum azonosítóját, a jelentés intervallumát,
  az átvitt adatokat és a le- vagy feltöltési sebességet.
+ tartalmaz egy parseReport függvényt , mely egy String objektumot elemez
+ és feltölti a kiolvasott értékekkel a riport paramétereket.
+ A jelentés paraméterek a 
+\shape italic
+toString 
+\shape default
+metódus felüldefiniálásával szöveggé konvertálhatóak.
 \end_layout
 
 \begin_layout Description
@@ -4457,7 +4464,7 @@ setSocket
 \shape italic
 stop
 \shape default
- metódusát meghívva le nem állítjuk.
+ metódusát meghívva le nem állítjuk, ami leyárja a socket objektumot.
 \end_layout
 
 \begin_layout Description
@@ -4466,14 +4473,80 @@ UDPReceiver fogadja a UDP típusú teszt során a csomagokat és számolja a
  csomagokat is számolja.
  Erről jelentést küld előre megadott idő intervallumonként, ezt a 
 \shape italic
-setReportInterval
+reportInterval
 \shape default
- függvény segítségével lehet megadni.
+ paraméter lehet megadni az osztály konstruktorában.
+ Az UDP protokollt használó tesztek során nem épül ki tartós kapcsolat a
+ kliens és a szerver között, ezért nem kap Socket objektumot, hanem maga
+ az UDP teszt osztály építi ki magának a kapcsolatot.
+ Az UDP protokoll történő üzenetküldéshez a Java DatagramSocket és DatagramPacke
+t osztályait használom.
+ A mobilhálózatokban előforduló NAT-olás miatt a kommunikációt minden esetben
+ a mobil oldali osztálynak kell kezdeményeznie, így nyitva egy portot, amin
+ keresztül ezután a szerver képes üzenetet küldeni a mobilkészüléknek.
+ A mobil oldalon való futtatáskor a 
+\shape italic
+setSenderParameters 
+\shape default
+metódust használom, ami megkapja a server IP címét, a tesztáltal használni
+ kívánt port számot és létrehoz egy alapértelmezett Datagramsocketet.
+ Ezt a szál 
+\shape italic
+start 
+\shape default
+metódusának meghívása elött kell meghívni.
+ A 
+\shape italic
+start
+\shape default
+ meghívása után az osztály 
+\shape italic
+call 
+\shape default
+függvényébe kerül át a vezérlés, ami leellenőrzi, hogy be van-e állítva
+ a 
+\shape italic
+senderAddress 
+\shape default
+paraméter - vagyis a szerver IP címe -, ha igen, akkor meghyvja a 
+\shape italic
+sendAddressToSenderThroughNAT
+\shape default
+ függvényt.
+ Ez arra szolgál, hogy küld egy DtagramPacketet a szerver címével és port
+ számával a DatagramSoceket-en keresztül és vár egy válasz üzenetet.
+ A riportolás a TCPReceiver-hez hasonlóan történik, annyi különbséggel,
+ hogy itt több adatot küld át.
+ Ezután a call metódus folyamatosan vár bufferSize méretü DatagramPacketeket.
+ Számolja ezek sorszámát és fiegyeli az elveszett illetve rossz sorrendbe
+ érkező csomagokat és számolja az aktuális jitter értéket a 
+\shape italic
+parsePackage
+\shape default
+ függvényben.
+ A jitter érték számítás képletét az RFC 1889, Real Time Protocol (RTP)
+ dokumentum tartalmazza.
+ A 
+\shape italic
+lost
+\shape default
+ paraméter tartalmazza az elveszett, a 
+\shape italic
+cntOutofOrder
+\shape default
+ attribútum a felcserélődött csomagok számát tárolja, a 
+\shape italic
+sum
+\shape default
+ pedig az összes fogadott csomagszámát.
  
 \end_layout
 
 \begin_layout Description
-UDPReport
+UDPReport a TCPReport leszámrazottja, mely tartalmazza a UDP tesztek sajátos
+ paramétereit: az elveszett csomagok számát, a felcserélődött csomagok számát,
+ az össz csomag számot és a jittert.
+ 
 \end_layout
 
 \begin_layout Description
