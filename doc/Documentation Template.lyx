@@ -4449,6 +4449,7 @@ TCPReport a TCP teszt mérési eredményeinek eltárolására szolgál.
 toString 
 \shape default
 metódus felüldefiniálásával szöveggé konvertálhatóak.
+ 
 \end_layout
 
 \begin_layout Description
@@ -4546,11 +4547,43 @@ sum
 UDPReport a TCPReport leszámrazottja, mely tartalmazza a UDP tesztek sajátos
  paramétereit: az elveszett csomagok számát, a felcserélődött csomagok számát,
  az össz csomag számot és a jittert.
+ Felüldefiniálja az ősosztályának metódusait, a 
+\shape italic
+parseReport
+\shape default
+ és a 
+\shape italic
+toString 
+\shape default
+függvényeket.
+ Először meghívódik az ősosztály függvénye, majd az UDP specifikus attribútumok
+ kezelése történik meg.
  
 \end_layout
 
 \begin_layout Description
-UDPSender
+UDPSender az UDPReceiver-hez hasonlóan megtalálható a 
+\shape italic
+setReceiverParameter 
+\shape default
+metódus, amelyből két példány is megtalálható különféle paraméterlistával.
+ A mobil oldalon csak a port számot adjuk meg, ekkor a receiverAddress paraméter
+ null értéket fog tartalmazni, ami azt jelenti, hogy a 
+\shape italic
+getAddressThroughNAT
+\shape default
+ metódus fog meghívódni a 
+\shape italic
+call 
+\shape default
+metódus futása során.
+ A 
+\shape italic
+getAddressThroughNAT
+\shape default
+ fogadja a mobil készüléktől az üzenetet és a beérkező DatagramPacketből
+ kiolvassa a feladó címét és a portot, ahova majd az üzeneteket fogja küldeni.
+ 
 \end_layout
 
 \begin_layout Description

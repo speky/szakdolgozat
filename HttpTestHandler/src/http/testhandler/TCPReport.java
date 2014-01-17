@@ -28,11 +28,11 @@ public class TCPReport {
         RateString = Collections.unmodifiableMap(aMap);
     }
 		
-	public  int reporterId = 0;
+	public int reporterId = 0;
 	public long  interval = 0;
-	public  double transferedData = 0.0;
-	public  double dlSpeed = 0.0;
-	public  double ulSpeed = 0.0;
+	public double transferedData = 0.0;
+	public double dlSpeed = 0.0;
+	public double ulSpeed = 0.0;
 	protected DataType data = DataType.BYTE;
 	protected RateType rate = RateType.BITS;
 	protected StringTokenizer tokens = null;
@@ -58,9 +58,13 @@ public class TCPReport {
 		ulSpeed = 0.0;
 	}
 	
-	public long getInterval() { return interval; }
+	public long getInterval() { 
+		return interval; 
+	}
 	
-	public double getTransferedData() { return transferedData; }
+	public double getTransferedData() {
+		return transferedData; 
+	}
 	
 	public boolean parseReport(final String report) {
 		if (report == null) {
