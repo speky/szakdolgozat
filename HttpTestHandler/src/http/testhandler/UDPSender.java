@@ -27,34 +27,35 @@ public class UDPSender extends ConnectionInstance {
 		super(ConnectionInstance.UDP, id, logger);
 		logger.addLine(TAG+ " id: " + id);
 		bufferSize = bufferSizeInByte;
-		init();		
+		initDelay();
 	}
 	
 	public void setRateInBitsPerSec(final double rate) {
 		UDPRate = rate;
+		initDelay();
 	}
 
-	private void init () {
+	private void initDelay() {
 		// Due to the UDP timestamps etc, included 
 		// reduce the read size by an amount 
 		// equal to the header size
 		delay_target = 0;
-		delay = 0; 
+		delay = 0;
 		adjust = 0;
-		// compute delay for bandwidth restriction, constrained to [0,1] seconds 
+		// compute delay for bandwidth restriction, constrained to [0,1] seconds
 		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) );
 		//sec = rate/byte*8 (= bits)
 		delay_target = (int) (UDPRate/((bufferSize) * kBytes_to_Bits));
-		
+
 		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
-			logger.addLine(TAG + "WARNING: delay too large, reducing from"+delay_target / kSecs_to_usecs +" to 1 second!"); 
-			delay_target = (int) kSecs_to_usecs * 1; 
-		}         
+			logger.addLine(TAG + "WARNING: delay too large, reducing from "+delay_target / kSecs_to_usecs +" to 1 second!");
+			delay_target = (int) kSecs_to_usecs * 1;
+		}
 	}
 
 	// used on mobile side
 	public boolean setReceiverParameters(final int port, final String address) {
-		receiverPort = port;	
+		receiverPort = port;
 		try {
 			receiverAddress  = InetAddress.getByName(address);
 			receiverPort = port;
@@ -71,8 +72,8 @@ public class UDPSender extends ConnectionInstance {
 	// used on server side
 	public boolean setReceiverParameter(final int port) {
 		receiverAddress = null;
-		receiverPort = port;		
-		try {			
+		receiverPort = port;
+		try {
 			socket = new DatagramSocket(port);
 			return true;
 		} catch (SocketException e) {
@@ -84,7 +85,7 @@ public class UDPSender extends ConnectionInstance {
 	private void getAddressThroughNAT() {
 		// Buffer for receiving incoming data
 		byte[] inboundDatagramBuffer = new byte[bufferSize];
-		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);		
+		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);
 		// Actually receive the datagram
 		try {
 			socket.receive(inboundDatagram);
@@ -109,28 +110,26 @@ public class UDPSender extends ConnectionInstance {
 	
 	public Integer call() {
 		try {
-			byte[] buf = new byte[bufferSize];			
+			byte[] buf = new byte[bufferSize];
 			packetID = 0;
 			long lastPacketTime = 0;
 			int packetSize = 0;
-			
+
 			if (receiverAddress == null) {
 				getAddressThroughNAT();
 			}
-			
+
 			while (running) {
 				long time = Calendar.getInstance().getTimeInMillis();
+				// delay between writes
+				// make an adjustment for how long the last loop iteration took
+				adjust = delay_target + (time - lastPacketTime);
 				lastPacketTime = time;
-				// delay between writes 
-				// make an adjustment for how long the last loop iteration took 
-				// TODO this doesn't work well in certain cases, like 2 parallel streams 
-				adjust = delay_target + (time -lastPacketTime); 
-				lastPacketTime = time ; 
 
-				if ( adjust > 0  ||  delay > 0 ) {
-					delay += adjust; 
+				if (adjust > 0  ||  delay > 0) {
+					delay += adjust;
 				}
-				
+
 				byte[]  packetData = (Integer.toString(++packetID) +" " + Long.toString(time) +" ").getBytes();
 				// re-generate byte buffer array if the packet id or time data's length has changed
 				if (packetSize != packetData.length) {
@@ -139,16 +138,16 @@ public class UDPSender extends ConnectionInstance {
 
 				DatagramPacket out = new DatagramPacket(buf, buf.length, receiverAddress, receiverPort);
 				socket.send(out);
-				
+
 				// wait for hold the preset 
-				if ( delay > 0 ) {					
+				if (delay > 0) {
 					try {
-						Thread.sleep( delay );
+						Thread.sleep(delay);
 					} catch (InterruptedException e) {
 						logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 						return id;
-					} 
-				}				
+					}
+				}
 			}
 		} catch (SocketException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());

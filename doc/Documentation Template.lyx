@@ -4581,8 +4581,28 @@ metódus futása során.
 \shape italic
 getAddressThroughNAT
 \shape default
- fogadja a mobil készüléktől az üzenetet és a beérkező DatagramPacketből
+ fogadja a mobilkészüléktől az üzenetet és a beérkező DatagramPacket-ből
  kiolvassa a feladó címét és a portot, ahova majd az üzeneteket fogja küldeni.
+ UDP protokoll nem garantálja a stabil adatátvitelisebességet sem, így ez
+ megadható 
+\shape italic
+setRateInBitsPerSec
+\shape default
+ segítségével.
+ Az 
+\shape italic
+initDelay
+\shape default
+ segítségével kiszámolódik, hogy mennyi időt kell várni a két csomag elküldése
+ között ahhoz, hogy egységes adatrátát tudjon produkálni a teszt.
+ A csomagküldés után ebből az időből levonodik a csomag elkészítésének ideje
+ (paketization time) és ennyit vár a következő csomag küldése előtt, a JavaThrea
+d osztályának 
+\shape italic
+sleep
+\shape default
+ metódusának segítségével várakoztathatjuk a szál futását.
+ Minden csomag tartlamazza a csomag azonosítóját és elküldésének idejét.
  
 \end_layout
 
