@@ -95,8 +95,7 @@ public class DataStorage {
 		values.put(RATE, rate);
 		values.put(NETWORKTYPE, networkType);
 
-		long rowId = db.insert(DB_TABLE, null, values);
-		System.out.println(rowId);
+		db.insert(DB_TABLE, null, values);
 	}
 
 	private DbData cursorToData(Cursor cursor) {
@@ -149,7 +148,7 @@ public class DataStorage {
 
 	public List<DbData> queryAll() {
 		List<DbData> dataList = new ArrayList<DbData>();
-		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE , null);
+		Cursor cursor = db.rawQuery("SELECT * FROM "+ DB_TABLE, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
 			while (cursor.isAfterLast() == false) {
@@ -164,7 +163,7 @@ public class DataStorage {
 	
 	public List<String> queryTestIds() {
 		List<String> idList = new ArrayList<String>();		
-		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID +" FROM "+DB_TABLE , null);
+		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTID +" FROM "+ DB_TABLE, null);
 		if (cursor != null) {
 			cursor.moveToFirst();	
 			while (cursor.isAfterLast() == false) {
@@ -179,7 +178,7 @@ public class DataStorage {
 	
 	public List<String> queryTestNames() {
 		List<String> idList = new ArrayList<String>();		
-		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTNAME +" FROM "+DB_TABLE , null);
+		Cursor cursor = db.rawQuery("SELECT DISTINCT " + TESTNAME +" FROM "+ DB_TABLE, null);
 		if (cursor != null) {
 			cursor.moveToFirst();	
 			while (cursor.isAfterLast() == false) {				
@@ -209,7 +208,7 @@ public class DataStorage {
 		String[] whereArgs = new String[] {
 				testId
 		};
-		Cursor cursor = db.rawQuery("SELECT * FROM  "+DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
+		Cursor cursor = db.rawQuery("SELECT * FROM  "+ DB_TABLE + " WHERE " + TESTID +"  = ?", whereArgs);
 
 		if (cursor != null) {
 			cursor.moveToFirst();		
@@ -229,7 +228,7 @@ public class DataStorage {
 		String[] whereArgs = new String[] {
 				testName
 		};
-		Cursor cursor = db.rawQuery("SELECT * FROM "+DB_TABLE + " WHERE " + TESTNAME +"  = ?", whereArgs);
+		Cursor cursor = db.rawQuery("SELECT * FROM "+ DB_TABLE + " WHERE " + TESTNAME +"  = ?", whereArgs);
 
 		if (cursor != null) {
 			cursor.moveToFirst();		
@@ -241,11 +240,6 @@ public class DataStorage {
 			cursor.close();
 		}
 		return dataList;		
-	}
-
-	public long getMaxTestId() {
-		final SQLiteStatement stmt = db.compileStatement("SELECT MAX("+TESTID +") FROM "+DB_TABLE);
-		return stmt.simpleQueryForLong();
 	}
 
 	class DbHelper extends SQLiteOpenHelper {

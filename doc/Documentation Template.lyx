@@ -4721,7 +4721,18 @@ sleep
 \end_layout
 
 \begin_layout Description
-Utility
+Utility osztály csak statikus függvényeket tartalmaz.
+ Ezeknek kisegítő szerepe van.
+ A 
+\shape italic
+decodePercent
+\shape default
+ metódust a HTTP üzenet feldolgozásánál használom, a 
+\shape italic
+fillStringBuffer
+\shape default
+ metódusok, pedig az átküldendő üzenetek elkészítésében játsznak szerepet.
+ Véletlenszerű karakterekkel töltenek fel egy előre megadott méretű tömböt.
 \end_layout
 
 \begin_layout Subsubsection
@@ -4841,8 +4852,15 @@ ExecutorService
 pool
 \shape default
  metódusának hívsakor a szál futása is elkezdődik.
- STOP típusú üzenet akkor érkezik, mikor a felhasználó leállítja a tesztfuttatás
-t.
+ 
+\begin_inset Quotes sld
+\end_inset
+
+STOP
+\begin_inset Quotes srd
+\end_inset
+
+ típusú üzenet akkor érkezik, mikor a felhasználó leállítja a tesztfuttatást.
  Ilyenkor az összes futó szál 
 \shape italic
 stop
@@ -4860,8 +4878,145 @@ Mobil alkalmazás osztályai
 \end_layout
 
 \begin_layout Description
-GPSService Ez a szolgáltatás az Androidüos Service osztályból öröklődik
- és megvelósítja a LocationListener interfészt.
+DataStorage az adatbázis kezelésére szolgáló osztály.
+ Ezen osztály metódusai segítségével hajthatunk végre módosításkot, lekérdezések
+et az adatbázisban.
+ Az open metódus meghívásával létrejön a ténzleges adatbázis, ezután lehet
+ új rekordokat felvinni és modostani azokat az adatbázisba.
+ Ezt a metódust csak egyszer kell meghívni az applikáció indulásakor.
+ A 
+\shape italic
+db 
+\shape default
+változó reprezentálja az SQLite adatbázist, és az 
+\shape italic
+open 
+\shape default
+metódus meghívásakor kap értéket a DbHelper 
+\shape italic
+getWritableDatabase 
+\shape default
+metódusának segítségével.
+ Az 
+\shape italic
+insert
+\shape default
+ metódus segítségével tudunk egy új elemet, rekordot felvinni az adatbázisba,
+ paraméterlistájában a rekord összes paraméterét meg kell adni.
+ A külnféle query (lekérdezés) kezdetű metódusokkal lekérdezéseket futtathatunk,
+ melyek visszatérési értéke egy String vagy DbData típusú objektumokat tartalmaz
+ó lista.
+ A 
+\shape italic
+queryAll
+\shape default
+ metódussal az adattábla összes elemét lekérdezhetjük, a 
+\shape italic
+querySpecifiedTest és a querySpecifiedTestByName
+\shape default
+ metódussal egy meghatározott azonosítójú, illetve nevű elemet kérdezhetünk
+ le.
+ A cursorToData nevű private függvény segítségével alakítja át az osztály
+ a lekérdezés eredményeit - amik Cursor típusú elemek - DbData típusúvá.
+ így egységesen és könnyen kezelhetőek lesznek a lekérdezések kimenetei.
+\end_layout
+
+\begin_layout Description
+DbHelper osztály az Android SQLiteOpenHelper osztályából származik, mely
+ segítségével lehet létrehozni az adatbáztist.
+ A programban az 
+\shape italic
+onCreate 
+\shape default
+metódusa lefutásakor egy SQL múvelet segítségével hozzuk létre a megfelelő
+ attribútumokkal rendelkező adatbázistáblát.
+ Az onUpgrade metódus segítségével lehet egy korábbi verziójú adatbázistáblát
+ frissíteni egy újabbra, aminek például több vagy kevesebb attribútuma van.
+ A program ilyen esetben csak törli a korábbit és létrehozza az újat.
+ Ezek a müveletek tranyakciókban hajtódnak végre, ami biztosítja, hogy egy
+ hiba esetén a program visszaáll a korábbi állapotra, táblára, így biztosítva
+ az adatok sértetlenségét.
+\end_layout
+
+\begin_layout Description
+DbData struktúra tartalmazza egy adatbázis elem paramétereit.
+ Konstruktorában ezek inicializálódnak.
+ Az egyes paramtéerek publikus hozzáférésűek, így az osztályon kívülről
+ szaabdon állítatóak ezek értékei.
+ A 
+\shape italic
+toString
+\shape default
+ metódus szöveges kimenetet állít elő az attribútumokból.
+ A 
+\shape italic
+toDescriptionString 
+\shape default
+pedig a OSMActivityben használt mérésipontokon megejelenő szöveget generálja
+ ki az adott parméterekből.
+\end_layout
+
+\begin_layout Description
+DriveTestApp az Android Application osztály leszármazottja és a LocationSubject,
+ a PhoneStateSubject és a TestSubject interfészt valósítja meg.
+ Az interfészek az Observer tervezési mintának megfelelő elemek, így az
+ Observer (megfigyelő) objektumok beregisztrálhatják magukat és a releváns
+ adat(ok) változásáról értesítést kapnak.
+ Ezen osztály objektuma indul el legelöszőr a program indítása során.
+ Azon paraméterek tárolódnak itt, melyeket több Activity is használ, általában
+ az információ áramlást, cserét segítík ezek a tárolt adatok.
+ Itt történik az adatbázis létrehozása és írása és azokat az adatokat, melyek
+ nem a mérésből származnak (hálózat típúsa, jel erősség, stb) is itt tárolódnak
+ el.
+ Továbbá eltárolódik a mobilinternet és a GPS használatának be- vagy kikapcsolt
+ állapota, ami a teszt futtatása előtt ellenőrzésre kerül.
+ Ezen információkat a megfelelő szolgáltatások adják, a PhoneStateListenerServic
+e a mobilkészülék adatainak és a telefon állapotának változásairól értesít,
+ míg a GPSService szolgáltatás a GPS pozíció értékét frissíti.
+ Ezen szolgáltatásokat az Application objektum inditja el és a hozzájuk
+ tartozó adatokat, attribútumokat is ez kezeli.
+ A DriveTestApp objektum értesül a változásokról a szolgáltatásoktól és
+ értesíti a beregisztrált megfigyelő objektumokat.
+ Itt található a prefs változó is mely egy SharedPreferences típusú változó.
+ Ez tárolja a Beállítások menüben beállított értékekeket és a prefrences.xml
+ tartalmazza a beállítható paramétereket és a menü leírását is.
+ Tartalmaz egy Handler típusú változót mely fogadja a HttpService-től érkező
+ üzeneteket.
+ Ezen keresztül továbbitódnak a jeletnések a tesztek futása során és itt
+ íródnak ki adatbázisba a jelentések a 
+\shape italic
+storeUDPReportItem
+\shape default
+, illetve a 
+\shape italic
+storeTCPReportItem
+\shape default
+ metódusok segítségével.
+ A 
+\shape italic
+startHttpClientService 
+\shape default
+függvény indítja el a HttpService szolgáltatást, ami fontos szerepet játszik
+ a tesztek futtatásában.
+ A szolgáltatás indításakor átdja a szükséges paramétereket egy Intent objektumb
+a ágyazva.
+ A szolgáltatás indítása a 
+\shape italic
+startService 
+\shape default
+metódus segítségével történik.
+ A teszt futását és a szolgáltatást is a 
+\shape italic
+stopHttpClientService 
+\shape default
+meghívásával lehet leállítani.
+ Tartalmaz továbbá lekérdező metódusokat, melyek a DataStorage típusú változón
+ kerülnek végrehajtásra.
+\end_layout
+
+\begin_layout Description
+GPSService szolgáltatás az Android Service osztályból öröklődik és megvelósítja
+ a LocationListener interfészt.
  A szolgáltatás indításakor az Application objektumban beállítódik, hogy
  fut a GPS szolgáltatás, majd az 
 \shape italic
@@ -4931,22 +5086,6 @@ osztályból származik, mely olyan szolgáltatás, ami csak addig fut amíg az
 onHandleInstance
 \shape default
  metódusában leírtak végrehajtódnak.
- 
-\end_layout
-
-\begin_layout Description
-DriveTestApp Ez az Application objektum, ez indul el legelőször a program
- futtatása során.
- Azon paraméterek tárolódnak itt, melyeket több Activity is használ.
- Itt történik az adatbázisba való irás is és azokat az adatokat, melyek
- nem a mérésből származnak (hálózat típúsa, jel erősség, stb) itt tárolódnak
- el.
- Továbbá eltárolódik a mobilnet és a GPS használatának be- vagy kikapcsolt
- állapota, ami a teszt futtatása előtt ellenőrzésre kerűl.
- Ezen információkat a megfelelő szolgáltatások adják, melyek korábban említésre
- kerültek.
- A DriveTestApp obejektum értesűl a változásokról a szolgáltatásoktól és
- értesíti a beregisztrált observer objektumokat.
  
 \end_layout
 
