@@ -21,7 +21,6 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,7 +31,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,10 +40,8 @@ import android.widget.Toast;
 import com.drivetesting.observers.LocationObserver;
 import com.drivetesting.observers.TestObserver;
 
-
 public class OSMActivity extends Activity implements LocationObserver, TestObserver {
 
-	private final String TAG = "LocationActivity";
 	private final String LAT = "latitude";
 	private final String LON = "longitude";
 	private final String TESTID = "testId";
@@ -56,7 +52,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private MapView mapView;
 	private int noOfPoints;
 	private int nodeCount;
-	private IMapController osmvController;
+	private IMapController controller;
 	private ItemizedOverlayWithBubble<ExtendedOverlayItem> roadNodeMarkers;
 	private ScaleBarOverlay scaleBarOverlay = null;
 	private List<RoadNode> nodes = null; 
@@ -98,7 +94,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
 		
-		osmvController = mapView.getController();		
+		controller = mapView.getController();		
 		mapView.setTileSource(TileSourceFactory.MAPNIK);		
 		
 		//Add Scale Bar
@@ -112,7 +108,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		final ArrayList<ExtendedOverlayItem> roadItems = new ArrayList<ExtendedOverlayItem>();
 		roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
 						
-		osmvController.setZoom(15);		
+		controller.setZoom(15);		
 		testId = application.getTestId();
 		testName = application.getTestName();
 			
@@ -136,7 +132,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 		loc.setLongitude(19.070567);
 		loc.setLatitude(47.497147);
 		// set camera to the location
-		osmvController.setCenter(new GeoPoint(loc));						
+		controller.setCenter(new GeoPoint(loc));						
 		mapView.postInvalidate();			
 	}
 	
@@ -156,10 +152,10 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 
 	private void load() {		
-		osmvController.setZoom(sharedPreferences.getInt(ZOOM, 15));
+		controller.setZoom(sharedPreferences.getInt(ZOOM, 15));
 		float lat = sharedPreferences.getFloat(LAT, 0.0f);
 		float lon = sharedPreferences.getFloat(LON, 0.0f);
-		osmvController.setCenter(new GeoPoint(lat, lon));
+		controller.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString(TESTNAME, "");
 		// set active test id as active and show it on the map
@@ -275,7 +271,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	private RoadNode addRoadNode(DbData data) {
 		RoadNode node = new RoadNode();
 		node.mLocation = new GeoPoint(data.lat, data.lon);
-		node.mInstructions = data.toInstrustionString();
+		node.mInstructions = data.toDescriptionString();
 		node.mDuration = data.signalLevel;
 		nodes.add(node);		
 		return node;
@@ -332,7 +328,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 	
 	private void setOverlays(){
-		osmvController.setCenter(nodeA.mLocation);						
+		controller.setCenter(nodeA.mLocation);						
 		mapView.getOverlays().add(roadNodeMarkers);
 		mapView.getOverlays().add(scaleBarOverlay);				
 		mapView.postInvalidate();
@@ -409,7 +405,7 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 
 	@Override
 	public void update(int action, String reports) {
-		if (application.ACTION_END == action ) {
+		if (DriveTestApp.ACTION_END == action ) {
 			return;		
 		}
 	

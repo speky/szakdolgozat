@@ -89,7 +89,7 @@ public class HttpService extends IntentService implements ReportI {
 		pool = Executors.newFixedThreadPool(MAX_THREAD);
 	}
 
-	protected Socket createSocket(int port) {
+	private Socket createSocket(int port) {
 		try {			
 			Socket socket = new Socket();
 			socket.connect(new InetSocketAddress(serverAddress, port), SOCKET_TIMEOUT);

@@ -25,9 +25,7 @@ public class FileHandler {
 	private Context context;
 	private String directory;
 	private String filePath = "";
-	
-	
-
+		
 	// for testing porpuses
 	public void setExternalStorageWriteable(boolean value) {
 		externalStorageWriteable = value;

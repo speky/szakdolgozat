@@ -1,10 +1,7 @@
 package com.drivetesting;
 
-import java.util.StringTokenizer;
-
-import http.testhandler.TCPReport;
-import http.testhandler.ReportReceiver.DataType;
 import http.testhandler.ReportReceiver.RateType;
+import http.testhandler.TCPReport;
 
 
 public class DbData {
@@ -28,8 +25,7 @@ public class DbData {
 	public int rate;
 	public String networkType;	
 
-	private String dataString;
-	private String rateString;
+	private String rateString = "";
 
 	public DbData() {
 		id = -1;
@@ -80,29 +76,26 @@ public class DbData {
 
 	private void setRateString() {
 		switch (rate) {
-		case 1:
-			dataString = TCPReport.DataString.get(DataType.BYTE);
+		case 1:			
 			rateString = TCPReport.RateString.get(RateType.BITS);
 			break;
-		case 2:
-			dataString = TCPReport.DataString.get(DataType.KB);
+		case 2:			
 			rateString = TCPReport.RateString.get(RateType.KBITS);			
 			break;
-		case 3:
-			dataString = TCPReport.DataString.get(DataType.MB);
+		case 3:			
 			rateString = TCPReport.RateString.get(RateType.MBITS);
 			break;
 		}
 	}
-	public String toInstrustionString() {
+	public String toDescriptionString() {
 		setRateString();
 		StringBuilder str = new StringBuilder();
 		str.append("Time: "+ time.toString() +"\n");
 		str.append("Network Type: "+ networkType+"\n");
-		str.append("Signal Strength: " + signalStrength +"\n");
+		str.append("Signal Strength: " + signalStrength +"dBm\n");
 		str.append("Signal Level: " + signalLevel +"\n");
-		str.append("Upload: "+ Double.toString(up) + "\n");
-		str.append("Download: "+ Double.toString(down) + "\n");
+		str.append("Upload: "+ Double.toString(up) + " "+rateString+"\n");
+		str.append("Download: "+ Double.toString(down) +" "+rateString+"\n");
 		str.append("MCC: "+ mcc +"\n");
 		str.append("MCC: "+ mcc +"\n");
 		str.append("LAC: " + lac +"\n");

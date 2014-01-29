@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import android.app.ActionBar;
@@ -97,7 +98,7 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 	 
 	// Function to show settings dialog       
-	public void showSettingsGPSAlert() {
+	private void showSettingsGPSAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
 		// Setting Dialog Title
@@ -128,7 +129,7 @@ public class TestActivity extends Activity implements TestObserver {
 		alertDialog.show();
 	}
 	
-	public void showSettingsNetworkAlert() {
+	private void showSettingsNetworkAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
 		// Setting Dialog Title
@@ -345,7 +346,7 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 		dialog = new ProgressDialog(context);
 		
 				
-		fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'").format(new Date());
+		fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'", Locale.getDefault()).format(new Date());
 		 
 		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
 	}

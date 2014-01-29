@@ -14,17 +14,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class PrefsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
-	
+
 	private final String TAG = "PrefsActivity";
 	private SharedPreferences prefs;
 	private DriveTestApp app;
-	
+
 	private static final Pattern IP_ADDRESS = Pattern.compile(
-	        "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
-	        + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
-	        + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
-	        + "|[1-9][0-9]|[0-9]))");
-		
+			"((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
+					+ "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
+					+ "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+					+ "|[1-9][0-9]|[0-9]))");
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {	
 		super.onCreate(savedInstanceState);
@@ -33,89 +33,87 @@ public class PrefsActivity extends PreferenceActivity implements OnSharedPrefere
 	}
 
 	@Override
-		public void onResume() {
-			Log.d(TAG, "onResume");
-		    super.onResume();
-		    prefs = app.getSharedPreference();
-		    prefs.registerOnSharedPreferenceChangeListener(this);
-		}
+	public void onResume() {
+		Log.d(TAG, "onResume");
+		super.onResume();
+		prefs = app.getSharedPreference();
+		prefs.registerOnSharedPreferenceChangeListener(this);
+	}
 
-		@Override
-		public void onPause() {
-			Log.d(TAG, "onPause");		
-			prefs.unregisterOnSharedPreferenceChangeListener(this);
-		    super.onPause();
+	@Override
+	public void onPause() {
+		Log.d(TAG, "onPause");		
+		prefs.unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
+	}
+
+
+	public static boolean isIPValid(String address) {
+		boolean isValid = false;		    		    
+		Matcher matcher = IP_ADDRESS.matcher(address);
+		if (matcher.matches()) {
+			isValid = true;
 		}
-		
-				
-		public static boolean isEmailValid(String address) {
-		    boolean isValid = false;		    		    
-		    Matcher matcher = IP_ADDRESS.matcher(address);
-		    if (matcher.matches()) {
-		        isValid = true;
-		    }
-		    return isValid;
-		}
-		
+		return isValid;
+	}
+
 	@Override
 	public synchronized void onSharedPreferenceChanged(SharedPreferences pref,	String key) {
 		this.prefs = pref;		
 		Log.d(TAG, "On Change preferences: "+ key);
 		if (key.equals("serverIp")) {
 			String adr = pref.getString("serverIp", null);
-			if (isEmailValid(adr) == false) {			
+			if (isIPValid(adr) == false) {			
 				Toast.makeText(this, "IP address is invalid! It is reset to default.", Toast.LENGTH_LONG).show();
 				SharedPreferences.Editor prefEditor = pref.edit();
 				prefEditor.putString(key, "92.249.132.6");
-	             prefEditor.commit();
-	             reload();	             
+				prefEditor.commit();
+				reload();	             
 			}
 			Log.d(TAG, "Server IP has changed");			
 		}
 	}
-			
+
 	//  It relaunches the activity using the same intent that fired it
 	private void reload(){
 		startActivity(getIntent()); 
-        finish();
-   }	 
-	 
+		finish();
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		menu.findItem(R.id.menu_settings).setVisible(false);
 
-	  @Override
-		public boolean onCreateOptionsMenu(Menu menu) {
-			getMenuInflater().inflate(R.menu.menu, menu);
-			menu.findItem(R.id.menu_settings).setVisible(false);
-			
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		int id = item.getItemId();
+		switch (id)
+		{
+		case R.id.menu_test:
+			startActivity(new Intent(this, TestActivity.class));
 			return true;
+
+		case R.id.menu_export:
+			startActivity(new Intent(this, ExportActivity.class));
+			return true;
+
+		case R.id.menu_map:
+			startActivity(new Intent(this, OSMActivity.class));
+			return true;
+
+		case R.id.menu_main:
+			startActivity(new Intent(this, MainActivity.class));
+			return true;
+
+		default:
+			return false;			
 		}
+	}
 
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-
-			int id = item.getItemId();
-			switch (id)
-			{
-			case R.id.menu_test:
-				startActivity(new Intent(this, TestActivity.class));
-				return true;
-
-			case R.id.menu_export:
-				startActivity(new Intent(this, ExportActivity.class));
-				return true;
-
-			case R.id.menu_map:
-				startActivity(new Intent(this, OSMActivity.class));
-				return true;
-
-			case R.id.menu_main:
-				startActivity(new Intent(this, MainActivity.class));
-				return true;
-
-			default:
-				return false;			
-			}
-		}
-	
 
 }
