@@ -198,7 +198,7 @@ class ServerThread extends Thread{
 		}
 		
 		int bufferSize = 1000; // 8kb
-		String bufferString = parser.getHeadProperty("URI");
+		String bufferString = parser.getHeadProperty("BUFFERSIZE");
 		if (bufferString != null) {
 			bufferSize = Integer.parseInt(bufferString); 
 		}

@@ -160,7 +160,7 @@ public class HttpService extends IntentService implements ReportI {
 	public void stop() {
 		logger.addLine(TAG+ "send stop to server");
 		try {
-			sendMessageToServer("STOP / Http*/1.0\n");
+			sendMessageToServer("STOP / HTTP*/1.0\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -187,16 +187,16 @@ public class HttpService extends IntentService implements ReportI {
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					isUpload = true;
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: TCP\nUnit: "+rateType+"\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: TCP\nUnit: "+rateType+"\nBUFFERSIZE: " + bufferSize +"\n");
 				} else {
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: TCP\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: TCP\nBUFFERSIZE: " + bufferSize +"\n");
 				}
 			}else {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					isUpload = true;
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
 				} else {					
-					sendMessageToServer("GET /"+bufferSize+" HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
 				}
 			}					
 

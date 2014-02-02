@@ -19,17 +19,15 @@ import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.drivetesting.observers.LocationObserver;
 import com.drivetesting.observers.PhoneStateObserver;
 import com.drivetesting.observers.TestObserver;
 import com.drivetesting.services.GPSService;
 import com.drivetesting.services.HttpService;
 import com.drivetesting.services.PhoneStateListenerService;
-import com.drivetesting.subjects.LocationSubject;
 import com.drivetesting.subjects.PhoneStateSubject;
 import com.drivetesting.subjects.TestSubject;
 
-public class DriveTestApp extends Application implements TestSubject, PhoneStateSubject, LocationSubject {
+public class DriveTestApp extends Application implements TestSubject, PhoneStateSubject {
 
 	static final String TAG = "DriveTesting";
 
@@ -69,7 +67,6 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 
 	private ArrayList<TestObserver> testObservers;
 	private ArrayList<PhoneStateObserver> phoneStateObservers;
-	private ArrayList<LocationObserver> locationObservers;
 
 	private StringBuilder message = new StringBuilder();
 	private int action = ACTION_END;
@@ -130,8 +127,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		Log.d(TAG, "App created");
 		testObservers = new ArrayList<TestObserver>();
 		phoneStateObservers = new ArrayList<PhoneStateObserver>();
-		locationObservers = new ArrayList<LocationObserver>();
-
+		
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 		
@@ -350,7 +346,6 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 
 	public void updateLocation(Location loc) {
 		location = loc;
-		notifyLocationObservers();
 	}
 
 	public boolean isTestRunning() {
@@ -466,24 +461,4 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		}
 	}
 
-	// handle location observers
-	@Override
-	public void registerObserver(LocationObserver observer) {
-		locationObservers.add(observer);			
-	}
-	@Override
-	public void removeObserver(LocationObserver observer) {
-		int index = locationObservers.indexOf(observer);
-		if (index > 0 ) {
-			locationObservers.remove(index);
-		}		
-	}
-	@Override
-	public void notifyLocationObservers() {
-		for (LocationObserver locationObserver :locationObservers) {
-			if (locationObserver != null && location != null) {
-				locationObserver.update(location);
-			}
-		}
-	}
 }

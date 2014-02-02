@@ -37,10 +37,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.drivetesting.observers.LocationObserver;
 import com.drivetesting.observers.TestObserver;
 
-public class OSMActivity extends Activity implements LocationObserver, TestObserver {
+public class OSMActivity extends Activity implements TestObserver {
 
 	private final String LAT = "latitude";
 	private final String LON = "longitude";
@@ -390,20 +389,6 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 	}
 
 	@Override
-	public void update(Location location) {
-		/*updateLoc(location);
-		Log.d(TAG, "location update");
-	}
-
-	private void updateLoc(Location location){
-		GeoPoint geoPoint = new GeoPoint(location);
-		osmvController.setCenter(geoPoint);
-		//locationOverlay.setLocation(geoPoint);		
-		mapView.postInvalidate();
-		*/
-	}
-
-	@Override
 	public void update(int action, String reports) {
 		if (DriveTestApp.ACTION_END == action ) {
 			return;		
@@ -420,14 +405,6 @@ public class OSMActivity extends Activity implements LocationObserver, TestObser
 			}
 		}
 	}
-	
-/*/ test
-	public void onClick(View view) {
-		application.fakeinsert();
-		application.testName = "testName1";
-		update(1, "s");
-	}
-*/
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -26,12 +26,12 @@ public class FileHandler {
 	private String directory;
 	private String filePath = "";
 		
-	// for testing porpuses
+	// for testing purposes
 	public void setExternalStorageWriteable(boolean value) {
 		externalStorageWriteable = value;
 	}
 	
-	//for testing porpuses
+	//for testing purposes
 	public void setExternalStorageAvailable(boolean value) {
 		externalStorageAvailable = value;
 	}

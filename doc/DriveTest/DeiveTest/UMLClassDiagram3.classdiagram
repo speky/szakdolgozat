@@ -508,6 +508,40 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="70d7cf7f-8ebc-44af-80c4-bfa7a96df192" name="DbData" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="4ace6689-df0a-4b31-a5f4-31db61463aae" />
+        <targetEnds>
+          <association Id="e175b902-4cca-41dc-9fbe-54360eab23de" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="ac928333-7509-47ce-9b84-3ace1f49d5a4" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="b6596caa-438b-433c-a856-f00b42bbd3a7" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="ebdf31f5-d6f5-4bde-9edc-66e0f3f5022b" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="98d63042-60ee-45bb-84be-21c9d5844acb" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="558a508f-700f-4e9b-9b4a-79068eb40891" />
+          </association>
+          <association Id="202af3d0-780d-4463-a904-0b3b0349b6e0" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="7cb2a492-a8b7-45c9-9482-30151fda0f8b" LastKnownName="DataStorage" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="4d4f9670-7315-4a1f-9ff9-231aea4b5c7f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="508cd641-b457-4021-a90e-0ccc209fb769" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="1f80f284-b33a-40f3-a4a2-493ed98332fe" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="db8897b8-e1b2-47f5-929c-949e97dc3739" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="481ab9cd-daf6-4162-84c4-268e7b37226a" />
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property Id="3a22e598-55c5-407f-b702-12de0ce07fa3" name="testId" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <elementDefinition Id="4b8aea30-5c41-457b-80c1-95d313f4a442" />
@@ -669,6 +703,24 @@
             <elementDefinition Id="55f601d1-83e8-4eab-b375-10a2e7faf183" />
           </interfaceRealization>
         </suppliersInternal>
+        <targetEnds>
+          <association Id="6f7f7d4d-b28a-47d5-a644-a52c637e1e3f" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="7cb2a492-a8b7-45c9-9482-30151fda0f8b" LastKnownName="DataStorage" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="817072aa-97df-4a21-a263-cf62d4f60b44" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="2c852e6d-da9e-4a05-bda4-552459c52960" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="59d11d4a-fa09-4562-8546-c69876ec645f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                  <elementDefinition Id="3ae70950-ed3c-4039-bd27-fb2a1304e7ad" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="5ee93c0a-df61-4d73-b7a1-4a9408dac46e" />
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property Id="b25d354e-13af-4fe6-a3a8-97d9ef65e4c1" name="dataStorage" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <elementDefinition Id="43d522ba-3261-4443-898d-35339f37a1aa" />
@@ -1343,21 +1395,37 @@
       <class Id="166d538a-9d86-4f34-8d96-4ce5d2be4018" name="ExportActivity" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="7abbfd1b-fa51-45b3-a922-4c5748ffb392" />
         <targetEnds>
-          <association Id="db11c3ca-5d62-4fb6-aede-21f2750ef8e2" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
-            <classMoniker Id="9de8e13b-8eb0-48a4-8901-fa0d2c29f0df" LastKnownName="HttpService" />
+          <association Id="70b46424-a686-41c0-aea7-f930bea65b1f" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="64471bfb-c786-4c10-9f11-7414a7e64ff5" LastKnownName="FileHandler" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
-                <memberEnd Id="c86870c6-7885-4593-bdf6-06768c2c3c23" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
-                  <elementDefinition Id="fc619f3f-0003-438d-91d7-1f567b681840" />
+                <memberEnd Id="37ecb95e-459a-49e3-95ab-32d55f53e539" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="98b1999f-43b4-48c1-896d-9c5ff122e225" />
                 </memberEnd>
               </associationHasOwnedEnds>
               <associationHasOwnedEnds>
-                <memberEnd Id="5b73d6dc-683a-4d3c-9c64-ff4f11449325" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
-                  <elementDefinition Id="514e5adb-3d17-4ee0-ac2c-940452047617" />
+                <memberEnd Id="8ec70542-e68d-4adc-837e-bbbcd248a09e" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                  <elementDefinition Id="3c3cdb7f-8222-4351-b88b-cb43d5605a78" />
                 </memberEnd>
               </associationHasOwnedEnds>
             </relationshipOwnedElementsInternal>
-            <elementDefinition Id="062d8a91-e2e6-4d20-a33a-649c7cd849ba" />
+            <elementDefinition Id="256d34c4-9caf-44e5-bcb3-eedd5ada31b3" />
+          </association>
+          <association Id="ece46bf1-faca-4caf-be7b-5671b5218db2" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="7cb2a492-a8b7-45c9-9482-30151fda0f8b" LastKnownName="DataStorage" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="28b4d8b4-02fd-4c73-9ae5-949ca754dfce" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="b917a9ba-0b30-4e73-8ec0-0d0eef48f167" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="dae0d125-1053-4b67-b389-4fa8f8391129" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                  <elementDefinition Id="548d9630-ac3a-4882-a54e-eedb56d84962" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="0de494bc-6f6c-4d05-9dcf-d1d80c8b58fd" />
           </association>
         </targetEnds>
         <ownedAttributesInternal>
@@ -1595,6 +1663,24 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="64471bfb-c786-4c10-9f11-7414a7e64ff5" name="FileHandler" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="dcadb317-2ae3-4bd3-a11c-a4caddc931d4" />
+        <targetEnds>
+          <association Id="67ffd766-2ca2-4ab8-8641-1d1fbfd75f1a" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="c24ff510-3f15-4b00-81be-533f8830058d" LastKnownName="TestActivity" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7c7dcfab-313e-430a-aacf-7cc5b73855f7" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Composite" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="5f3b6e68-ef7a-4581-ae94-62ba67ccdccf" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="59462629-5b6d-41d2-8921-927b08d41e2b" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="true">
+                  <elementDefinition Id="a0beeefd-7045-42e6-b830-14843208b1f7" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="0e917236-0cbc-4c48-a2b6-c2366839d37b" />
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property Id="be67bb46-9f73-4f1f-94c0-626fb1930d81" name="fileName" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <elementDefinition Id="76d64a6e-2d66-4292-83ec-44e5c16ea0d7" />
@@ -3195,6 +3281,40 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="9da89ffa-6dac-4c07-9c37-498dfa63e9d9" name="SeparatedListAdapter" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="1062479b-227f-4783-92c9-35d3accc0a44" />
+        <targetEnds>
+          <association Id="c0d63503-75e8-4027-a805-5e512054f394" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="c24ff510-3f15-4b00-81be-533f8830058d" LastKnownName="TestActivity" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c936ec64-8441-4ee5-86b0-814310167054" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="26f549c8-1861-4b0f-a097-80fe0992f110" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="cdef3b92-8208-4fff-acf0-fecd8123784d" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="1069f87a-7104-4703-8efe-f35575ac7ae1" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="dc6c0a60-0ea0-4018-8567-226ee37410a8" />
+          </association>
+          <association Id="073a0ad6-10aa-437d-aafa-9e5edc135d02" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="ac6a4e1b-5c52-4d0a-b8d9-17de262e61bf" LastKnownName="MainActivity" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="0691ad44-9db5-4ec9-9e60-74231925552a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="14c173d9-4647-436d-ba0e-2b89086323fb" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="818e846c-ba19-4a25-ba1b-fe9d2f08492a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="07142a4e-f340-425a-8f3a-9e0e1f129b1a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="751185e9-538e-4e0d-bad1-92298e9648d5" />
+          </association>
+        </targetEnds>
         <ownedOperationsInternal>
           <operation Id="21d1297b-409d-4460-a4f4-8aa6c0bd642c" name="SeparatedListAdapter" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="232bb057-188b-4b47-b3e5-77d306196c2d" />
@@ -3334,21 +3454,21 @@
       <class Id="15888ca7-be44-4269-94ca-dce07a1676fe" name="GPSService" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="0de78834-5d31-4a6d-9b37-63fe9b86b7b1" />
         <targetEnds>
-          <association Id="8e5cf20a-cae7-45ed-bb78-2a165a5e6749" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+          <association Id="dd00fa44-207b-491c-b8ab-90f7356d0f02" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
             <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
-                <memberEnd Id="56f5c0ab-7172-4dae-acf9-90f324e2edc3" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
-                  <elementDefinition Id="e1452697-85a6-4e8f-9c2d-27923249d13f" />
+                <memberEnd Id="af815b4c-f6c8-4ce3-ab57-51e2c8fe885a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="fb3e2a42-c5d1-417d-9c37-8063706edea5" />
                 </memberEnd>
               </associationHasOwnedEnds>
               <associationHasOwnedEnds>
-                <memberEnd Id="08da9c5f-2ae9-4be3-a309-a373c6e9f39a" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
-                  <elementDefinition Id="7851680c-e87f-4b11-a425-1e83e6d29b4d" />
+                <memberEnd Id="f17ba433-f57b-44ff-83c1-dd8c68f86853" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="5a1be783-6ff2-4a33-ba47-0203fd536b2f" />
                 </memberEnd>
               </associationHasOwnedEnds>
             </relationshipOwnedElementsInternal>
-            <elementDefinition Id="6d842823-4ece-4dfd-9cf0-312d91b98fc3" />
+            <elementDefinition Id="2cdd5a26-7611-4e0c-8359-cb2c28af128e" />
           </association>
         </targetEnds>
         <ownedAttributesInternal>
@@ -3502,6 +3622,24 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="1326de31-370b-4b22-b715-b5ad9a043328" name="PhoneStateListenerService" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="7c655a38-d831-4cd2-90e1-82553366d816" />
+        <targetEnds>
+          <association Id="d9d7d812-dad5-4e9b-aa94-c11d10e747b7" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="431b1111-64f5-4894-87d5-74973e465cb7" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="Shared" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e60ca104-ae2c-4709-b811-45fabe9cfe2b" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="c541bc40-7cf4-42e0-b38b-05e139a032f8" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="99804cf5-8dbc-4489-82ad-321d02b868eb" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="0aa28bef-d2d0-45a9-84e7-aaed5993f98b" />
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property Id="c08cb8ab-0816-4293-8dcc-0478885dd00d" name="telephonyManager" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <elementDefinition Id="ae9d4162-dbdf-41b0-bd97-116c2d5d138a" />
@@ -3598,6 +3736,24 @@
     <logicalClassDesignerModelHasTypes>
       <class Id="9de8e13b-8eb0-48a4-8901-fa0d2c29f0df" name="HttpService" isAbstract="false" isLeaf="false" isActiveClass="false">
         <elementDefinition Id="cc48cbcd-084f-4e8f-9af7-7f99169ab55e" />
+        <targetEnds>
+          <association Id="7258fa1f-71a7-45a6-ab8d-f14db5daabcf" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="b2032b4d-2eae-4f91-b845-2140b0a40aa4" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="441a3040-7d66-417c-9e94-eaa84a1aff9d" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="4a9faedb-9395-424c-ab9d-f55c845caead" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="acbbc550-9b21-4a24-88a7-70cf771513d3" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="8f979de7-8bf6-4abd-aff6-c5c30e6726e8" />
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property Id="a4ac6eae-2abf-41fb-bf48-13c6d36512a6" name="serverAddress" visibility="Private" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
             <elementDefinition Id="f6ecd5b8-f99e-4a69-85f1-a2e1e763562d" />
@@ -3883,6 +4039,24 @@
     <logicalClassDesignerModelHasTypes>
       <Interface Id="676eba6b-6229-474e-b218-c36b49cde6d6" name="LocationObserver" isAbstract="false" isLeaf="false">
         <elementDefinition Id="baf27e19-ff7b-4402-a04e-eb7245c03409" />
+        <targetEnds>
+          <association Id="8c826729-bdf4-4cc7-a258-17974fc29d1d" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="da05c63a-f2b4-400d-8aa4-bea1d985c43f" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="f8a72076-e7b3-489f-9c96-f8f014723edd" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="6da4656a-24d4-48ed-b950-3ba5fe03d092" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="1bfda3e9-798c-4aa0-8cf5-956f2bc60dd4" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="c4c7f2c0-dfab-405b-9364-aab3fb581c95" />
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation Id="fb630deb-53b5-45d6-8b10-aba7ae4e18fc" name="update" isLeaf="false" isStatic="false" isAbstract="true" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="1e28fd8f-1823-441d-bfb1-e58113341476" />
@@ -3911,6 +4085,24 @@
     <logicalClassDesignerModelHasTypes>
       <Interface Id="ccba037b-21ac-4b53-9c9f-440435be6f26" name="TestObserver" isAbstract="false" isLeaf="false">
         <elementDefinition Id="ff7b7f54-1e50-4de8-87b0-e49eab98044d" />
+        <targetEnds>
+          <association Id="9f727232-d2cd-454d-80cd-cd63bfaa2ab9" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="514c6db7-330d-4145-975c-cad3c05d6952" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="e27549e2-49e7-4904-9341-541cf8f2a402" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="25565686-d1e2-418b-b5bd-10f33f1c25fe" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="e621b671-6b45-4964-95f9-2be5994aa847" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="fb7b37e8-1325-4d71-9df7-1c60e3344c7a" />
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation Id="92f0d22a-b099-49a0-8a21-b416c2d7dc5a" name="update" isLeaf="false" isStatic="false" isAbstract="true" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="d87bc917-4caa-4efe-a0fb-887f1bddd69a" />
@@ -3941,6 +4133,24 @@
     <logicalClassDesignerModelHasTypes>
       <Interface Id="24301414-4060-4a03-9c64-e57b6b785ac4" name="PhoneStateObserver" isAbstract="false" isLeaf="false">
         <elementDefinition Id="d096da8b-6e10-440f-9c34-57352d988d6c" />
+        <targetEnds>
+          <association Id="6df49e01-4113-4103-856a-8cd6879ebed3" isDerived="false" sourceEndRoleName="" targetEndRoleName="" isLeaf="false" isAbstract="false">
+            <classMoniker Id="83f7ed1e-b023-47f9-a28b-97d2583b78ec" LastKnownName="DriveTestApp" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd Id="7bd40d77-95cb-4241-83ea-5bb1c2fcc768" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false" isNavigableOwned="false">
+                  <elementDefinition Id="007289c5-6540-4d08-a460-5c8cf1adfdbd" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd Id="499c9ed9-a84d-4d43-8561-6fd1516196cd" isLeaf="false" isStatic="false" isReadOnly="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+                  <elementDefinition Id="1c2dae75-4ca0-456c-bb7b-0fd9135e1f8a" />
+                </memberEnd>
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+            <elementDefinition Id="d006b399-b1ec-4687-8210-63ea7b7c060f" />
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation Id="846ac5a1-50d8-496d-a094-5ac7a8350978" name="updateSignalStrength" isLeaf="false" isStatic="false" isAbstract="true" concurrency="Sequential" isQuery="false">
             <elementDefinition Id="4197ff16-2f7f-4021-86ca-fb1c4797a04d" />

@@ -4115,6 +4115,39 @@ Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
 \begin_layout Description
 HTTP* egy specializált HTTP protokolt, melyet a ebben a programban használok
  az Android applikáció és a szerveren futó alkalamazás kommunikációjában.
+ A kommunikációt mindenképpen a mobil alakalmazás kezdeményezi egy "GET
+\begin_inset Quotes srd
+\end_inset
+
+ üzenet küldésével, mely ilyen adatokat tartalmaz: GET / HTTP*/1.0
+\backslash
+n REPORTPERIOD: <jelentésküldés ideje>
+\backslash
+nMODE: <DL vagy UL>
+\backslash
+n CONNECTION: <TCP vagy UDP>
+\backslash
+n Unit: <1, 2 vagy 3>
+\backslash
+n BUFFERSIZE: <buffer méret>
+\backslash
+n.
+ Ez az üzenet tartalmazza a teszt paramétereit, amiket a felhasználó adott
+ meg.
+ A szerver oldali program ezek alapján inditja el a megfelelő küldő vagy
+ fogadó szálat.
+ A program a teszt leállításakor egy 
+\begin_inset Quotes sld
+\end_inset
+
+STOP
+\begin_inset Quotes srd
+\end_inset
+
+ üzenetet küld a szervernek, mely ilyen alakú: "STOP / HTTP*/1.0
+\backslash
+n".
+ Ennek hatására a szerver leállítja a teszt szálat.
 \end_layout
 
 \begin_layout Section
@@ -4163,10 +4196,13 @@ HttpTestHandler osztályok
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Newpage pagebreak
 \end_inset
 
 
@@ -4178,13 +4214,10 @@ Szerver oldal
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
-
-\begin_layout Plain Layout
-
-\end_layout
 
 \begin_layout Plain Layout
 \noindent
@@ -4208,10 +4241,13 @@ HttpServer osztályai
 
 \end_layout
 
-\begin_layout Plain Layout
+\end_inset
+
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Newpage pagebreak
 \end_inset
 
 
@@ -4223,11 +4259,20 @@ Kliens oldal
 
 \begin_layout Standard
 \begin_inset Float figure
+placement H
 wide false
 sideways false
 status open
 
 \begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename D:/Szakdoga/doc/mobilclass.eps
+	scale 80
+
+\end_inset
+
 
 \end_layout
 
@@ -4257,12 +4302,11 @@ Adatbázis leírása
 \end_layout
 
 \begin_layout Standard
-A program által használt adatbázis modell bemutatása, mezők jellemzése
-\end_layout
-
-\begin_layout Standard
 Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik: DATA/data/Dr
 iveTesting/databases/FILENAME.
+ Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
+ táblát tartalmaz.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -5015,6 +5059,84 @@ meghívásával lehet leállítani.
 \end_layout
 
 \begin_layout Description
+
+\series bold
+Export Activity
+\series default
+ A program által generált teszt eredények fájlba menthetóek CSV formátumban
+ ennek az Activity-nek a segítségével.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Id
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kattintva a 
+\shape italic
+onTestClick 
+\shape default
+visszahívó metódus hívódik meg, ami megjelenití test azonosító választó
+ felugróablakot.
+ A test id-kat az adatbázisból kérdezi le a program a , majd egy AlarmDialog-on
+ keresztűl megjelníti azokat.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Export to CVS
+\begin_inset Quotes srd
+\end_inset
+
+ felíratú gombra kattintva a 
+\shape italic
+onExportClick 
+\shape default
+metódus hajtódik végre, ahol leellenőrzi a program a beállított paramétereket,
+ ha valamelyik nincs beállítva, akkor hibát jelez AlarmDialog segítségével.
+ Az adatok a FileHandler osztály segítségével íródnak ki a külső vagy belső
+ tárra.
+ Ha elérhető (írásra is) a külső tár, akkor oda fog kerülni az fájl, különben
+ a belső tárra.
+ Az exportálás a fájlművelet miatt aszinkron folyamat, ami az AsyncTask
+ osztály segítségével lett megvalósítva.
+ Ez az aszinkron osztály a ExportToCVS, ez felelős a fájl kiírásáért, ami
+ a 
+\shape italic
+doInBackground
+\shape default
+ metódusban lett megvalósítva, itt kerül meghívásra a FileHandler osztály
+ példányának megfelelő kiíró függvénye.
+\end_layout
+
+\begin_layout Description
+FileHandler osztály tartalmazza a fájl kezelési függvényeket, amik segítik
+ az írás és olvasási műveleteket a külső vagy belső tárokon.
+ A paraméterek segítségével megadható a célkönyvtár és a fájl neve ami tartalmaz
+ni fogja a kiírt infomrációkat vagy ahonnan az olvasás fog történni.
+ Az interfészen megadható a külső vagy belső tárat szeretnénk használni
+ és a program automatikusan megvizsgálja, hogy elérhető-e a külső tár vagy
+ sem.
+ Utóbbi esetben a program mindenképpen a belső tárra fog írni és onnan próbál
+ meg olvasni is.
+ Ezt a logikát a 
+\shape italic
+writeFile
+\shape default
+ és a 
+\shape italic
+readFile
+\shape default
+ metódusok tartalmazzák, maga a külső tár elérhetőségének vizsgálata az
+ 
+\shape italic
+init
+\shape default
+ függvényben történik meg.
+\end_layout
+
+\begin_layout Description
 GPSService szolgáltatás az Android Service osztályból öröklődik és megvelósítja
  a LocationListener interfészt.
  A szolgáltatás indításakor az Application objektumban beállítódik, hogy
@@ -5042,35 +5164,6 @@ onLocationChanged
  visszahívó metódussal kap értesítést a szolgáltatás.
  Ekkor a kapott Location paramétert továbbítja a DriveTestApp objektum felé.
  Az osztály megszűnésekor leiratkozik a pozíció frissítési szolgáltatásról.
-\end_layout
-
-\begin_layout Description
-PhoneStateListenerService Az Android API által nyújtott dinamikus, időben
- változó telefon és hálózati információk lekérdezésére vonatkozó szolgáltatásoka
-t valóstom meg itt.
- A 
-\shape italic
-connectivityReceiver
-\shape default
- egy BroadcastReceiver, minek segítségével a ConnectivityManager üzeneteit
- megkapja az alaklamazás és így figyelhető a mobil internet szolgáltatás
- elérhetősége.
- A változásról értesül az application objektum is.
- A készülék és a hálózat adatairól a TelephonyManager segítségével kaphatunk
- információkat.
- PhoneStateListenerImpl segédosztály megvalósítja a PhoneStateListener interfész
-t, így kap értesítést az applikáció az adatkapcsolat (data connection) állapotár
-ól és a pozícióhoz kapcsoló MCC, MNC, LAC és CID paraméterekről is.
- Ezek az értékek az application objektumban lesznek letárolva.
- A PhoneStateListener a ConnectivityReceiverrel egyetemben a service konstruktor
-ába kerül beregisztrálásra.
-\end_layout
-
-\begin_layout Description
-The values are defined in the GSM standard TS 27.007, section 8.5 From the
- standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
- -53 dBm 31 -51 dBm or greater 99 not known or not detectable Which means
- - 0 is low, 31 is good.
 \end_layout
 
 \begin_layout Description
@@ -5154,56 +5247,80 @@ initNetworkData
 \end_layout
 
 \begin_layout Description
-TestActivity
+OSMActivity a térképet jeleníti meg és azon a kiválasztott mérési pontokat.
 \end_layout
 
 \begin_layout Description
-
-\series bold
-Export Activity
-\series default
- A program által generált teszt eredények fájlba menthetóek CSV formátumban
- ennek az Activity-nek a segítségével.
+PhoneStateListenerService Az Android API által nyújtott dinamikus, időben
+ változó telefon és hálózati információk lekérdezésére vonatkozó szolgáltatásoka
+t valóstom meg itt.
  A 
-\begin_inset Quotes sld
-\end_inset
-
-Set Test Id
-\begin_inset Quotes srd
-\end_inset
-
- gombra kattintva a 
 \shape italic
-onTestClick 
+connectivityReceiver
 \shape default
-visszahívó metódus hívódik meg, ami megjelenití test azonosító választó
- felugróablakot.
- A test id-kat az adatbázisból kérdezi le a program a , majd egy AlarmDialog-on
- keresztűl megjelníti azokat.
- A 
-\begin_inset Quotes sld
-\end_inset
-
-Export to CVS
-\begin_inset Quotes srd
-\end_inset
-
- felíratú gombra kattintva a 
-\shape italic
-onExportClick 
-\shape default
-metódus hajtódik végre, ahol leellenőrzi a program a beállított paramétereket,
- ha valamelyik nincs beállítva, akkor hibát jelez AlarmDialog segítségével.
- Az adatok a FileHandler osztály segítségével íródnak ki a külső vagy belső
- tárra.
- Ha elérhető (írásra is) a külső tár, akkor oda fog kerülni az fájl, különben
- a belső tárra.
- Az exportálás a fájlművelet miatt aszinkron folyamat, ami az AsyncTask
- osztály segítségével lett megvalósítva.
+ egy BroadcastReceiver, minek segítségével a ConnectivityManager üzeneteit
+ megkapja az alaklamazás és így figyelhető a mobil internet szolgáltatás
+ elérhetősége.
+ A változásról értesül az application objektum is.
+ A készülék és a hálózat adatairól a TelephonyManager segítségével kaphatunk
+ információkat.
+ PhoneStateListenerImpl segédosztály megvalósítja a PhoneStateListener interfész
+t, így kap értesítést az applikáció az adatkapcsolat (data connection) állapotár
+ól és a pozícióhoz kapcsoló MCC, MNC, LAC és CID paraméterekről is.
+ Ezek az értékek az application objektumban lesznek letárolva.
+ A PhoneStateListener a ConnectivityReceiverrel egyetemben a service konstruktor
+ába kerül beregisztrálásra.
 \end_layout
 
 \begin_layout Description
-PreferenceActivity
+The values are defined in the GSM standard TS 27.007, section 8.5 From the
+ standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
+ -53 dBm 31 -51 dBm or greater 99 not known or not detectable Which means
+ - 0 is low, 31 is good.
+\end_layout
+
+\begin_layout Description
+PhoneStateObserver interfész tartalmazza a telefon adatainak változásához
+ tartozóó értesítési, frissítési metódusok fejléceit.
+ 
+\end_layout
+
+\begin_layout Description
+PhoneStateSubject interfész tartlamazza a PhoneStateObserver-hez kapcsolódó
+ értesítési és regisztrálási függvények fejléceit.
+\end_layout
+
+\begin_layout Description
+PrefsActivity egy egyszerű Activity, ami a beállítások megjelenítéséért
+ felelős.
+ Tartalmazza a menüket a többi Activity-hez hasonlóan, melyek segítségével
+ elérhető a többi Activity is.
+ A 
+\shape italic
+onSharedPreferenceChanged 
+\shape default
+metódus segítségével értesül az osztály a beállítások változásáról, így
+ ellenőrizhető a megadott adatok helyessége.
+ Az IP cím megadása esetén használom ezt a metódust, ha nem illeszekedik
+ a megadott mintára a bevitt cím, akkor egy előre megadott, alapértelmezett
+ IP címet álítok be, ami jól formázott és egy Toast üzenete segítségével
+ értesítem a felhasználót a hibáról.
+\end_layout
+
+\begin_layout Description
+TestActivity a felhasználó itt állíthatja be a tesztek paramétereit és elindítha
+tja vagy leállíthatja teszt futtatását.
+\end_layout
+
+\begin_layout Description
+TestObserver interfészen keresztül egy osztály a tesztek során érkező jelentések
+ről értesülhet szöveges formában.
+ 
+\end_layout
+
+\begin_layout Description
+TestSubject interfész a TestObserver-ek ki- és beregisztálásához szüklséges
+ metódusok fejlécét tartalmazza.
 \end_layout
 
 \begin_layout Subsection

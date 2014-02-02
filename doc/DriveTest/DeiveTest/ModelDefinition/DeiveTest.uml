@@ -7978,6 +7978,82 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="558a508f-700f-4e9b-9b4a-79068eb40891"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="b6596caa-438b-433c-a856-f00b42bbd3a7"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="98d63042-60ee-45bb-84be-21c9d5844acb"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="481ab9cd-daf6-4162-84c4-268e7b37226a"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="6cb33f45-9aa1-436b-8fc1-ddffcc7b37a5"
+              LastKnownName="DataStorage"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="508cd641-b457-4021-a90e-0ccc209fb769"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="db8897b8-e1b2-47f5-929c-949e97dc3739"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="4b8aea30-5c41-457b-80c1-95d313f4a442"
@@ -8409,6 +8485,45 @@
               LastKnownLocation="DeiveTest.uml" />
           </generalization>
         </generalsInternal>
+        <targetEnds>
+          <association
+            Id="5ee93c0a-df61-4d73-b7a1-4a9408dac46e"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="6cb33f45-9aa1-436b-8fc1-ddffcc7b37a5"
+              LastKnownName="DataStorage"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="2c852e6d-da9e-4a05-bda4-552459c52960"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="3ae70950-ed3c-4039-bd27-fb2a1304e7ad"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="43d522ba-3261-4443-898d-35339f37a1aa"
@@ -9709,20 +9824,20 @@
         isActiveClass="false">
         <targetEnds>
           <association
-            Id="062d8a91-e2e6-4d20-a33a-649c7cd849ba"
+            Id="256d34c4-9caf-44e5-bcb3-eedd5ada31b3"
             isDerived="false"
             sourceEndRoleName=""
             targetEndRoleName=""
             isLeaf="false"
             isAbstract="false">
             <classMoniker
-              Id="cc48cbcd-084f-4e8f-9af7-7f99169ab55e"
-              LastKnownName="HttpService"
+              Id="dcadb317-2ae3-4bd3-a11c-a4caddc931d4"
+              LastKnownName="FileHandler"
               LastKnownLocation="DeiveTest.uml" />
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
-                  Id="fc619f3f-0003-438d-91d7-1f567b681840"
+                  Id="98b1999f-43b4-48c1-896d-9c5ff122e225"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -9734,7 +9849,44 @@
               </associationHasOwnedEnds>
               <associationHasOwnedEnds>
                 <memberEnd
-                  Id="514e5adb-3d17-4ee0-ac2c-940452047617"
+                  Id="3c3cdb7f-8222-4351-b88b-cb43d5605a78"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="0de494bc-6f6c-4d05-9dcf-d1d80c8b58fd"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="6cb33f45-9aa1-436b-8fc1-ddffcc7b37a5"
+              LastKnownName="DataStorage"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="b917a9ba-0b30-4e73-8ec0-0d0eef48f167"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="548d9630-ac3a-4882-a54e-eedb56d84962"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -10217,6 +10369,45 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="0e917236-0cbc-4c48-a2b6-c2366839d37b"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="61dc86d3-666b-4dbf-bfd3-9e00dbbd1dbc"
+              LastKnownName="TestActivity"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="5f3b6e68-ef7a-4581-ae94-62ba67ccdccf"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Composite"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="a0beeefd-7045-42e6-b830-14843208b1f7"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="true" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="76d64a6e-2d66-4292-83ec-44e5c16ea0d7"
@@ -13288,6 +13479,82 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="dc6c0a60-0ea0-4018-8567-226ee37410a8"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="61dc86d3-666b-4dbf-bfd3-9e00dbbd1dbc"
+              LastKnownName="TestActivity"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="26f549c8-1861-4b0f-a097-80fe0992f110"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1069f87a-7104-4703-8efe-f35575ac7ae1"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+          <association
+            Id="751185e9-538e-4e0d-bad1-92298e9648d5"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="5b8e5bf7-d21a-4d7d-846d-6e71a02092df"
+              LastKnownName="MainActivity"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="14c173d9-4647-436d-ba0e-2b89086323fb"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="07142a4e-f340-425a-8f3a-9e0e1f129b1a"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedOperationsInternal>
           <operation
             Id="232bb057-188b-4b47-b3e5-77d306196c2d"
@@ -13564,7 +13831,7 @@
         isActiveClass="false">
         <targetEnds>
           <association
-            Id="6d842823-4ece-4dfd-9cf0-312d91b98fc3"
+            Id="2cdd5a26-7611-4e0c-8359-cb2c28af128e"
             isDerived="false"
             sourceEndRoleName=""
             targetEndRoleName=""
@@ -13577,19 +13844,19 @@
             <relationshipOwnedElementsInternal>
               <associationHasOwnedEnds>
                 <memberEnd
-                  Id="e1452697-85a6-4e8f-9c2d-27923249d13f"
+                  Id="fb3e2a42-c5d1-417d-9c37-8063706edea5"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
                   isDerived="false"
                   isDerivedUnion="false"
-                  aggregation="None"
+                  aggregation="Shared"
                   isComposite="false"
                   isNavigableOwned="false" />
               </associationHasOwnedEnds>
               <associationHasOwnedEnds>
                 <memberEnd
-                  Id="7851680c-e87f-4b11-a425-1e83e6d29b4d"
+                  Id="5a1be783-6ff2-4a33-ba47-0203fd536b2f"
                   isLeaf="false"
                   isStatic="false"
                   isReadOnly="false"
@@ -13883,6 +14150,45 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="0aa28bef-d2d0-45a9-84e7-aaed5993f98b"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e60ca104-ae2c-4709-b811-45fabe9cfe2b"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="Shared"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="99804cf5-8dbc-4489-82ad-321d02b868eb"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="ae9d4162-dbdf-41b0-bd97-116c2d5d138a"
@@ -14086,6 +14392,45 @@
         isAbstract="false"
         isLeaf="false"
         isActiveClass="false">
+        <targetEnds>
+          <association
+            Id="8f979de7-8bf6-4abd-aff6-c5c30e6726e8"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="441a3040-7d66-417c-9e94-eaa84a1aff9d"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="acbbc550-9b21-4a24-88a7-70cf771513d3"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedAttributesInternal>
           <property
             Id="f6ecd5b8-f99e-4a69-85f1-a2e1e763562d"
@@ -15464,6 +15809,45 @@
         name="LocationObserver"
         isAbstract="false"
         isLeaf="false">
+        <targetEnds>
+          <association
+            Id="c4c7f2c0-dfab-405b-9364-aab3fb581c95"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="f8a72076-e7b3-489f-9c96-f8f014723edd"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1bfda3e9-798c-4aa0-8cf5-956f2bc60dd4"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation
             Id="1e28fd8f-1823-441d-bfb1-e58113341476"
@@ -15512,6 +15896,45 @@
         name="TestObserver"
         isAbstract="false"
         isLeaf="false">
+        <targetEnds>
+          <association
+            Id="fb7b37e8-1325-4d71-9df7-1c60e3344c7a"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e27549e2-49e7-4904-9341-541cf8f2a402"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="e621b671-6b45-4964-95f9-2be5994aa847"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation
             Id="d87bc917-4caa-4efe-a0fb-887f1bddd69a"
@@ -15560,6 +15983,45 @@
         name="PhoneStateObserver"
         isAbstract="false"
         isLeaf="false">
+        <targetEnds>
+          <association
+            Id="d006b399-b1ec-4687-8210-63ea7b7c060f"
+            isDerived="false"
+            sourceEndRoleName=""
+            targetEndRoleName=""
+            isLeaf="false"
+            isAbstract="false">
+            <classMoniker
+              Id="fe34f969-6edb-4446-ba99-152cddfcbb34"
+              LastKnownName="DriveTestApp"
+              LastKnownLocation="DeiveTest.uml" />
+            <relationshipOwnedElementsInternal>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="007289c5-6540-4d08-a460-5c8cf1adfdbd"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false"
+                  isNavigableOwned="false" />
+              </associationHasOwnedEnds>
+              <associationHasOwnedEnds>
+                <memberEnd
+                  Id="1c2dae75-4ca0-456c-bb7b-0fd9135e1f8a"
+                  isLeaf="false"
+                  isStatic="false"
+                  isReadOnly="false"
+                  isDerived="false"
+                  isDerivedUnion="false"
+                  aggregation="None"
+                  isComposite="false" />
+              </associationHasOwnedEnds>
+            </relationshipOwnedElementsInternal>
+          </association>
+        </targetEnds>
         <ownedOperations>
           <operation
             Id="4197ff16-2f7f-4021-86ca-fb1c4797a04d"

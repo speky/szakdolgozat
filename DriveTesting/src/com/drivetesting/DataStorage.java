@@ -20,7 +20,7 @@ public class DataStorage {
 
 	public static final String DB_NAME  = "drive_test_db_v1"; 
 	public static final int DB_VERSION = 1;
-	public static final String DB_TABLE  = "test_dat";
+	public static final String DB_TABLE  = "test_data";
 	public static final String ID = "id";
 	public static final String TESTID = "test_id";
 	public static final String TESTNAME = "test_name";
