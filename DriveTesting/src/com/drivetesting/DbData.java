@@ -87,6 +87,7 @@ public class DbData {
 			break;
 		}
 	}
+	
 	public String toDescriptionString() {
 		setRateString();
 		StringBuilder str = new StringBuilder();

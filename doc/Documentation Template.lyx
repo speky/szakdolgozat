@@ -5179,7 +5179,52 @@ osztályból származik, mely olyan szolgáltatás, ami csak addig fut amíg az
 onHandleInstance
 \shape default
  metódusában leírtak végrehajtódnak.
- 
+ Ez az osztály kezeli a szerveroldali ServerThread osztályhoz hasonlóan
+ a teszt futtatásába aktívan részt vevő osztályok példányosítását és a szálkezel
+ést is.
+ A Messenger osztály segítségével tud kommunikálni a TestActivity példányával
+ a 
+\shape italic
+sendMessage
+\shape default
+ függvény segítségével tud annak üzenete küldeni.
+ Ezt a Messenger objektumot az 
+\shape italic
+onHandleInstance
+\shape default
+ metódusban kapja meg az osztály az Intent típusú paraméteren keresztül,
+ akárcsak a többi teszt futtatáshoz szükséges paramétert mint a azadatáramlás
+ iránya, protokoll típusa és a buffer mérete.
+ Ebben a fügvénzben csatlakozik a mobilkészülék a szerverhez az előre definiált
+ 4500-as porton keresztül.
+ Ez a program futása során csak egyszer történik meg.
+ Ezután meghívódik a 
+\shape italic
+makeNewThread 
+\shape default
+nevú függvény, ahol elkezdődik a kommunikáció a serverrel HTTP*/1.0 típusú
+ üzenetek segítségével.
+ Itt beszéli meg a készülék a szerverrel a teszt paramétereit, majd, létrejönnek
+ a teszt futtatáshoz szükséges TCP vagy UDP osztály és elindul egy külön
+ szálon, és elindul a reportReceiver is, ami a jelentéseket fogadja.
+ A 
+\shape italic
+sendMessageToServer
+\shape default
+ metódussal tud üzentet küldeni a szerver felé, a 
+\shape italic
+receiveMessageFromServer
+\shape default
+ függvényben pedig vár egy üzenetet a szervertől és értelmezi azt a 
+\shape italic
+parseServerAnswer
+\shape default
+ metódus segítségével.
+ A onDestroy eseményt a szolágltatás leállítása váltja ki, ekkor a 
+\shape italic
+stop
+\shape default
+ metódusának segítségével leállítüdnak a teszt szálak is.
 \end_layout
 
 \begin_layout Description
@@ -5247,7 +5292,88 @@ initNetworkData
 \end_layout
 
 \begin_layout Description
-OSMActivity a térképet jeleníti meg és azon a kiválasztott mérési pontokat.
+OSMActivity főfeladata a térkép és azon a kiválasztott mérési pontok megjeleníté
+se.
+ A TestObserver interfészt megvalósítja, mivel így kap értesítést az újabb
+ teszt bejegyzések érkezéséről, amit lekér az adatbázisból a 
+\shape italic
+queryLastInsertedRow
+\shape default
+ függvény segítségével és megjelenít a térképen.
+ Ehhez az 
+\shape italic
+update
+\shape default
+ metódust kellett felüldefiniálni.
+ A térkép megjelenítéséhez és kezeléséhez egy külső könyvtárat használok
+ osmdroid-ot.
+ Ez egy szabadon felhasnzálható könyvtár, mely a Google Mapsühoz hasonló
+ szolgáltatásokat nyújt ingyenesen.
+ Ennek segítségével tudom megjeleníteni a térképet és rajta az útvonalat
+ és a jelentéseket reprezentáló elemeket.
+ Az onCreate eseménykor inicializálódnak a paraméterek, mint például a mapView,
+ ami a térképnézetet reprezentálja és a controller változó, ami IMapController
+ típusú és többek között ezen keresztül lehet a nagyitást (zoom) állítani.
+ Az onPause eseménykor elementésre kerül az aktuális pozíció, a nagzitás
+ értéke és a beállított test azonosító, illetve teszt név is.
+ Ezek az információk az onResume eseménykor, vagyis mikor újra aktív lesz
+ ez az ablak, visszatöltődnek és beállítódnak.
+ A teszt azonosítót a 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Id
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombra kattintva állíthatja be a felhasnzáló, ennek megnyomásakor
+ a 
+\shape italic
+onTestClick
+\shape default
+ függvény fog meghívódni.
+ Ha a teszt nevét választja ki a felhasnzáló, akkor a 
+\begin_inset Quotes sld
+\end_inset
+
+Set Test Name
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombra kattintva a 
+\shape italic
+onTestNameClick 
+\shape default
+medus fog végrehajtódni.
+ A szövges mezőben megjelenik a kiválasztott érték, a megadott teszt azonosító
+ vagy a teszt neve.
+ A teszt név több teszt futást is tartalmazhat, különféle teszt azonosítójú
+ teszteket foghat össze.
+ Ilyenkor a térképen a külnbözö tesztek végpontjai is össze lesznek kötve
+ egymással.
+ A 
+\shape italic
+loadRoad
+\shape default
+ metódus hívódik meg egy teszt betöltésekor és egy új elem hozzáadása kor
+ is.
+ Itt szereplő nodeA és nodeB változók két egymást követő mérési pontot jelölnek
+ a térképen.
+ Ezek RoadNode típusú objektumok, ami tartalmazza a pont helyét a térképen
+ (szélességi és hosszúsági fokot) és szövegesen a mérési adatokat.
+ A 
+\shape italic
+addRoadNode
+\shape default
+ metódus segítségével készít a program RoadNode típusú objektumokat az egyes
+ adatbázis rekordokból.
+ A noOfPoints változó tartalmazza, hogz eddig összesen hány darab pont van
+ betöltve a térképen, illetve a nodeCount változó meghatározza hogy még
+ hány pontot kell betölteni.
+ Maga az út rajzolás és számolás kötelezően AsyncTask típusú objektumban
+ kell hogz történjen, hogy ne akadályozza a fő szál fitását, így ezt az
+ UpdateRoadTask belső osztály végzi.
+ 
 \end_layout
 
 \begin_layout Description
@@ -5281,7 +5407,7 @@ The values are defined in the GSM standard TS 27.007, section 8.5 From the
 
 \begin_layout Description
 PhoneStateObserver interfész tartalmazza a telefon adatainak változásához
- tartozóó értesítési, frissítési metódusok fejléceit.
+ tartozó értesítési, frissítési metódusok fejléceit.
  
 \end_layout
 
