@@ -4268,7 +4268,7 @@ status open
 \noindent
 \align left
 \begin_inset Graphics
-	filename D:/Szakdoga/doc/mobilclass.eps
+	filename mobilclass.eps
 	scale 80
 
 \end_inset
@@ -4306,7 +4306,99 @@ Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik: DATA
 iveTesting/databases/FILENAME.
  Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
  táblát tartalmaz.
- 
+ Ezek az attribútumai a táblának:
+\end_layout
+
+\begin_layout Itemize
+"id" - integer típusú érték, a tábla elsődleges kulcsa, autmatikusan inkrementál
+ódik
+\end_layout
+
+\begin_layout Itemize
+"test_id" - integer típusú érték, a teszt azonosítója
+\end_layout
+
+\begin_layout Itemize
+"test_name" - varchar(100) típusú érték, a teszt nevét tartalmazza, amit
+ a felhasználó a beállításoknál megadott
+\end_layout
+
+\begin_layout Itemize
+"time" - varchar(100) típusú érték, a mérés pontos idejét tárolja
+\end_layout
+
+\begin_layout Itemize
+"lat" - varchar(15) típusú érték, a mobilkészülék poziciójának szélességi
+ értékét tárolja
+\end_layout
+
+\begin_layout Itemize
+"lon" - varchar(15) típusú érték, a mobilkészülék poziciójának hosszúsági
+ értékét tárolja
+\end_layout
+
+\begin_layout Itemize
+"signal_strenght" - varchar(15) típusú érték, a jel erősség értékét tárolja
+ dBm-ben
+\end_layout
+
+\begin_layout Itemize
+"signal_level" - varchar(15) típusú érték, a jel erősség besorolásást tartalamzz
+a (0-4 közötti értéket vehet fel)
+\end_layout
+
+\begin_layout Itemize
+"up_speed" - varchar(15) típusú érték, a feltöltési sebességet tárolja a
+ rate által meghatározott mértékegységben
+\end_layout
+
+\begin_layout Itemize
+"down_speed" - varchar(15) típusú érték, a letöltési sebességet tárolja
+ a rate által meghatározott mértékegységben
+\end_layout
+
+\begin_layout Itemize
+"jitter" - varchar(15) típusú érték, UDP tesztek esetén a jitter értékét
+ tárolja
+\end_layout
+
+\begin_layout Itemize
+"lost_packet" - integer típusú érték, UDP tesztek esetén az elveszett csomagok
+ számát tárolja
+\end_layout
+
+\begin_layout Itemize
+"sum_packet" - integer típusú érték, UDP tesztek esetén az eddig elküldött
+ csomagok számát tárolja
+\end_layout
+
+\begin_layout Itemize
+"mcc
+\begin_inset Quotes srd
+\end_inset
+
+ - integer típusú érték
+\end_layout
+
+\begin_layout Itemize
+"mnc" - integer típusú érték
+\end_layout
+
+\begin_layout Itemize
+"lac" - integer típusú érték
+\end_layout
+
+\begin_layout Itemize
+"cid" - integer típusú érték, cella azonosítója
+\end_layout
+
+\begin_layout Itemize
+"network_type" - varchar(15) típusú érték, a mobil hálózat típusát tartalmazza
+\end_layout
+
+\begin_layout Itemize
+"rate" - integer típusú érték, az átviteli sebesség mértékegység azonosítóját
+ tartalmazza
 \end_layout
 
 \begin_layout Subsection
@@ -5373,6 +5465,34 @@ addRoadNode
  Maga az út rajzolás és számolás kötelezően AsyncTask típusú objektumban
  kell hogz történjen, hogy ne akadályozza a fő szál fitását, így ezt az
  UpdateRoadTask belső osztály végzi.
+ A roadManager 
+\shape italic
+getRoad
+\shape default
+ metódusa kiszámítja az utat a két megadott végpont között és visszatér
+ egy Road típusú elemmel.
+ Az 
+\shape italic
+drawRoadOnMap
+\shape default
+ metódus rajzolja a térképre a kiszámolt útszakaszt a PathOverlay típus
+ segítségével, ami a RoadManager 
+\shape italic
+buildRoadOverlay
+\shape default
+ függvényének eredménye.
+ Itt korrigálódik a mérési pont helye, hogy illeszkedjen az útra és kirajzolódik
+ a mérésipontot reprezentáló jel is.
+ A jel szine a jel erősségétől függően 5 féle lehet.
+ Ha van még kirajzolandó pont, akkor újra meghívódik a loadRoad függvény,
+ egyéb esetben pedig a setOverlays hívódik meg, ami az utolsó betöltött
+ pontot helyezi a középpontba és garantálja hogy az egyes rétegek megfeleő
+ sorrendbe kerüljenek kirajzolásra, végül újra rajzoltatja atérképet az
+ 
+\shape italic
+invalidate
+\shape default
+ metódushívással.
  
 \end_layout
 
@@ -5396,13 +5516,11 @@ t, így kap értesítést az applikáció az adatkapcsolat (data connection) ál
  Ezek az értékek az application objektumban lesznek letárolva.
  A PhoneStateListener a ConnectivityReceiverrel egyetemben a service konstruktor
 ába kerül beregisztrálásra.
-\end_layout
-
-\begin_layout Description
-The values are defined in the GSM standard TS 27.007, section 8.5 From the
- standard: 0 -113 dBm or less 1 -111 dBm 2...30 -109...
- -53 dBm 31 -51 dBm or greater 99 not known or not detectable Which means
- - 0 is low, 31 is good.
+ A jelerősség értéket osztályozom a GSM sztenderdnek megfelelően (TS 27.007,
+ 8.5 fejezet) ASU (Arbitrary Strength Unit) értékek 0-tól 3-ig terjednek,
+ ahol a 31 a kiváló minőséget jelöli, ezen értékek átszámíthatóak dBm-be
+ és a jel erősség paraméter ezt az átszámolt értéket fogja tartalmazni.
+ 
 \end_layout
 
 \begin_layout Description

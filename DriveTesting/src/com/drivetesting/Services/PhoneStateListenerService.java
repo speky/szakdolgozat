@@ -138,7 +138,8 @@ public class PhoneStateListenerService extends Service {
 			application.setGsmBitErrorRate(String.valueOf(signalStrength.getGsmBitErrorRate()));
 
 			//Toast.makeText(context, "Signal strength changed!  ", Toast.LENGTH_SHORT).show();
-		}				  
+		}
+		
 		public int getLevel(int asu) {
 			int level = DriveTestApp.SIGNAL_UNKOWN;
 			// ASU ranges from 0 to 31 - TS 27.007 Sec 8.5
