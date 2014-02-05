@@ -1927,14 +1927,6 @@ Units - sebesség és a fogadott adatok mennyiségének mértékegységét álí
  be
 \end_layout
 
-\begin_layout Standard
-Fájl kezelésre vonatkozó beállitások:
-\end_layout
-
-\begin_layout Standard
-?
-\end_layout
-
 \begin_layout Subsection
 Program használata és teszt futtatás
 \end_layout
@@ -1992,10 +1984,74 @@ Messages
 Hibaüzenetek
 \end_layout
 
-\begin_layout Standard
-mikor jelez a program hibát és mit tegyen a felhasználó ha ilyennel találkozik
- (pl.
- nem elérhető a GPS szolgáltatás, stb.)
+\begin_layout Subsubsection*
+Hibaüzenetek a teszt futtatás során
+\end_layout
+
+\begin_layout Itemize
+GPS aktíválása szükséges a teszt futtatáshoz, ha ezt elmulasztja a felhasználó,
+ akkor egy felugró ablak tájékoztatja erről, amikor a tesztet elindítaná
+ a következő üzenettel: "GPS is not enabled.
+ Do you want to go to settings menu?".
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Yes
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kattintva megjelenik telefon GPS-el kapcsolatos beállításai, ahol
+ aktiválni tudja a felhasználó ezt a szolgáltatást.
+ A beállítás után a vissza gombbal a felhasnzáló visszatérhet a program
+ tesztfuttatási ablakába.
+\end_layout
+
+\begin_layout Itemize
+Mobilinternet aktíválása is szükséges a teszt futtatáshoz, ha ezt elmulasztja
+ a felhasználó, akkor egy felugró ablak tájékoztatja erről, amikor a tesztet
+ elindítaná a következő üzenettel: "Network is not enabled.
+ Do you want to go to settings menu?".
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Yes
+\begin_inset Quotes srd
+\end_inset
+
+ gombra kattintva megjelenik telefon hlózattal kapcsolatos beállításai,
+ ahol aktiválni tudja a felhasználó ezt a szolgáltatást.
+ A beállítás után a vissza gombbal a felhasnzáló visszatérhet a program
+ tesztfuttatási ablakába.
+\end_layout
+
+\begin_layout Itemize
+Hibásan megadott szerver IP cím esetén a teszt futása hamaer leáll és a
+ következő üzenet olvasható a Teszt ablak üzenetei között: "Error: Cannot
+ connect to server! IP: <megadott IP cím> port: 4500
+\begin_inset Quotes srd
+\end_inset
+
+.
+ Ilyen esetben a felhasználónak ellenőriznie kell a beállítások között a
+ megadott IP cím helyességét, illetve, hogy elérhető egy kólső hálózati
+ eszközről.
+ Ha a szerver nem közvetlenül kapcsolódik az internethez, akkor a hálózati
+ eszközökben a PortForwarding funkció használatát és beállításait is érdemes
+ ellenőrizni.
+\end_layout
+
+\begin_layout Itemize
+Foglalt teszt port esetén a "Could not connect to server! test port: <port
+ szám>" üentet láthatja a felhasználó.
+ Ez akkor történhet meg, ha egy másik program már használja az adott portot,
+ ebben az esetben próbálkozzon új tesztet indítani, a teszt megpróbál egy
+ másik portot használni.
+ A szerver gépen az 5500 és 5600 közötti portokat használhatja teszt futtatásra
+ a program.
+ Minden teszt indiításkor egy új portot fog választani a program.
+ 
 \end_layout
 
 \begin_layout Chapter
@@ -2025,7 +2081,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -2097,7 +2153,7 @@ lines 0
 placement o
 overhang 0in
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2657,7 +2713,7 @@ Második generáció
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \paragraph_spacing single
@@ -2726,7 +2782,7 @@ Harmadik generáció
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -2820,7 +2876,7 @@ hivatalosan
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -2872,7 +2928,7 @@ A lenti táblázat tartalmazza az átvitelisebességeket különféle technológ
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -3612,7 +3668,7 @@ getApplicationContext()
 \end_layout
 
 \begin_layout Subsection
-Futási környezet és konfigurációs fájlok
+Futási környezet és konfiguráció
 \end_layout
 
 \begin_layout Standard
@@ -3720,159 +3776,6 @@ Komponensek deklarációja a manifest fájlban a következők lehetnek:
 
 \begin_layout Itemize
 <provider> elemek a tartalomszolgáltató osztályokhoz
-\end_layout
-
-\begin_layout Subsubsection
-Felhasználói felület leírása
-\end_layout
-
-\begin_layout Standard
-Az Android rendszerben az Activity objektumok rendelkeznek felhasználói
- felülettel, melyek leírását objektumonként külön-külön kell deklarálni
- XML fájlokban.
- Ezek a fájlok az alkalmazás könyvtárán belül a 
-\shape italic
-
-\begin_inset Quotes sld
-\end_inset
-
-res/layout
-\begin_inset Quotes srd
-\end_inset
-
-
-\shape default
- könyvtárban találhatóak.
- Egy XML elem neve ebben az esetben egy Java objektum nevét tükrözi, tehát
- ha az XML elem egy <Button> elem, akkor az alkalmazás egy Button (gomb)
- objektumot fog létrehozni.
- Amikor betöltődik egy Activity objektum, akkor a neki megfelelő felület
- leíró XML fájlból a rendszer megfelelően létrehozza futási időben és inicializá
-lja ezeket az objektumokat.
- 
-\end_layout
-
-\begin_layout Standard
-Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombbal:
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-<?xml version="1.0" encoding="utf-8"?>
-\end_layout
-
-\begin_layout Plain Layout
-
-<LinearLayout xmlns:android="http://schemas..."
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:layout_width="match_parent"
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:layout_height="match_parent"
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:orientation="vertical" >
-\end_layout
-
-\begin_layout Plain Layout
-
-	<TextView android:id="@+id/textView1"
-\end_layout
-
-\begin_layout Plain Layout
-
-		      android:layout_width="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-      		android:layout_height="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-      		android:text="" />
-\end_layout
-
-\begin_layout Plain Layout
-
-    <Button android:id="@+id/button1"
-\end_layout
-
-\begin_layout Plain Layout
-
-            android:layout_width="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-            android:layout_height="wrap_content"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-</LinearLayout>
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
- Eclipse fejlesztőeszközbe ágyazott grafikus szerkesztőfelület segítségével
- is.
- Különféle Layout objektumok segítségével meghatározhatjuk az egyes elemek
- (gombok, szövegmezők, stb.) elhelyezkedését.
- A felhasználóval való interakciókra különféle elemek állnak rendelkezésre
- pl.: gombok, beviteli mezők, dátumválasztók, stb.
- ezeket widget-eknek nevezzük.
- A felhasználói felület (UI - user interface) leíró XML fájlokban hozzá
- tudunk rendelni különféle elemekhez visszahívó (callback) metódusokat.
- Ezeket az XML elemek android:on<valami> (pl.: android:onClick=<metódus_név>)
- paraméterében tudjuk meghatározni.
- A felhasználói felületet leíró fájlt használó Activity osztályban kell
- definiálni az XML elemekhez tartozó visszahívó metódusokat, melyek meghívódnak,
- ha az adott eseményt kiváltja egy felhasználói esemény.
- 
-\end_layout
-
-\begin_layout Subsubsection
-Menü leírása
-\end_layout
-
-\begin_layout Standard
-Menüket külön leíró XML fájl(ok)ban definiálhatunk, melyekben meg kell határozni
- az egyes menüpontokat.
- Ezen leíró fájlok a program könyvtárán belül a 
-\begin_inset Quotes sld
-\end_inset
-
-res/menu
-\begin_inset Quotes srd
-\end_inset
-
- mappában találhatóak.
- A felhasználó a menün keresztül navigálhat a user interface-el rendelkező
- Activity-k között és elérheti a beállításokat.
- Az Activity osztályokhoz az onCreateoptionMenu metódus megvalósításával
- tudunk menüt rendleni.
- Itt kell megadni, hogy mi történjen, ha a felhasználó az egyes menüpontokra
- kattint.
- Az Android rendszer automatikusan kirajzolja a menüt a képernyőre.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -4172,7 +4075,7 @@ Közös osztályok architectúrája
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -4217,7 +4120,7 @@ Szerver oldal
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -4262,11 +4165,11 @@ Kliens oldal
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
-\align left
+\align center
 \begin_inset Graphics
 	filename mobilclass.eps
 	scale 80
@@ -4377,15 +4280,15 @@ a (0-4 közötti értéket vehet fel)
 \begin_inset Quotes srd
 \end_inset
 
- - integer típusú érték
+ - integer típusú érték, MCC azonosítója
 \end_layout
 
 \begin_layout Itemize
-"mnc" - integer típusú érték
+"mnc" - integer típusú érték, MNC azonosítója
 \end_layout
 
 \begin_layout Itemize
-"lac" - integer típusú érték
+"lac" - integer típusú érték, LAC azonosítója
 \end_layout
 
 \begin_layout Itemize
@@ -4402,13 +4305,206 @@ a (0-4 közötti értéket vehet fel)
 \end_layout
 
 \begin_layout Subsection
-Felhasználó felület terve
+Felhasználó felület, navigálás az ablakok között
+\end_layout
+
+\begin_layout Subsubsection
+Felhasználói felület leírása
 \end_layout
 
 \begin_layout Standard
-áttekintő ábra, amely mutatja a képernyők közti navigálási lehetőségeket,
- irányokat.
- Kiemelve a fontosabb felhasználói eseménykezeléseket
+Az Android rendszerben az Activity objektumok rendelkeznek felhasználói
+ felülettel, melyek leírását objektumonként külön-külön kell deklarálni
+ XML fájlokban.
+ Ezek a fájlok az alkalmazás könyvtárán belül a 
+\shape italic
+
+\begin_inset Quotes sld
+\end_inset
+
+res/layout
+\begin_inset Quotes srd
+\end_inset
+
+
+\shape default
+ könyvtárban találhatóak.
+ Egy XML elem neve ebben az esetben egy Java objektum nevét tükrözi, tehát
+ ha az XML elem egy <Button> elem, akkor az alkalmazás egy Button (gomb)
+ objektumot fog létrehozni.
+ Amikor betöltődik egy Activity objektum, akkor a neki megfelelő felület
+ leíró XML fájlból a rendszer megfelelően létrehozza futási időben és inicializá
+lja ezeket az objektumokat.
+ 
+\end_layout
+
+\begin_layout Standard
+Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombbal:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<?xml version="1.0" encoding="utf-8"?>
+\end_layout
+
+\begin_layout Plain Layout
+
+<LinearLayout xmlns:android="http://schemas..."
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:layout_width="match_parent"
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:layout_height="match_parent"
+\end_layout
+
+\begin_layout Plain Layout
+
+    android:orientation="vertical" >
+\end_layout
+
+\begin_layout Plain Layout
+
+	<TextView android:id="@+id/textView1"
+\end_layout
+
+\begin_layout Plain Layout
+
+		      android:layout_width="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+      		android:layout_height="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+      		android:text="" />
+\end_layout
+
+\begin_layout Plain Layout
+
+    <Button android:id="@+id/button1"
+\end_layout
+
+\begin_layout Plain Layout
+
+            android:layout_width="wrap_content"
+\end_layout
+
+\begin_layout Plain Layout
+
+            android:layout_height="wrap_content"/>
+\end_layout
+
+\begin_layout Plain Layout
+
+</LinearLayout>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ezeket a leíró fájlokat könnyedén kézzel is szerkeszthetjük vagy akár az
+ Eclipse fejlesztőeszközbe ágyazott grafikus szerkesztőfelület segítségével
+ is.
+ Különféle Layout objektumok segítségével meghatározhatjuk az egyes elemek
+ (gombok, szövegmezők, stb.) elhelyezkedését.
+ A felhasználóval való interakciókra különféle elemek állnak rendelkezésre
+ pl.: gombok, beviteli mezők, dátumválasztók, stb.
+ ezeket widget-eknek nevezzük.
+ A felhasználói felület (UI - user interface) leíró XML fájlokban hozzá
+ tudunk rendelni különféle elemekhez visszahívó (callback) metódusokat.
+ Ezeket az XML elemek android:on<valami> (pl.: android:onClick=<metódus_név>)
+ paraméterében tudjuk meghatározni.
+ A felhasználói felületet leíró fájlt használó Activity osztályban kell
+ definiálni az XML elemekhez tartozó visszahívó metódusokat, melyek meghívódnak,
+ ha az adott eseményt kiváltja egy felhasználói esemény.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Menü leírása
+\end_layout
+
+\begin_layout Standard
+Menüket külön leíró XML fájl(ok)ban definiálhatunk, melyekben meg kell határozni
+ az egyes menüpontokat.
+ Ezen leíró fájlok a program könyvtárán belül a 
+\begin_inset Quotes sld
+\end_inset
+
+res/menu
+\begin_inset Quotes srd
+\end_inset
+
+ mappában találhatóak.
+ A felhasználó a menün keresztül navigálhat a user interface-el rendelkező
+ Activity-k között és elérheti a beállításokat.
+ Az Activity osztályokhoz az onCreateoptionMenu metódus megvalósításával
+ tudunk menüt rendleni.
+ Itt kell megadni, hogy mi történjen, ha a felhasználó az egyes menüpontokra
+ kattint.
+ Az Android rendszer automatikusan kirajzolja a menüt a képernyőre.
+ A DriveTest mobilapplikáció minden Activity osztályból származó osztálya
+ rendelkezik grafikus interfésszel és tartalmazza, felüldefiniálja a 
+\shape italic
+onCreateOptionsMenu
+\shape default
+ és a 
+\shape italic
+onOptionsItemSelected
+\shape default
+ metódusokat.
+ Ezek segítségével lehet megejeleníteni a menüt és reagálni a menüt érintő
+ felhasználói eseményekre.
+ Az Adnroid 3.0 verziójától a menü egy ActionBar-nak nevezett felületen jelenik
+ meg, a menu.xml fájlban leírtaknak megfelelően.
+ A leíró fájlban a menüelemek 
+\shape italic
+showAsAction
+\shape default
+ tulajdonságának állításával lehet befolyásolni azok megjelenését: ha 
+\begin_inset Quotes sld
+\end_inset
+
+always
+\begin_inset Quotes srd
+\end_inset
+
+ akkor mindig látható az adott elem, ha 
+\begin_inset Quotes sld
+\end_inset
+
+ifRoom
+\begin_inset Quotes srd
+\end_inset
+
+, akkor csak akkor jelenik meg az ActionBar-ban, ha elfér a telefon kijelzőjén.
+ Az 
+\begin_inset Quotes sld
+\end_inset
+
+always
+\begin_inset Quotes srd
+\end_inset
+
+ opció esetén akkor is kirajzolódik a menüelem, ha nem fér ki az ActionBar-ban,
+ ilyenkor a képernyő alján jelenik meg, ahogy az ActionBar bevezetése előtt
+ is történt.
 \end_layout
 
 \begin_layout Section
@@ -4420,9 +4516,28 @@ Döntések a megvalósítás során
 \end_layout
 
 \begin_layout Standard
-Ide kerül annak a leírása, hogy miért nem lettek megvalósítva a hívás indításos
- mérések; A több szálúság szükségessége és a komponensek kommunikációjának
- miértjei
+A fejlesztést megelőző kutatómunka során kiderült, hogy az android SDK nem
+ támogatja a számos hálózati és készülék információ elérését (biztonsági
+ okokból), így nem lehet egyszerűen az Android SDK segítségével úgy hyvást
+ kezdeményezni, hogy a hívás végeztével a hívásról adatokat kaphasson a
+ program.
+ Ehhez alacsony szinten, kernel szinten kellene hozzá férni az adatokhoz.
+ Így a programban csak adathívásokra korlátozódik a tesztelés a tervezett
+ hangívások helyett.
+\end_layout
+
+\begin_layout Standard
+A program Java programozási nyelven készül, mert az Android is erre épül
+ és könnyebb a szerverrel közös részek miatt mind a három részt Java alapokon
+ megvalósítani.
+ Ráadásul a Java készen ad sok programozást segítő könyvtárat, többek között
+ a hálózati kommunikációhoz.
+ Sajnos ebben az esetben a Java.net csomagban lévő osztályok egy nagy részét
+ elfedik a hálózati kommunikációnak, így mikor egy Socket outputstream-jén
+ keresztül egy üzenetet küldök a másik félnek, akkor csak bízni tudok benne,
+ hogy a program valóban egyből kiküldi az üzenetet és nem végez semmiféle
+ tömörítési, egyszerüsítési eljárást a csomagon, ami meghamisíthatná a mérési
+ eredményeket és így a tesztek eredményeit is.
 \end_layout
 
 \begin_layout Standard
@@ -4469,7 +4584,7 @@ interfészt.
 \end_layout
 
 \begin_layout Description
-HttpParser a HTTP üzenetek feldolgozását végzi.
+HttpParser a HTTP* üzenetek feldolgozását végzi.
  A 
 \shape italic
 parseHttpMessage
@@ -5587,27 +5702,34 @@ a projekt könyvtár szerkezetének és a fájlok szerepének bemutatása
 Tesztelés
 \end_layout
 
-\begin_layout Standard
-The first "Lint" program originated on Seventh Edition Research Unix at
- Bell Laboratories.
- AndroidLint, a part of the standard Android SDK.
+\begin_layout Subsection
+Statikus kódelemzés
 \end_layout
 
 \begin_layout Standard
-What the tools does is examine your code, and offer opinions based on expert-lev
-el knowledge of the language and libraries.
- But there will be cases where you're right.
- And, of course, it's an impossibly-hard problem for the computer to know
- which, so there is no substitute for the judgement of an experienced developer!
+A "Lint" program a Bell Laboratories terméke, az AndroidLint, része az Android
+ SDK-nak.
+ Ez az eszköz megvizsgálja a kódot, és javításokat ajánl.Lehetnek esetek
+ mikor a program téved és az adott körülmények között az adot kód helyes,
+ amire a Lint azt javasolja, hogy javítsd ki, így természetesen nem helyettesíti
+ a hozzáértő fejlesztőt.
 \end_layout
 
 \begin_layout Standard
-One very common error is to create a Toast by calling makeText(), and forget
- to call the new Toast's show() method; the toast is created but never pops
- up! The standard compiler cannot catch this kind of error, but Android
- Lint can, and that is just one of its many capabilities.
- you can run it under Eclipse.
- 
+Egyik nagyon gyakori hiba, hogy egy Toast létrehozásakor a 
+\shape italic
+makeText
+\shape default
+ metúdust használják,és elfelejtik meghívni a 
+\shape italic
+show 
+\shape default
+metódust; a toast létrejön, de soha nem fog megjelenni! A hagyományos fordító
+ nem tudja elkapni ezt a hibát, de az Android Lint képes, és ez csak egy
+ a sokközül.
+ Eclipse alol nagyon egyszerü és kényelmes a hasnzálata.
+ Sok lehetséges hiba forrást megtalált és a fejlesztés során törekedtem
+ rá hogy alacsonyan tartsam a Lint hibajelzések számát.
 \end_layout
 
 \begin_layout Subsection
@@ -5617,19 +5739,20 @@ Unit teszt
 \begin_layout Standard
 Az Android tesztek JUnit-on alapszanak.
  Hagyományos JUnit teszteket is használtam a unit tesztek írásakor, ezek
- anem használják az Android API-t.
+ anem használják az Android SDK-t.
  Az Android teszt esetekkel az Android komponensek megfelelő viselkedését
  tesztelem ezek a teszt osztályok az AndroidTestCase-ből öröklődnek, melyek
  a JUnit keretrendszeren túl Android specifikus setup, teardown, és egyéb
- segád metódusokat tartalmaznak.
- A JUnit-beli Assert osztályt használva jeleníthetjük meg a teszt eredményeket.
- Ezek a metódusok összehasonlítják kapott eredménzeket a tesztben várt eredménze
-kkel és ha nem egyeznek meg akkor hivételt generálnak, mely esetben a teszt
- eset hibát fog jelezni.
+ segéd metódusokat tartalmaznak.
+ A JUnit-beli Assert osztályt használva jeleníthetjük meg a teszt eredményeket
+ és jelezhetjük a hibákat.
+ Ezek a metódusok összehasonlítják kapott eredményeket a tesztben várt eredménye
+kkel, ha nem egyeznek meg akkor kivételt generálnak, mely esetben a teszt
+ hibát fog jelezni.
 \end_layout
 
 \begin_layout Standard
-Külön teszt projektet készítettem a DriveTest applikáció teszteléséhez 
+Külön tesztprojektet készítettem a DriveTest applikáció teszteléséhez 
 \shape italic
 DriveTestingTest 
 \shape default

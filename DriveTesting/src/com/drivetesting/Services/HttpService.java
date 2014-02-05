@@ -111,8 +111,7 @@ public class HttpService extends IntentService implements ReportI {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		messenger = (Messenger) intent.getExtras().get("handler"); 		
-		//String resultTxt = msg + " " + DateFormat.format("MM/dd/yy h:mmaa", System.currentTimeMillis());
-
+	
 		serverAddress = (String)intent.getExtras().get("serverIp");
 		if (serverAddress == null || serverAddress.equals("0.0.0.0")) {
 			sendMessage("error", "Error: Invalid server address!");
