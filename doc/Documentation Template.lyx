@@ -5760,40 +5760,49 @@ néven.
  
 \end_layout
 
-\begin_layout Standard
-
-\series bold
-Instrumentation
+\begin_layout Subsection
+Komponens teszt
 \end_layout
 
 \begin_layout Standard
-Android instrumentation is a set of control methods or "hooks" in the Android
- system.
- These hooks control an Android component independently of its normal lifecycle.
- They also control how Android loads applications.Normally, an Android component
- runs in a lifecycle determined by the system.
- For example, an Activity object's lifecycle starts when the Activity is
- activated by an Intent.
- The object's onCreate() method is called, followed by onResume().
- When the user starts another application, the onPause() method is called.
- If the Activity code calls the finish() method, the onDestroy() method
- is called.
- The Android framework API does not provide a way for your code to invoke
- these callback methods directly, but you can do so using instrumentation.
+Android ActivityInstrumentationTestCase2 osztály segítségével létrehozhatóak
+ olyan tesztek, melyek az egyes Android komponensek életciklusát befolyásolják.
+ Kiválthatóak az egyes rendszerszintű események és így tesztelhetőek a komponens
+ek egymásra hatása is.
+ Például egy Activity objektum életciklusa kezdetekor meghívódik az objektum
+ 
+\shape italic
+onCreate
+\shape default
+ metódusa, amit az 
+\shape italic
+onResume 
+\shape default
+követ.
+ Egy másik applikáció elindulása, vagy egy másik Activity-re váltás hatására,
+ az 
+\shape italic
+onPause 
+\shape default
+metódus hívódik meg.
+ Az Android keretrendsezr nem biztosít lehetőséget ezen metódusok, események
+ közvetlen meghívására, az Instrumentation.ok használatával ez mégis lehetővé
+ válik.
 \end_layout
 
 \begin_layout Standard
-You use the 
-\series bold
-ApplicationTestCase 
-\series default
-test case class to test the setup and teardown of Application objects.
- These objects maintain the global state of information that applies to
- all the components in an application package.
- The test case can be useful in verifying that the <application> element
- in the manifest file is correctly set up.
- Note, however, that this test case does not allow you to control testing
- of the components within your application package.
+Az ApplicationTestCase használatával tesztelhető az Application objektum
+ setup és teardown metódusa.
+ A teszt eset arra használható, hogy validálja az <application> elemet a
+ 
+\begin_inset Quotes sld
+\end_inset
+
+manifest
+\begin_inset Quotes srd
+\end_inset
+
+ fájl helyességét.
 \end_layout
 
 \begin_layout Subsection
@@ -5801,8 +5810,7 @@ Rendszer teszt
 \end_layout
 
 \begin_layout Standard
-program tesztelése valódi mobilon és emulátoron.
- (blackbox)
+A szerver és kliens programok együttes tesztelése mobilkészülékkel.
 \end_layout
 
 \begin_layout Subsection
@@ -5810,12 +5818,49 @@ Tesztelés eredménye
 \end_layout
 
 \begin_layout Standard
-tesztelések eredményének összefoglalása, a tesztelés alatt előforduló hibák
- megjegyzése és a javítás dokumentálása
+A rendszer tesztelés során kiderült, hogy a HttpService osztályban hibásan
+ lett implementálva a szerverhez kapcsolódás, így minden teszt futtatáskor
+ újra próbált csatlakozni a szerverhez és ez azt eredményezte hgoz mindig
+ az első teszt portot (5500) akarta használni, ami a többszöri kapcsolódást
+ megakadályozta mert még a port foglalt volt.
+ Ebben az esetben a megoldás az lett, hogy a szerverhez csatlakozott Socket
+ objektumot eltárolja a program és csak akkor hoz létre újat ha ez a Socet
+ objektum még nem létezik, így a szerverrel való kapcsolat megmarad és új
+ teszt indítása esetén a tesztportok egyesével léptetődnek.
 \end_layout
 
 \begin_layout Standard
-esetleg hatékonyság elemzés, 
+A program tervezése során elkövetett hiba volt, hogy a TCP és UDP segédolsztályo
+k maguk kezelték a Socket objektumokat és a csatlakozást.
+ Ebben az esetben a tesztelés során kiderült, hogy nem lehe tudni, a kapcsolati
+ hibák okát és a program egz hibás futás végén is úgy tért vissza mintha
+ egy sikeres futásnak lett volna vége.
+ Ebben az esetben a megoldás az volt, hogy a socket objektumokat egy szintel
+ feljebb a HttpServer vagy a HttpService osztályok végzik és a létrejött
+ Socket objektumokat a TCP és UDP osztályoknak továbbítják, és így a hibákról
+ is értesül a felhasználó.
+\end_layout
+
+\begin_layout Standard
+UDP protokollt használó tesztek esetén a hálózati kommunikáció során nem
+ használhatóak a Socket objektumok, a kapcsolat nem építhető ki a szerver
+ oldal felől.
+ A mobil telefon IP címe nem publikus, általában NAT-olva van az operátorok
+ hálózata, egyrészt biztonsági szempontok miatt, másrészt a kevés címtartomány
+ miatt.
+ Ez azt eredményezte, hogy minden esetben a mobil készüléknek kell kezdeményezni
+e a kommunikációt, ezzel lehetővé téve hogy a szerver üzenetetket tudjon
+ küldeni a készülék felé.
+ A tesztek során világossá vált, hogy a TCP esethez hasonló megoldást kell
+ találnom, így keletkeztek a 
+\shape italic
+sendAddressToSenderThroughNAT
+\shape default
+ és 
+\shape italic
+getAddressThroughNAT
+\shape default
+ metódusok, amik kiküszöblik a NAT által keletkezett problémát.
 \end_layout
 
 \begin_layout Section
@@ -5830,29 +5875,108 @@ limitációk, ToDo-k, tervezett módosítások összegzése.
 Összefoglalás
 \end_layout
 
+\begin_layout Standard
+A szakdolgozatom elkészítésével sikerült betekintést nyerni az Android platformr
+a való fejelsztés lépéseibe és a mobilhálózatok bonyolúlt és szerteágazó
+ világába.
+ Első lépésben az Android platform került ismertetésre, mely a bemutatott
+ alkalmazás implementálása mellett számos új lehetőségeket rejt.
+ Mára már kiforrot mind a platform és mind a fejlesztői környezet, melyel
+ nagyon könnyen fejleszthetünk alkalmazásokat.
+ Továbbá ismertettem a mobilhálózatokat és ezek generációit.
+ Az egyre nagyobb mértékű és egyre inkább nagyobb hangsúlyt kapó mobil adatforga
+lom világában az enyém és az enyémhez hasonló dignosztikai programoknak
+ nagy szerepe van és lesz is.
+ Olyan alakalmazást valósítottam meg, mellyel a telefonhálózatok operátorai
+ költséghatékonyan megkönyíthetik a munkájukat.
+ Természetesen még nagyon sok elemmel ki lehetne egészíteni a programot,
+ ami még hatékonyabbá és többoldalúvá tehetné a programot, például a program
+ tovább bővithető az Android nyújtotta új szolgáltatásokkal, illetve alacsony
+ szintű fejlesztésekkel a telefonkészülékkel olzan hanghívások is tesztelhetőek,
+ amit a mostani Android verzió nem támogat, így még gazdagabbá, hatékonyabbá
+ lehet tenni tesztelést.
+\end_layout
+
+\begin_layout Chapter
+Köszönetnyilvánítás
+\end_layout
+
+\begin_layout Standard
+Szeretnék mindenkinek köszönetet modnani, aki közvetlen vagy közvetett módon
+ segítette a dolgozat elkészülését.
+\end_layout
+
+\begin_layout Standard
+Köszönettel tartozom témavezetőmnek Sike Sándornak, hogy lehetőséget biztosított
+ munkám sikeres elvégzéséhez és dolgozatom megírásához.
+ Köszönöm a segítőkész támogatását és dolgzatom alapos áttekintését.
+ 
+\end_layout
+
+\begin_layout Standard
+Köszönöm Dósa István kollégámnak és Simonyi Tibor külső konzulensemnek a
+ hasznos tanácsokat és támogatásukat a dolgozatom elkészítéséhez.
+\end_layout
+
+\begin_layout Standard
+Végül szertném megköszönni családom türelmét és segíségét.
+\end_layout
+
+\begin_layout Chapter
+Irodalomjegyzék
+\end_layout
+
+\begin_layout Itemize
+Android, http://developer.android.com (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+Második generációs mobilhálózatok, http://en.wikipedia.org/wiki/2G (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+Harmadik generációs mobilhálózatok, http://en.wikipedia.org/wiki/3G (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+Negyedik generációs mobilhálózatok, http://en.wikipedia.org/wiki/4G (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+HTTP 1.0 leírása, http://www.jmarshall.com/easy/http/ (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+HTTP 1.0 szabvány, http://www.rfc-editor.org/rfc/rfc1945.txt (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+Mobil készülék jelerősségének magzarázata és számítása, http://en.wikipedia.org/wi
+ki/Mobile_phone_signal (2014.021.06)
+\end_layout
+
 \begin_layout Chapter
 \start_of_appendix
 Használt eszközök a fejlesztés során
 \end_layout
 
 \begin_layout Standard
-Irodalomjegyzék
+Android SDK 15 verziója
 \end_layout
 
 \begin_layout Standard
-http://www.jmarshall.com/easy/http/
+Eclipse Indigo
+\end_layout
+
+\begin_layout Description
+Lyx egy nyílt forráskódú LATEX dokumentum szerkesztő.
+ Leegyszerűsíti és felgyorsítja sok közös LATEX elem használatát, ugyanakkor
+ engedi, hogz a felhasnzálók TEX kódot is használhassanak, ahol szükséges.
+ LZX weboldala: http://www.lyx.org.
 \end_layout
 
 \begin_layout Standard
-http://www.rfc-editor.org/rfc/rfc1945.txt
-\end_layout
-
-\begin_layout Standard
-http://en.wikipedia.org/wiki/Mobile_phone_signal
-\end_layout
-
-\begin_layout Standard
-http://en.wikipedia.org/wiki/DBm
+Visual Studio 2010
 \end_layout
 
 \begin_layout Standard
