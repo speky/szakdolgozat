@@ -515,7 +515,7 @@ Informatikus BSc
 \begin_layout Plain Layout
 
 \size large
-Dósa István
+Simonyi Tibor
 \end_layout
 
 \end_inset
@@ -802,15 +802,8 @@ rendszerű mobilkészülék segítségével.
 \end_layout
 
 \begin_layout Standard
-Az Android platformot választottam, mivel széles körben elérhető és a 
-\begin_inset CommandInset href
-LatexCommand href
-name "Wikipedia"
-target "http://en.wikipedia.org/wiki/Mobile_operating_system"
-
-\end_inset
-
- adatai szerint ezt használják a legtöbben a világon.
+Az Android platformot választottam, mivel széles körben elérhető és a [Wikipedia
+] adatai szerint ezt használják a legtöbben a világon.
  Így akár a felhasználók által gyűjtött teszt adatokat is felhasználhatják
  a telefon szolgáltatók, operátorok, mivel a program használata egyszerű,
  nem igényel szaktudást.
@@ -932,28 +925,11 @@ Szoftver feltételek:
 
 \begin_layout Standard
 A szerver oldali program fordításához és futtatásához szükséges a JDK (Java
- Developer Kit) legalább 1.6-os verziója, itt elérhető: 
-\begin_inset CommandInset href
-LatexCommand href
-name "JDK letöltés"
-target "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html"
-
-\end_inset
-
-.
- 
+ Developer Kit) legalább 1.6-os verziója, itt elérhető: [JDK]
 \end_layout
 
 \begin_layout Standard
-Valamint az Apache ant, amit innen tölthetünk le: 
-\begin_inset CommandInset href
-LatexCommand href
-name "ant letöltés"
-target "http://ant.apache.org/manual/install.html"
-
-\end_inset
-
-.
+Valamint az Apache ant, amit innen tölthetünk le: [ant].
  
 \end_layout
 
@@ -4091,8 +4067,8 @@ HttpTestHandler osztályok
 
 \begin_inset Graphics
 	filename test.eps
-	lyxscale 80
-	scale 80
+	lyxscale 85
+	scale 85
 
 \end_inset
 
@@ -4125,19 +4101,19 @@ status collapsed
 \begin_layout Plain Layout
 \noindent
 \align center
-\begin_inset Graphics
-	filename server.png
-	lyxscale 90
-	scale 90
-
-\end_inset
-
-
 \begin_inset Caption
 
 \begin_layout Plain Layout
 HttpServer osztályai
 \end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename server.eps
+	lyxscale 85
+	scale 85
 
 \end_inset
 
@@ -4170,8 +4146,19 @@ status collapsed
 \begin_layout Plain Layout
 \noindent
 \align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+DriveTestApp osztályai 1.
+ rész
+\end_layout
+
+\end_inset
+
+
 \begin_inset Graphics
 	filename mobilclass.eps
+	lyxscale 90
 	scale 80
 
 \end_inset
@@ -4180,10 +4167,7 @@ status collapsed
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption
 
-\begin_layout Plain Layout
-DriveTestApp osztályai
 \end_layout
 
 \end_inset
@@ -4191,7 +4175,40 @@ DriveTestApp osztályai
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
 \begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+DriveTestApp osztályai 2.
+ rész
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename mobilclass2.eps
+	lyxscale 90
+	scale 80
+
+\end_inset
+
 
 \end_layout
 
@@ -4205,9 +4222,16 @@ Adatbázis leírása
 \end_layout
 
 \begin_layout Standard
-Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik: DATA/data/Dr
-iveTesting/databases/FILENAME.
- Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
+Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik:
+\end_layout
+
+\begin_layout Standard
+DATA/data/DriveTesting/databases/FILENAME.
+ 
+\end_layout
+
+\begin_layout Standard
+Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
  táblát tartalmaz.
  Ezek az attribútumai a táblának:
 \end_layout
@@ -4343,73 +4367,27 @@ Példa egy egyszerű függőleges elrendezés egy szövegmezővel és egy gombba
 \end_layout
 
 \begin_layout Standard
-\begin_inset listings
-inline false
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
 status open
 
 \begin_layout Plain Layout
+\begin_inset External
+	template JavaCode
+	filename layout.java
 
-<?xml version="1.0" encoding="utf-8"?>
-\end_layout
+\end_inset
 
-\begin_layout Plain Layout
 
-<LinearLayout xmlns:android="http://schemas..."
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:layout_width="match_parent"
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:layout_height="match_parent"
-\end_layout
-
-\begin_layout Plain Layout
-
-    android:orientation="vertical" >
-\end_layout
-
-\begin_layout Plain Layout
-
-	<TextView android:id="@+id/textView1"
-\end_layout
-
-\begin_layout Plain Layout
-
-		      android:layout_width="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-      		android:layout_height="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-      		android:text="" />
-\end_layout
-
-\begin_layout Plain Layout
-
-    <Button android:id="@+id/button1"
-\end_layout
-
-\begin_layout Plain Layout
-
-            android:layout_width="wrap_content"
-\end_layout
-
-\begin_layout Plain Layout
-
-            android:layout_height="wrap_content"/>
-\end_layout
-
-\begin_layout Plain Layout
-
-</LinearLayout>
 \end_layout
 
 \end_inset
@@ -5446,10 +5424,14 @@ MainActivity Az alakalmazás fő (main) activity objektuma, vagyis ez az objektu
  változhatnak, ezen információkat a networkDataList változó tartalmazza.
  Ezek értékeit a PhonestateListenerService-től kapja az osztály.
  Ehhez megvalósítja a PhoneStateObserver interfészt és beregisztrálja magát
- az application objektumba, mint observer (megfigyelő) objektum: ((DriveTestApp)
-getApplication()).registerPhoneStateObserver(this); A SimpleAdapter segítségével
- lehet táblázatos formába rendezni az adatokat, ehhez szükséges egy layout
- xml fájl, ami leírja az elrendezést.
+ az application objektumba, mint observer (megfigyelő) objektum: 
+\begin_inset Quotes sld
+\end_inset
+
+((DriveTestApp)getApplication()).
+ registerPhoneStateObserver(this);" A SimpleAdapter segítségével lehet táblázato
+s formába rendezni az adatokat, ehhez szükséges egy layout xml fájl, ami
+ leírja az elrendezést.
  A két listához tartozó adapter neve phoneDataAdapter és networkDataAdapter.
  A 
 \shape italic
@@ -5683,11 +5665,45 @@ TestSubject interfész a TestObserver-ek ki- és beregisztálásához szüklség
 \end_layout
 
 \begin_layout Subsection
-Activity-k egymás közti kommunikációja
+Osztályok egymás közti kommunikációja teszt futtatás során
 \end_layout
 
 \begin_layout Standard
-Az aszinkron működés kommunikációs megoldásainak leírása
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption
+
+\begin_layout Plain Layout
+TCP teszt futása
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename tcptest.eps
+	lyxscale 80
+	scale 80
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -5931,6 +5947,15 @@ Android, http://developer.android.com (2014.021.06)
 \end_layout
 
 \begin_layout Itemize
+[ant] ant letöltése, http://ant.apache.org/manual/install.html (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+[JDK] JDK letöltése, http://www.oracle.com/technetwork/java/javase/downloads/jdk7-
+downloads-1880260.html (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
 Második generációs mobilhálózatok, http://en.wikipedia.org/wiki/2G (2014.021.06)
 \end_layout
 
@@ -5951,8 +5976,13 @@ HTTP 1.0 szabvány, http://www.rfc-editor.org/rfc/rfc1945.txt (2014.021.06)
 \end_layout
 
 \begin_layout Itemize
-Mobil készülék jelerősségének magzarázata és számítása, http://en.wikipedia.org/wi
-ki/Mobile_phone_signal (2014.021.06)
+Mobil jelerősségének számítása, http://en.wikipedia.org/wiki/Mobile_phone_signal
+ (2014.021.06)
+\end_layout
+
+\begin_layout Itemize
+[Wikipedia] mobil operáciosrendszerek, http://en.wikipedia.org/wiki/Mobile_operati
+ng_system (2014.021.06)
 \end_layout
 
 \begin_layout Chapter
@@ -5968,6 +5998,10 @@ Android SDK 15 verziója
 Eclipse Indigo
 \end_layout
 
+\begin_layout Standard
+git
+\end_layout
+
 \begin_layout Description
 Lyx egy nyílt forráskódú LATEX dokumentum szerkesztő.
  Leegyszerűsíti és felgyorsítja sok közös LATEX elem használatát, ugyanakkor
@@ -5976,7 +6010,7 @@ Lyx egy nyílt forráskódú LATEX dokumentum szerkesztő.
 \end_layout
 
 \begin_layout Standard
-Visual Studio 2010
+Visual Studio 2010 Ultimate
 \end_layout
 
 \begin_layout Standard

@@ -17,11 +17,34 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\ArchitectureTools\Microsoft.VisualStudio.TeamArchitect.ModelingProject.targets" />
   <ItemGroup>
+    <Content Include="mobilclasses2.classdiagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="mobilclasses2.classdiagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>mobilclasses2.classdiagram</DependentUpon>
+    </Content>
+    <Content Include="ModelDefinition\Package1_1711.uml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\Package_1501.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package_1702.uml">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ModelDefinition\Package_1711.uml">
       <SubType>Content</SubType>
     </Content>
     <Content Include="ModelDefinition\Package_1845.uml">
       <SubType>Content</SubType>
+    </Content>
+    <Content Include="TCPtest.sequencediagram">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="TCPtest.sequencediagram.layout">
+      <SubType>Content</SubType>
+      <DependentUpon>TCPtest.sequencediagram</DependentUpon>
     </Content>
     <Content Include="UMLClassDiagram1.classdiagram">
       <SubType>Content</SubType>
