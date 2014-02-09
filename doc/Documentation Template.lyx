@@ -4226,7 +4226,7 @@ Az applikáció adatbázisa a mobileszközön ebben a fájlban tárolódik:
 \end_layout
 
 \begin_layout Standard
-DATA/data/DriveTesting/databases/FILENAME.
+data/data/com.drivetesting/databases/drive_test_db_v1.
  
 \end_layout
 
@@ -5669,6 +5669,86 @@ Osztályok egymás közti kommunikációja teszt futtatás során
 \end_layout
 
 \begin_layout Standard
+Az alábbi szekvencia dagrammon egy TCP teszt futása során használt üzenet
+ és jelentés küldések láthatóak.
+ Ez a teszt letöltési (Download) üzemmódban fut vagyis a szerver küldi az
+ adatokat a TCPSender osztályon keresztül és a mobileszköz fogadja azokat
+ a TCPReceiver segítségével.
+\end_layout
+
+\begin_layout Enumerate
+Felhasnzáló megnyomja a 
+\begin_inset Quotes sld
+\end_inset
+
+Start Test
+\begin_inset Quotes srd
+\end_inset
+
+ gombot a TestActivity-ben és elindul a GSP helyszolgáltatás és a HttpService
+ osztály példányosul és egy külön szálon, a háttérben futni kezd.
+\end_layout
+
+\begin_layout Enumerate
+Előre megadott porton keresztül és a beállításoknál meghatározott IP címen
+ elérhető HttpServer objektumhoz kapcsolódik egy Socket-en keresztül.
+ 
+\end_layout
+
+\begin_layout Enumerate
+A kapcsolat létrejötte után a HttpServer példány létrehoz egy ServerThread
+ példányt egy új szálon.
+ Ez szolgálja majd ki a telefontól érkező teszt kéréseket.
+\end_layout
+
+\begin_layout Enumerate
+A HttpService példány elküldi a ServerThread-nek a teszt beállításait és
+ a receiveMessageFromServer metódusban aktívan vár a szerver válaszára.
+  A sendResponse-ban küldött válaszban megkapja a szerver által használt
+ teszt portját, ahova majd csatlakozni tud.
+\end_layout
+
+\begin_layout Enumerate
+A ServerThread létrehozza a ReportSender osztályt, ami szükség esetén továbbtja
+ a jelentéseket a mobilkészülék felé.
+\end_layout
+
+\begin_layout Enumerate
+HttpServer létrehozza a ReportReceiver egy példányát és csatlakozik a ReportSend
+erhez egy előre definiált porton.
+\end_layout
+
+\begin_layout Enumerate
+A tesztnek megfelelő osztály létrejön a szerver oldalon, jelen esetben a
+ TCPSender egy példánya, ami aszinkron módon egy párhuzamos szálon fog futni.
+\end_layout
+
+\begin_layout Enumerate
+A TCPSender folyamatosan küldi a csomagokat a TCPREceiver felé, ami előre
+ beállított intervallumonként a ReportReceiver-en keresztül jelentést küld
+ egy Timer segítségével.
+ Ez a jelentés az adatforgalomról tartalmaz adatokat, például az átviteli
+ sebességet és az átvitt adat mennyiségét tartalmazza.
+ A felhasnzáló a TestActivity Messages ablakában láthatja ezeket a jelentéseket,
+ mindig a legfrissebb kerül a lista tetejére.
+ 
+\end_layout
+
+\begin_layout Enumerate
+A ReportReceiver továbbítja a DriveTestApp application objektumnak az üzenetet
+ egy Handler objketum segítségével.
+ Itt a jelentések elmentődnek az adatbázisban és értesítésre kerülnek a
+ TesztObserver interfészt megvalósítható osztályok példányainak az interfész
+ update metódusával.
+ A jelentések listája az application objektumban tárolódik.
+\end_layout
+
+\begin_layout Enumerate
+A TestActivity Message ablakában megjelenik a frissített üzenetek listája,
+ amit láthat a felhasználó.
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 placement H
 wide false
@@ -5689,7 +5769,6 @@ TCP teszt futása
 
 \begin_inset Graphics
 	filename tcptest.eps
-	lyxscale 80
 	scale 80
 
 \end_inset
@@ -5697,21 +5776,9 @@ TCP teszt futása
 
 \end_layout
 
-\begin_layout Plain Layout
-
-\end_layout
-
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-Fájlok kapcsolata
-\end_layout
-
-\begin_layout Standard
-a projekt könyvtár szerkezetének és a fájlok szerepének bemutatása 
 \end_layout
 
 \begin_layout Section
@@ -5754,9 +5821,9 @@ Unit teszt
 
 \begin_layout Standard
 Az Android tesztek JUnit-on alapszanak.
- Hagyományos JUnit teszteket is használtam a unit tesztek írásakor, ezek
- anem használják az Android SDK-t.
- Az Android teszt esetekkel az Android komponensek megfelelő viselkedését
+ Hagyományos JUnit teszteket is használtam a HttpServer és HttpTestHandler
+ projektek unit tesztjeinek írásakor, ezek nem használják az Android SDK-t.
+ Az Android tesztesetekkel az Android komponensek megfelelő viselkedését
  tesztelem ezek a teszt osztályok az AndroidTestCase-ből öröklődnek, melyek
  a JUnit keretrendszeren túl Android specifikus setup, teardown, és egyéb
  segéd metódusokat tartalmaznak.
@@ -5767,12 +5834,22 @@ kkel, ha nem egyeznek meg akkor kivételt generálnak, mely esetben a teszt
  hibát fog jelezni.
 \end_layout
 
+\begin_layout Subsubsection
+DriveTesting
+\end_layout
+
 \begin_layout Standard
-Külön tesztprojektet készítettem a DriveTest applikáció teszteléséhez 
+Külön tesztprojektet készítettem a DriveTesting applikáció teszteléséhez
+ 
 \shape italic
 DriveTestingTest 
 \shape default
 néven.
+ 
+\end_layout
+
+\begin_layout Description
+DataStorageTest adatbázis tábla létrehozását és az adatok beszúrását teszteli.
  
 \end_layout
 
@@ -6003,10 +6080,10 @@ git
 \end_layout
 
 \begin_layout Description
-Lyx egy nyílt forráskódú LATEX dokumentum szerkesztő.
- Leegyszerűsíti és felgyorsítja sok közös LATEX elem használatát, ugyanakkor
- engedi, hogz a felhasnzálók TEX kódot is használhassanak, ahol szükséges.
- LZX weboldala: http://www.lyx.org.
+LyX egy nyílt forráskódú LaTeX dokumentum szerkesztő.
+ Leegyszerűsíti és felgyorsítja sok közös LaTeX elem használatát, ugyanakkor
+ engedi, hogy a felhasnzálók TeX kódot is használhassanak, ahol szükséges.
+ LyX weboldala: http://www.lyx.org.
 \end_layout
 
 \begin_layout Standard

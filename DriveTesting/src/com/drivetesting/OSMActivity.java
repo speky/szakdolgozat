@@ -110,13 +110,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		controller.setZoom(15);		
 		testId = application.getTestId();
 		testName = application.getTestName();
-
-		if (testName.equals("") ) {
-			setTestNameString();
-		} else {
-			setTestIdString();
-		}
-
+		
 		/* /blaha
 		viaPoints.add(new GeoPoint(47.497147, 19.070567));
 

@@ -40,19 +40,5 @@
                       android:entries="@array/listArray"
                       android:entryValues="@array/listValues" />
   </PreferenceCategory>
-  
-  <PreferenceCategory android:title="File Preferences">
-      <CheckBoxPreference
-      android:key="checkbox"
-      android:title="Checkbox Preference"
-      android:summary="Check it on, check it off"
-    />
-    <EditTextPreference
-      android:key="text"
-      android:title="Text Entry Dialog"
-      android:summary="Click to pop up a field for entry"
-      android:dialogTitle="Enter something useful"
-    />
     
-  </PreferenceCategory>
 </PreferenceScreen>

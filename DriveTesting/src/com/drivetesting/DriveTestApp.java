@@ -134,14 +134,14 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		dataStorage = new DataStorage(this);
 		dataStorage.open();	
 
-		dataStorage.deleteAll();
+	/*	dataStorage.deleteAll();
 		dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, "networkType");
-		
+	
 		dataStorage.insert(1, "testName1", 47.497147, 19.070567, 1.1, 1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
 		dataStorage.insert(1, "testName1", 47.497219, 19.069383, 5.2, 2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
 		dataStorage.insert(1, "testName1", 47.497994, 19.068972, 8.3, 3, 9.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
 		//dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
-		 
+	*/	 
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}

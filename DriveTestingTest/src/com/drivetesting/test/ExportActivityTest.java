@@ -62,7 +62,7 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 		assertTrue(text.isEnabled());
 		
 		String s = editTestId.getText().toString();
-		assertTrue(s.equals("Choose Test ID"));
+		assertTrue(s.equals("Test: undefined"));
 		assertTrue(editTestId.isEnabled() == false);
 		
 		assertTrue(setTestId.getText().equals("Set Test ID"));
