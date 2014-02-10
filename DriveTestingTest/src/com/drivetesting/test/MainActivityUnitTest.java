@@ -187,7 +187,7 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity>{
 		map = networkDataList.get(2);
 		assertTrue(map.size() == 2);
 		assertTrue(map.get("name").equals("Roaming"));
-		assertTrue(map.get("value").equals("Nincs"));
+		assertTrue(map.get("value").equals("None"));
 
 		map = networkDataList.get(3);
 		assertTrue(map.size() == 2);

@@ -1,12 +1,5 @@
 package com.drivetesting.test;
 
-import com.drivetesting.ExportActivity;
-import com.drivetesting.MainActivity;
-import com.drivetesting.OSMActivity;
-import com.drivetesting.PrefsActivity;
-import com.drivetesting.R;
-import com.drivetesting.TestActivity;
-
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
@@ -15,10 +8,14 @@ import android.test.TouchUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.drivetesting.ExportActivity;
+import com.drivetesting.MainActivity;
+import com.drivetesting.OSMActivity;
+import com.drivetesting.PrefsActivity;
+import com.drivetesting.R;
+import com.drivetesting.TestActivity;
 
 public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportActivity> {
 
@@ -74,9 +71,7 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 	
 	public void testExport() throws Exception {
 		 Instrumentation instrumentation = getInstrumentation();
-	      // Register we are interested in the authentication activiry...
-	      Instrumentation.ActivityMonitor monitor = instrumentation.addMonitor(ExportActivity.class.getName(), null, false);
-				
+	      	      				
 		// Type the filename
 	      View currentView = activity.findViewById(R.id.output_file_name);
 	      assertNotNull(currentView);	      

@@ -1,21 +1,10 @@
 package http.testhandler;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import http.testhandler.Logger;
-import http.testhandler.ReportI;
-import http.testhandler.ReportReceiver;
-import http.testhandler.TCPReport;
-import http.testhandler.UDPReport;
 import http.testhandler.ReportReceiver.DataType;
 import http.testhandler.ReportReceiver.RateType;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 import org.junit.AfterClass;
 import org.junit.Assert;

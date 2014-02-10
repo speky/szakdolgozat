@@ -4,14 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.ListView;
 
 import com.drivetesting.ExportActivity;
 import com.drivetesting.MainActivity;

@@ -5835,7 +5835,7 @@ kkel, ha nem egyeznek meg akkor kivételt generálnak, mely esetben a teszt
 \end_layout
 
 \begin_layout Subsubsection
-DriveTesting
+DriveTesting applikáció
 \end_layout
 
 \begin_layout Standard
@@ -5850,7 +5850,36 @@ néven.
 
 \begin_layout Description
 DataStorageTest adatbázis tábla létrehozását és az adatok beszúrását teszteli.
- 
+ Az insert (beillesztés) nem csak az adatbázis műveletet teszteli, hanem
+ az adatbázis tábla attribútumainak helyes sorrendjét és típusát is.
+ Ezenkívül lekérdezéseket is teszteli, amik fontos szerepet játszanak a
+ tesztelés folyamán, főként az exportálás és a térképes megjelenítés folyamataib
+an.
+\end_layout
+
+\begin_layout Description
+MainActivityUnitTest a két HashMap lista, vagyis a phoneDataList és a networkDat
+aList alapértelmezett beállítását ellenőrzi.
+ Továbba a PhoneStateObserver interfész által biztosított 
+\shape italic
+update
+\shape default
+ függvények implementációjának helyességét is teszteli.
+\end_layout
+
+\begin_layout Description
+SeparatedListTest a SeparatedListAdapter osztály metódusait teszteli.
+ Az Android BaseAdapter osztály metódusait felüldefiniálja és lehetőséget
+ biztosít egy fejléces, kétszínű lista létrehozására.
+ A teszt ezeket a funkcíkat teszteli.
+\end_layout
+
+\begin_layout Subsubsection
+HttpTestHandler
+\end_layout
+
+\begin_layout Subsubsection
+HttpServer
 \end_layout
 
 \begin_layout Subsection
@@ -5883,19 +5912,12 @@ metódus hívódik meg.
  válik.
 \end_layout
 
-\begin_layout Standard
-Az ApplicationTestCase használatával tesztelhető az Application objektum
- setup és teardown metódusa.
- A teszt eset arra használható, hogy validálja az <application> elemet a
- 
-\begin_inset Quotes sld
-\end_inset
+\begin_layout Description
+ExportActivity ..
+\end_layout
 
-manifest
-\begin_inset Quotes srd
-\end_inset
-
- fájl helyességét.
+\begin_layout Description
+TestActivity ..
 \end_layout
 
 \begin_layout Subsection
@@ -5903,7 +5925,8 @@ Rendszer teszt
 \end_layout
 
 \begin_layout Standard
-A szerver és kliens programok együttes tesztelése mobilkészülékkel.
+A szerver és kliens programok együttes tesztelése Android emulátorral és
+ mobilkészülékkel.
 \end_layout
 
 \begin_layout Subsection
