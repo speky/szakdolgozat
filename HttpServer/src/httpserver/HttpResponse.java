@@ -85,27 +85,6 @@ public class HttpResponse {
 	}		
 
 	/**
-	 * Serves file from RootDir
-	 * Uses only URI, ignores all headers and HTTP parameters.
-	 */
-	public void serveFile(String fileName) {		
-		if  (fileName.length() < 1) {
-			logger.addLine(TAG +"  ServeFile's Uri is  empty!");
-			return;
-		}
-
-		File file = new File(ROOT_DIR, fileName);
-		if  (!file.exists()) {
-			setResponseText(HttpParser.HTTP_NOTFOUND, MIME_PLAINTEXT, null);
-			logger.addLine("File doesn't exist! " + fileName);
-		}
-
-		if  (!file.canRead()) {
-			setResponseText(HttpParser.HTTP_FORBIDDEN, MIME_PLAINTEXT, null);
-		}
-	}
-
-	/**
 	 * GMT date formatter
 	 */
 	public static java.text.SimpleDateFormat gmtFormat;

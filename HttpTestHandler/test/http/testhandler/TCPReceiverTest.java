@@ -1,9 +1,13 @@
 package http.testhandler;
 
+import java.io.ByteArrayInputStream;
+import java.net.Socket;
+
 import http.testhandler.Logger;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class TCPReceiverTest{
 	private static Logger logger;
@@ -17,7 +21,7 @@ public class TCPReceiverTest{
 	public static void tearDown() {
 		logger.deleteLogFile();
 	}
-/*	
+/*
 	@Test
 	public void testTCPReceiverWithoutAnyInput() {
 		final Socket socket = mock(Socket.class);
@@ -29,7 +33,7 @@ public class TCPReceiverTest{
 			e.printStackTrace();
 		}
 
-		TCPReceiver receiver = new TCPReceiver(logger, "0");
+		TCPReceiver receiver = new TCPReceiver(logger, "0", null, null);
 		receiver.setSocket(socket);
 		receiver.readPackets();
 		try {
@@ -39,8 +43,6 @@ public class TCPReceiverTest{
 			e.printStackTrace();
 		}
 		receiver.stop();
-		Assert.assertTrue(receiver.getReceivedPacket() == 0);
-		Assert.assertTrue(receiver.getSentPacket() == 0);
 	}
 
 	@Test

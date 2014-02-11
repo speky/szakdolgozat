@@ -5878,8 +5878,22 @@ SeparatedListTest a SeparatedListAdapter osztály metódusait teszteli.
 HttpTestHandler
 \end_layout
 
+\begin_layout Description
+HttpParserTest a HTTP*/1.0 típusú üzentek feldolgozását végző osztályt teszteli,
+ amit mind a szerver, mind a kliens oldal használ.
+ A teszt során különböző bementi paraméterek, üzenetek esetén vizsgálom
+ a feldolgozó (parser) osztály belső állapotát.
+\end_layout
+
 \begin_layout Subsubsection
 HttpServer
+\end_layout
+
+\begin_layout Description
+HttpResponseTest a Httpresponse osztályt teszteli, ami egy HTTP*/1.0 típusú
+ válaszüzenetet generál a szerver oldalon.
+ Különféle bemeneti paraméterek esetén megvizsgálja a kimeneti szöveget
+ és ezzel az elküldendő üzenetet hitelesíti.
 \end_layout
 
 \begin_layout Subsection
@@ -5907,17 +5921,31 @@ követ.
 onPause 
 \shape default
 metódus hívódik meg.
- Az Android keretrendsezr nem biztosít lehetőséget ezen metódusok, események
+ Az Android keretrendszer nem biztosít lehetőséget ezen metódusok, események
  közvetlen meghívására, az Instrumentation.ok használatával ez mégis lehetővé
  válik.
+ A tesztek futásuk során az Android emulátort használják.
 \end_layout
 
 \begin_layout Description
-ExportActivity ..
+ExportActivityTest az ExportActivity osztályt teszteli.
+ A menük közti navigálást és az Activity-k közti váltást és a felületen
+ elhelyezett elemek működését teszteli.
 \end_layout
 
 \begin_layout Description
-TestActivity ..
+MainActivityInstrumentTest a MainActivityt teszteli és annak fontos adatainak
+ alapértelmezett beállításait.
+ Főkénta phoneDataList és networkDataList lista elemek értéket A menük közti
+ navigálást és az Activity-k közti váltást és a felületen elhelyezett elemek
+ működését teszteli.
+\end_layout
+
+\begin_layout Description
+TestActivityTest a TestActivity osztályt tezteli az grafikus interfész helyes
+ beállítását és megvizsgálja az alapértelmezett értékeket.
+ A menük közti navigálást és az Activity-k közti váltást és a felületen
+ elhelyezett elemek működését teszteli.
 \end_layout
 
 \begin_layout Subsection

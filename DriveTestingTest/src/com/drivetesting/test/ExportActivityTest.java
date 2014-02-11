@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -76,15 +77,18 @@ public class ExportActivityTest extends	ActivityInstrumentationTestCase2<ExportA
 	      View currentView = activity.findViewById(R.id.output_file_name);
 	      assertNotNull(currentView);	      
 	      TouchUtils.clickView(this, currentView);
-	      instrumentation.sendStringSync("testFile");		
+	      /*for (int i = 0; i <10; ++i)    { 
+              instrumentation.sendCharacterSync(KeyEvent.KEYCODE_DPAD_RIGHT); 
+              instrumentation.sendCharacterSync(KeyEvent.KEYCODE_DEL); 
+          }*/
+	      instrumentation.sendStringSync("testFile");
 	      assertEquals(text.getText().toString(), "testFile");
 	      
 	   // Click the Id button...
 	      currentView = activity.findViewById(R.id.btn_settestid);
 	      assertNotNull(currentView);	      
 	      TouchUtils.clickView(this, currentView);
-	      
-		
+	      	      
 	}
 	
 	public void testMenuTets() throws Exception {
