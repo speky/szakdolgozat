@@ -5885,6 +5885,41 @@ HttpParserTest a HTTP*/1.0 típusú üzentek feldolgozását végző osztályt t
  a feldolgozó (parser) osztály belső állapotát.
 \end_layout
 
+\begin_layout Description
+ReportReceiverTest HTTP*/1.0 üzenetek fogadását végző osztályt ellenőrzi.
+ A küldött üzenetet feldolgozza és belső változóiban tárolja az utolsó üzenet
+ értékeit, ezeket lekérdezem a teszt során és ellenőrzöm, hogz a megfelelő
+ értékek szerepelnek-e az egyes váltokban.
+\end_layout
+
+\begin_layout Description
+ReportSenderTest a HTTP*/1.0 üzenetek küldésével foglalkozó osztály tesztelését
+ végzi.
+ A sendReportMessage müködését vizsgálom, hogy a megadott üzenetet milyen
+ formában küldi el.
+\end_layout
+
+\begin_layout Description
+TCPReport a TCP jelentések feldolgozását végző osztály metódusainak tesztelésért
+ felelős.
+ Annak 
+\shape italic
+parseReport
+\shape default
+ metódusán keresztüli adatbevitel a szöveggé alakitó 
+\shape italic
+toString
+\shape default
+ metódus segítségével ellőnirezhető.
+ 
+\end_layout
+
+\begin_layout Description
+UDPReport a TCP verzióhoz hasonlóan hajtódik végre a tesztelés.
+ A parseReportMetódusa van felüldefiniálva, hogy az UDP jelentés specifikus
+ tagjait is feldolgozza, ez kerül tesztelésre.
+\end_layout
+
 \begin_layout Subsubsection
 HttpServer
 \end_layout
@@ -5903,8 +5938,8 @@ Komponens teszt
 \begin_layout Standard
 Android ActivityInstrumentationTestCase2 osztály segítségével létrehozhatóak
  olyan tesztek, melyek az egyes Android komponensek életciklusát befolyásolják.
- Kiválthatóak az egyes rendszerszintű események és így tesztelhetőek a komponens
-ek egymásra hatása is.
+ Kiválthatóak az egyes rendszerszintű események, így tesztelhetőek a komponensek
+ egymásra hatása is.
  Például egy Activity objektum életciklusa kezdetekor meghívódik az objektum
  
 \shape italic
@@ -5964,11 +5999,11 @@ Tesztelés eredménye
 \begin_layout Standard
 A rendszer tesztelés során kiderült, hogy a HttpService osztályban hibásan
  lett implementálva a szerverhez kapcsolódás, így minden teszt futtatáskor
- újra próbált csatlakozni a szerverhez és ez azt eredményezte hgoz mindig
- az első teszt portot (5500) akarta használni, ami a többszöri kapcsolódást
- megakadályozta mert még a port foglalt volt.
+ újra próbált csatlakozni a szerverhez.
+ Ez azt eredményezte, hogy mindig az első teszt portot (5500) akarta használni,
+ ami a többszöri kapcsolódást megakadályozta, mert még a port foglalt volt.
  Ebben az esetben a megoldás az lett, hogy a szerverhez csatlakozott Socket
- objektumot eltárolja a program és csak akkor hoz létre újat ha ez a Socet
+ objektumot eltárolja a program és csak akkor hoz létre újat ha ez a Socket
  objektum még nem létezik, így a szerverrel való kapcsolat megmarad és új
  teszt indítása esetén a tesztportok egyesével léptetődnek.
 \end_layout
@@ -6118,27 +6153,65 @@ ng_system (2014.021.06)
 Használt eszközök a fejlesztés során
 \end_layout
 
-\begin_layout Standard
-Android SDK 15 verziója
+\begin_layout Itemize
+
+\series bold
+Android SDK 
+\series default
+15 verziója
 \end_layout
 
-\begin_layout Standard
-Eclipse Indigo
+\begin_layout Itemize
+
+\series bold
+Eclipse 
+\series default
+(Indigo) egy IDE, integrált fejelsztő környezet.
+ Többnyire Javaában íródott.
+ Applikációk fejlesztésére használják, a plug-in-ek használatával és fejlesztésé
+vel több féle programozási nyelven történő fejlesztést is támogathat.
+ 
 \end_layout
 
-\begin_layout Standard
-git
+\begin_layout Itemize
+
+\series bold
+Git 
+\series default
+egy nyílt forráskódú, elosztott verziókezelő szoftver, vagy másképpen egy
+ szoftver forráskód kezelő rendszer, amely a sebességre helyezi a hangsúlyt.
+ A Gitet eredetileg Linus Torvalds fejlesztette ki a Linux kernel fejlesztéséhez.
+ Minden Git munkamásolat egy teljes értékű repository teljes verziótörténettel
+ és teljes revíziókövetési lehetőséggel, amely nem függ a hálózat elérésétől
+ vagy központi szervertől.
 \end_layout
 
-\begin_layout Description
-LyX egy nyílt forráskódú LaTeX dokumentum szerkesztő.
+\begin_layout Itemize
+
+\series bold
+LyX 
+\series default
+egy nyílt forráskódú LaTeX dokumentum szerkesztő.
  Leegyszerűsíti és felgyorsítja sok közös LaTeX elem használatát, ugyanakkor
  engedi, hogy a felhasnzálók TeX kódot is használhassanak, ahol szükséges.
  LyX weboldala: http://www.lyx.org.
 \end_layout
 
-\begin_layout Standard
-Visual Studio 2010 Ultimate
+\begin_layout Itemize
+
+\series bold
+Visual
+\series default
+ 
+\series bold
+Studio 2010 Ultimate 
+\series default
+egy professzionális fejelsztő eszköz, mely nagyon sok programozásinyelven
+ történő fejelsztést támogat.
+ Ezenkívül széleskörüen támogatja a fejlesztés többi fázisát, aspektusát
+ is így különféle diagrammok is készíthetőek a segítségével.
+ ennek köszönhetően ezzel készítettem el a dolgozatban szereplő osztály
+ és szekvencia diagrammokat.
 \end_layout
 
 \begin_layout Standard
