@@ -5988,8 +5988,9 @@ Rendszer teszt
 \end_layout
 
 \begin_layout Standard
-A szerver és kliens programok együttes tesztelése Android emulátorral és
- mobilkészülékkel.
+Ezen teszt során a szerver és kliens programok együttes tesztelését végeztem
+ Android emulátorral és mobilkészülékkel egyaránt.
+ 
 \end_layout
 
 \begin_layout Subsection
@@ -6047,7 +6048,25 @@ Továbbfejlesztési lehetőségek
 \end_layout
 
 \begin_layout Standard
-limitációk, ToDo-k, tervezett módosítások összegzése.
+A szerver jelenleg csak egy mobilkészüléket képes egyidőben kiszolgálni,
+ ugyanis a ServerThread osztály mindig az előre megadott ServerPorton próbál
+ Socket-et nyitni.
+ Ha már foglalt a port akkor a következő Socket kreálása hibát fog jelezni
+ és a kapcsolat nem tud kiépülni a második készülék és a szerver között.
+\end_layout
+
+\begin_layout Standard
+A teszt jelenleg nem képes hanghívásokat kezelni, sem indítani, sem fogadni.
+ Ezek használatához kernel szinten kéne módosításokat végezni, hogy a szökséges
+ információk eljuthassanak az applikációhoz.
+\end_layout
+
+\begin_layout Standard
+Továbbá a jelenlegi megoldással egyszerre csak egy teszt futtatható, megoldható
+ lenne kis módosítással több teszt párhuzamos futtatása, de ha túl sok fut
+ párhuzamosan, akkor befolyásolhatják egymás mért értékeit és így a teszt
+ eredményét is.
+ 
 \end_layout
 
 \begin_layout Chapter
@@ -6158,7 +6177,11 @@ Használt eszközök a fejlesztés során
 \series bold
 Android SDK 
 \series default
-15 verziója
+15 verzióját használom, a program ennél magasabb verziószámú Andorodi készülékek
+en is fut, de alacsonyabb verziójuak már nem támogatottak.
+ Az SDK tartalmazza az Android specifikus könyvtárakat, amik használatával
+ Android eszközön futtatható appplikációk készíthetőek.
+ 
 \end_layout
 
 \begin_layout Itemize
@@ -6170,7 +6193,10 @@ Eclipse
  Többnyire Javaában íródott.
  Applikációk fejlesztésére használják, a plug-in-ek használatával és fejlesztésé
 vel több féle programozási nyelven történő fejlesztést is támogathat.
- 
+ Ezen eszköz támogatja az Android platformra történő fejlesztést is, így
+ ezt hasnzáltam a dolgozatom elkészítéséhez.
+ Könnyen integrálható bele egy plug-in, aminek segítségével futtathatunk
+ Android emulátrot, ami hibakeresés során nagyon hasznos eszköz.
 \end_layout
 
 \begin_layout Itemize
