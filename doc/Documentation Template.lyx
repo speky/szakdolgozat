@@ -5886,10 +5886,17 @@ HttpParserTest a HTTP*/1.0 típusú üzentek feldolgozását végző osztályt t
 \end_layout
 
 \begin_layout Description
+LoggerTest a logfájl készítés és kezelést teszteli.
+ A log fájl tartalmazza a program futása során bekövetkező, annak működésére
+ vonatkozó üzeneteket.
+ Ezek megkönnyíthetik az esetleges hibák felderítését és kijavítását is.
+\end_layout
+
+\begin_layout Description
 ReportReceiverTest HTTP*/1.0 üzenetek fogadását végző osztályt ellenőrzi.
  A küldött üzenetet feldolgozza és belső változóiban tárolja az utolsó üzenet
- értékeit, ezeket lekérdezem a teszt során és ellenőrzöm, hogz a megfelelő
- értékek szerepelnek-e az egyes váltokban.
+ értékeit, ezeket lekérdezem a teszt során és ellenőrzöm, hogy a megfelelő
+ értékek szerepelnek-e az egyes változókban.
 \end_layout
 
 \begin_layout Description
