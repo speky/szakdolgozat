@@ -33,7 +33,8 @@ public class TCPSender  extends ConnectionInstance {
 		logger.addLine(TAG+" stopped!");				
 		running = false;
 		try {
-			socket.close();			
+			socket.close();
+			socket = null;
 		} catch (IOException e) {
 			errorMessage = "Socket cannot stopped!";
 			logger.addLine(TAG+errorMessage);
