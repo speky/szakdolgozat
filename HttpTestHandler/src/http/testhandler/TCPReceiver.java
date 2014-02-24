@@ -51,11 +51,13 @@ public class TCPReceiver extends ConnectionInstance {
 					  @Override
 					  public void run() {
 						  if (reportReceiver  != null ) {								
-							  reportReceiver.setReceivedBytes(id, reportInterval, readedBytes);
+							  reportReceiver.setReceivedBytes(id, reportInterval/1000, readedBytes);
 						  } else if (null != reportSender){
-							  reportSender.sendReportMessage(Integer.toString(id), "TCP", Integer.toString(readedBytes));
+							  reportSender.sendReportMessage(Integer.toString(id), "TCP", 
+									  	Integer.toString(id)+" " +Integer.toString(reportInterval/1000)+ " "+Integer.toString(readedBytes));
 						  }
 						  readedBytes = 0;
+						  logger.addLine(TAG+" readedByte = "+ Integer.toString(readedBytes ));
 					  }
 					}, reportInterval, reportInterval);
 			}
@@ -75,6 +77,7 @@ public class TCPReceiver extends ConnectionInstance {
 				if (!socket.isClosed()) {
 					logger.addLine(TAG+"Close socket");
 					socket.close();
+					socket = null;
 				}				
 				
 			} catch (IOException e) {
@@ -120,8 +123,9 @@ public class TCPReceiver extends ConnectionInstance {
 				
 		try {
 			while (reading && inputStream != null) {
-				readedBytes += inputStream.read(byteBuffer);		
-				//logger.addLine(TAG+"Readed Bytes: "+readedBytes);								
+				int bytes = inputStream.read(byteBuffer);
+				logger.addLine(TAG+"Readed Bytes: "+ Integer.toString(bytes));
+				readedBytes += bytes;
 			}					
 		} catch (IOException e) {
 			logger.addLine(TAG+e.getMessage());			

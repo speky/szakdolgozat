@@ -105,6 +105,7 @@ public class UDPSender extends ConnectionInstance {
 		running = false;
 		if (socket != null) {
 			socket.close();
+			socket = null;
 		}
 	}
 	

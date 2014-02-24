@@ -25,6 +25,7 @@ public class UDPReceiver extends ConnectionInstance {
 	private int lost = 0;
 	private int sum = 0;	
 	private int cntOutofOrder = 0;
+	private Timer timer = null;
 	
 	private MessageI reportSender = null;
 	private ReceiverReportI reportReceiver = null;
@@ -72,6 +73,11 @@ public class UDPReceiver extends ConnectionInstance {
 		running = false;
 		if (socket != null) {
 			socket.close();
+			socket = null;
+		}
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
 		}
 	}
 
@@ -100,6 +106,7 @@ public class UDPReceiver extends ConnectionInstance {
 		if ( stringPacketId  > packetCount) {
 			packetCount = stringPacketId;
 		}
+		++sum;
 	}
 
 	// punch hole through the NAT from the mobile side
@@ -124,15 +131,18 @@ public class UDPReceiver extends ConnectionInstance {
 		}
 
 		//Declare reporter timer
-		Timer timer = new Timer();
+		timer = new Timer();
 		//Set the schedule function and rate
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				if (reportReceiver  != null ) {								
-					reportReceiver.setReceivedBytes(id, reportInterval, readedBytes, jitter, lost, cntOutofOrder, sum);
+					reportReceiver.setReceivedBytes(id, reportInterval/1000, readedBytes, jitter, lost, cntOutofOrder, sum);
 				} else if (null != reportSender){
-					reportSender.sendReportMessage(Integer.toString(id), "UDP", Integer.toString(readedBytes)+ " "+
+					reportSender.sendReportMessage(Integer.toString(id), "UDP", 
+																	Integer.toString(id) + " "+										
+																	Integer.toString(reportInterval/1000) + " "+
+																	Integer.toString(readedBytes)+ " "+
 																	 Double.toString(jitter)+ " "+
 																	 Integer.toString(lost)+ " "+
 																	 Integer.toString(cntOutofOrder)+" "+
@@ -162,6 +172,10 @@ public class UDPReceiver extends ConnectionInstance {
 			//logger.addLine(TAG+received);
 			parsePackage(received, time);
 
+		}
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
 		}
 		logger.addLine(TAG+ "exited!");
 		return id;

@@ -272,11 +272,17 @@ public class TestActivity extends Activity implements TestObserver {
 	}
 
 	private void load() {	    	    
-		typeGroupIndex = sharedPreferences.getInt(TYPE_GROUP, R.id.type_tcp);
-		typeGroup.check(typeGroupIndex);
-		
-		directionGroupIndex = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
-		directionGroup.check(directionGroupIndex);
+		int index = sharedPreferences.getInt(TYPE_GROUP, R.id.type_tcp);
+		if (index != 0) {
+			typeGroupIndex = index;
+			typeGroup.check(typeGroupIndex);
+		}
+				
+		index = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
+		if (index != 0) {
+			directionGroupIndex = index;
+			directionGroup.check(directionGroupIndex);
+		}
 		
 		setMessage(sharedPreferences.getString(MESSAGE, ""));
 		
