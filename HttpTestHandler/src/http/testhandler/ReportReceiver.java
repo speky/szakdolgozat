@@ -209,7 +209,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		UDPReport report = new UDPReport(id, interval, (double)bytes, 0.0, 0.0, jitter, lost, outOfOrdered, sum);
 		calcSpeed(report);
 		tcpReportList.add(report);	
-		reporter.sendMessage("TCP", report.toString());
+		reporter.sendMessage("UDP", report.toString());
 	}
 
 	private void calcSpeed(TCPReport report) {

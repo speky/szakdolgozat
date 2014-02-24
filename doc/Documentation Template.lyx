@@ -5997,6 +5997,28 @@ Rendszer teszt
 \begin_layout Standard
 Ezen teszt során a szerver és kliens programok együttes tesztelését végeztem
  Android emulátorral és mobilkészülékkel egyaránt.
+ Szerverként minden esetben az asztali számítógépem szolgált, mely segítségével
+ tudtam adatforgalmat geenrálni a mobilkészülék és a számítógép között.
+ A számítógépem egy routerüen keresztül kapcoslódik az Internethez, meleyn
+ be kellett állítani a port továbbytást, hogy tudjon kommunikálni a mobil
+ készülékkel.
+ A tesztek során számos hibát felderítettem a programban, melyeket alacsonyabb
+ szintü tesztekkel nem volt lehetséges, mert ezek csak a két komponens (szerver
+ és kliens) együttes jelenléte és kommunikációja esetén lehetett felderíteni.
+ Ilyen probléma volt a mobilkészülék NATüolt hálózatbn történő elérése.
+ Biztonsági szempontok miatt nem lehet direkt elérni a készülékeket publikus
+ címen keresztül, így minden esetben a készüléknek kell kezdeményezni a
+ kommunikációt, mely folyamat során nyit egy portot, amin keresztül a külső
+ program tud válaszolni a mobilon futó programnak.
+ Ez főleg UDP protokoll esetén volt problémás, ahol incs állandó kapcsolat
+ kiépítve, csak egy-egy üzenet elküldésének idejére.
+ A tesztelések során valós környezteben, utcán is ki lett próbálva az applikáció
+, miközben aktívan kommunikált a szerverrel.
+ A mérések grafikus megejelenítésekor a GPS jel pontatlansága gondot okozhat.
+ Ennek minősége telefonkészüléktől és a terület múhold lefedettségétől is
+ függ.
+ Vannak területek, ahol centiméterre pontos értéket tud, adni valahol több
+ méteres eltérés is jelentkezht a vlaós pozícióhoz képest.
  
 \end_layout
 
