@@ -15,11 +15,10 @@ public class UDPSender extends ConnectionInstance {
 	private int bufferSize;	//in Byte
 	private final String TAG = "UDPSender: ";
 	private double UDPRate = 1024.0 * 1024.0; //1MBit/sec
-	private double kSecs_to_usecs = 1e6; 
-	private final int kBytes_to_Bits = 8;  
+	private final int Bytes_to_Bits = 8;  
 	private int packetID;
 	private long adjust ;
-	private long delay_target ;
+	private double delay_target ;
 	private long delay; 
 	private boolean running = true;
 
@@ -39,19 +38,16 @@ public class UDPSender extends ConnectionInstance {
 		// Due to the UDP timestamps etc, included 
 		// reduce the read size by an amount 
 		// equal to the header size
-		delay_target = 0;
+		delay_target = 0.0;
 		delay = 0;
 		adjust = 0;
 		// compute delay for bandwidth restriction, constrained to [0,1] seconds
-		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) );
-		logger.addLine(TAG + "DELAY_TARGET1 : "+ delay_target );
-		//sec = rate/byte*8 (= bits)
-		delay_target = (int) (UDPRate/((bufferSize) * kBytes_to_Bits));
-		logger.addLine(TAG + "DELAY_TARGET2 : "+ delay_target );
-		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
-			logger.addLine(TAG + "WARNING: delay too large, reducing from "+delay_target / kSecs_to_usecs +" to 1 second!");
-			delay_target = (int) kSecs_to_usecs * 1;
-		}
+		// 1 / (bits per second / bits) = second 
+		delay_target = 1.0 / (double)(UDPRate/ (bufferSize * Bytes_to_Bits));
+		// store in milliseconds
+		delay_target *= 1000.0;
+		//logger.addLine(TAG + "DELAY_TARGET: "+ delay_target );
+		
 	}
 
 	// used on mobile side
@@ -121,18 +117,19 @@ public class UDPSender extends ConnectionInstance {
 				getAddressThroughNAT();
 			}
 
+			lastPacketTime = Calendar.getInstance().getTimeInMillis();
 			while (running) {
 				long time = Calendar.getInstance().getTimeInMillis();
 				// delay between writes
 				// make an adjustment for how long the last loop iteration took
-				adjust = delay_target + (time - lastPacketTime);
-				logger.addLine(TAG + "ADJUST: "+ adjust);
+				adjust = (long)(delay_target) + (lastPacketTime-time);
+				//logger.addLine(TAG + "ADJUST: "+ adjust);
 				lastPacketTime = time;
 
 				if (adjust > 0  ||  delay > 0) {
 					delay += adjust;
 				}
-				logger.addLine(TAG + "DELAY: "+ delay);
+				//logger.addLine(TAG + "DELAY: "+ delay);
 
 				byte[]  packetData = (Integer.toString(++packetID) +" " + Long.toString(time) +" ").getBytes();
 				// re-generate byte buffer array if the packet id or time data's length has changed

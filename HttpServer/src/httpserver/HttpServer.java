@@ -130,8 +130,11 @@ class ServerThread extends Thread{
 						
 					} else if (parser.getMethod().equals("STOP")) {
 						for (ConnectionInstance instance : connectionInstances ) {
-							instance.stop();
+							if (instance != null) {
+								instance.stop();		
+							}
 						}
+						connectionInstances.clear();
 						reporter.stop();
 						reporter = null;						
 					}else{
@@ -140,7 +143,7 @@ class ServerThread extends Thread{
 				}
 			}
 		} catch (Exception e) {            
-			logger.addLineAndPrint("ERROR in run() " + e.getMessage()+" ( id: " + id+" )");
+			logger.addLineAndPrint(TAG + id +"ERROR in run() " + e.getMessage()+ " ");
 		} 
 	}
 	

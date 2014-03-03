@@ -788,7 +788,7 @@ A szakdolgozatom célja egy
 \end_inset
 
 Drive testing" alkalmazás megvalósítása, egy kis költségvetésű Android operációs
-rendszerű mobilkészülék segítségével.
+ rendszerű mobilkészülék segítségével.
  Nagy előnye ennek a megoldásnak a meglévő technológiával szemben, hogy
  a teszt elvégzéséhez elég egy mobiltelefon készülék és nem kell drága felszerel
 ést és mérnököt alkalmazni.
@@ -874,12 +874,12 @@ Program bemutatása
 \begin_layout Standard
 A Drive Testing applikáció egy Android készüléken futtatható program, mely
  a telefon hálózatról tud különféle statisztikai adatokat gyűjteni.
- Ehhez tartozik egy szerver oldali program is, mellyel a mobil alakalmazás
+ Ehhez tartozik egy szerver oldali program is, mellyel a mobil alkalmazás
  a mérések során aktívan kommunikál.
- Az alkalamazással futtatható tesztek adatokat gyűjtenek a telefonhálózatról
+ Az alkalmazással futtatható tesztek adatokat gyűjtenek a telefonhálózatról
  és a készülékről a szerver programmal történő kommunikáció során, melyek
  fontos információkkal szolgálhatnak a telefonhálózatot üzemeltető operátoroknak.
- A tesztelő akár menetközben, autóban ülve tudja futtatni a teszteket futtani.
+ A tesztelő akár menet közben, autóban ülve tudja futtatni a teszteket futtatni.
  A mérések során az adatok grafikus térképen is megtekinthetőek és a futtatás
  végeztével az eredmények ki is exportálhatóak az adatbázisból CSV formátumban
  egy tetszőleges fájlba.
@@ -896,8 +896,8 @@ Hardver feltételek
 \end_layout
 
 \begin_layout Standard
-Az alkalmazás futtatásához szükséges legalább 4.0.4 verziójú Android operációsrend
-szerű telefonkészülék.
+Az alkalmazás futtatásához szükséges legalább 4.0.4 verziójú Android operációs
+ rendszerű telefonkészülék.
  Korábbi verziójú rendszeren lehetséges, hogy egyes funkciók nem működnek
  megfelelően, illetve el se indul a program.
 \end_layout
@@ -913,7 +913,7 @@ A mobilkészüléken be kell kapcsolni a mobilhálózaton keresztüli adatelér�
 \begin_layout Standard
 Továbbá egy asztali számítógép, melyen található JVM (Java virtuális gép)
  a szerver oldali program futtatásához.
- Ennek internet hozáférést kell biztosítani.
+ Ennek internet hozzáférést kell biztosítani.
  
 \end_layout
 
@@ -936,10 +936,10 @@ Valamint az Apache ant, amit innen tölthetünk le: [ant].
 \begin_layout Standard
 A feltelepített Drive Test programban be kell állítani a szerver oldali
  számítógép IP címét, ha router illetve egyéb más hálózati eszköz is érintett
- a kommunkációban, úgy biztosítani kell, hogy az applikációk kommunikálni
- tudjanak a 4500-as porton keresztűl.
+ a kommunikációban, úgy biztosítani kell, hogy az applikációk kommunikálni
+ tudjanak a 4500-as porton keresztül.
  Továbbá a programok használhatják még a 5000, illetve a 5500 és 5600 közötti
- portokat a kommunkáció során.
+ portokat a kommunikáció során.
 \end_layout
 
 \begin_layout Standard
@@ -952,10 +952,10 @@ Az alábbi lista tartalmazza a jogokat (permission), amit a mobilalkalmazás
 \series bold
 access coarse location:
 \series medium
- az alaklamazásnak szüksége van erre ahhoz, hogy megjeleníthessük a készülék
+ az alkalmazásnak szüksége van erre ahhoz, hogy megjeleníthessük a készülék
  helyzetét a térképen és mérhessük a jelerősséget.
- Ezt a hálózati poziciót gyorsan el tudja nekünk kűldeni az adott hálózati
- eszköz, de elég durva becslést ad a telefon helyére, körülbelül 100 métres
+ Ezt a hálózati pozíciót gyorsan el tudja nekünk küldeni az adott hálózati
+ eszköz, de elég durva becslést ad a telefon helyére, körülbelül 100 méteres
  pontossággal.
  Ezt akkor használjuk, mikor a GPS szolgáltatás nem elérhető, például beltérben.
 \end_layout
@@ -975,10 +975,10 @@ zuk a telefon helyzetét, ehhez a szolgáltatáshoz szükséges ez a jogosultsá
 internet, access network state, read phone state
 \series default
 : a hálózat állapotának figyelésével kapunk értesítést a jel erősség változásról.
- Internet hozzáférés szükséges a szerverrel való kommunkikációhoz és a térkép
+ Internet hozzáférés szükséges a szerverrel való kommunikációhoz és a térkép
  frissítéséhez.
- A mérések során a telfon és a hálózat fontos paraméterei is rögzítésre
- kerülnek, kivéve a kritikus, azonosításra alakalmas paraméterek, mint például
+ A mérések során a telefon és a hálózat fontos paraméterei is rögzítésre
+ kerülnek, kivéve a kritikus, azonosításra alkalmas paraméterek, mint például
  az IMEI/ESN szám, telefon szám, SIM széria szám vagy a MAC cím.
  Ezeket nem rögzíti az alkalmazás, csupán megjeleníti.
 \end_layout
@@ -988,7 +988,7 @@ read
 \series bold
 and write external storage:
 \series default
- külső tér írása és olvasása szökséges a jelentések, logok kiírásához.
+ külső tér írása és olvasása szükséges a jelentések, logok kiírásához.
  A felhesználó innen tudja lementeni a mérési eredményeket USB-n keresztül.
  
 \end_layout
@@ -1023,7 +1023,7 @@ segítségével könnyedén fordíthatjuk és futtathatjuk az alkalmazást:
 \end_layout
 
 \begin_layout Description
-- Ezután az Apache ant program segítségével tudjuk fordítani az alaklamazást.
+- Ezután az Apache ant program segítségével tudjuk fordítani az alkalmazást.
  Ezt a lépést csak egyszer kell végrehajtani, későbbiekben elég lesz csak
  a futtatásnál leírtakat elvégezni.
  A terminálban az 
@@ -1038,7 +1038,7 @@ ant
 \shape italic
 ant run 
 \shape default
-parancsal futtathatjuk a programot.
+paranccsal futtathatjuk a programot.
 \end_layout
 
 \begin_layout Description
@@ -1221,9 +1221,9 @@ nkkel elérjük azt.
 \begin_layout Standard
 4.
  Másoljuk fel a programot egy tetszőleges mappába, majd válasszuk le az
- SD kártyát a pc-ről, és csatlakoztassuk a telefonon.
+ SD kártyát a PC-ről, és csatlakoztassuk a telefonon.
  Indítsuk el a fájlkezelő programot, és keressük meg a megfelelő fájlt.
- Válasszuk ki az apk filet, ekkor feljön egy opció, hogy megnyitjuk a fájlt,
+ Válasszuk ki az apk fájlt, ekkor feljön egy opció, hogy megnyitjuk a fájlt,
  vagy telepítjük.
  Mi most az utóbbit válasszuk, az ablak a bal oldali képen látható.
  A következő ablakban átnézhetjük a program legfontosabb tulajdonságait,
@@ -1240,7 +1240,7 @@ Telepítés
 
 \begin_layout Standard
 5.
- A sikeres telepítést követően az alkalmazások között megjlenik a program
+ A sikeres telepítést követően az alkalmazások között megjelenik a program
  ikonja, mellyel futtathatjuk azt.
  Az ikon a bal alsó képen látható.
  
@@ -1257,7 +1257,7 @@ Menü áttekintése
 \end_layout
 
 \begin_layout Standard
-A felhasználó a menüpontok segtségével navigálhat az egyes ablakok között.
+A felhasználó a menüpontok segítségével navigálhat az egyes ablakok között.
  Összesen öt ablakot tartalmaz az alkalmazás.
  Az applikáció minden ablakban négy menüelem kap helyet.
  
@@ -1314,7 +1314,7 @@ Menü tablet-en (4.7
 \end_layout
 
 \begin_layout Standard
-Kesekenyebb kijelző esetén a menüpontoknak csak az ikonja jelenik meg.
+Keskenyebb kijelző esetén a menüpontoknak csak az ikonja jelenik meg.
  
 \begin_inset Float figure
 placement H
@@ -1420,7 +1420,7 @@ Ikonok
 \end_layout
 
 \begin_layout Subsection
-Ablakok leirása
+Ablakok leírása
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1428,9 +1428,9 @@ Main (fő) ablak
 \end_layout
 
 \begin_layout Standard
-Az alakalmazás fő ablaka, ez jelenik meg az inditás után.
- A megjelenitett lista két fő részre bontható: az eslő tartalmazza a telefon
- adatatit (Phone Data), ezek nagyrésze nem változik, fontos paraméter a
+Az alkalmazás fő ablaka, ez jelenik meg az indítás után.
+ A megjelenített lista két fő részre bontható: az első tartalmazza a telefon
+ adatait (Phone Data), ezek nagy része nem változik, fontos paraméter a
  jel erősség érték (signal strength), ami a rádió hálózati torony által
  küldött jel erőssége.
  A második része a hálózati adatokat tartalmazza (Network Data).
@@ -1468,23 +1468,23 @@ Main ablak
 
 \end_inset
 
-Ezen adatok nagyrésze a telefon, illetve a hálózat aktuális állapotától
- függenek, mint például a hálózat tipusa (Network Type), ami lehet UMTS,
+Ezen adatok nagy része a telefon, illetve a hálózat aktuális állapotától
+ függenek, mint például a hálózat típusa (Network Type), ami lehet UMTS,
  EDGE, stb.
  Ez a telefon helyétől függ és persze az adott területen elérhető mobilhálózat
  szolgáltatásoktól.
- A mérések szempontjából fontos adatok a már emlitett szignál erősség, hálózat
- tipusa, ezeken kivűl az MCC, MNC, LAC és a CID, ezen értékek változása
- esetén a képernyő autómatikusan frissül a képernyőn is.
- Utóbbiak azonostják a telefonoperátort az adott országra vonatkozóan, és
- meghatározzák a mobilkészülék helyét, azaz, hogy az operátor melyik cellájában
- tartózkodik.
- MNC (Mobile Network Code) és az MCC (Mobile Country Code) együtt egyértelmúen
+ A mérések szempontjából fontos adatok a már említett szignál erősség, hálózat
+ típusa, ezeken kívül az MCC, MNC, LAC és a CID, ezen értékek változása
+ esetén a képernyő automatikusan frissül a képernyőn is.
+ Utóbbiak azonosítják a telefonoperátort az adott országra vonatkozóan,
+ és meghatározzák a mobilkészülék helyét, azaz, hogy az operátor melyik
+ cellájában tartózkodik.
+ MNC (Mobile Network Code) és az MCC (Mobile Country Code) együtt egyértelműen
  meghatározza az operátort az adott országban, LAC (Location Area Code)
- a hálózat szólgáltatójához tartozó területi azonosító, CID (Cel ID) cella
+ a hálózat szolgáltatójához tartozó területi azonosító, CID (Cel ID) cella
  azonosító.
  A lista automatikusan frissűl, ha megváltozik egy érték.
- A felhasználó az ujja segtségével fel és le görgetheti a kijelzőn a táblázatot.
+ A felhasználó az ujja segítségével fel és le görgetheti a kijelzőn a táblázatot.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -1492,14 +1492,14 @@ Test (teszt) ablak
 \end_layout
 
 \begin_layout Standard
-Az alkalmazás fő része, ahonnan a felhasználó a teszteket tudja inditani.
- Egyszerre csak egy mérés futhat, és nem lehet menetközben megváltoztatni
- a beállitásokat.
- A beállitások a következőek lehetnek: feltöltés vagy letöltés teszt, azon
- belül UDP vagy TCP protokollok használatát lehet beállitani rádiógombok
- segitségével.
+Az alkalmazás fő része, ahonnan a felhasználó a teszteket tudja indítani.
+ Egyszerre csak egy mérés futhat, és nem lehet menet közben megváltoztatni
+ a beállításokat.
+ A beállítások a következőek lehetnek: feltöltés vagy letöltés teszt, azon
+ belül UDP vagy TCP protokollok használatát lehet beállítani rádiógombok
+ segítségével.
  A megadott értékek, beállítások elmentődnek és az ablakok közti váltáskor
- megörződik, illetve visszatöltődik, ha a felhasználó visszatér ehhez az
+ megőrződik, illetve visszatöltődik, ha a felhasználó visszatér ehhez az
  ablakhoz.
  
 \end_layout
@@ -1514,7 +1514,7 @@ Start test
 \end_inset
 
  feliratú gombra kattintva elkezdődik a teszt futtatás.
- Ez elöbb emlitett gomb beszürkül, ilyenkor nem fogadja a felhasználói események
+ Ez előbb említett gomb beszürkül, ilyenkor nem fogadja a felhasználói események
 et.
  A 
 \begin_inset Quotes sld
@@ -1524,9 +1524,9 @@ Stop test
 \begin_inset Quotes srd
 \end_inset
 
- feliratú gomb kivilágosodik és fogadja a kattintás eseményet, ezzel lehet
- lálitani a futó tesztet.
- A teszt autmatikusan leáll ha nem siekrül elinditani a tesztelést valamilyen
+ feliratú gomb kivilágosodik és fogadja a kattintás eseményét, ezzel lehet
+ állattani a futó tesztet.
+ A teszt automatikusan leáll ha nem sikerül elindítani a tesztelést valamilyen
  beállítási vagy hálózati oknál fogva.
 \begin_inset Wrap figure
 lines 0
@@ -1571,11 +1571,11 @@ A teszt futtatásához szükséges paraméterek a távoli szerver IP címe és a
 \end_layout
 
 \begin_layout Standard
-A teszt futása során a felhaszáló egy előre megadott intervallumonként jelentést
- kap, ami tartalmazza a mérések aktuális eredményét: hálózat tipusát, a
- fel- és letöltési sebbesééget, UDP teszt esetén a jittert és a fogadott
+A teszt futása során a felhasználó egy előre megadott intervallumonként
+ jelentést kap, ami tartalmazza a mérések aktuális eredményét: hálózat típusát,
+ a fel- és letöltési légsebességet, UDP teszt esetén a jittert és a fogadott
  és az elveszett csomagok számát.
- Ez a riport a képernyő közepén találhtó lista tartalmazza.
+ Ez a riport a képernyő közepén található lista tartalmazza.
  Ezt a listát törölheti a felhasználó, a 
 \begin_inset Quotes sld
 \end_inset
@@ -1585,7 +1585,7 @@ Clear logs
 \end_inset
 
  feliratú gombra kattintva.
- Az esetleges kapcsolati hibákról is ezen keresztűl értesül a felhasználó.
+ Az esetleges kapcsolati hibákról is ezen keresztül értesül a felhasználó.
  Ezen hibák a 
 \begin_inset Quotes sld
 \end_inset
@@ -1599,7 +1599,7 @@ Hibaüzenetek
 \end_layout
 
 \begin_layout Standard
-Az aktuális tartalma ennek a log listának elmentatő a 
+Az aktuális tartalma ennek a log listának elmenthető a 
 \begin_inset Quotes sld
 \end_inset
 
@@ -1607,10 +1607,10 @@ Save logs
 \begin_inset Quotes srd
 \end_inset
 
- gomb seitségével.
+ gomb segítségével.
  Az elmentett fájl neve a az aktuális időbélyegből fog generálódni, például:
  201311031130.txt.
- A megadott beálitásoknak megfelelően és a tárolók elérhetőségétől föggően
+ A megadott beállításoknak megfelelően és a tárolók elérhetőségétől függően
  a külső vagy belső tárra fog elmentésre kerülni az applikáció könyvtárán
  belül.
 \end_layout
@@ -1620,8 +1620,8 @@ Map (térkép) ablak
 \end_layout
 
 \begin_layout Standard
-A térkép megejeleitéséhez szükséges mobil internet kapcsolat és GPS adat
- használat engedélyezés a pontos pozició meghatározására.
+A térkép megjelenítéséhez szükséges mobil internet kapcsolat és GPS adat
+ használat engedélyezés a pontos pozíció meghatározására.
  A felhasználó kiválaszthatja, hogy melyik teszt eredményeit szeretné látnia
  térképen megjelenítve.
  Erre szolgál a két oldalsó gomb: a "Set Test ID
@@ -1738,7 +1738,7 @@ Az ablak tetején található mezőbe írható be a kimeneti fájl neve.
 \end_layout
 
 \begin_layout Standard
-A program által generált teszt eredények fájlba menthetőek CSV formátumban.
+A program által generált teszt eredmények fájlba menthetőek CSV formátumban.
  A CSV fájl első sora a fejléc: id, test_id, test_name, time, lat, lon,
  signal_strength, up_speed, down_speed, jitter, lost_packet, sum_packet,
  mcc, mnc, lac, cid, rate, network_type mezőkkel, ahol az id az adatbázis
@@ -1746,12 +1746,12 @@ A program által generált teszt eredények fájlba menthetőek CSV formátumban
  test_name a teszt neve, amit a felhasználó a beállítások között adott meg,
  time a bejegyzés ideje, lat avagy latitude szélességi koordináta, a lon
  azaz longitude a hosszúsági koordinátája a mérés helyének, up_speed és
- a down_speed a fel- és letöltési sebesség, jitter-nek az UDP protokolt
+ a down_speed a fel- és letöltési sebesség, jitter-nek az UDP protokollt
  használó tesztek esetén van jelentősége és a csomagok közti késést mutatja,
  a lost_packet és sum_packet szintén UDP teszt esetén jelentős, az elveszett
  és az eddigi összes csomag számát jelentik, és a network type pedig a hálózat
- típusa (UMTS, EDGE, stb.), végül a rate a fel ésletöltési sebeség mértékegységét
- jelölik (Mbits, Kbits, stb.).
+ típusa (UMTS, EDGE, stb.), végül a rate a fel- és letöltési sebesség mértékegysé
+gét jelölik (Mbits, Kbits, stb.).
  Ez után lévő bejegyzések az adatbázis sorainak megfelelő adatok.
 \end_layout
 
@@ -1775,7 +1775,7 @@ Set Test Name
 \end_inset
 
  nevű gombra kattintva tehetjük meg.
- Rákattintva a felugró abalkból választhatjuk ki a megfelelő teszt azonosítót.
+ Rákattintva a felugró ablakból választhatjuk ki a megfelelő teszt azonosítót.
 \begin_inset Wrap figure
 lines 0
 placement o
@@ -1857,24 +1857,24 @@ Exporting database...
 \end_inset
 
  felirattal.
- A dialógus ablakban forgó icon jelzi, hogy még tart az exportálási folyamat.
+ A dialógus ablakban forgó ikon jelzi, hogy még tart az exportálási folyamat.
 \end_layout
 
 \begin_layout Standard
 A művelet befejeztével az ablak automatikusan bezáródik és egy felugró üzenetabl
-akban megjelnik, hogy sikeres volt-e a művelet vagy sem.
- Sikeres exportálás esetén a fájl elérésiútja us megjelenik.
+akban megjelenik, hogy sikeres volt-e a művelet vagy sem.
+ Sikeres exportálás esetén a fájl elérési útja is megjelenik.
 \end_layout
 
 \begin_layout Subsubsection*
-Setting (beállitások) ablak
+Setting (beállítások) ablak
 \end_layout
 
 \begin_layout Standard
-Az itt megejelnő paraméterek segitségével konfigurálható a teszt futtatás,
- ileltve a program működése.
- Ezek a paraméterek a program bezerása után is megmaradnak, nem kell a felhaszná
-lónak újra beállitania ezeket.
+Az itt megjelenő paraméterek segítségével konfigurálható a teszt futtatás,
+ illetve a program működése.
+ Ezek a paraméterek a program bezárása után is megmaradnak, nem kell a felhaszná
+lónak újra beállítania ezeket.
  
 \end_layout
 
@@ -1899,7 +1899,7 @@ Test Name - teszt neve
 \end_layout
 
 \begin_layout Itemize
-Units - sebesség és a fogadott adatok mennyiségének mértékegységét álíthatóak
+Units - sebesség és a fogadott adatok mennyiségének mértékegységét állíthatóak
  be
 \end_layout
 
@@ -1908,15 +1908,15 @@ Program használata és teszt futtatás
 \end_layout
 
 \begin_layout Standard
-A fő ablakban is nyomon lehet követni a jel erősség, hálózat típúsának és
+A fő ablakban is nyomon lehet követni a jel erősség, hálózat típusának és
  a cella információk változását, de ilyenkor sajnos nem kerül eltárolásra
- a változás, így nem lehet viszakövetni sem.
+ a változás, így nem lehet visszakövetni sem.
  A teszt ablakban van lehetőség tesztek futtatására.
  Választhatunk UDP vagy TCP protokollok és fel- vagy letöltés között a rádiógomb
 ok segítségével.
- A teszt futtatása előtt győzödjön meg róla, hogy a szerver oldali program
+ A teszt futtatása előtt győződjön meg róla, hogy a szerver oldali program
  a HttpServer fut és elérhető a szerver és a fentebb említett portok szabadok.
- A szerver publikus IP címét be kell álítani a Beállítások menüponban.
+ A szerver publikus IP címét be kell állítani a Beállítások menüpontban.
  A teszt futtatásához a 
 \begin_inset Quotes sld
 \end_inset
@@ -1937,7 +1937,7 @@ Stop test
 
  feliratú gombbal.
  Az előre megadott időközönként (report intervallum) a program megvizsgálja
- és kiírja az aktuális értékeket az adatbázisba és mejelennek a 
+ és kiírja az aktuális értékeket az adatbázisba és megjelennek a 
 \begin_inset Quotes sld
 \end_inset
 
@@ -1965,7 +1965,7 @@ Hibaüzenetek a teszt futtatás során
 \end_layout
 
 \begin_layout Itemize
-GPS aktíválása szükséges a teszt futtatáshoz, ha ezt elmulasztja a felhasználó,
+GPS aktiválása szükséges a teszt futtatáshoz, ha ezt elmulasztja a felhasználó,
  akkor egy felugró ablak tájékoztatja erről, amikor a tesztet elindítaná
  a következő üzenettel: "GPS is not enabled.
  Do you want to go to settings menu?".
@@ -1979,12 +1979,12 @@ Yes
 
  gombra kattintva megjelenik telefon GPS-el kapcsolatos beállításai, ahol
  aktiválni tudja a felhasználó ezt a szolgáltatást.
- A beállítás után a vissza gombbal a felhasnzáló visszatérhet a program
+ A beállítás után a vissza gombbal a felhasználó visszatérhet a program
  tesztfuttatási ablakába.
 \end_layout
 
 \begin_layout Itemize
-Mobilinternet aktíválása is szükséges a teszt futtatáshoz, ha ezt elmulasztja
+Mobilinternet aktiválása is szükséges a teszt futtatáshoz, ha ezt elmulasztja
  a felhasználó, akkor egy felugró ablak tájékoztatja erről, amikor a tesztet
  elindítaná a következő üzenettel: "Network is not enabled.
  Do you want to go to settings menu?".
@@ -1996,22 +1996,22 @@ Yes
 \begin_inset Quotes srd
 \end_inset
 
- gombra kattintva megjelenik telefon hlózattal kapcsolatos beállításai,
+ gombra kattintva megjelenik telefon hálózattal kapcsolatos beállításai,
  ahol aktiválni tudja a felhasználó ezt a szolgáltatást.
- A beállítás után a vissza gombbal a felhasnzáló visszatérhet a program
+ A beállítás után a vissza gombbal a felhasználó visszatérhet a program
  tesztfuttatási ablakába.
 \end_layout
 
 \begin_layout Itemize
-Hibásan megadott szerver IP cím esetén a teszt futása hamaer leáll és a
- következő üzenet olvasható a Teszt ablak üzenetei között: "Error: Cannot
- connect to server! IP: <megadott IP cím> port: 4500
+Hibásan megadott szerver IP cím esetén a teszt futása hamar leáll és a következő
+ üzenet olvasható a Teszt ablak üzenetei között: "Error: Cannot connect
+ to server! IP: <megadott IP cím> port: 4500
 \begin_inset Quotes srd
 \end_inset
 
 .
  Ilyen esetben a felhasználónak ellenőriznie kell a beállítások között a
- megadott IP cím helyességét, illetve, hogy elérhető egy kólső hálózati
+ megadott IP cím helyességét, illetve, hogy elérhető egy külső hálózati
  eszközről.
  Ha a szerver nem közvetlenül kapcsolódik az internethez, akkor a hálózati
  eszközökben a PortForwarding funkció használatát és beállításait is érdemes
@@ -2020,13 +2020,13 @@ Hibásan megadott szerver IP cím esetén a teszt futása hamaer leáll és a
 
 \begin_layout Itemize
 Foglalt teszt port esetén a "Could not connect to server! test port: <port
- szám>" üentet láthatja a felhasználó.
+ szám>" üzentet láthatja a felhasználó.
  Ez akkor történhet meg, ha egy másik program már használja az adott portot,
  ebben az esetben próbálkozzon új tesztet indítani, a teszt megpróbál egy
  másik portot használni.
  A szerver gépen az 5500 és 5600 közötti portokat használhatja teszt futtatásra
  a program.
- Minden teszt indiításkor egy új portot fog választani a program.
+ Minden teszt indításkor egy új portot fog választani a program.
  
 \end_layout
 
@@ -2187,9 +2187,7 @@ FDMA
 \series default
  (Frequency Division Multiple Access) a leggyakoribb analóg rendszer.
  Ez a technika a spektrum frekvenciatartományokra való feldarabolásán alapszik
- és egy frekvenciasávot t'rs
-\backslash
-t egy felhasználóhoz.
+ és egy frekvenciasávot társít egy felhasználóhoz.
  Egy csatornát egy időben csak egy előfizető használhat, így egy csatorna
  lezárul a beszélgetés idejére más felhasználók elől, amíg le nem teszik,
  vagy át nem adódik a beszélgetés egy másik csatornának.
@@ -2278,7 +2276,7 @@ ip Project) tartja karban a szabványt.
  A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
  mértéke a rendszert egyidejűleg használók számától függ.
  A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége (Quality
- of Service) biztositott a kapcsolat ideje alatt.
+ of Service) biztosított a kapcsolat ideje alatt.
  2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
  A 2G és GPRS technológiák kombinációját néha 2.5G-nek szokták hívni, ami
  a 2G és a 3G mobil technológiák között helyezkedik el.
@@ -2321,7 +2319,7 @@ W-CDMA
  jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
  a Qualcomm dominált.
  Qualcomm volt az első cég, akinek sikerült alkalmazható és költséghatékony
- megoldást találnia: ez volt a korai IS-95 rádióinterface sztenderd, melyből
+ megoldást találnia: ez volt a korai IS-95 rádióinterfésze sztenderd, melyből
  a CDMA2000 (IS-856/IS-2000) fejlődött ki.
  CDMA2000 hálózatok széles körben elterjedtek különösen Amerikában.
  Azonban az eltérő követelmények és felépítés megakadályozta a globális
@@ -2614,7 +2612,7 @@ Roaming
  amely különbözik a szolgáltatás regisztrált helyétől.
  Roaming biztosítja a kapcsolatot vezetéknélküli eszköz és a hálózat között,
  a kapcsolat elvesztése nélkül.
- Hagyományos GSM Roaming definició szerint (GSM Association Permanent Reference
+ Hagyományos GSM Roaming definíció szerint (GSM Association Permanent Reference
  Document AA.39) a cella felhasználó képes automatikusan hívást indítani
  és fogadni, adatokat küldeni és fogadni, vagy más szolgáltatásokhoz kapcsolódni
 , miközben utazik, elhagyja a hazai szolgáltatás által lefedett területet.
@@ -2630,9 +2628,9 @@ Handover
  lévő hívást, vagy adat folyamot átviszünk az egyik csatornáról a másikra.
  Erre akkor van szükség, mikor a készülék átlépi a cella határát, vagyis
  kilép az eddigi adótorony körzetéből és egy másik veszi át a kiszolgálását.
- Több féle handover létezik, attól föggően, hogy a telefon melyik cellát,
+ Több féle handover létezik, attól függően, hogy a telefon melyik cellát,
  milyen irányba lépi át.
- Például abban az esetben, mikor a készülék nem csak egy celle határán van,
+ Például abban az esetben, mikor a készülék nem csak egy cella határán van,
  hanem egy tartomány határán is, akkor nem csak egy másik toronyhoz (BTS
  vagy Node B) kerül át , hanem egy másik BSC vagy RNC-hez is.
 \end_layout
@@ -2797,7 +2795,7 @@ status collapsed
 3G rendszer gyorsabb kommunikációs szolgáltatást nyújt, beleértve a hang,
  fax és Internet szolgáltatásokat, melyek bármikor és bárhonnan elérhetőek.
  Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk,
- például multimédiás szorakoztatás, információ és helymeghatározás szolgáltatáso
+ például multimédiás szórakoztatás, információ és helymeghatározás szolgáltatáso
 k elterjedését a felhasználók között.
  Az első 3G hálózatot Japánban építették ki 2001-ben.
  2.5G hálózatok, mint a GPRS (Global Packet Radio Service) már elérhetőek
@@ -2828,9 +2826,9 @@ A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
  A 2008-as ITU szabvány szerint legfeljebb 100 Mbit/s átviteli sebesség
  elérése lesz képes egy gyorsan mozgó készülék esetén (például: kocsiban,
  vonaton) és akár 1Gbit/s adatráta is elérhető egyéb esetekben.
- Két 4G rendszertervet dolgoztak ki, amit már kereskedelmi forgalmoban is
+ Két 4G rendszertervet dolgoztak ki, amit már kereskedelmi forgalomban is
  használnak, ez a Mobile WiMAx és az LTE.
- Egyik megoldás sem telejesen teljesíti az ITU szabványt, ezért ezeket még
+ Egyik megoldás sem teljesen teljesíti az ITU szabványt, ezért ezeket még
  
 \begin_inset Quotes sld
 \end_inset
@@ -2840,10 +2838,10 @@ hivatalosan
 \end_inset
 
  nem tartják a szakemberek negyedik generációs hálózatnak, habár az operátorok
- már annak hírdetik.
- Mindkét technológiát fejelsztik, hogy megfeleljen a 4G szabvány elverásainak,
+ már annak hirdetik.
+ Mindkét technológiát fejlesztik, hogy megfeleljen a 4G szabvány elvérásainak,
  főleg az adatátviteli sebesség kapcsán.
- Egzáltalán nem támogatja már a hagzományos vonalkapcsolt szolgáltatásokat,
+ Egyáltalán nem támogatja már a hagyományos vonalkapcsolt szolgáltatásokat,
  csak az internet protokollra (IP) épülőket, mint amilyen az IP telefonálás.
 \end_layout
 
@@ -2889,7 +2887,7 @@ A hálózatok vizsgált adatai
 \end_layout
 
 \begin_layout Standard
-A lenti táblázat tartalmazza az átvitelisebességeket különféle technológiák
+A lenti táblázat tartalmazza az átviteli sebességeket különféle technológiák
  esetén.
  Ezek a sebesség adatok módosulhatnak attól függően, hogy milyen rádiótechnológi
 át használ a telefonhálózat operátora (CDMA, FDD, stb.) Amint látható, a
@@ -3161,9 +3159,9 @@ Technológiák és az elérhető adatráták
 \begin_layout Standard
 A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerősség
  és UDP tesztek esetén a jitter.
- A jelerősség - amit dBm-be mérnek - indikálja a szolgáltataás minőségét.
- Az értéke sok paramétertől függ, többek között az adótoronztól való távolságtól
-, a természeti akadájoktól, amik a készülék és a torony között vannak (erdő,
+ A jelerősség - amit dBm-be mérnek - indikálja a szolgáltatás minőségét.
+ Az értéke sok paramétertől függ, többek között az adótoronytól való távolságtól
+, a természeti akadályoktól, amik a készülék és a torony között vannak (erdő,
  hegy, stb.) és az időjárástól is függhet.
  A telefonkészüléken 5 darab kis osztás szokta jelezni a jelerősséget.
  Minél több osztás aktív, annál erősebb a jel, annál jobb a szolgáltatás.
@@ -3176,13 +3174,13 @@ A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerőss
 \end_layout
 
 \begin_layout Standard
-A jitter a csomagok megérkezési ideje közötti különbség, amit a hálzati
+A jitter a csomagok megérkezési ideje közötti különbség, amit a hálózati
  torlódásból, időzítési problémából vagy útvonal váltásból eredhet.
  Ez akkor jó, ha kicsi az érték, azaz a csomagok sűrűn követik egymást és
  a csomagok beérkezési idejei között nem nagy a különbség.
  A jitter nagysága, illetve nagy, sűrű változása okozhatja a telefonbeszélgetése
-k közbeni hangkiesést, akadozást, illetve a videolejeátszás során a képek
- kiesését, szagatást.
+k közbeni hangkiesést, akadozást, illetve a videolejátszás során a képek
+ kiesését, szaggatást.
  Az UDP-t használó tesztek során a jelentések tartalmazzák az aktuális jitter
  értéket.
  Ezen értékeket figyelve derülhet ki a magas jitter érték, illetve a gyakori,
@@ -3562,8 +3560,8 @@ IntentService
 \begin_layout Standard
 Az IntentService a Service osztályból öröklődik és aszinkron kéréseket kezel
  (Intent-eken keresztül).
- Kliens külkd egy kérést a startService(Intent) híváson keresztül és a szolgálta
-tás elindul, és leállítja magát, ha végre hajtotta a feladatát.
+ Kliens küld egy kérést a startService(Intent) híváson keresztül és a szolgáltat
+ás elindul, és leállítja magát, ha végre hajtotta a feladatát.
  Egyszerre csak egy kérést szolgál ki, ha több érkezik be, akkor egymás
  után lesznek kiszolgálva.
  Ez a módszer gyakran használt eljárás, annak érdekében, hogy tehermentesítsük
@@ -3606,7 +3604,7 @@ Intent
 \end_layout
 
 \begin_layout Standard
-Az intent üzenetekkel futás idejü kapcsolatot, kötést létesíthetünk Android
+Az intent üzenetekkel futás idejű kapcsolatot, kötést létesíthetünk Android
  komponensek között.
  Intent objektum egy adatstruktúra, ami általában a végrehajtandó művelet
  absztrakt leírását tartalmazza, illetve a fogadó komponens számára fontos
@@ -3623,11 +3621,11 @@ Application
 \begin_layout Standard
 Ezen osztály segítségével lehet figyelni, karbantartani az egész applikáció
  állapotát.
- A saját application obektumunkat az AndroidManifest.xml fájl <application>
+ A saját application objektumunkat az AndroidManifest.xml fájl <application>
  tagja írja le, ami azt jelenti, hogy az osztály példánya létrejön az applikáció
  indulása elején.
- Álatlában nincs szükség erre az objektumra.
- A többi Android obejktumból elérhető az Application objektum a 
+ Általában nincs szükség erre az objektumra.
+ A többi Android objektumból elérhető az Application objektum a 
 \shape italic
 getApplication()
 \shape default
@@ -3635,7 +3633,7 @@ getApplication()
 \end_layout
 
 \begin_layout Standard
-Ha szükség van egy globáls Context objektumra (például BroadcastReceiver
+Ha szükség van egy globális Context objektumra (például BroadcastReceiver
  objektum beregisztrálásához), itt található a 
 \shape italic
 getApplicationContext()
@@ -3649,7 +3647,7 @@ Futási környezet és konfiguráció
 
 \begin_layout Standard
 Az Android SDK tartalmaz egy alap könyvtárat, mely megvalósítja a Java programoz
-ásinyelv túlnyomó részét.
+ási nyelv túlnyomó részét.
  
 \end_layout
 
@@ -3730,7 +3728,7 @@ Az <activity> elemben az android:name paraméter tartalmazza az Activity
 
 \begin_layout Standard
 A fenti példában látható <intent-filter> rész utasítja a rendszert, hogy
- a MainActivity nevű acvtivity objektumot töltse be az alakalmazás elindulása
+ a MainActivity nevű acvtivity objektumot töltse be az alkalmazás elindulása
  után.
 \end_layout
 
@@ -3759,7 +3757,7 @@ Adattárolás
 \end_layout
 
 \begin_layout Standard
-Az Android számos lehetőséget kínál az adatok perzisztens tárolására.
+Az Android számos lehetőséget kínál az adatok perzisztencia tárolására.
  Ezek lehetnek megosztott preferenciák (Shared preference), mely primitív
  adatokat tarol kulcs-érték párok alapján, külső illetve belső tároló, illetve
  SQLite adatbázis.
@@ -3771,9 +3769,9 @@ Az Android számos lehetőséget kínál az adatok perzisztens tárolására.
 \series bold
 Megosztott preferenciák
 \series default
- segítségével tárolhatjuk el egyszerűen az alakalmazás, illetve az egyes
- Activity objektumok állapotát, mivel az adatok megmaradnak az alakalmazás
- megszünése után is.
+ segítségével tárolhatjuk el egyszerűen az alkalmazás, illetve az egyes
+ Activity objektumok állapotát, mivel az adatok megmaradnak az alkalmazás
+ megszűnése után is.
  Kulcs-érték párok segítségével el tudjuk menteni az objektumok változóinak
  értékét, majd visszaolvasni, ha szükséges.
  Az eltárolt attribútumok float, int, long, boolean és string típusúak lehetnek.
@@ -3782,8 +3780,7 @@ Megosztott preferenciák
 getSharedPreferences()
 \shape default
  metódus segítségével névvel ellátott preferenciát kapunk, melyet első paraméter
-ként kell megadnunk, és arra hivatkozva bárhonnan el tudjuk érni az alaklamzásbó
-l.
+ként kell megadnunk, és arra hivatkozva bárhonnan el tudjuk érni az alkalmzásból.
  A 
 \shape italic
 getPreferences()
@@ -3803,7 +3800,7 @@ segítségével
  
 \series default
 olyan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
-ban, amikhez csak az alakalmazás férhet hozzá és annak eltávolításakor ezek
+ban, amikhez csak az alkalmazás férhet hozzá és annak eltávolításakor ezek
  a fájlok automatikusan törlődnek.
  
 \end_layout
@@ -3829,19 +3826,20 @@ at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
  SQL szintaxis és tranzakciók.
  A futás során az adatbázisnak kevés memóriára van szüksége (kb.
  250 KByte).
- Az adatbázisműveletek fájl műveleteket igénzelnek, amik lassúak lehetnek,
+ Az adatbázisműveletek fájl műveleteket igényelnek, amik lassúak lehetnek,
  ezért aszinkron módon kell azokat végrehajtani.
- Adatbáziskezelés megvalósításához szükség lesz egy osztályra, mely az 
+ Adatbázis kezelés megvalósításához szükség lesz egy osztályra, mely az
+ 
 \shape italic
 SQLiteOpenHelper 
 \shape default
-osztályból számrazik.
+osztályból származik.
  Ennek az 
 \shape italic
 onCreate() 
 \shape default
-függvényét kell felüldefinálni az adatbázist létrhozó implementácioval,
- melyet SQL parancsal adhatunk meg.
+függvényét kell felüldefiniálni az adatbázist létrehozó implementációval,
+ melyet SQL paranccsal adhatunk meg.
  Az 
 \shape italic
 onUpgrade()
@@ -3856,7 +3854,7 @@ getReadableDatabase()
 \shape italic
 getWriteableDatabase()
 \shape default
- függvényeinek segítségével kaphatunk egy SQLiteDatabase obejktumot, melyen
+ függvényeinek segítségével kaphatunk egy SQLiteDatabase objektumot, melyen
  keresztül hozzáférhetünk az adatbázis táblákhoz és módosíthatjuk azokat.
  SQLiteDatabase 
 \shape italic
@@ -3910,12 +3908,12 @@ Hálózati protokollok a programban
 \series bold
 UDP (User Datagram Protocol): 
 \series default
-kapcsolatnélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
+kapcsolat nélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
  Portszámot és checksum-ot is tartalmaz egy csomag.
  A csomagok nem biztos, hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz,
  mint amilyen sorrendben el lettek küldve.
  A küldő nem kap visszaigazolást a csomag megérkezéséről.
- Ez a protokoll nagyon elterjedt a videójátékoknál és a telekommunikációban.
+ Ez a protokoll nagyon elterjedt a videojátékoknál és a telekommunikációban.
  
 \end_layout
 
@@ -3928,7 +3926,7 @@ megbízható de ezért lassabb is, mint például az UDP.
  Folyamként vagy fájlként kezeli a kapcsolatokat.
  A csomagok megfelelő sorrendjéről, illetve az elveszett csomagok újra küldésérő
 l is gondoskodik.
- A csomagok bufferrelésével eléri, hogy az átviteli sebesség is közel állandó
+ A csomagok pufferrelésével eléri, hogy az átviteli sebesség is közel állandó
  legyen az adat küldése, továbbítása során.
 \end_layout
 
@@ -3943,8 +3941,8 @@ sára használják.
  stb.
  Használhat TCP és UDP protokollokat is.
  HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
- a kapcoslatot és küld egy kérést a HTTP szervernek.
- Amint a szerver visszaküldte a választ lezérja a kapcsolatot.
+ a kapcsolatot és küld egy kérést a HTTP szervernek.
+ Amint a szerver visszaküldte a választ lezárja a kapcsolatot.
  A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
  pl.: 
 \begin_inset Quotes sld
@@ -3992,9 +3990,9 @@ Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
 \end_layout
 
 \begin_layout Description
-HTTP* egy specializált HTTP protokolt, melyet a ebben a programban használok
- az Android applikáció és a szerveren futó alkalamazás kommunikációjában.
- A kommunikációt mindenképpen a mobil alakalmazás kezdeményezi egy "GET
+HTTP* egy specializált HTTP protokollt, melyet a ebben a programban használok
+ az Android applikáció és a szerveren futó alkalmazás kommunikációjában.
+ A kommunikációt mindenképpen a mobil alkalmazás kezdeményezi egy "GET
 \begin_inset Quotes srd
 \end_inset
 
@@ -4013,7 +4011,7 @@ n BUFFERSIZE: <buffer méret>
 n.
  Ez az üzenet tartalmazza a teszt paramétereit, amiket a felhasználó adott
  meg.
- A szerver oldali program ezek alapján inditja el a megfelelő küldő vagy
+ A szerver oldali program ezek alapján indítja el a megfelelő küldő vagy
  fogadó szálat.
  A program a teszt leállításakor egy 
 \begin_inset Quotes sld
@@ -4034,7 +4032,7 @@ A program architektúrája
 \end_layout
 
 \begin_layout Standard
-A szerver oldali és a mobil alaklamazás is használja a 
+A szerver oldali és a mobil alkalmazás is használja a 
 \shape italic
 HttpFileHandler.jar
 \shape default
@@ -4043,7 +4041,7 @@ HttpFileHandler.jar
 \end_layout
 
 \begin_layout Subsection
-Közös osztályok architectúrája
+Közös osztályok architektúrája
 \end_layout
 
 \begin_layout Standard
@@ -4237,8 +4235,8 @@ Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
 \end_layout
 
 \begin_layout Itemize
-"id" - integer típusú érték, a tábla elsődleges kulcsa, autmatikusan inkrementál
-ódik
+"id" - integer típusú érték, a tábla elsődleges kulcsa, automatikusan implementá
+lódik
 \end_layout
 
 \begin_layout Itemize
@@ -4255,12 +4253,12 @@ Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
 \end_layout
 
 \begin_layout Itemize
-"lat" - varchar(15) típusú érték, a mobilkészülék poziciójának szélességi
+"lat" - varchar(15) típusú érték, a mobilkészülék pozíciójának szélességi
  értékét tárolja
 \end_layout
 
 \begin_layout Itemize
-"lon" - varchar(15) típusú érték, a mobilkészülék poziciójának hosszúsági
+"lon" - varchar(15) típusú érték, a mobilkészülék pozíciójának hosszúsági
  értékét tárolja
 \end_layout
 
@@ -4270,8 +4268,8 @@ Az adatbázisnak, melyet drive_test_db_v1 hívnak egy test_data nevű adatbázis
 \end_layout
 
 \begin_layout Itemize
-"signal_level" - varchar(15) típusú érték, a jel erősség besorolásást tartalamzz
-a (0-4 közötti értéket vehet fel)
+"signal_level" - varchar(15) típusú érték, a jel erősség besorolását tartalmazza
+ (0-4 közötti értéket vehet fel)
 \end_layout
 
 \begin_layout Itemize
@@ -4447,9 +4445,9 @@ onCreateOptionsMenu
 onOptionsItemSelected
 \shape default
  metódusokat.
- Ezek segítségével lehet megejeleníteni a menüt és reagálni a menüt érintő
+ Ezek segítségével lehet megjeleníteni a menüt és reagálni a menüt érintő
  felhasználói eseményekre.
- Az Adnroid 3.0 verziójától a menü egy ActionBar-nak nevezett felületen jelenik
+ Az Android 3.0 verziójától a menü egy ActionBar-nak nevezett felületen jelenik
  meg, a menu.xml fájlban leírtaknak megfelelően.
  A leíró fájlban a menüelemek 
 \shape italic
@@ -4496,7 +4494,7 @@ Döntések a megvalósítás során
 \begin_layout Standard
 A fejlesztést megelőző kutatómunka során kiderült, hogy az android SDK nem
  támogatja a számos hálózati és készülék információ elérését (biztonsági
- okokból), így nem lehet egyszerűen az Android SDK segítségével úgy hyvást
+ okokból), így nem lehet egyszerűen az Android SDK segítségével úgy hívást
  kezdeményezni, hogy a hívás végeztével a hívásról adatokat kaphasson a
  program.
  Ehhez alacsony szinten, kernel szinten kellene hozzá férni az adatokhoz.
@@ -4514,7 +4512,7 @@ A program Java programozási nyelven készül, mert az Android is erre épül
  elfedik a hálózati kommunikációnak, így mikor egy Socket outputstream-jén
  keresztül egy üzenetet küldök a másik félnek, akkor csak bízni tudok benne,
  hogy a program valóban egyből kiküldi az üzenetet és nem végez semmiféle
- tömörítési, egyszerüsítési eljárást a csomagon, ami meghamisíthatná a mérési
+ tömörítési, egyszerűsítési eljárást a csomagon, ami meghamisíthatná a mérési
  eredményeket és így a tesztek eredményeit is.
 \end_layout
 
@@ -4524,12 +4522,12 @@ A hálózati forgalom mérésére, figyelésére használtam volna a TrafficStat
  forgalomról nyújt információkat a /proc/uid_stat/<uid> könyvtárból.
  Ez tartalmazza a TCP vagy UDP protokollokon küldött és fogadott byte-ok
  és csomagok számát.
- Ha a fájlok nem léteznek aTrafficStats nem tud nhálózati statisztikával
+ Ha a fájlok nem léteznek aTrafficStats nem tud hálózati statisztikával
  szolgálni.
  A getUidTxBytes() és a getUIDRxBytes() jelentések csak a TCP forgalmat
  tartalmazzák az UDP-re vonatkozót nem.
  Így az UDP forgalomról az alkalmazás nem kap semmilyen adatot.
- Ezen és hasonló hiábák miatt, nem tudtam érdemben használni a küldött és
+ Ezen és hasonló hibák miatt, nem tudtam érdemben használni a küldött és
  fogadott csomagok mérésére.
  Ezért saját csomag figyelő és számoló algoritmust kellett írjak.
  
@@ -4580,7 +4578,7 @@ Properties
 \shape italic
 methodProperty
 \shape default
- tartalmazza az üzenet típusát, egy paramétert, ami a buffer méretét adja
+ tartalmazza az üzenet típusát, egy paramétert, ami a puffer méretét adja
  meg vagy egy azonosítót tartalmaz és a HTTP verziót.
  A 
 \shape italic
@@ -4595,7 +4593,7 @@ MODE
 \begin_inset Quotes srd
 \end_inset
 
- az adatforgalom irányát határozza meg, hogy a syerver küldi-e az adatokat
+ az adatforgalom irányát határozza meg, hogy a szerver küldi-e az adatokat
  (ez a letöltés, 
 \begin_inset Quotes sld
 \end_inset
@@ -4621,20 +4619,20 @@ CONNECTION
 \begin_inset Quotes srd
 \end_inset
 
- a kapcsolat típusát határozza meg, miszerint UDP, vagz TCP protokollt fog
+ a kapcsolat típusát határozza meg, miszerint UDP, vagy TCP protokollt fog
  használni a teszt.
 \end_layout
 
 \begin_layout Description
 Logger osztály segítségével különféle üzeneteket menthetünk el egy fájlba.
- A programban főleg a hibaüzeneteket eltárolásásra használom, ami a hiba
- keresésést könnyíti meg.
- Az üzenet a sztenderd kimenetre is kiiratható a 
+ A programban főleg a hibaüzenetek eltárolásásra használom, ami a hiba keresést
+ könnyíti meg.
+ Az üzenet a sztenderd kimenetre is kiíratható a 
 \shape italic
 addLineAndPrint 
 \shape default
 metódus segítségével.
- Ez utóbbit szerver oldali komponensben használható ki, mert ott a parancsorban
+ Ez utóbbit szerver oldali komponensben használható ki, mert ott a parancssorban
  is olvashatóak ezek az üzenetek.
  A log fájl nevét a konstruktorban adhatjuk meg, alapértelmezetten 
 \begin_inset Quotes sld
@@ -4646,7 +4644,7 @@ log.txt" névvel fog létrejönni a fájl a bináris fájl mellett.
 \end_layout
 
 \begin_layout Description
-MessageI egy interfész, ami egyetlen sendReportMessage függgvény fejlécét
+MessageI egy interfész, ami egyetlen sendReportMessage függvény fejlécét
  tartalmazza.
  Ennek segítségével tud a TCPSender és UDPSender osztály jelentéseket küldeni
  - a ReportSender osztályon keresztül - a teszt és a csomagok állapotáról
@@ -4662,7 +4660,7 @@ ReceiverReportI a ReportReceiver osztály interfésze, melyet jelentések küld�
 
 \begin_layout Description
 ReportI interfészt megvalósítja a HttpService osztály és segítségével tud
- a ReportReceiver osztály példánya üzenetet továbbitani, illetve küldeni
+ a ReportReceiver osztály példánya üzenetet továbbítani, illetve küldeni
  a Test Activity felé a felhasználónak.
  A 
 \shape italic
@@ -4674,9 +4672,9 @@ sendMessage
 \begin_layout Description
 ReportReceiver osztály példánya a mobilkészüléken fut - egy külön szálon
  - és fogadja a jelentéseket, riportokat, majd továbbítja a HttpService
- példánynak, ami továbbitja a TestActivitynek az Application obejktumon
+ példánynak, ami továbbítja a TestActivity-nek az Application objektumon
  keresztül.
- Így láthatóvá válik és folyamatosan frussül a TestActivity üzenetlistája.
+ Így láthatóvá válik és folyamatosan frissül a TestActivity üzenetlistája.
  A TCP- és UDPReceiver osztályoktól kapott értékek a 
 \shape italic
 ReceiverReportI
@@ -4686,8 +4684,8 @@ ReceiverReportI
 setReceivedBytes 
 \shape default
 metódus segítségével továbbítódnak, ha a receiver (fogadó) osztálypéldányok
- a mobil alakalmazáson futnak - azaz a mobilkészülék a fogadó-, így a mobil
- letöltési sebessségét vizsgljuk.
+ a mobil alkalmazáson futnak - azaz a mobilkészülék a fogadó-, így a mobil
+ letöltési sebességét vizsgáljuk.
  Egyébként a szerver által fogadott csomagokról a ReportSender osztálytól
  kap üzenetet, amit a 
 \shape italic
@@ -4725,7 +4723,7 @@ ReportSender a szerver oldali programban fut az osztály egy példánya, külön
  szálon.
  A megadott porton létrehoz egy ServerSocket-et, ahova a kliens oldalon
  futó ReportReceiver osztálypéldánya tud csatlakozni.
- Ezen keresztül kap értesítést a kliens a szerver oldali csomagok érekzéséről,
+ Ezen keresztül kap értesítést a kliens a szerver oldali csomagok érkezéséről,
  a teszt állapotáról.
  A 
 \shape italic
@@ -4755,9 +4753,9 @@ osztály segítségével lehet meghatározni, hogy milyen művelet hajtódjon v�
 scheduleAtFixedRate
 \shape default
  metódusával lehet megadni.
- Az osztály konstuktora képes MessageI és ReceiverReportI interfészeket
+ Az osztály konstruktora képes MessageI és ReceiverReportI interfészeket
  fogadni attól függően, hogy szerver oldalon fut - így a ReportSenderen
- keresztűl tud jelentést küldeni-, vagy a mobil oldalon, amikor a ReportReceiver
+ keresztül tud jelentést küldeni-, vagy a mobil oldalon, amikor a ReportReceiver
  osztály példányát használja.
  A 
 \shape italic
@@ -4796,9 +4794,9 @@ metódus felüldefiniálásával szöveggé konvertálhatóak.
 \end_layout
 
 \begin_layout Description
-TCPSender a ConnectionInstance osztályből származik és a konstruktorában
- megadott méretű buffert tölt fel véletlenszerü adatokkal.
- A buffer adatát foylamatosan küldi a 
+TCPSender a ConnectionInstance osztályból származik és a konstruktorában
+ megadott méretű puffert tölt fel véletlenszerű adatokkal.
+ A puffer adatát foylamatosan küldi a 
 \shape italic
 setSocket
 \shape default
@@ -5793,7 +5791,7 @@ Statikus kódelemzés
 A "Lint" program a Bell Laboratories terméke, az AndroidLint, része az Android
  SDK-nak.
  Ez az eszköz megvizsgálja a kódot, és javításokat ajánl.Lehetnek esetek
- mikor a program téved és az adott körülmények között az adot kód helyes,
+ mikor a program téved és az adott körülmények között az adott kód helyes,
  amire a Lint azt javasolja, hogy javítsd ki, így természetesen nem helyettesíti
  a hozzáértő fejlesztőt.
 \end_layout
@@ -5803,14 +5801,14 @@ Egyik nagyon gyakori hiba, hogy egy Toast létrehozásakor a
 \shape italic
 makeText
 \shape default
- metúdust használják,és elfelejtik meghívni a 
+ metódust használják,és elfelejtik meghívni a 
 \shape italic
 show 
 \shape default
 metódust; a toast létrejön, de soha nem fog megjelenni! A hagyományos fordító
  nem tudja elkapni ezt a hibát, de az Android Lint képes, és ez csak egy
- a sokközül.
- Eclipse alol nagyon egyszerü és kényelmes a hasnzálata.
+ a sok közül.
+ Eclipse alól nagyon egyszerű és kényelmes a használata.
  Sok lehetséges hiba forrást megtalált és a fejlesztés során törekedtem
  rá hogy alacsonyan tartsam a Lint hibajelzések számát.
 \end_layout
@@ -5871,7 +5869,7 @@ update
 SeparatedListTest a SeparatedListAdapter osztály metódusait teszteli.
  Az Android BaseAdapter osztály metódusait felüldefiniálja és lehetőséget
  biztosít egy fejléces, kétszínű lista létrehozására.
- A teszt ezeket a funkcíkat teszteli.
+ A teszt ezeket a funkciókat teszteli.
 \end_layout
 
 \begin_layout Subsubsection
@@ -5886,7 +5884,7 @@ HttpParserTest a HTTP*/1.0 típusú üzentek feldolgozását végző osztályt t
 \end_layout
 
 \begin_layout Description
-LoggerTest a logfájl készítés és kezelést teszteli.
+LoggerTest a log fájl készítés és kezelést teszteli.
  A log fájl tartalmazza a program futása során bekövetkező, annak működésére
  vonatkozó üzeneteket.
  Ezek megkönnyíthetik az esetleges hibák felderítését és kijavítását is.
@@ -5902,7 +5900,7 @@ ReportReceiverTest HTTP*/1.0 üzenetek fogadását végző osztályt ellenőrzi.
 \begin_layout Description
 ReportSenderTest a HTTP*/1.0 üzenetek küldésével foglalkozó osztály tesztelését
  végzi.
- A sendReportMessage müködését vizsgálom, hogy a megadott üzenetet milyen
+ A sendReportMessage működését vizsgálom, hogy a megadott üzenetet milyen
  formában küldi el.
 \end_layout
 
@@ -5913,11 +5911,11 @@ TCPReport a TCP jelentések feldolgozását végző osztály metódusainak teszt
 \shape italic
 parseReport
 \shape default
- metódusán keresztüli adatbevitel a szöveggé alakitó 
+ metódusán keresztüli adatbevitel a szöveggé alakító 
 \shape italic
 toString
 \shape default
- metódus segítségével ellőnirezhető.
+ metódus segítségével ellenőrizhető.
  
 \end_layout
 
@@ -5932,7 +5930,7 @@ HttpServer
 \end_layout
 
 \begin_layout Description
-HttpResponseTest a Httpresponse osztályt teszteli, ami egy HTTP*/1.0 típusú
+HttpResponseTest a HttpResponse osztályt teszteli, ami egy HTTP*/1.0 típusú
  válaszüzenetet generál a szerver oldalon.
  Különféle bemeneti paraméterek esetén megvizsgálja a kimeneti szöveget
  és ezzel az elküldendő üzenetet hitelesíti.
