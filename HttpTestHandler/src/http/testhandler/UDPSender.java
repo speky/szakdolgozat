@@ -44,9 +44,10 @@ public class UDPSender extends ConnectionInstance {
 		adjust = 0;
 		// compute delay for bandwidth restriction, constrained to [0,1] seconds
 		delay_target = (int) ((bufferSize/1024) * ((kSecs_to_usecs * kBytes_to_Bits)  / UDPRate) );
+		logger.addLine(TAG + "DELAY_TARGET1 : "+ delay_target );
 		//sec = rate/byte*8 (= bits)
 		delay_target = (int) (UDPRate/((bufferSize) * kBytes_to_Bits));
-
+		logger.addLine(TAG + "DELAY_TARGET2 : "+ delay_target );
 		if ( delay_target < 0  || delay_target > (int) 1 * kSecs_to_usecs ) {
 			logger.addLine(TAG + "WARNING: delay too large, reducing from "+delay_target / kSecs_to_usecs +" to 1 second!");
 			delay_target = (int) kSecs_to_usecs * 1;
@@ -125,11 +126,13 @@ public class UDPSender extends ConnectionInstance {
 				// delay between writes
 				// make an adjustment for how long the last loop iteration took
 				adjust = delay_target + (time - lastPacketTime);
+				logger.addLine(TAG + "ADJUST: "+ adjust);
 				lastPacketTime = time;
 
 				if (adjust > 0  ||  delay > 0) {
 					delay += adjust;
 				}
+				logger.addLine(TAG + "DELAY: "+ delay);
 
 				byte[]  packetData = (Integer.toString(++packetID) +" " + Long.toString(time) +" ").getBytes();
 				// re-generate byte buffer array if the packet id or time data's length has changed

@@ -1,10 +1,8 @@
 package httpserver;
 
 
-import http.testhandler.HttpParser;
 import http.testhandler.Logger;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -20,7 +18,6 @@ public class HttpResponse {
 	public static final String MIME_DEFAULT_BINARY = "application/octet-stream";
 
 	private static final String TAG = "HTTP_RESPONSE: ";
-	private static String ROOT_DIR = "c:\\";
 
 	private Logger logger = null;
 

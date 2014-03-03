@@ -242,6 +242,8 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		httpIntent.putExtra("type", type);				
 		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
 		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
+		httpIntent.putExtra("udprate", prefs.getString("udprate", "1024"));
+		
 		rateType = prefs.getInt("rateType", 1);
 		httpIntent.putExtra("rateType", Integer.toString(rateType));
 

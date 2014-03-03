@@ -26,6 +26,14 @@
       android:inputType="number"
     />
     <EditTextPreference
+      android:key="udprate"
+      android:title="UDP bitrate (in kbits)"
+      android:summary="Click to pop up a field for entry"
+      android:dialogTitle="UDP bitrate"
+      android:defaultValue="1024"
+      android:inputType="number"
+    />
+    <EditTextPreference
       android:key="testName"
       android:title="Test Name"
       android:summary="Click to pop up a field for entry"

@@ -64,6 +64,7 @@ public class HttpService extends IntentService implements ReportI {
 	private int direction = 0;
 	private int bufferSize = 8000;
 	private int reportPeriod = 1000;
+	private int udpRate = 1024;
 	private int rateType = 1;
 
 	private Messenger messenger = null;
@@ -133,6 +134,7 @@ public class HttpService extends IntentService implements ReportI {
 
 		bufferSize = Integer.parseInt((String)intent.getExtras().get("bufferSize"));
 		reportPeriod = Integer.parseInt((String)intent.getExtras().get("reportPeriod"));
+		udpRate = Integer.parseInt((String)intent.getExtras().get("udpRate"));
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
@@ -193,9 +195,9 @@ public class HttpService extends IntentService implements ReportI {
 			}else {
 				if (direction == DriveTestApp.DOWNLOAD) {
 					isUpload = true;
-					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: DL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize + "\nUDPRATE:"+ udpRate +"\n");
 				} else {					
-					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize +"\n");
+					sendMessageToServer("GET / HTTP*/1.0\nREPORTPERIOD: "+reportPeriod+"\nMODE: UL\n CONNECTION: UDP\nBUFFERSIZE: " + bufferSize + "\nUDPRATE:"+ udpRate +"\n");
 				}
 			}					
 
@@ -251,7 +253,9 @@ public class HttpService extends IntentService implements ReportI {
 
 				} else {
 					UDPSender sender = new UDPSender(++threadCount, logger, bufferSize);					
-					if (sender.setReceiverParameters(testPort, serverAddress)) {					
+					if (sender.setReceiverParameters(testPort, serverAddress)) {
+						// udprate in kbits
+						sender.setRateInBitsPerSec(udpRate * 1024);
 						addConnectionInstance(sender);
 					}
 				}
