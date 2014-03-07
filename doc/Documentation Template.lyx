@@ -1909,11 +1909,11 @@ Program használata és teszt futtatás
 
 \begin_layout Standard
 A fő ablakban is nyomon lehet követni a jel erősség, hálózat típusának és
- a cella információk változását, de ilyenkor sajnos nem kerül eltárolásra
- a változás, így nem lehet visszakövetni sem.
+ a cella információk változását, de ilyenkor nem kerül eltárolásra a változás,
+ így nem lehet visszakövetni sem.
  A teszt ablakban van lehetőség tesztek futtatására.
- Választhatunk UDP vagy TCP protokollok és fel- vagy letöltés között a rádiógomb
-ok segítségével.
+ Választhatunk UDP és TCP protokollok, fel- és letöltés között a rádiógombok
+ segítségével.
  A teszt futtatása előtt győződjön meg róla, hogy a szerver oldali program
  a HttpServer fut és elérhető a szerver és a fentebb említett portok szabadok.
  A szerver publikus IP címét be kell állítani a Beállítások menüpontban.
@@ -1947,13 +1947,26 @@ Messages
 
  fejlécű listában a teszt ablakban.
  Ezek a bejegyzések tartalmazzák a különböző mérési eredményeket.
+ A 
+\begin_inset Quotes sld
+\end_inset
+
+Save logs
+\begin_inset Quotes srd
+\end_inset
+
+ gomb segítségével elmenthető a Messages üzenet doboz aktuális tartalma.
+ Az elmentett fájl neve és elérési útja egy felugróablakban lesz látható.
  A térképen látható az épp futó teszt és méréseknek megfelelően frissülnek
  az adatok rajta.
  Lehetőség van korábbi tesztek eredményeit is megjeleníteni a térképen teszt
  azonosító vagy teszt név alapján.
- Bármely tesztet ki lehet exportálni CSV formátumba az adatbázisból név
- vagy azonosító alapján.
- 
+ Az export ablakban bármely tesztet ki lehet exportálni CSV formátumba az
+ adatbázisból név vagy azonosító alapján.
+ A fájl nevét és egadhatja a felhasználó és az export gomb megnyomásával
+ elindul az exportálási folyamat.
+ Végül egy felugró ablakban jelenik, meg az elmentett fájl neve és elérési
+ útja, ileltve hiba esetén a hibaüzenet.
 \end_layout
 
 \begin_layout Subsection
@@ -6003,25 +6016,33 @@ Ezen teszt során a szerver és kliens programok együttes tesztelését végezt
  A tesztek során számos hibát felderítettem a programban, melyeket alacsonyabb
  szintü tesztekkel nem volt lehetséges, mert ezek csak a két komponens (szerver
  és kliens) együttes jelenléte és kommunikációja esetén lehetett felderíteni.
- Ilyen probléma volt a mobilkészülék NATüolt hálózatbn történő elérése.
- Biztonsági szempontok miatt nem lehet direkt elérni a készülékeket publikus
- címen keresztül, így minden esetben a készüléknek kell kezdeményezni a
- kommunikációt, mely folyamat során nyit egy portot, amin keresztül a külső
- program tud válaszolni a mobilon futó programnak.
- Ez főleg UDP protokoll esetén volt problémás, ahol incs állandó kapcsolat
+ Ilyen probléma volt a mobilkészülék NAT-olt hálózatbn történő elérése.
+ Biztonsági szempontok miatt nem lehet közvetlenül elérni a készülékeket
+ publikus IP címen keresztül, így minden esetben a készüléknek kell kezdeményezn
+i a kommunikációt, mely folyamat során nyit egy portot, amin keresztül a
+ külső program tud válaszolni a mobilon futó programnak.
+ Ez főleg UDP protokoll esetén volt probléma, ahol incs állandó kapcsolat
  kiépítve, csak egy-egy üzenet elküldésének idejére.
- A tesztelések során valós környezteben, utcán is ki lett próbálva az applikáció
-, miközben aktívan kommunikált a szerverrel.
+ A tesztelések során valós környezteben is ki lett próbálva az applikáció,
+ miközben aktívan kommunikált a szerverrel.
  A mérések grafikus megejelenítésekor a GPS jel pontatlansága gondot okozhat.
- Ennek minősége telefonkészüléktől és a terület múhold lefedettségétől is
+ Ennek minősége telefonkészüléktől és a terület műhold lefedettségétől is
  függ.
- Vannak területek, ahol centiméterre pontos értéket tud, adni valahol több
- méteres eltérés is jelentkezht a vlaós pozícióhoz képest.
+ Vannak területek, ahol centiméterre pontos értéket tud adni, máshol több
+ méteres eltérés is jelentkezhet a vlaós pozícióhoz képest.
+ Ezért használtam a térképes megejelenítésnél az OSMDroid útvonal generálási
+ metódusát , ami útvonalra illeszti a GPS koordinátákat, így kis eltérés
+ mellet is jó eredményeket tud mutatni a program.
+ A tesztek során mind a kétféle protokollt és teszt módot kiprobáltam kombinálva
+ egymással.
+ Közben a mért adatokat, azok közül is a felü és letöltési sebességet a
+ Speedtest nevü programmal ellenőriztem, mely megmondja, hogy az adott helyen
+ milyen a sűvszélességgel rendelkezik a hálózat.
  
 \end_layout
 
 \begin_layout Subsection
-Tesztelés eredménye
+Tesztelés során talált hibák
 \end_layout
 
 \begin_layout Standard
@@ -6102,24 +6123,33 @@ Továbbá a jelenlegi megoldással egyszerre csak egy teszt futtatható, megoldh
 
 \begin_layout Standard
 A szakdolgozatom elkészítésével sikerült betekintést nyerni az Android platformr
-a való fejelsztés lépéseibe és a mobilhálózatok bonyolúlt és szerteágazó
+a való fejelsztés lépéseibe, valamint a mobilhálózatok bonyolúlt és szerteágazó
  világába.
  Első lépésben az Android platform került ismertetésre, mely a bemutatott
  alkalmazás implementálása mellett számos új lehetőségeket rejt.
  Mára már kiforrot mind a platform és mind a fejlesztői környezet, melyel
  nagyon könnyen fejleszthetünk alkalmazásokat.
- Továbbá ismertettem a mobilhálózatokat és ezek generációit.
- Az egyre nagyobb mértékű és egyre inkább nagyobb hangsúlyt kapó mobil adatforga
-lom világában az enyém és az enyémhez hasonló dignosztikai programoknak
- nagy szerepe van és lesz is.
- Olyan alakalmazást valósítottam meg, mellyel a telefonhálózatok operátorai
+ Bár sok lehetőséget nyújt a különféle applikációk fejlesztésében, a dolgozatom
+ elkészítése során nem találtam módot arra, hogy a hivatalos Android SDK
+ segítségével a hanghívásokat is tesztelhessem.
+ Kutatómunkám arar vezetett, hogy a szükséges információk alacsony szinten
+ kerülnek letárolásra, illetve kezelésre, melyhez nem elég az Android SDK
+ megváltoztatása sem.
+\end_layout
+
+\begin_layout Standard
+Továbbá ismertettem a mobilhálózatokat és ezek generációit.
+ Ezen leírásokból is kitűnik az egyre nagyobb mértékű és egyre inkább nagyobb
+ hangsúlyt kapó mobiladatforgalom világában az enyém és az ehhez hasonló
+ dignosztikai programoknak nagy szerepe van és lesz is.
+ Olyan alkalmazást valósítottam meg, mellyel a telefonhálózatok operátorai
  költséghatékonyan megkönyíthetik a munkájukat.
  Természetesen még nagyon sok elemmel ki lehetne egészíteni a programot,
- ami még hatékonyabbá és többoldalúvá tehetné a programot, például a program
+ ami még hatékonyabbá és többoldaluvá tehetné a programot, például a program
  tovább bővithető az Android nyújtotta új szolgáltatásokkal, illetve alacsony
- szintű fejlesztésekkel a telefonkészülékkel olzan hanghívások is tesztelhetőek,
- amit a mostani Android verzió nem támogat, így még gazdagabbá, hatékonyabbá
- lehet tenni tesztelést.
+ szintű fejlesztésekkel a telefonkészülékkel olyan hanghívások is tesztelhetőek,
+ amit a dolgozatom nem támogat, így még gazdagabbá, hatékonyabbá lehet tenni
+ tesztelést.
 \end_layout
 
 \begin_layout Chapter
@@ -6204,8 +6234,9 @@ Használt eszközök a fejlesztés során
 \series bold
 Android SDK 
 \series default
-15 verzióját használom, a program ennél magasabb verziószámú Andorodi készülékek
-en is fut, de alacsonyabb verziójuak már nem támogatottak.
+15.
+ verzióját használom, a program ennél magasabb verziószámú Andorodi készülékeken
+ is fut, de alacsonyabb verziójuak már nem támogatottak.
  Az SDK tartalmazza az Android specifikus könyvtárakat, amik használatával
  Android eszközön futtatható appplikációk készíthetőek.
  
@@ -6237,6 +6268,17 @@ egy nyílt forráskódú, elosztott verziókezelő szoftver, vagy másképpen eg
  Minden Git munkamásolat egy teljes értékű repository teljes verziótörténettel
  és teljes revíziókövetési lehetőséggel, amely nem függ a hálózat elérésétől
  vagy központi szervertől.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+GitHub 
+\series default
+(www.github.com) egy Git-es fejlesztéseket támogató weboldal, mely ingyenes
+ tárterületet biztosít a felhasználóknak.
+ A dolgozatom készítése során itt tároltam a adatokat és a forráskodókat
+ is.
 \end_layout
 
 \begin_layout Itemize
