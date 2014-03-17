@@ -864,6 +864,1991 @@ A szakdolgozatom leginkább a mobil adathívások tesztelésével és elemzésé
 \end_layout
 
 \begin_layout Chapter
+Szükséges ismeretek
+\end_layout
+
+\begin_layout Section
+Mobilhálózatok bemutatása
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Mobilhálózatok kialakulása
+\end_layout
+
+\begin_layout Standard
+Már a második világháborúban képesek voltak rádiótelefonos kapcsolatot kiépíteni
+ katonai használatra.
+ Kézi rádió adó-vevők már az 1940-es évektől elérhetőek voltak, pár telefon
+ társaságnak volt gépkocsiban is használható mobil telefon készüléke.
+ A korai készülékek testesek voltak és sok áramot fogyasztottak, a hálózat
+ pedig csak néhány szimultán beszélgetést tudott csak kiszolgálni.
+ 
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align right
+\begin_inset Graphics
+	filename 621px-Mobile_radio_telephone.jpg
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Első mobil telefonok egyike
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+Az egyesült államokbeli Bell laboratórium mérnökei olyan rendszeren dolgoztak,
+ ami képessé teszi a mobil felhasználókat hívások kezdeményezésére és fogadására
+ akár az autójukból.
+ Az AT&T vállalat 1947-ben megalkotta az első mobiltelefon hálózatot a Mobile
+ Telephon Service-t (MTS).
+ 5,000 ügyféle volt és körülbelül heti 30 000 hívást bonyolítottak rajta.
+ A cella technológia bevezetése lehetővé tette a frekvenciák sokszori újrahaszno
+sítását kis szomszédos területeken, melyeket alacsony teljesítményű adók
+ segítségével fedtek le.
+ Ez lehetővé tette gazdaságilag megvalósítható módon a mobiltelefonok széles
+ körben való elterjedését.
+\end_layout
+
+\begin_layout Standard
+A mobil telefonok fejlődése jól nyomon követhető az egymást követő generációkon,
+ a korai "0G" szolgáltatásokon keresztül az első generációs (1G) analóg
+ cellás hálózatok és második generációs (2G) digitális mobil hálózatokon
+ át a harmadik generációs (3G) szélessávú adat szolgáltatásokig.
+ Napjainkban fejlődnek és egyre inkább elterjednek a negyedik generációs
+ (4G) native-IP hálózatok.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Cellák koncepciója
+\end_layout
+
+\begin_layout Standard
+1947-ben Douglas H.
+ Ring és W.
+ Rae Young a Bell laboratórium mérnökei javasolták a hatszögletű cellák
+ használatát a mobil hálózatokban.
+ Akkoriban ez még nem volt megvalósítható csupán két évtizeddel később,
+ mikor Richard H.
+ Frenkiel, Joel S.
+ Engel és Philip T.
+ Porter mérnökök kiterjesztették a korábbi javaslatot és egy sokkal részletesebb
+ tervet dolgoztak ki.
+ Porter volt, aki először javasolta, hogy az adótornyok használják a már
+ jól ismert irányított antennákat, annak érdekében, hogy redukálják az interfere
+nciát és növeljék a csatornák újrahasznosíthatóságát.
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0in
+width "50col%"
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Transmitting_tower_top_us.jpg
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Többirányú mobilhálózati antenna
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Ezekben a korai időkben a mobilkészüléknek az adótorony által lefedett körzetben
+ kellett maradnia, ahhoz hogy szolgáltatás folyamatos maradjon, vagyis a
+ szolgáltatás nem volt folytonos, átjárható az egyes cellák között.
+ A koncepciók, mint a frekvencia újrahasználás és az átadás (handoff vagy
+ handover) számos új mobiltelefon hálózati koncepciók alapját képezték.
+ 1970-ben Amos E.
+ Joel Bell Laboratórium mérnöke feltalálta a három oldalú antennát, hogy
+ segítse a hívások átadásának folyamatát egyik cellából a másikba.
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatokban gyakran használt kifejezések leírása
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Hozzáférési Technológiák
+\end_layout
+
+\begin_layout Description
+
+\series bold
+FDMA
+\series default
+ (Frequency Division Multiple Access) a leggyakoribb analóg rendszer.
+ Ez a technika a spektrum frekvenciatartományokra való feldarabolásán alapszik
+ és egy frekvenciasávot társít egy felhasználóhoz.
+ Egy csatornát egy időben csak egy előfizető használhat, így egy csatorna
+ lezárul a beszélgetés idejére más felhasználók elől, amíg le nem teszik,
+ vagy át nem adódik a beszélgetés egy másik csatornának.
+ A "full-duplex" FDMA átvitelnek két csatornára van szüksége, egy az adatok
+ küldésére és egy másik a fogadására.
+ FDMA technikát az első generációs analóg rendszerekben használták.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+TDMA
+\series default
+ (Time Division Multiple Access) nagyobb kapacitásra volt képes, mert az
+ egyes frekvenciákat időszeletekre (time slot) osztotta.
+ TDMA rendszerben a felhasználók az egész frekvenciatartományt használhatták,
+ több felhasználó osztozott ugyanazon a frekvencia csatornán amiből egy-egy
+ időszeletet kaptak.
+ TDMA a második generációs mobil hálózatok domináns technológiája.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+CDMA
+\series default
+ (Code Division Multiple Access) szórt spektrumú technológián alapul.
+ Titkosított adat átvitelt is lehetővé tette, ezért régóta használják katonai
+ célokra.
+ CDMA megnövelte a spektrum teljesítő képességét azzal, hogy a felhasználók
+ az összes csatornát használhatják egy időben.
+ Az adások az egész hullámsávot kihasználják, és minden hang vagy adat híváshoz
+ egy egyedi kód tartozik, ami megkülönböztethetővé teszi egymástól a hívásokat.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Mobil hálózati szabványok
+\end_layout
+
+\begin_layout Description
+
+\series bold
+PSTN
+\series default
+ (Public Switched Telephone Network) nyilvános vonalkapcsolt telefonhálózat.
+ Telefon vezetékek, optikai kábelek, mikrohullámú átviteli állomások, kommunikác
+iós műholdak és tengeralatti telefon kábelek kötik össze a kapcsolási központoka
+t, hogy bármely telefon készülékkel felvehessük a kapcsolatot a világon.
+ Eredetileg a hálózat analóg, vezetékes telefon rendszer volt, PSTN majdnem
+ teljesen digitális, mobil és vezetékes telefonokat is tartalmaz.
+ Egyetlen globális címtartománya van a telefonszámoknak, melyet a E.163 és
+ E.164 szabványok írnak le.
+ Az összekapcsolt hálózatok és az egységes számozásnak köszönhetően bármely
+ telefonról hívható bármely másik készülék.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+GSM 
+\series default
+(Global System for Mobile communication) ezt a szabványt az ETSI (European
+ Telecommunications Standards Institute) a második generációs (2G) mobilhálózati
+ protokollok leírására.
+ A GSM sztenderd váltotta le az első generációs (1G) analóg hálózatot egy
+ új, digitális, teljes kétirányú kommunikációt lehetővé tevő, vonalkapcsolt
+ hálózat bevezetésével.
+ Ezt később kiegészítették azzal, hogy belevették az adatkommunikációt is
+ a szabványba, először vonalkapcsolt átvitellel, majd csomagkapcsolt átvitellel:
+ GPRS (General Packet Radio Services) és EDGE (Enhanced Data rates for GSM
+ Evolution vagy EGPRS).
+\end_layout
+
+\begin_layout Description
+
+\series bold
+GPRS 
+\series default
+(General Packet Radio Service) egy csomagkapcsolt szolgáltatás 2G és 3G
+ kommunikációs rendszerekben.
+ A GPRS-t az ETSI szabványosította, napjainkban a 3GPP (3rd Generation Partnersh
+ip Project) tartja karban a szabványt.
+ A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
+ mértéke a rendszert egyidejűleg használók számától függ.
+ A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége (Quality
+ of Service) biztosított a kapcsolat ideje alatt.
+ 2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
+ A 2G és GPRS technológiák kombinációját néha 2.5G-nek szokták hívni, ami
+ a 2G és a 3G mobil technológiák között helyezkedik el.
+ Mérsékelt sebességű adatátvitelt biztosít a GSM rendszerben, az addig kihasznál
+atlan több csatornás idő osztásos (TDMA: Time division multiple acces) technológ
+ia segítségével.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+EDGE
+\series default
+ (Enhanced Data rates for GSM Evolution), más néven EGPRS (Enhanced GPRS)
+ mobiltelefon technológia, ami nagyobb adatátviteli sebességet tesz lehetővé.
+ EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.
+ A 3GPP szabványosította és GSM család részévé vált.
+ Kifinomult kódolási eljárások bevezetésének köszönhetően megnőtt a csatornánkén
+t elérhető bitráta, háromszoros kapacitás és teljesítmény beli növekedést
+ eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
+ A továbbfejlesztett EDGE kisebb késést és több mint kétszeres teljesítmény
+ növekedést biztosít.
+ A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+W-CDMA
+\series default
+ (Wideband Code Division Multiple Access) egy 3G mobilhálózati rádiós interfész
+ sztenderd.
+ A leggyakrabban használt tagja az Universal Mobile Telecommunications System
+ (UMTS) családnak és néha az UMTS szinonimájaként használják.
+ A DS-CDMA csatorna hozzáférési és FDD duplex módszereket alkalmazza, hogy
+ nagyobb sebességre legyen képes és több felhasználót tudjon kiszolgálni
+ a TDMA és TDD (time division duplex) rendszerekhez képest.
+ Ugyanazt a központi hálózatot használja, mint a 2G GSM hálózat.
+ Code Division Multiple Access kommunikációs hálózat sok cég közreműködésével
+ jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
+ a Qualcomm dominált.
+ Qualcomm volt az első cég, akinek sikerült alkalmazható és költséghatékony
+ megoldást találnia: ez volt a korai IS-95 rádióinterfésze sztenderd, melyből
+ a CDMA2000 (IS-856/IS-2000) fejlődött ki.
+ CDMA2000 hálózatok széles körben elterjedtek különösen Amerikában.
+ Azonban az eltérő követelmények és felépítés megakadályozta a globális
+ elterjedését.
+ A a meglévő rádiós interfészekkel való inkompatibilitás és a nagy költséggel
+ járó fejleszthetőség ellenére a W-CDMA egy meghatározó szabvánnyá vált.
+ A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
+ vagy több pár 1.25 MHz rádió csatornát.
+ Habár a W-CDMA szintén CDMA átviteli technikát alkalmaz, akár a CDMA2000,
+ a W-CDMA nem egyszerűen egy széles sávú verziója a CDMA2000-nak.
+ Mérnöki szempontból a W-CDMA különböző optimalizálási lehetőséget nyújt
+ költség, kapacitás és teljesítmény között.
+ Specifikációk egész halmazát tartalmazza, melyek részletesen definiálják
+ a protokollokat, a kommunikációt a készülékek és a tornyok között, hogyan
+ kell modulálni a szignálokat és azt is hogyan kell az adatokat strukturálni.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+UMTS
+\series default
+ (The Universal Mobile Telecommunications System) harmadik generációs mobil
+ hálózati rendszer.
+ A 3GPP (3rd Generation Partnership Project) fejlesztette ki és tartja karban.
+ W-CDMA hozzáférési technológiát használ a jobb hálózati kihasználtság és
+ sávszélesség miatt.
+ UMTS specifikál egy teljes hálózati rendszert, melybe beletartozik a hozzáférés
+i hálózat (UMTS Terrestrial Radio Access Network, UTRAN), a központi hálózat
+ (core network) és a felhasználók SIM általi azonosítása.
+ Az EDGE és a CDMA2000 ellentétben az UMTS új bázis állomást és frekvencia
+ allokációs módszert igényel.
+ Az UMTS által támogatott maximális adat átviteli ráta 42 Mbit/s, ha HSPA+
+ alkalmaznak a hálózatban és 7.2 Mbit/s HSDPA használat esetén.
+ Ezek a sebességek szignifikánsan gyorsabbak , mint a GSM 9.6 kbit/s-os hibajavít
+ásos vonalkapcsolt adatátvitele, vagy a CDMAOne csatornák 14.4 kbit/s rátája.
+ 2006 óta UMTS hálózatokat számos országban feljavították a High Speed Downlink
+ Packet Access (
+\series bold
+HSDPA
+\series default
+) technikával, melyet néha 3.5G néven emlegetnek.
+ HSDPA segítségével a letöltési sebesség elérheti a 21 Mbit/s-ot.
+ A feltöltési sebesség javítását támogató technológia a High-Speed Uplink
+ Packet Access (
+\series bold
+HSUPA
+\series default
+).
+ Az első UMTS hálózatot 2002-ben indították be, nagy hangsúlyt fektetve
+ az olyan mobil alkalmazásokra, mint a mobil TV és videóhívás.
+ A nagy adatátviteli sebességet gyakran Internet elérésre használják.
+ 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+LTE
+\series default
+ (Long-Term Evolution) 4G LTE, a legújabb sztenderd a mobiltelefonok és
+ adat terminálok közötti nagy sebességű vezeték nélküli adatkommunikációra.
+ GSM/EDGE és UMTS/HSPA hálózati technológiákon alapszik, de nagyobb kapacitást
+ és sebességet nyújt különböző rádiós interfészek együttes alkalmazásával.
+ A világ első publikus LTE szolgáltatója a TeliaSonera Osloban és Stockholmban.
+ Várhatóan az LTE lesz az első igazán globális mobiltelefon sztenderd, habár
+ a országonként különböző frekvenciasávok használata miatt csak a többsávos
+ telefonok lesznek képesek kihasználni minden országban az LTE szolgáltatást.
+ Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogatták, az
+ LTE 326 Mbit átvételére lesz képes másodpercenként, 20 MHz széles frekvenciatar
+tományon.
+ Az LTE sztenderd csak IP hálózatokat támogatja.
+ A GSM, UMTS és CDMA2000 hagyományos vonalkapcsolt hálózatok, így az LTE-vel
+ való együtt működés miatt át kell tervezni a hálózatokat.
+ Erre több fél megoldást dolgoztak ki:
+\end_layout
+
+\begin_layout Description
+
+\series bold
+VoLTE 
+\series default
+(Voice Over LTE) megközelítés IP Multimedia Subsystem (IMS) hálózaton alapszik.
+ Ezzel a megoldással a hangszolgáltatás adatfolyamként továbbítódik az LTE
+ állomáson keresztül.
+ Ez azt jelenti, hogy nem kell módosítani a hagyományos vonalkapcsolt hálózatot,
+ képes lesz a 4G-s hívást adatcsomagként továbbítani.
+ Másik megközelítés a 
+\series bold
+CSFB 
+\series default
+(Circuit Switched Fallback).
+ Eben az esetben az LTE csak adatcsomag szolgáltatást nyújt, és a hanghívások
+ vonalkapcsolt hálózatban dolgozódnak fel.
+ Ezt a megoldást használva az operátoroknak csak az MSC-t kell frissíteniük
+ IMS telepítés helyett.
+ Hátránya a hosszabb hívás kiépítési idő.
+ A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-NB
+ kodek (narrow band) használatát, de a javasolt beszéd kodek VoLTE-hoz az
+ Adaptive Multi-Rate Wideband, avagy a HD Voice.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Mobil hálózat elemei
+\end_layout
+
+\begin_layout Description
+BSC (Base Station Controller) több tíz esetleg több száz BTS-t irányít.
+ A BSC rádió csatornák kiosztásáért felelős, mérési eredményeket fogad a
+ mobil készülékektől és a BTS-ek közötti handover-eket kezeli.
+ BSC fő funkciója összekötőként viselkedik a BTS-ek és a Mobile Switching
+ Center (MSC) között.
+ Általában a hálózatokban gyakorta úgy strukturálják, hogy számos BSC-t
+ elosztanak a régiókban közel a BTS-ekhez, melyek egy nagy központosított
+ MSC site-al állnak kapcsolatban.
+ MSC-ket és Service GPRS Support Node-okat (SGSN) is kiszolgál (abban az
+ esetben ha GPRS-t használ).
+ 
+\end_layout
+
+\begin_layout Description
+BSS (Base Station Subsystem) része a hagyományos mobilhálózatnak (2G, GSM)
+ és a kommunikációt biztosítja a mobiltelefon és a hálózati kapcsolóalrendszer
+ között.
+ A BSS transzkódolást végez, rádió csatornákat rendel a mobiltelefonokhoz,
+ lapozást kezel, és még sok más feladatot ellát a rádiós hálózatban.
+\end_layout
+
+\begin_layout Description
+BTS (Base Transceiver Station) tartalmazza a rádió szignálok átviteléhez
+ és fogadásához szükséges berendezéseket, antennákat, valamint a bázisállomással
+ (BSC) történő kommunikáció dekódoláshoz és titkosításhoz szükséges eszközöket.
+ Valójában nem más, mint egy pikócella sok rádió adó-vevővel (TRX), amik
+ lehetővé teszik különböző frekvenciák kiszolgálását.
+ Egy BTS-t a "szülő
+\begin_inset Quotes srd
+\end_inset
+
+ bázis állomás (BSC) vezérel.
+\end_layout
+
+\begin_layout Description
+MS (Mobile Station) azaz maga a mobil készülék, amivel a felhasználó hívást
+ kezdeményezhet és fogadhat.
+ Ez a terminológia 2G rendszerekre vonatkozik, mint a GSM.
+ 3G rendszerekeben a mobile station helyett 
+\begin_inset Quotes sld
+\end_inset
+
+user equipment
+\begin_inset Quotes srd
+\end_inset
+
+-ként (UE) hivatkoznak rá.
+\end_layout
+
+\begin_layout Description
+RNC (Radio Network Controller) az UMTS mobil hálózat (UTRAN) irányító egysége
+ és a hozzá kapcsolt 
+\begin_inset Quotes sld
+\end_inset
+
+Node B
+\begin_inset Quotes srd
+\end_inset
+
+-k kontrollálásáért felelős.
+ BSC-nek 3G-s hálózati megfelelője, hasonló munkát végez: az üzenetek encryptálá
+sa és erőforrás kezelés.
+ Az RNC kapcsolatban áll a Circuit Switched Core Network-hez a Media Gateway-en
+ (MGW) keresztül és az Serving GPRS Support Node-en (SGSN) keresztül a Packet
+ Switched Core Network-höz.
+\end_layout
+
+\begin_layout Description
+Node-B Ezt a terminust az UMTS hálózatban használják és megfelel a BTS-nek
+ a GSM-ben.
+ A mobil készülékek Node B-n tudnak egymással kommunikálni.
+ Az RNC kontrollálja ezt a hálózati elemet.
+\end_layout
+
+\begin_layout Description
+VLR (Visitor Location Register) egy adatbázis azon előfizetők számára, akik
+ beléptek az adott VLR-hez tartozó Mobile Switching Center (MSC) területére.
+ Minden egyes bázisállomáshoz pontosan egy VLR tartozik, így az előfizető
+ egy időben mindig csak egy VLR-ben szerepel.
+ Az adatok vagy a mobil készülékről (MS), vagy a HLR-től érkeznek.
+ Amint érzékel egy új MS-t az MSC, azonnal készít egy új bejegyzést a VLR-jében
+ és frissíti a HLR-ben az előfizető helyzetét.
+\end_layout
+
+\begin_layout Description
+HLR (Home Location Register) egy központi adatbázis, ami tartalmazza az
+ összes mobiltelefon előfizetője adatát, akik használhatják hálózatot.
+ 
+\end_layout
+
+\begin_layout Description
+M-MGW (Mobile Media Gateway) egy olyan eszköz, ami a digitális média folyamokat
+ konvertálja (transzkódolja) a különböző telekommunikációs hálózatok között
+ (PSTN, 2G, 3G, stb.), illetve lehetővé teszi a különféle átviteli protokollok
+ használatát (ATM, IP, TDM) .
+ Általában az egyes hálózatok határán helyezkedik el, hogy biztosítsa az
+ adatok konvertálását egyik hálózatból a másikba.
+\end_layout
+
+\begin_layout Description
+SGSN (Serving GPRS Support Node) felelős a mobileszközök és kiszolgáló állomások
+ közötti adat csomagok szállításáért.
+ A feladatai közé tartozik az irányítás (routing), a helymeghatározás és
+ a felhasználók azonosítása (authentication).
+ 
+\end_layout
+
+\begin_layout Description
+GGSN (Gateway GPRS Support Node) központi eleme a GPRS hálózatnak, az internet
+ elérését biztosítja a GPRS hálózat és a külső hálózatok között.
+ Kívülről nézve a GGSN egy router, aki elrejti a GPRS hálózat infrastruktúráját
+ a külső hálózattól.
+ Mikor adat csomagokat kap megvizsgálja, hogy a felhasználó aktív-e és,
+ ha igen akkor továbbítja a csomagot az SGSN-nek, aki kiszolgálja a mobil
+ felhasználót.
+\end_layout
+
+\begin_layout Description
+MSC (Mobil Softswitch Controller) elsődleges eleme a GSM/CDMA hálózatoknak,
+ a hanghívások route-olásáért és az SMS, valamint más szolgáltatásokért
+ felelős, mint a konferencia hívások, FAX, stb.
+ Kiépíti, majd lebontja a kapcsolatokat, hívásokat, valamint kezeli a handover-e
+ket.
+\end_layout
+
+\begin_layout Description
+IMS (IP Multimedia Subsystem) egy architektúra az IP alapú multimédiás szolgálta
+tásokhoz.
+ Kezdetben a 3GPP arra fejlesztette ki, hogy terjesszék ki a GPRS-t Internet
+ alapú szolgáltatásokkal.
+ A könnyebb integrálhatóság miatt IETF protokollokat használnak ahol csak
+ lehetcségs, ilyen például a SIP (Session Initiation Protocol) .
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Mobil hálózat szolgáltatások
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+SIM
+\series default
+ (Subscriber Identity Module) egyik fő jellemzője a GSM-nek a SIM bevezetése,
+ a legtöbben SIM kártya néven ismerik.
+ A SIM egy cserélhető okoskártya, mely az előfizető információt és telefonkönyve
+t tartalmazhat.
+ Lehetővé teszi a felhasználónak, hogy információkat tároljon és egy másik
+ telefonban is fel tudja használni azokat.
+ Ezentúl lehetővé teszi, hogy szolgáltatót váltson a felhasználó a készülék
+ lecserélése nélkül, mivel csak SIM kártyát kell lecserélnie.
+ Néhány operátor blokkolja ezt a lehetőséget a SIM lezárásával, ez esetben
+ a készülék csak az adott szolgáltató kártyáját fogadja el.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+WAP
+\series default
+ (Wireless Application Protocol): egy sztenderd technika a vezetéknélküli
+ hálózatokon keresztül történő információ cserének.
+ A WAP böngésző egy webböngésző a mobil készülékekhez.
+ A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
+ az interaktív adatszolgáltatásra.
+ Interaktivitást követelt az Internet és Web alkalmazások támogatása pl.:
+ email kezelés, tőzsdei árak vagy a sporteredmények követése.
+ A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
+bilitást a WAP és más különböző hálózati technológiák között, mint a GSM
+ és a CDMA.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Roaming
+\series default
+ egy általános kifejezés a mobil szolgáltatás kiterjesztésére olyan helyre,
+ amely különbözik a szolgáltatás regisztrált helyétől.
+ Roaming biztosítja a kapcsolatot vezetéknélküli eszköz és a hálózat között,
+ a kapcsolat elvesztése nélkül.
+ Hagyományos GSM Roaming definíció szerint (GSM Association Permanent Reference
+ Document AA.39) a cella felhasználó képes automatikusan hívást indítani
+ és fogadni, adatokat küldeni és fogadni, vagy más szolgáltatásokhoz kapcsolódni
+, miközben utazik, elhagyja a hazai szolgáltatás által lefedett területet.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Handover
+\series default
+ kifejezés (vagy handoff) arra a folyamatra utal, mikor egy folyamatban
+ lévő hívást, vagy adat folyamot átviszünk az egyik csatornáról a másikra.
+ Erre akkor van szükség, mikor a készülék átlépi a cella határát, vagyis
+ kilép az eddigi adótorony körzetéből és egy másik veszi át a kiszolgálását.
+ Több féle handover létezik, attól függően, hogy a telefon melyik cellát,
+ milyen irányba lépi át.
+ Például abban az esetben, mikor a készülék nem csak egy cella határán van,
+ hanem egy tartomány határán is, akkor nem csak egy másik toronyhoz (BTS
+ vagy Node B) kerül át , hanem egy másik BSC vagy RNC-hez is.
+\end_layout
+
+\begin_layout Subsection
+Mobilhálózatok fejlődése
+\end_layout
+
+\begin_layout Standard
+Az első rádiótelefon szolgáltatás '40es végén vezették be Amerikában, ez
+ azt jelentette, hogy a mobil használók akár autóból is tudtak kapcsolódni
+ a meglévő publikus telefonhálózathoz.
+ 1960-ban új rendszert indított a Bell Systems, amit IMTS-nek (Improved
+ Mobile Telephone Service) hívtak, mely számos újítást hozott, például szélesebb
+ sávszélességet.
+ Az első analóg cellás rendszer ezen az IMTS rendszeren alapult és a 1970-es
+ évek elején fejlesztették ki.
+ A rendszer "cellás" volt, mert a lefedett területeket felosztották kisebb
+ részekre, avagy cellákra.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Első generáció 
+\end_layout
+
+\begin_layout Standard
+Első generációs mobil rendszer az AMPS (Advance mobile phone system), melyet
+ először az Egyesült államokban vezették be.
+ Ez az egyik legjobb FDMA (Frequency Division Multiple Access) technológia,
+ mely lehetővé teszi, hogy hanghívást bonyolíthat az egész országban.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Második generáció
+\end_layout
+
+\begin_layout Standard
+2G digitális cellás rendszer, melyet az 1980-as évek végén fejlesztették
+ ki.
+ Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak
+ az analóg 1G rendszerhez képest.
+ GSM (Global system for mobile communication) volt az első kereskedelemben
+ működtetett digitális cellás rendszer, mely TDMA (Time division multiple
+ acces) alapú.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\paragraph_spacing single
+\noindent
+\align center
+\begin_inset Graphics
+	filename Gsm_structures.svg.jpg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+2G hálózat struktúrája
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A 2G technológiák biztosítanak különböző szolgáltatásokat, mint szöveges
+ üzenet, kép üzenet és MMS (multi media messages) küldését.
+ Az összes szöveges üzenet digitálisan titkosított, így csak a megfelelő
+ címzett tudja fogadni és elolvasni az üzenetet.
+ Idővel sokat fejlesztettek a rendszeren, így alakult ki a korábban már
+ említett GPRS és az EDGE technológiák.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+
+\series bold
+Harmadik generáció
+\series default
+ 
+\end_layout
+
+\begin_layout Standard
+3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefonhálózatok
+ operátoraitól.
+ A fejlesztés 1996-ban kezdődött a Nippon Telephone & Telegraph (NTT) és
+ az Ericsson vezetésével; 1997-ben az amerikai Telecommunications Industry
+ Association (TIA) a CDMA-t választotta 3G technológiájának; 1998-ban az
+ European Telecommunications Standards Institute (ETSI) ugyan ezt tette
+ és végül a széles sávú CDMA (W-CDMA) és a CDMA 2000 adaptálták az UMTS-hez
+ (Universal Mobile Telecommunications System).
+ W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
+ A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
+ 2000 CDM-et (Code Division Multiplexing) eljárást használ.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename UMTS_structures.svg.jpg
+	scale 55
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+3G hálózat struktúrája
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+3G rendszer gyorsabb kommunikációs szolgáltatást nyújt, beleértve a hang,
+ fax és Internet szolgáltatásokat, melyek bármikor és bárhonnan elérhetőek.
+ Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk,
+ például multimédiás szórakoztatás, információ és helymeghatározás szolgáltatáso
+k elterjedését a felhasználók között.
+ Az első 3G hálózatot Japánban építették ki 2001-ben.
+ 2.5G hálózatok, mint a GPRS (Global Packet Radio Service) már elérhetőek
+ voltak Europa bizonyos országaiban.
+ 3G technológia támogatja a 144 Kbps sávszélességet nagy sebességű mozgásnál
+ (pl: járművek), 384 Kbps pl egyetemek területén és 2 Mbps-ot állóhelyzetben
+ (pl: épületen belül).
+ A maximális letöltési adatráta 384Kpbs, átlagosan 200 Kpbs és a feltöltés
+ is ráta 64 Kpbs.
+\end_layout
+
+\begin_layout Subsubsection*
+
+\series bold
+Negyedik generáció 
+\end_layout
+
+\begin_layout Standard
+Negyedik generációs (4G) mobil kommunikáció nagyobb adatátvitelre lesz képes,
+ mint a 3G.
+ Az adatráta tervezett mértéke 100 Mbps .
+\end_layout
+
+\begin_layout Standard
+A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
+ sebességű adatátvitelt, így lehetővé teszi többek között a jó minőségű,
+ nagy felbontású videótelefonálást.
+ A 2008-as ITU szabvány szerint legfeljebb 100 Mbit/s átviteli sebesség
+ elérése lesz képes egy gyorsan mozgó készülék esetén (például: kocsiban,
+ vonaton) és akár 1Gbit/s adatráta is elérhető egyéb esetekben.
+ Két 4G rendszertervet dolgoztak ki, amit már kereskedelmi forgalomban is
+ használnak, ez a Mobile WiMAx és az LTE.
+ Egyik megoldás sem teljesen teljesíti az ITU szabványt, ezért ezeket még
+ 
+\begin_inset Quotes sld
+\end_inset
+
+hivatalosan
+\begin_inset Quotes srd
+\end_inset
+
+ nem tartják a szakemberek negyedik generációs hálózatnak, habár az operátorok
+ már annak hirdetik.
+ Mindkét technológiát fejlesztik, hogy megfeleljen a 4G szabvány elvérásainak,
+ főleg az adatátviteli sebesség kapcsán.
+ Egyáltalán nem támogatja már a hagyományos vonalkapcsolt szolgáltatásokat,
+ csak az internet protokollra (IP) épülőket, mint amilyen az IP telefonálás.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename interphaseLTEnetwork.jpg
+	scale 60
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+4G és 3G hálózat architektúrája
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+A hálózatok vizsgált adatai
+\end_layout
+
+\begin_layout Standard
+A lenti táblázat tartalmazza az átviteli sebességeket különféle technológiák
+ esetén.
+ Ezek a sebesség adatok módosulhatnak attól függően, hogy milyen rádiótechnológi
+át használ a telefonhálózat operátora (CDMA, FDD, stb.) Amint látható, a
+ 2G és 3G hálózatok adatrátája egyre inkább növekszik, így lehetővé téve
+ a nagyobb sávszélességigényű szolgáltatások bevezetését, mint a HD audió
+ és videó szolgáltatások.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="11" columns="2">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="right" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Technológia
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Adatráta
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GSM
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.6Kbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GSM/GPRS 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+40Kbps-144Kbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+EDGE 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+474Kbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+UMTS (WCDMA) 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+384Kbps-2Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA-One 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+9.6Kbps-76.8Kpbs
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 1x EV-DO 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+384Kbps – 2.4Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 1x EV-DV
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+3.09Mbps 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CDMA 2000 3x
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+2Mbps – 4Mbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+HSDPA 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+8Mbps – 10Mbps
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LTE
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+le 1 Gbps, fel 500 Mbps.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Technológiák és az elérhető adatráták
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerősség
+ és UDP tesztek esetén a jitter.
+ A jelerősség - amit dBm-be mérnek - indikálja a szolgáltatás minőségét.
+ Az értéke sok paramétertől függ, többek között az adótoronytól való távolságtól
+, a természeti akadályoktól, amik a készülék és a torony között vannak (erdő,
+ hegy, stb.) és az időjárástól is függhet.
+ A telefonkészüléken 5 darab kis osztás szokta jelezni a jelerősséget.
+ Minél több osztás aktív, annál erősebb a jel, annál jobb a szolgáltatás.
+ Ha kicsi a jel erősség, akkor probléma léphet fel a szolgáltatások minőségében,
+ például akadozik a hangátvitel, nagyon ingadozik az átviteli sebesség.
+ A ritkán lakott területeken is kicsi szokott lenni a jelerősség.
+ A mérésekből kiderülhet, hogy olyan helyen is rossz a jel minősége, ahol
+ ezt nem is várnánk, és az operátorok feladata, hogy kiderítsék ennek az
+ okát.
+\end_layout
+
+\begin_layout Standard
+A jitter a csomagok megérkezési ideje közötti különbség, amit a hálózati
+ torlódásból, időzítési problémából vagy útvonal váltásból eredhet.
+ Ez akkor jó, ha kicsi az érték, azaz a csomagok sűrűn követik egymást és
+ a csomagok beérkezési idejei között nem nagy a különbség.
+ A jitter nagysága, illetve nagy, sűrű változása okozhatja a telefonbeszélgetése
+k közbeni hangkiesést, akadozást, illetve a videolejátszás során a képek
+ kiesését, szaggatást.
+ Az UDP-t használó tesztek során a jelentések tartalmazzák az aktuális jitter
+ értéket.
+ Ezen értékeket figyelve derülhet ki a magas jitter érték, illetve a gyakori,
+ nagy különbségek is problémát jelezhetnek a hálózatban.
+ 
+\end_layout
+
+\begin_layout Section
+Android platform bemutatása
+\end_layout
+
+\begin_layout Standard
+Az Android fejlesztő környezet széleskörű támogatást nyújt a fejlesztőknek
+ a telefon és a hálózat adatainak lekéréséhez, ami nagyban megkönnyíti az
+ alkalmazás fejlesztését.
+ A nyílt fejlesztői környezettel az Android lehetőséget biztosít a fejlesztőnek,
+ hogy magas színvonalú és innovatív alkalmazásokat készítsen.
+ A fejlesztők kihasználhatják például az adott eszköz hardver képességeit,
+ hozzáférhetnek a felhasználó adataihoz és akár futtathatnak háttér szolgáltatás
+okat is.
+\end_layout
+
+\begin_layout Subsection
+Android komponensek
+\end_layout
+
+\begin_layout Standard
+Az Android fejlesztőkörnyezetnek több komponense létezik, mindegyiknek különböző
+ célja és szerepe van a programban.
+ Ezek általában egymással szoros kapcsolatban állnak, de önálló példányban
+ léteznek és saját életciklusuk van.
+\end_layout
+
+\begin_layout Subsubsection
+Activity
+\end_layout
+
+\begin_layout Standard
+Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nevezünk.
+ Például egy zenelejátszó program Activity-je lehet, ami megjeleníti a lejátszó
+ felületet, és egy másik, ahol kiválaszthatja a felhasználó a lejátszandó
+ zenéket.
+ Minden alkalmazásnak van egy kitüntet "fő
+\begin_inset Quotes srd
+\end_inset
+
+ Activity-je, ha a felhasználó elindítja a programot ez az ablak jelenik
+ meg.
+ Habár mindegyik Activity a zenelejátszó programban együttműködve adja a
+ teljes felhasználói élményt, mégis mindegyik független a többitől.
+ 
+\end_layout
+
+\begin_layout Standard
+A hagyományos applikációkkal ellentétben az Android programoknak nincs kontrollj
+uk az életciklusuk felett.
+ Így az alkalmazás komponenseinek figyelnie kell a program állapotváltozására
+ és aszerint reagálni.
+ A komponensek állapota befolyásolja a program állapotát, mely meghatározza
+ a program prioritását a rendszerben.
+ Az Activity-k úgynevezett "Activity stack
+\begin_inset Quotes srd
+\end_inset
+
+-en, azaz egy Last-In-First-Out adatszerkezetben tárolódnak.
+ Mikor egy új Activity elindul, az előtte futó kerül a stack tetejére.
+ Ha az előtérben lévő, aktív Activity bezáródik vagy a felhasználó megnyomja
+ a Vissza gombot, akkor a verem tetején lévő kerül előtérbe.
+ Ha az Activity-t megsemmisíti a rendszer, mert már nincs rá szükség, akkor
+ felszabadítja annak erőforrásait és eltávolítja a veremből.
+ A folyamatot az alábbi kép szemlélteti.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename stack.png
+	scale 60
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Activity-ket tartalmazó verem
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az Activity-nek négy állapota lehet:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Aktív 
+\series default
+(Active), ebben az állapotban a verem tetején lévő Activity lehet, ilyenkor
+ az ablak előtérben van és képes fogadni a felhasználói utasításokat.
+ Az Android rendszer mindent megtesz annak érdekében, hogy ez az Activity
+ futhasson.
+ Így, ha kevés az erőforrás, a memória, akkor leállítja a verem alján lévőket
+ és felszabadítja azok erőforrását.
+ Mikor egy másik Activity lesz az aktív, akkor az előbbi állapota felfüggesztett
+ lesz.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Felfüggesztett
+\series default
+ (Paused) állapotban az Activity látható maradhat, de nem reagál felhasználói
+ eseményekre, nincs fókusza.
+ Ez akkor fordulhat elő, ha az előtérben lévő ablak átlátszó vagy nem fedi
+ le a teljes képernyőt.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Leállt 
+\series default
+(Stopped), ekkor az Activity nem látható, leállt.
+ Az erőforrások még nem szabadulnak fel és a veremből sem kerül ki.
+ A leállt Activity-k prioritása a legkisebb, így ezeket terminálja legelőször
+ a rendszer, ha erőforrásra van szüksége.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Inaktív 
+\series default
+(Inactive) állapotba kerül, ha terminálva lett vagy mielőtt elindul.
+ Ezek az Activity-k nincsenek a veremben és csak újraindításkor válhat aktívvá.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename activity_lifecycle.png
+	scale 60
+	clip
+
+\end_inset
+
+
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Activity életciklusa
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Android rendszer biztosítja, hogy az egyes Activity-k reagálhassanak az
+ állapotváltásra.
+ A lenti képen láthatóak az Activity életciklusai.
+ A téglalapok visszahívó (callback) metódusokat szimbolizálnak.
+ Ezek felhasználhatók különféle műveletek végrehajtására az egyes átmenetek
+ során.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onCreate() 
+\series default
+Az Activity létrejöttekor hívódik meg.
+ Itt kell az összes statikus adatot inicializálni, például nézetek létrehozása.
+ Ez a függvény kap egy Bundle típusú paramétert, mely az Activity előző
+ állapotát tartalmazza.
+ Mindenképp onStart() metódus hívás követi.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onRestart() 
+\series default
+egy leállított Activity újraindítása során hívódik meg.
+ OnStart() metódus követi.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStart() 
+\series default
+az előtt hívódik, hogy az Activity láthatóvá válna a felhasználó számára.
+ OnResume() metódus hívódik ezután, ha az Activity előtérbe kerül vagy az
+ onStop(), ha háttérbe kerül.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onResume() 
+\series default
+akkor hívódik, ha az Activity a verem tetejére kerül, mielőtt aktívvá válna
+ és felhasználói inputot fogadna.
+ Minden esetben onPause() hívódik utána.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onPause() 
+\series default
+egy másik alkalmazás folytatása váltja ki ezt a metódushívást.
+ Itt célszerű elmenteni az adatokat, illetve leállítani az erőforrás igényes
+ műveleteket, mint például az animáció lejátszást.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStop() 
+\series default
+az Activity leállásakor vagy egy másik Activity aktívvá válásakor hívódik,
+ ilyenkor Ezután onRestart() hívás jelzi, hogy újra aktívvá vált az Activity.
+ 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onDestroy() 
+\series default
+az Activity megszűnésekor kerül meghívásra, amit vagy a rendszer vált ki,
+ mert erőforrásra van szüksége vagy meghívták rá az 
+\shape italic
+finish()
+\shape default
+ metódust.
+\end_layout
+
+\begin_layout Subsubsection*
+Service 
+\end_layout
+
+\begin_layout Standard
+A Service (szolgáltatás) egy háttérben, párhuzamosan futó komponens.
+ Sokáig futó műveletek végrehajtására használható és nem biztosít felhasználói
+ felületet.
+ Ilyen művelet lehet például a zenelejátszás, miközben a felhasználó más
+ alkalmazást használ, anélkül, hogy a háttérben futó zenelejátszás blokkolná
+ vagy zavarná a másik alkalmazást, illetve a felhasználót.
+ Egy másik komponens, mint például egy Activity indíthat Service-t és interakció
+ba léphet vele.
+ Egy új service-t indíthat egy komponens a 
+\shape italic
+startService()
+\shape default
+ metódus hívással, ami akkor is fut, ha a hívó komponens megszűnik.
+ Service automatikusan leáll, ha a feladatát befejezte.
+ Ez a feladat lehet például egy fájl feltöltése.
+ Másik működési módja a service-nek az úgynevezett kötött (bound) service.
+ Egy komponens a 
+\shape italic
+bindService()
+\shape default
+ metódussal tud összeköttetésbe kerülni ezzel service-vel.
+ Több komponens is kapcsolódhat egy service-hez, ha már egy komponens se
+ kapcsolódik a szolgáltatáshoz, akkor megszűnik a service.
+ Fontos callback metódusok, melyeket implementálhat egy service -nek:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onStartCommand() 
+\series default
+akkor hívódik, mikor egy másik komponens meghívja a 
+\shape italic
+startService()
+\shape default
+ metódust.
+ Ha ez a metódus implementálásra kerül és befejezte a működését, akkor a
+ le kell állítani a 
+\shape italic
+stopSelf()
+\shape default
+ vagy 
+\shape italic
+stopService()
+\shape default
+ metódussal.
+ Ha csak kötött szolgáltatásként szeretnénk használni , akkor nem kell implement
+álni ezt a metódust.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onBind()
+\series default
+ metódus hívódik, ha egy másik komponens akar kapcsolódni a service-hez
+ a 
+\shape italic
+bindService()
+\shape default
+ függvény hívással.
+ Ha nem akarjuk megengedni a szolgáltatáshoz való csatlakozást akkor null-t
+ kell visszatérő paraméterként, egyébként pedig egy IBinder típusú objektumot,
+ amin keresztül a hívó komponens kommunikálhat a szolgáltatással.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onCreate()
+\series default
+ a service létrehozásakor hívódik az 
+\shape italic
+onStartCommand()
+\shape default
+ előtt.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+onDestroy()
+\series default
+ a rendszer hívja ezt a metódust, mikor a szolgáltatást már nem használják
+ többé és meg kell szüntetni.
+ Itt kell felszabadítani a foglalt erőforrásokat, szálakat.
+\end_layout
+
+\begin_layout Subsubsection*
+IntentService
+\end_layout
+
+\begin_layout Standard
+Az IntentService a Service osztályból öröklődik és aszinkron kéréseket kezel
+ (Intent-eken keresztül).
+ Kliens küld egy kérést a startService(Intent) híváson keresztül és a szolgáltat
+ás elindul, és leállítja magát, ha végre hajtotta a feladatát.
+ Egyszerre csak egy kérést szolgál ki, ha több érkezik be, akkor egymás
+ után lesznek kiszolgálva.
+ Ez a módszer gyakran használt eljárás, annak érdekében, hogy tehermentesítsük
+ az applikáció fő szálát.
+ A használatához az IntentService osztályból kell származtatni és implementálni
+ az 
+\shape italic
+onHandleIntent(Intent)
+\shape default
+ metódust.
+ Az IntentService meg fogja kapni ezt az Intent-et, elindítja az új szálat,
+ és megállítja szolgáltatást.
+\end_layout
+
+\begin_layout Subsubsection
+Broadcast receiver
+\end_layout
+
+\begin_layout Standard
+A broadcast receiver egy olyan komponens, amely válaszol a rendszerszintű
+ üzenetekre.
+ Számos rendszerüzenetet kezelhet például a képernyő kikapcsolásról vagy
+ az akkumulátor töltöttségének csökkenéséről érkező üzeneteket.
+ Az alkalmazás is kezdeményezhet ilyen üzenet küldést például, ha egy másik
+ alkalmazásnak akar üzenetet küldeni.
+ A service-hez hasonlóan nem rendelkezik felhasználói felülettel.
+\end_layout
+
+\begin_layout Standard
+Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni, amit Inetent-nek
+ neveznek.
+ Ez kapcsol össze komponenseket futási időben, akkor is, ha a komponens
+ egy másik applikációhoz tartozik.
+ Az Intent közvetíthet üzenetet másik komponensnek, például, hogy jelenítsenek
+ meg egy képet vagy nyisson meg egy weboldalt.
+\end_layout
+
+\begin_layout Subsubsection*
+Intent
+\end_layout
+
+\begin_layout Standard
+Az intent üzenetekkel futás idejű kapcsolatot, kötést létesíthetünk Android
+ komponensek között.
+ Intent objektum egy adatstruktúra, ami általában a végrehajtandó művelet
+ absztrakt leírását tartalmazza, illetve a fogadó komponens számára fontos
+ információkat is tartalmazhat.
+ Ezen felül tartalmaz a rendszer számár a lényeges információkat például:
+ a fogadó komponens kategóriáját.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Application 
+\end_layout
+
+\begin_layout Standard
+Ezen osztály segítségével lehet figyelni, karbantartani az egész applikáció
+ állapotát.
+ A saját application objektumunkat az AndroidManifest.xml fájl <application>
+ tagja írja le, ami azt jelenti, hogy az osztály példánya létrejön az applikáció
+ indulása elején.
+ Általában nincs szükség erre az objektumra.
+ A többi Android objektumból elérhető az Application objektum a 
+\shape italic
+getApplication()
+\shape default
+ metódus segítségével.
+\end_layout
+
+\begin_layout Standard
+Ha szükség van egy globális Context objektumra (például BroadcastReceiver
+ objektum beregisztrálásához), itt található a 
+\shape italic
+getApplicationContext()
+\shape default
+ függvény, mely visszaadja ezt a Context objektumot.
+\end_layout
+
+\begin_layout Subsection
+Futási környezet és konfiguráció
+\end_layout
+
+\begin_layout Standard
+Az Android SDK tartalmaz egy alap könyvtárat, mely megvalósítja a Java programoz
+ási nyelv túlnyomó részét.
+ 
+\end_layout
+
+\begin_layout Standard
+Minden alkalmazás saját szálon fut és saját Dalvik virtuális gép példánnyal
+ rendelkezik, így egymástól elkülönítve tudnak futni az egyes alkalmazások.
+ A Dalvik VM (virtuális gép) a Linux kernelre támaszkodik az alacsony szintű
+ funkcionalitás használata során, mint például a szálkezelés.
+ A Linux továbbá biztonsági, memória és hálózat kezelési szolgáltatásokat
+ is nyújt.
+\end_layout
+
+\begin_layout Standard
+Az Android operációs rendszer megvalósítja a 
+\shape italic
+legkisebb jogosultság elvét, 
+\shape default
+így az alkalmazás csak a számára szükséges komponensekhez fér hozzá.
+ Egy alkalmazás engedélyt kérhet arra, hogy komponensekhez, adatokhoz férhessen
+ hozzá például: névjegyzék, tárolók (SD kártya), kamera, stb.
+ Minden engedélyt a felhasználónak kell jóváhagynia telepítéskor.
+\end_layout
+
+\begin_layout Subsubsection
+AndroidManifest.xml
+\end_layout
+
+\begin_layout Standard
+Az Android rendszer számára szükséges konfigurációs paramétereket tartalmazza,
+ illetve az alkalmazás által használt komponensek deklarációját.
+ Tartalmazza továbbá a felhasználói jogosultságok listáját, deklarálja az
+ alkalmazás futtatásához szükséges minimum Android API szint számát, illetve
+ egyéb hardver és szoftver paramétereket.
+ Azok a komponensek, amik nincsenek deklarálva ebben a fájlban, nem láthatóak
+ a rendszer számára.
+ Ez a fájl az alkalmazás gyökérkönyvtárában foglal helyet.
+\end_layout
+
+\begin_layout Standard
+így néz ki egy Activity deklarációja a manifest fájlban:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset External
+	template JavaCode
+	filename manifest.java
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Az <activity> elemben az android:name paraméter tartalmazza az Activity
+ osztályból származó osztály nevét, melyet az alkalmazásban használunk.
+ Az android:label paraméterben megadhatjuk a felhasználó számára megjelenő
+ nevet.
+\end_layout
+
+\begin_layout Standard
+A fenti példában látható <intent-filter> rész utasítja a rendszert, hogy
+ a MainActivity nevű acvtivity objektumot töltse be az alkalmazás elindulása
+ után.
+\end_layout
+
+\begin_layout Standard
+Komponensek deklarációja a manifest fájlban a következők lehetnek:
+\end_layout
+
+\begin_layout Itemize
+<activity> elemek az Activity-ból származó osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<service> elemek a Service illetve IntentService típusú osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<receiver> elemek a BroadcastReceiver osztályokhoz
+\end_layout
+
+\begin_layout Itemize
+<provider> elemek a tartalomszolgáltató osztályokhoz
+\end_layout
+
+\begin_layout Subsubsection*
+Adattárolás
+\end_layout
+
+\begin_layout Standard
+Az Android számos lehetőséget kínál az adatok perzisztencia tárolására.
+ Ezek lehetnek megosztott preferenciák (Shared preference), mely primitív
+ adatokat tarol kulcs-érték párok alapján, külső illetve belső tároló, illetve
+ SQLite adatbázis.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Megosztott preferenciák
+\series default
+ segítségével tárolhatjuk el egyszerűen az alkalmazás, illetve az egyes
+ Activity objektumok állapotát, mivel az adatok megmaradnak az alkalmazás
+ megszűnése után is.
+ Kulcs-érték párok segítségével el tudjuk menteni az objektumok változóinak
+ értékét, majd visszaolvasni, ha szükséges.
+ Az eltárolt attribútumok float, int, long, boolean és string típusúak lehetnek.
+ A 
+\shape italic
+getSharedPreferences()
+\shape default
+ metódus segítségével névvel ellátott preferenciát kapunk, melyet első paraméter
+ként kell megadnunk, és arra hivatkozva bárhonnan el tudjuk érni az alkalmzásból.
+ A 
+\shape italic
+getPreferences()
+\shape default
+ függvény segítségével az Activity objektumokhoz rendelhetünk egy preferenciát,
+ amiben az adott tevékenység objektum adatait tárolhatjuk.
+ 
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Belső tár 
+\series default
+segítségével
+\series bold
+ 
+\series default
+olyan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
+ban, amikhez csak az alkalmazás férhet hozzá és annak eltávolításakor ezek
+ a fájlok automatikusan törlődnek.
+ 
+\end_layout
+
+\begin_layout Standard
+A 
+\series bold
+külső tár
+\series default
+ lehet a telefonhoz csatolt SD kártya, azaz hordozható memória egység, melyen
+ olyan fájlokat tárolhatunk, melyekhez a felhasználó is hozzáférhet.
+ 
+\end_layout
+
+\begin_layout Standard
+Android alkalmazásokban SQLite 
+\series bold
+adatbázisok
+\series default
+at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
+ más applikációból már nem.
+ Az SQLite támogatja a hagyományos relációs adatbázis funkciókat, mint az
+ SQL szintaxis és tranzakciók.
+ A futás során az adatbázisnak kevés memóriára van szüksége (kb.
+ 250 KByte).
+ Az adatbázisműveletek fájl műveleteket igényelnek, amik lassúak lehetnek,
+ ezért aszinkron módon kell azokat végrehajtani.
+ Adatbázis kezelés megvalósításához szükség lesz egy osztályra, mely az
+ 
+\shape italic
+SQLiteOpenHelper 
+\shape default
+osztályból származik.
+ Ennek az 
+\shape italic
+onCreate() 
+\shape default
+függvényét kell felüldefiniálni az adatbázist létrehozó implementációval,
+ melyet SQL paranccsal adhatunk meg.
+ Az 
+\shape italic
+onUpgrade()
+\shape default
+ metódus felüldefiniálásával megadhatjuk a programunk, milyen utasításokat
+ hajtson végre, ha a tábla korábbi verziója már létezik az adott eszközön.
+ A helper osztályunk 
+\shape italic
+getReadableDatabase()
+\shape default
+ és a 
+\shape italic
+getWriteableDatabase()
+\shape default
+ függvényeinek segítségével kaphatunk egy SQLiteDatabase objektumot, melyen
+ keresztül hozzáférhetünk az adatbázis táblákhoz és módosíthatjuk azokat.
+ SQLiteDatabase 
+\shape italic
+query()
+\shape default
+ és 
+\shape italic
+rawquary()
+\shape default
+ metódusaival futtathatunk lekérdezéseket.
+ Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manőverezh
+etünk a lekérdezés eredményének sorai között.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Boxed
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset External
+	template JavaCode
+	filename test.java
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Hálózati protokollok a programban
+\end_layout
+
+\begin_layout Description
+
+\series bold
+UDP (User Datagram Protocol): 
+\series default
+kapcsolat nélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
+ Portszámot és checksum-ot is tartalmaz egy csomag.
+ A csomagok nem biztos, hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz,
+ mint amilyen sorrendben el lettek küldve.
+ A küldő nem kap visszaigazolást a csomag megérkezéséről.
+ Ez a protokoll nagyon elterjedt a videojátékoknál és a telekommunikációban.
+ 
+\end_layout
+
+\begin_layout Description
+
+\series bold
+TCP (Transmission Control Protocol): 
+\series default
+megbízható de ezért lassabb is, mint például az UDP.
+ Folyamként vagy fájlként kezeli a kapcsolatokat.
+ A csomagok megfelelő sorrendjéről, illetve az elveszett csomagok újra küldésérő
+l is gondoskodik.
+ A csomagok pufferrelésével eléri, hogy az átviteli sebesség is közel állandó
+ legyen az adat küldése, továbbítása során.
+\end_layout
+
+\begin_layout Description
+
+\series bold
+HTTP (Hypertext Transfer Protocol):
+\series default
+ a web hálózati protokollja, fájlok és más adatok - azaz erőforrások - továbbítá
+sára használják.
+ Ezek az erőforrások lehetnek HTML fájlok, képek, lekérdezési eredmények,
+ stb.
+ Használhat TCP és UDP protokollokat is.
+ HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
+ a kapcsolatot és küld egy kérést a HTTP szervernek.
+ Amint a szerver visszaküldte a választ lezárja a kapcsolatot.
+ A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
+ pl.: 
+\begin_inset Quotes sld
+\end_inset
+
+GET /path/to/file/index.html HTTP/1.0
+\begin_inset Quotes srd
+\end_inset
+
+ vagy 
+\begin_inset Quotes sld
+\end_inset
+
+HTTP/1.0 200 OK
+\begin_inset Quotes srd
+\end_inset
+
+.
+ A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
+ metódusok még a POST és a HEAD.
+ Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
+ Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
+ Ezek után szerepelhetnek paraméterek 
+\begin_inset Quotes sld
+\end_inset
+
+PARAMÉTER: érték
+\begin_inset Quotes srd
+\end_inset
+
+ alakban.
+ Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
+ mint például az erőforrás módosításának ideje: 
+\begin_inset Quotes sld
+\end_inset
+
+Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
+\begin_inset Quotes srd
+\end_inset
+
+.
+ Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
+ Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
+ 
+\end_layout
+
+\begin_layout Description
+HTTP* egy specializált HTTP protokollt, melyet a ebben a programban használok
+ az Android applikáció és a szerveren futó alkalmazás kommunikációjában.
+ A kommunikációt mindenképpen a mobil alkalmazás kezdeményezi egy "GET
+\begin_inset Quotes srd
+\end_inset
+
+ üzenet küldésével, mely ilyen adatokat tartalmaz: GET / HTTP*/1.0
+\backslash
+n REPORTPERIOD: <jelentésküldés ideje>
+\backslash
+nMODE: <DL vagy UL>
+\backslash
+n CONNECTION: <TCP vagy UDP>
+\backslash
+n Unit: <1, 2 vagy 3>
+\backslash
+n BUFFERSIZE: <buffer méret>
+\backslash
+n.
+ Ez az üzenet tartalmazza a teszt paramétereit, amiket a felhasználó adott
+ meg.
+ A szerver oldali program ezek alapján indítja el a megfelelő küldő vagy
+ fogadó szálat.
+ A program a teszt leállításakor egy 
+\begin_inset Quotes sld
+\end_inset
+
+STOP
+\begin_inset Quotes srd
+\end_inset
+
+ üzenetet küld a szervernek, mely ilyen alakú: "STOP / HTTP*/1.0
+\backslash
+n".
+ Ennek hatására a szerver leállítja a teszt szálat.
+\end_layout
+
+\begin_layout Chapter
 Felhasználói dokumentáció
 \end_layout
 
@@ -2045,1999 +4030,6 @@ Foglalt teszt port esetén a "Could not connect to server! test port: <port
 
 \begin_layout Chapter
 Fejlesztői dokumentáció
-\end_layout
-
-\begin_layout Section
-Mobilhálózatok bemutatása
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Mobilhálózatok kialakulása
-\end_layout
-
-\begin_layout Standard
-Már a második világháborúban képesek voltak rádiótelefonos kapcsolatot kiépíteni
- katonai használatra.
- Kézi rádió adó-vevők már az 1940-es évektől elérhetőek voltak, pár telefon
- társaságnak volt gépkocsiban is használható mobil telefon készüléke.
- A korai készülékek testesek voltak és sok áramot fogyasztottak, a hálózat
- pedig csak néhány szimultán beszélgetést tudott csak kiszolgálni.
- 
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0col%
-width "50col%"
-status collapsed
-
-\begin_layout Plain Layout
-\noindent
-\align right
-\begin_inset Graphics
-	filename 621px-Mobile_radio_telephone.jpg
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Első mobil telefonok egyike
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-Az egyesült államokbeli Bell laboratórium mérnökei olyan rendszeren dolgoztak,
- ami képessé teszi a mobil felhasználókat hívások kezdeményezésére és fogadására
- akár az autójukból.
- Az AT&T vállalat 1947-ben megalkotta az első mobiltelefon hálózatot a Mobile
- Telephon Service-t (MTS).
- 5,000 ügyféle volt és körülbelül heti 30 000 hívást bonyolítottak rajta.
- A cella technológia bevezetése lehetővé tette a frekvenciák sokszori újrahaszno
-sítását kis szomszédos területeken, melyeket alacsony teljesítményű adók
- segítségével fedtek le.
- Ez lehetővé tette gazdaságilag megvalósítható módon a mobiltelefonok széles
- körben való elterjedését.
-\end_layout
-
-\begin_layout Standard
-A mobil telefonok fejlődése jól nyomon követhető az egymást követő generációkon,
- a korai "0G" szolgáltatásokon keresztül az első generációs (1G) analóg
- cellás hálózatok és második generációs (2G) digitális mobil hálózatokon
- át a harmadik generációs (3G) szélessávú adat szolgáltatásokig.
- Napjainkban fejlődnek és egyre inkább elterjednek a negyedik generációs
- (4G) native-IP hálózatok.
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Cellák koncepciója
-\end_layout
-
-\begin_layout Standard
-1947-ben Douglas H.
- Ring és W.
- Rae Young a Bell laboratórium mérnökei javasolták a hatszögletű cellák
- használatát a mobil hálózatokban.
- Akkoriban ez még nem volt megvalósítható csupán két évtizeddel később,
- mikor Richard H.
- Frenkiel, Joel S.
- Engel és Philip T.
- Porter mérnökök kiterjesztették a korábbi javaslatot és egy sokkal részletesebb
- tervet dolgoztak ki.
- Porter volt, aki először javasolta, hogy az adótornyok használják a már
- jól ismert irányított antennákat, annak érdekében, hogy redukálják az interfere
-nciát és növeljék a csatornák újrahasznosíthatóságát.
-\begin_inset Wrap figure
-lines 0
-placement o
-overhang 0in
-width "50col%"
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Graphics
-	filename Transmitting_tower_top_us.jpg
-	scale 50
-
-\end_inset
-
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Többirányú mobilhálózati antenna
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Ezekben a korai időkben a mobilkészüléknek az adótorony által lefedett körzetben
- kellett maradnia, ahhoz hogy szolgáltatás folyamatos maradjon, vagyis a
- szolgáltatás nem volt folytonos, átjárható az egyes cellák között.
- A koncepciók, mint a frekvencia újrahasználás és az átadás (handoff vagy
- handover) számos új mobiltelefon hálózati koncepciók alapját képezték.
- 1970-ben Amos E.
- Joel Bell Laboratórium mérnöke feltalálta a három oldalú antennát, hogy
- segítse a hívások átadásának folyamatát egyik cellából a másikba.
-\end_layout
-
-\begin_layout Subsection
-Mobilhálózatokban gyakran használt kifejezések leírása
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Hozzáférési Technológiák
-\end_layout
-
-\begin_layout Description
-
-\series bold
-FDMA
-\series default
- (Frequency Division Multiple Access) a leggyakoribb analóg rendszer.
- Ez a technika a spektrum frekvenciatartományokra való feldarabolásán alapszik
- és egy frekvenciasávot társít egy felhasználóhoz.
- Egy csatornát egy időben csak egy előfizető használhat, így egy csatorna
- lezárul a beszélgetés idejére más felhasználók elől, amíg le nem teszik,
- vagy át nem adódik a beszélgetés egy másik csatornának.
- A "full-duplex" FDMA átvitelnek két csatornára van szüksége, egy az adatok
- küldésére és egy másik a fogadására.
- FDMA technikát az első generációs analóg rendszerekben használták.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-TDMA
-\series default
- (Time Division Multiple Access) nagyobb kapacitásra volt képes, mert az
- egyes frekvenciákat időszeletekre (time slot) osztotta.
- TDMA rendszerben a felhasználók az egész frekvenciatartományt használhatták,
- több felhasználó osztozott ugyanazon a frekvencia csatornán amiből egy-egy
- időszeletet kaptak.
- TDMA a második generációs mobil hálózatok domináns technológiája.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-CDMA
-\series default
- (Code Division Multiple Access) szórt spektrumú technológián alapul.
- Titkosított adat átvitelt is lehetővé tette, ezért régóta használják katonai
- célokra.
- CDMA megnövelte a spektrum teljesítő képességét azzal, hogy a felhasználók
- az összes csatornát használhatják egy időben.
- Az adások az egész hullámsávot kihasználják, és minden hang vagy adat híváshoz
- egy egyedi kód tartozik, ami megkülönböztethetővé teszi egymástól a hívásokat.
- 
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Mobil hálózati szabványok
-\end_layout
-
-\begin_layout Description
-
-\series bold
-PSTN
-\series default
- (Public Switched Telephone Network) nyilvános vonalkapcsolt telefonhálózat.
- Telefon vezetékek, optikai kábelek, mikrohullámú átviteli állomások, kommunikác
-iós műholdak és tengeralatti telefon kábelek kötik össze a kapcsolási központoka
-t, hogy bármely telefon készülékkel felvehessük a kapcsolatot a világon.
- Eredetileg a hálózat analóg, vezetékes telefon rendszer volt, PSTN majdnem
- teljesen digitális, mobil és vezetékes telefonokat is tartalmaz.
- Egyetlen globális címtartománya van a telefonszámoknak, melyet a E.163 és
- E.164 szabványok írnak le.
- Az összekapcsolt hálózatok és az egységes számozásnak köszönhetően bármely
- telefonról hívható bármely másik készülék.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-GSM 
-\series default
-(Global System for Mobile communication) ezt a szabványt az ETSI (European
- Telecommunications Standards Institute) a második generációs (2G) mobilhálózati
- protokollok leírására.
- A GSM sztenderd váltotta le az első generációs (1G) analóg hálózatot egy
- új, digitális, teljes kétirányú kommunikációt lehetővé tevő, vonalkapcsolt
- hálózat bevezetésével.
- Ezt később kiegészítették azzal, hogy belevették az adatkommunikációt is
- a szabványba, először vonalkapcsolt átvitellel, majd csomagkapcsolt átvitellel:
- GPRS (General Packet Radio Services) és EDGE (Enhanced Data rates for GSM
- Evolution vagy EGPRS).
-\end_layout
-
-\begin_layout Description
-
-\series bold
-GPRS 
-\series default
-(General Packet Radio Service) egy csomagkapcsolt szolgáltatás 2G és 3G
- kommunikációs rendszerekben.
- A GPRS-t az ETSI szabványosította, napjainkban a 3GPP (3rd Generation Partnersh
-ip Project) tartja karban a szabványt.
- A GPRS szolgáltatás jellemzője a változó teljesítmény és késés, melyek
- mértéke a rendszert egyidejűleg használók számától függ.
- A vonal kapcsolt rendszerrel ellentétben, ahol szolgáltatás minősége (Quality
- of Service) biztosított a kapcsolat ideje alatt.
- 2G-s rendszerben a GPRS által biztosított adatráta 56–114 kbit/s.
- A 2G és GPRS technológiák kombinációját néha 2.5G-nek szokták hívni, ami
- a 2G és a 3G mobil technológiák között helyezkedik el.
- Mérsékelt sebességű adatátvitelt biztosít a GSM rendszerben, az addig kihasznál
-atlan több csatornás idő osztásos (TDMA: Time division multiple acces) technológ
-ia segítségével.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-EDGE
-\series default
- (Enhanced Data rates for GSM Evolution), más néven EGPRS (Enhanced GPRS)
- mobiltelefon technológia, ami nagyobb adatátviteli sebességet tesz lehetővé.
- EDGE a 2003 év elején került bevezetésre a GSM hálózatokban.
- A 3GPP szabványosította és GSM család részévé vált.
- Kifinomult kódolási eljárások bevezetésének köszönhetően megnőtt a csatornánkén
-t elérhető bitráta, háromszoros kapacitás és teljesítmény beli növekedést
- eredményezett a hagyományos GSM/GPRS kapcsolathoz képest.
- A továbbfejlesztett EDGE kisebb késést és több mint kétszeres teljesítmény
- növekedést biztosít.
- A legnagyobb bitráta elérheti a 1Mbit/s-ot, átlagosan pedig a 400kbit/s-ot.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-W-CDMA
-\series default
- (Wideband Code Division Multiple Access) egy 3G mobilhálózati rádiós interfész
- sztenderd.
- A leggyakrabban használt tagja az Universal Mobile Telecommunications System
- (UMTS) családnak és néha az UMTS szinonimájaként használják.
- A DS-CDMA csatorna hozzáférési és FDD duplex módszereket alkalmazza, hogy
- nagyobb sebességre legyen képes és több felhasználót tudjon kiszolgálni
- a TDMA és TDD (time division duplex) rendszerekhez képest.
- Ugyanazt a központi hálózatot használja, mint a 2G GSM hálózat.
- Code Division Multiple Access kommunikációs hálózat sok cég közreműködésével
- jött létre, de a CDMA (inkább W-CDMA) cellás telefon hálózat fejlesztésében
- a Qualcomm dominált.
- Qualcomm volt az első cég, akinek sikerült alkalmazható és költséghatékony
- megoldást találnia: ez volt a korai IS-95 rádióinterfésze sztenderd, melyből
- a CDMA2000 (IS-856/IS-2000) fejlődött ki.
- CDMA2000 hálózatok széles körben elterjedtek különösen Amerikában.
- Azonban az eltérő követelmények és felépítés megakadályozta a globális
- elterjedését.
- A a meglévő rádiós interfészekkel való inkompatibilitás és a nagy költséggel
- járó fejleszthetőség ellenére a W-CDMA egy meghatározó szabvánnyá vált.
- A W-CDMA egy pár 5 MHz széles rádió csatornát használ, míg a CDMA2000 egy
- vagy több pár 1.25 MHz rádió csatornát.
- Habár a W-CDMA szintén CDMA átviteli technikát alkalmaz, akár a CDMA2000,
- a W-CDMA nem egyszerűen egy széles sávú verziója a CDMA2000-nak.
- Mérnöki szempontból a W-CDMA különböző optimalizálási lehetőséget nyújt
- költség, kapacitás és teljesítmény között.
- Specifikációk egész halmazát tartalmazza, melyek részletesen definiálják
- a protokollokat, a kommunikációt a készülékek és a tornyok között, hogyan
- kell modulálni a szignálokat és azt is hogyan kell az adatokat strukturálni.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-UMTS
-\series default
- (The Universal Mobile Telecommunications System) harmadik generációs mobil
- hálózati rendszer.
- A 3GPP (3rd Generation Partnership Project) fejlesztette ki és tartja karban.
- W-CDMA hozzáférési technológiát használ a jobb hálózati kihasználtság és
- sávszélesség miatt.
- UMTS specifikál egy teljes hálózati rendszert, melybe beletartozik a hozzáférés
-i hálózat (UMTS Terrestrial Radio Access Network, UTRAN), a központi hálózat
- (core network) és a felhasználók SIM általi azonosítása.
- Az EDGE és a CDMA2000 ellentétben az UMTS új bázis állomást és frekvencia
- allokációs módszert igényel.
- Az UMTS által támogatott maximális adat átviteli ráta 42 Mbit/s, ha HSPA+
- alkalmaznak a hálózatban és 7.2 Mbit/s HSDPA használat esetén.
- Ezek a sebességek szignifikánsan gyorsabbak , mint a GSM 9.6 kbit/s-os hibajavít
-ásos vonalkapcsolt adatátvitele, vagy a CDMAOne csatornák 14.4 kbit/s rátája.
- 2006 óta UMTS hálózatokat számos országban feljavították a High Speed Downlink
- Packet Access (
-\series bold
-HSDPA
-\series default
-) technikával, melyet néha 3.5G néven emlegetnek.
- HSDPA segítségével a letöltési sebesség elérheti a 21 Mbit/s-ot.
- A feltöltési sebesség javítását támogató technológia a High-Speed Uplink
- Packet Access (
-\series bold
-HSUPA
-\series default
-).
- Az első UMTS hálózatot 2002-ben indították be, nagy hangsúlyt fektetve
- az olyan mobil alkalmazásokra, mint a mobil TV és videóhívás.
- A nagy adatátviteli sebességet gyakran Internet elérésre használják.
- 
-\end_layout
-
-\begin_layout Description
-
-\series bold
-LTE
-\series default
- (Long-Term Evolution) 4G LTE, a legújabb sztenderd a mobiltelefonok és
- adat terminálok közötti nagy sebességű vezeték nélküli adatkommunikációra.
- GSM/EDGE és UMTS/HSPA hálózati technológiákon alapszik, de nagyobb kapacitást
- és sebességet nyújt különböző rádiós interfészek együttes alkalmazásával.
- A világ első publikus LTE szolgáltatója a TeliaSonera Osloban és Stockholmban.
- Várhatóan az LTE lesz az első igazán globális mobiltelefon sztenderd, habár
- a országonként különböző frekvenciasávok használata miatt csak a többsávos
- telefonok lesznek képesek kihasználni minden országban az LTE szolgáltatást.
- Míg a korábbi technológiák 28 Mbit/s elméleti maximumot támogatták, az
- LTE 326 Mbit átvételére lesz képes másodpercenként, 20 MHz széles frekvenciatar
-tományon.
- Az LTE sztenderd csak IP hálózatokat támogatja.
- A GSM, UMTS és CDMA2000 hagyományos vonalkapcsolt hálózatok, így az LTE-vel
- való együtt működés miatt át kell tervezni a hálózatokat.
- Erre több fél megoldást dolgoztak ki:
-\end_layout
-
-\begin_layout Description
-
-\series bold
-VoLTE 
-\series default
-(Voice Over LTE) megközelítés IP Multimedia Subsystem (IMS) hálózaton alapszik.
- Ezzel a megoldással a hangszolgáltatás adatfolyamként továbbítódik az LTE
- állomáson keresztül.
- Ez azt jelenti, hogy nem kell módosítani a hagyományos vonalkapcsolt hálózatot,
- képes lesz a 4G-s hívást adatcsomagként továbbítani.
- Másik megközelítés a 
-\series bold
-CSFB 
-\series default
-(Circuit Switched Fallback).
- Eben az esetben az LTE csak adatcsomag szolgáltatást nyújt, és a hanghívások
- vonalkapcsolt hálózatban dolgozódnak fel.
- Ezt a megoldást használva az operátoroknak csak az MSC-t kell frissíteniük
- IMS telepítés helyett.
- Hátránya a hosszabb hívás kiépítési idő.
- A jobb minőségű hang biztosításához a 3GPP megköveteli legalább az AMR-NB
- kodek (narrow band) használatát, de a javasolt beszéd kodek VoLTE-hoz az
- Adaptive Multi-Rate Wideband, avagy a HD Voice.
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Mobil hálózat elemei
-\end_layout
-
-\begin_layout Description
-BSC (Base Station Controller) több tíz esetleg több száz BTS-t irányít.
- A BSC rádió csatornák kiosztásáért felelős, mérési eredményeket fogad a
- mobil készülékektől és a BTS-ek közötti handover-eket kezeli.
- BSC fő funkciója összekötőként viselkedik a BTS-ek és a Mobile Switching
- Center (MSC) között.
- Általában a hálózatokban gyakorta úgy strukturálják, hogy számos BSC-t
- elosztanak a régiókban közel a BTS-ekhez, melyek egy nagy központosított
- MSC site-al állnak kapcsolatban.
- MSC-ket és Service GPRS Support Node-okat (SGSN) is kiszolgál (abban az
- esetben ha GPRS-t használ).
- 
-\end_layout
-
-\begin_layout Description
-BSS (Base Station Subsystem) része a hagyományos mobilhálózatnak (2G, GSM)
- és a kommunikációt biztosítja a mobiltelefon és a hálózati kapcsolóalrendszer
- között.
- A BSS transzkódolást végez, rádió csatornákat rendel a mobiltelefonokhoz,
- lapozást kezel, és még sok más feladatot ellát a rádiós hálózatban.
-\end_layout
-
-\begin_layout Description
-BTS (Base Transceiver Station) tartalmazza a rádió szignálok átviteléhez
- és fogadásához szükséges berendezéseket, antennákat, valamint a bázisállomással
- (BSC) történő kommunikáció dekódoláshoz és titkosításhoz szükséges eszközöket.
- Valójában nem más, mint egy pikócella sok rádió adó-vevővel (TRX), amik
- lehetővé teszik különböző frekvenciák kiszolgálását.
- Egy BTS-t a "szülő
-\begin_inset Quotes srd
-\end_inset
-
- bázis állomás (BSC) vezérel.
-\end_layout
-
-\begin_layout Description
-MS (Mobile Station) azaz maga a mobil készülék, amivel a felhasználó hívást
- kezdeményezhet és fogadhat.
- Ez a terminológia 2G rendszerekre vonatkozik, mint a GSM.
- 3G rendszerekeben a mobile station helyett 
-\begin_inset Quotes sld
-\end_inset
-
-user equipment
-\begin_inset Quotes srd
-\end_inset
-
--ként (UE) hivatkoznak rá.
-\end_layout
-
-\begin_layout Description
-RNC (Radio Network Controller) az UMTS mobil hálózat (UTRAN) irányító egysége
- és a hozzá kapcsolt 
-\begin_inset Quotes sld
-\end_inset
-
-Node B
-\begin_inset Quotes srd
-\end_inset
-
--k kontrollálásáért felelős.
- BSC-nek 3G-s hálózati megfelelője, hasonló munkát végez: az üzenetek encryptálá
-sa és erőforrás kezelés.
- Az RNC kapcsolatban áll a Circuit Switched Core Network-hez a Media Gateway-en
- (MGW) keresztül és az Serving GPRS Support Node-en (SGSN) keresztül a Packet
- Switched Core Network-höz.
-\end_layout
-
-\begin_layout Description
-Node-B Ezt a terminust az UMTS hálózatban használják és megfelel a BTS-nek
- a GSM-ben.
- A mobil készülékek Node B-n tudnak egymással kommunikálni.
- Az RNC kontrollálja ezt a hálózati elemet.
-\end_layout
-
-\begin_layout Description
-VLR (Visitor Location Register) egy adatbázis azon előfizetők számára, akik
- beléptek az adott VLR-hez tartozó Mobile Switching Center (MSC) területére.
- Minden egyes bázisállomáshoz pontosan egy VLR tartozik, így az előfizető
- egy időben mindig csak egy VLR-ben szerepel.
- Az adatok vagy a mobil készülékről (MS), vagy a HLR-től érkeznek.
- Amint érzékel egy új MS-t az MSC, azonnal készít egy új bejegyzést a VLR-jében
- és frissíti a HLR-ben az előfizető helyzetét.
-\end_layout
-
-\begin_layout Description
-HLR (Home Location Register) egy központi adatbázis, ami tartalmazza az
- összes mobiltelefon előfizetője adatát, akik használhatják hálózatot.
- 
-\end_layout
-
-\begin_layout Description
-M-MGW (Mobile Media Gateway) egy olyan eszköz, ami a digitális média folyamokat
- konvertálja (transzkódolja) a különböző telekommunikációs hálózatok között
- (PSTN, 2G, 3G, stb.), illetve lehetővé teszi a különféle átviteli protokollok
- használatát (ATM, IP, TDM) .
- Általában az egyes hálózatok határán helyezkedik el, hogy biztosítsa az
- adatok konvertálását egyik hálózatból a másikba.
-\end_layout
-
-\begin_layout Description
-SGSN (Serving GPRS Support Node) felelős a mobileszközök és kiszolgáló állomások
- közötti adat csomagok szállításáért.
- A feladatai közé tartozik az irányítás (routing), a helymeghatározás és
- a felhasználók azonosítása (authentication).
- 
-\end_layout
-
-\begin_layout Description
-GGSN (Gateway GPRS Support Node) központi eleme a GPRS hálózatnak, az internet
- elérését biztosítja a GPRS hálózat és a külső hálózatok között.
- Kívülről nézve a GGSN egy router, aki elrejti a GPRS hálózat infrastruktúráját
- a külső hálózattól.
- Mikor adat csomagokat kap megvizsgálja, hogy a felhasználó aktív-e és,
- ha igen akkor továbbítja a csomagot az SGSN-nek, aki kiszolgálja a mobil
- felhasználót.
-\end_layout
-
-\begin_layout Description
-MSC (Mobil Softswitch Controller) elsődleges eleme a GSM/CDMA hálózatoknak,
- a hanghívások route-olásáért és az SMS, valamint más szolgáltatásokért
- felelős, mint a konferencia hívások, FAX, stb.
- Kiépíti, majd lebontja a kapcsolatokat, hívásokat, valamint kezeli a handover-e
-ket.
-\end_layout
-
-\begin_layout Description
-IMS (IP Multimedia Subsystem) egy architektúra az IP alapú multimédiás szolgálta
-tásokhoz.
- Kezdetben a 3GPP arra fejlesztette ki, hogy terjesszék ki a GPRS-t Internet
- alapú szolgáltatásokkal.
- A könnyebb integrálhatóság miatt IETF protokollokat használnak ahol csak
- lehetcségs, ilyen például a SIP (Session Initiation Protocol) .
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Mobil hálózat szolgáltatások
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-SIM
-\series default
- (Subscriber Identity Module) egyik fő jellemzője a GSM-nek a SIM bevezetése,
- a legtöbben SIM kártya néven ismerik.
- A SIM egy cserélhető okoskártya, mely az előfizető információt és telefonkönyve
-t tartalmazhat.
- Lehetővé teszi a felhasználónak, hogy információkat tároljon és egy másik
- telefonban is fel tudja használni azokat.
- Ezentúl lehetővé teszi, hogy szolgáltatót váltson a felhasználó a készülék
- lecserélése nélkül, mivel csak SIM kártyát kell lecserélnie.
- Néhány operátor blokkolja ezt a lehetőséget a SIM lezárásával, ez esetben
- a készülék csak az adott szolgáltató kártyáját fogadja el.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-WAP
-\series default
- (Wireless Application Protocol): egy sztenderd technika a vezetéknélküli
- hálózatokon keresztül történő információ cserének.
- A WAP böngésző egy webböngésző a mobil készülékekhez.
- A WAP bevezetése előtt, a mobil szolgáltatóknak limitált lehetőségük volt
- az interaktív adatszolgáltatásra.
- Interaktivitást követelt az Internet és Web alkalmazások támogatása pl.:
- email kezelés, tőzsdei árak vagy a sporteredmények követése.
- A WAP sztenderd egy protokoll családot ír le, mely lehetővé teszi az interopera
-bilitást a WAP és más különböző hálózati technológiák között, mint a GSM
- és a CDMA.
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Roaming
-\series default
- egy általános kifejezés a mobil szolgáltatás kiterjesztésére olyan helyre,
- amely különbözik a szolgáltatás regisztrált helyétől.
- Roaming biztosítja a kapcsolatot vezetéknélküli eszköz és a hálózat között,
- a kapcsolat elvesztése nélkül.
- Hagyományos GSM Roaming definíció szerint (GSM Association Permanent Reference
- Document AA.39) a cella felhasználó képes automatikusan hívást indítani
- és fogadni, adatokat küldeni és fogadni, vagy más szolgáltatásokhoz kapcsolódni
-, miközben utazik, elhagyja a hazai szolgáltatás által lefedett területet.
- 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Handover
-\series default
- kifejezés (vagy handoff) arra a folyamatra utal, mikor egy folyamatban
- lévő hívást, vagy adat folyamot átviszünk az egyik csatornáról a másikra.
- Erre akkor van szükség, mikor a készülék átlépi a cella határát, vagyis
- kilép az eddigi adótorony körzetéből és egy másik veszi át a kiszolgálását.
- Több féle handover létezik, attól függően, hogy a telefon melyik cellát,
- milyen irányba lépi át.
- Például abban az esetben, mikor a készülék nem csak egy cella határán van,
- hanem egy tartomány határán is, akkor nem csak egy másik toronyhoz (BTS
- vagy Node B) kerül át , hanem egy másik BSC vagy RNC-hez is.
-\end_layout
-
-\begin_layout Subsection
-Mobilhálózatok fejlődése
-\end_layout
-
-\begin_layout Standard
-Az első rádiótelefon szolgáltatás '40es végén vezették be Amerikában, ez
- azt jelentette, hogy a mobil használók akár autóból is tudtak kapcsolódni
- a meglévő publikus telefonhálózathoz.
- 1960-ban új rendszert indított a Bell Systems, amit IMTS-nek (Improved
- Mobile Telephone Service) hívtak, mely számos újítást hozott, például szélesebb
- sávszélességet.
- Az első analóg cellás rendszer ezen az IMTS rendszeren alapult és a 1970-es
- évek elején fejlesztették ki.
- A rendszer "cellás" volt, mert a lefedett területeket felosztották kisebb
- részekre, avagy cellákra.
- 
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Első generáció 
-\end_layout
-
-\begin_layout Standard
-Első generációs mobil rendszer az AMPS (Advance mobile phone system), melyet
- először az Egyesült államokban vezették be.
- Ez az egyik legjobb FDMA (Frequency Division Multiple Access) technológia,
- mely lehetővé teszi, hogy hanghívást bonyolíthat az egész országban.
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Második generáció
-\end_layout
-
-\begin_layout Standard
-2G digitális cellás rendszer, melyet az 1980-as évek végén fejlesztették
- ki.
- Az új rendszer jobb minőséget és nagyobb kapacitást biztosít a felhasználóknak
- az analóg 1G rendszerhez képest.
- GSM (Global system for mobile communication) volt az első kereskedelemben
- működtetett digitális cellás rendszer, mely TDMA (Time division multiple
- acces) alapú.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\paragraph_spacing single
-\noindent
-\align center
-\begin_inset Graphics
-	filename Gsm_structures.svg.jpg
-	scale 55
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-2G hálózat struktúrája
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-A 2G technológiák biztosítanak különböző szolgáltatásokat, mint szöveges
- üzenet, kép üzenet és MMS (multi media messages) küldését.
- Az összes szöveges üzenet digitálisan titkosított, így csak a megfelelő
- címzett tudja fogadni és elolvasni az üzenetet.
- Idővel sokat fejlesztettek a rendszeren, így alakult ki a korábban már
- említett GPRS és az EDGE technológiák.
- 
-\end_layout
-
-\begin_layout Subsubsection
-
-\series bold
-Harmadik generáció
-\series default
- 
-\end_layout
-
-\begin_layout Standard
-3G kezdeményezés a készülék gyártóktól származott, nem pedig a telefonhálózatok
- operátoraitól.
- A fejlesztés 1996-ban kezdődött a Nippon Telephone & Telegraph (NTT) és
- az Ericsson vezetésével; 1997-ben az amerikai Telecommunications Industry
- Association (TIA) a CDMA-t választotta 3G technológiájának; 1998-ban az
- European Telecommunications Standards Institute (ETSI) ugyan ezt tette
- és végül a széles sávú CDMA (W-CDMA) és a CDMA 2000 adaptálták az UMTS-hez
- (Universal Mobile Telecommunications System).
- W-CDMA és CDMA 2000 volt a két legnagyobb javaslat a 3G technológiára.
- A W-CDMA TDM-et (Time Division Multiplexing), ezzel ellentétben a CDMA
- 2000 CDM-et (Code Division Multiplexing) eljárást használ.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Graphics
-	filename UMTS_structures.svg.jpg
-	scale 55
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-3G hálózat struktúrája
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-3G rendszer gyorsabb kommunikációs szolgáltatást nyújt, beleértve a hang,
- fax és Internet szolgáltatásokat, melyek bármikor és bárhonnan elérhetőek.
- Az ITU féle IMT-2000 3G sztenderd tette lehetővé az innovatív applikációk,
- például multimédiás szórakoztatás, információ és helymeghatározás szolgáltatáso
-k elterjedését a felhasználók között.
- Az első 3G hálózatot Japánban építették ki 2001-ben.
- 2.5G hálózatok, mint a GPRS (Global Packet Radio Service) már elérhetőek
- voltak Europa bizonyos országaiban.
- 3G technológia támogatja a 144 Kbps sávszélességet nagy sebességű mozgásnál
- (pl: járművek), 384 Kbps pl egyetemek területén és 2 Mbps-ot állóhelyzetben
- (pl: épületen belül).
- A maximális letöltési adatráta 384Kpbs, átlagosan 200 Kpbs és a feltöltés
- is ráta 64 Kpbs.
-\end_layout
-
-\begin_layout Subsubsection*
-
-\series bold
-Negyedik generáció 
-\end_layout
-
-\begin_layout Standard
-Negyedik generációs (4G) mobil kommunikáció nagyobb adatátvitelre lesz képes,
- mint a 3G.
- Az adatráta tervezett mértéke 100 Mbps .
-\end_layout
-
-\begin_layout Standard
-A 4G szolgáltatás biztosítani fogja a szélessávú, nagy kapacitású, nagy
- sebességű adatátvitelt, így lehetővé teszi többek között a jó minőségű,
- nagy felbontású videótelefonálást.
- A 2008-as ITU szabvány szerint legfeljebb 100 Mbit/s átviteli sebesség
- elérése lesz képes egy gyorsan mozgó készülék esetén (például: kocsiban,
- vonaton) és akár 1Gbit/s adatráta is elérhető egyéb esetekben.
- Két 4G rendszertervet dolgoztak ki, amit már kereskedelmi forgalomban is
- használnak, ez a Mobile WiMAx és az LTE.
- Egyik megoldás sem teljesen teljesíti az ITU szabványt, ezért ezeket még
- 
-\begin_inset Quotes sld
-\end_inset
-
-hivatalosan
-\begin_inset Quotes srd
-\end_inset
-
- nem tartják a szakemberek negyedik generációs hálózatnak, habár az operátorok
- már annak hirdetik.
- Mindkét technológiát fejlesztik, hogy megfeleljen a 4G szabvány elvérásainak,
- főleg az adatátviteli sebesség kapcsán.
- Egyáltalán nem támogatja már a hagyományos vonalkapcsolt szolgáltatásokat,
- csak az internet protokollra (IP) épülőket, mint amilyen az IP telefonálás.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Graphics
-	filename interphaseLTEnetwork.jpg
-	scale 60
-
-\end_inset
-
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-4G és 3G hálózat architektúrája
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-A hálózatok vizsgált adatai
-\end_layout
-
-\begin_layout Standard
-A lenti táblázat tartalmazza az átviteli sebességeket különféle technológiák
- esetén.
- Ezek a sebesség adatok módosulhatnak attól függően, hogy milyen rádiótechnológi
-át használ a telefonhálózat operátora (CDMA, FDD, stb.) Amint látható, a
- 2G és 3G hálózatok adatrátája egyre inkább növekszik, így lehetővé téve
- a nagyobb sávszélességigényű szolgáltatások bevezetését, mint a HD audió
- és videó szolgáltatások.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float table
-placement H
-wide false
-sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Tabular
-<lyxtabular version="3" rows="11" columns="2">
-<features tabularvalignment="middle">
-<column alignment="left" valignment="top" width="0">
-<column alignment="right" valignment="top" width="0">
-<row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Technológia
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-Adatráta
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-GSM
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-9.6Kbps 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-GSM/GPRS 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-40Kbps-144Kbps 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-EDGE 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-474Kbps
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-UMTS (WCDMA) 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-384Kbps-2Mbps 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-CDMA-One 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-9.6Kbps-76.8Kpbs
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-CDMA 2000 1x EV-DO 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-384Kbps – 2.4Mbps 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-CDMA 2000 1x EV-DV
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-3.09Mbps 
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-CDMA 2000 3x
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-2Mbps – 4Mbps
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-HSDPA 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-8Mbps – 10Mbps
-\end_layout
-
-\end_inset
-</cell>
-</row>
-<row>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-LTE
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="right" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-le 1 Gbps, fel 500 Mbps.
-\end_layout
-
-\end_inset
-</cell>
-</row>
-</lyxtabular>
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Technológiák és az elérhető adatráták
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-A hálózat további fontos tulajdonságai, amik mérésre kerülnek a jelerősség
- és UDP tesztek esetén a jitter.
- A jelerősség - amit dBm-be mérnek - indikálja a szolgáltatás minőségét.
- Az értéke sok paramétertől függ, többek között az adótoronytól való távolságtól
-, a természeti akadályoktól, amik a készülék és a torony között vannak (erdő,
- hegy, stb.) és az időjárástól is függhet.
- A telefonkészüléken 5 darab kis osztás szokta jelezni a jelerősséget.
- Minél több osztás aktív, annál erősebb a jel, annál jobb a szolgáltatás.
- Ha kicsi a jel erősség, akkor probléma léphet fel a szolgáltatások minőségében,
- például akadozik a hangátvitel, nagyon ingadozik az átviteli sebesség.
- A ritkán lakott területeken is kicsi szokott lenni a jelerősség.
- A mérésekből kiderülhet, hogy olyan helyen is rossz a jel minősége, ahol
- ezt nem is várnánk, és az operátorok feladata, hogy kiderítsék ennek az
- okát.
-\end_layout
-
-\begin_layout Standard
-A jitter a csomagok megérkezési ideje közötti különbség, amit a hálózati
- torlódásból, időzítési problémából vagy útvonal váltásból eredhet.
- Ez akkor jó, ha kicsi az érték, azaz a csomagok sűrűn követik egymást és
- a csomagok beérkezési idejei között nem nagy a különbség.
- A jitter nagysága, illetve nagy, sűrű változása okozhatja a telefonbeszélgetése
-k közbeni hangkiesést, akadozást, illetve a videolejátszás során a képek
- kiesését, szaggatást.
- Az UDP-t használó tesztek során a jelentések tartalmazzák az aktuális jitter
- értéket.
- Ezen értékeket figyelve derülhet ki a magas jitter érték, illetve a gyakori,
- nagy különbségek is problémát jelezhetnek a hálózatban.
- 
-\end_layout
-
-\begin_layout Section
-Android platform bemutatása
-\end_layout
-
-\begin_layout Standard
-Az Android fejlesztő környezet széleskörű támogatást nyújt a fejlesztőknek
- a telefon és a hálózat adatainak lekéréséhez, ami nagyban megkönnyíti az
- alkalmazás fejlesztését.
- A nyílt fejlesztői környezettel az Android lehetőséget biztosít a fejlesztőnek,
- hogy magas színvonalú és innovatív alkalmazásokat készítsen.
- A fejlesztők kihasználhatják például az adott eszköz hardver képességeit,
- hozzáférhetnek a felhasználó adataihoz és akár futtathatnak háttér szolgáltatás
-okat is.
-\end_layout
-
-\begin_layout Subsection
-Android komponensek
-\end_layout
-
-\begin_layout Standard
-Az Android fejlesztőkörnyezetnek több komponense létezik, mindegyiknek különböző
- célja és szerepe van a programban.
- Ezek általában egymással szoros kapcsolatban állnak, de önálló példányban
- léteznek és saját életciklusuk van.
-\end_layout
-
-\begin_layout Subsubsection
-Activity
-\end_layout
-
-\begin_layout Standard
-Egy felhasználói felülettel rendelkező képernyőt, ablakot Activity-nek nevezünk.
- Például egy zenelejátszó program Activity-je lehet, ami megjeleníti a lejátszó
- felületet, és egy másik, ahol kiválaszthatja a felhasználó a lejátszandó
- zenéket.
- Minden alkalmazásnak van egy kitüntet "fő
-\begin_inset Quotes srd
-\end_inset
-
- Activity-je, ha a felhasználó elindítja a programot ez az ablak jelenik
- meg.
- Habár mindegyik Activity a zenelejátszó programban együttműködve adja a
- teljes felhasználói élményt, mégis mindegyik független a többitől.
- 
-\end_layout
-
-\begin_layout Standard
-A hagyományos applikációkkal ellentétben az Android programoknak nincs kontrollj
-uk az életciklusuk felett.
- Így az alkalmazás komponenseinek figyelnie kell a program állapotváltozására
- és aszerint reagálni.
- A komponensek állapota befolyásolja a program állapotát, mely meghatározza
- a program prioritását a rendszerben.
- Az Activity-k úgynevezett "Activity stack
-\begin_inset Quotes srd
-\end_inset
-
--en, azaz egy Last-In-First-Out adatszerkezetben tárolódnak.
- Mikor egy új Activity elindul, az előtte futó kerül a stack tetejére.
- Ha az előtérben lévő, aktív Activity bezáródik vagy a felhasználó megnyomja
- a Vissza gombot, akkor a verem tetején lévő kerül előtérbe.
- Ha az Activity-t megsemmisíti a rendszer, mert már nincs rá szükség, akkor
- felszabadítja annak erőforrásait és eltávolítja a veremből.
- A folyamatot az alábbi kép szemlélteti.
-\end_layout
-
-\begin_layout Standard
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Graphics
-	filename stack.png
-	scale 60
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Plain Layout
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Activity-ket tartalmazó verem
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Az Activity-nek négy állapota lehet:
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Aktív 
-\series default
-(Active), ebben az állapotban a verem tetején lévő Activity lehet, ilyenkor
- az ablak előtérben van és képes fogadni a felhasználói utasításokat.
- Az Android rendszer mindent megtesz annak érdekében, hogy ez az Activity
- futhasson.
- Így, ha kevés az erőforrás, a memória, akkor leállítja a verem alján lévőket
- és felszabadítja azok erőforrását.
- Mikor egy másik Activity lesz az aktív, akkor az előbbi állapota felfüggesztett
- lesz.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Felfüggesztett
-\series default
- (Paused) állapotban az Activity látható maradhat, de nem reagál felhasználói
- eseményekre, nincs fókusza.
- Ez akkor fordulhat elő, ha az előtérben lévő ablak átlátszó vagy nem fedi
- le a teljes képernyőt.
- 
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Leállt 
-\series default
-(Stopped), ekkor az Activity nem látható, leállt.
- Az erőforrások még nem szabadulnak fel és a veremből sem kerül ki.
- A leállt Activity-k prioritása a legkisebb, így ezeket terminálja legelőször
- a rendszer, ha erőforrásra van szüksége.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-Inaktív 
-\series default
-(Inactive) állapotba kerül, ha terminálva lett vagy mielőtt elindul.
- Ezek az Activity-k nincsenek a veremben és csak újraindításkor válhat aktívvá.
-\end_layout
-
-\begin_layout Standard
-\noindent
-\align center
-\begin_inset Float figure
-placement H
-wide false
-sideways false
-status open
-
-\begin_layout Plain Layout
-\noindent
-\align center
-\begin_inset Graphics
-	filename activity_lifecycle.png
-	scale 60
-	clip
-
-\end_inset
-
-
-\begin_inset Caption
-
-\begin_layout Plain Layout
-Activity életciklusa
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Android rendszer biztosítja, hogy az egyes Activity-k reagálhassanak az
- állapotváltásra.
- A lenti képen láthatóak az Activity életciklusai.
- A téglalapok visszahívó (callback) metódusokat szimbolizálnak.
- Ezek felhasználhatók különféle műveletek végrehajtására az egyes átmenetek
- során.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onCreate() 
-\series default
-Az Activity létrejöttekor hívódik meg.
- Itt kell az összes statikus adatot inicializálni, például nézetek létrehozása.
- Ez a függvény kap egy Bundle típusú paramétert, mely az Activity előző
- állapotát tartalmazza.
- Mindenképp onStart() metódus hívás követi.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onRestart() 
-\series default
-egy leállított Activity újraindítása során hívódik meg.
- OnStart() metódus követi.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onStart() 
-\series default
-az előtt hívódik, hogy az Activity láthatóvá válna a felhasználó számára.
- OnResume() metódus hívódik ezután, ha az Activity előtérbe kerül vagy az
- onStop(), ha háttérbe kerül.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onResume() 
-\series default
-akkor hívódik, ha az Activity a verem tetejére kerül, mielőtt aktívvá válna
- és felhasználói inputot fogadna.
- Minden esetben onPause() hívódik utána.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onPause() 
-\series default
-egy másik alkalmazás folytatása váltja ki ezt a metódushívást.
- Itt célszerű elmenteni az adatokat, illetve leállítani az erőforrás igényes
- műveleteket, mint például az animáció lejátszást.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onStop() 
-\series default
-az Activity leállásakor vagy egy másik Activity aktívvá válásakor hívódik,
- ilyenkor Ezután onRestart() hívás jelzi, hogy újra aktívvá vált az Activity.
- 
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onDestroy() 
-\series default
-az Activity megszűnésekor kerül meghívásra, amit vagy a rendszer vált ki,
- mert erőforrásra van szüksége vagy meghívták rá az 
-\shape italic
-finish()
-\shape default
- metódust.
-\end_layout
-
-\begin_layout Subsubsection*
-Service 
-\end_layout
-
-\begin_layout Standard
-A Service (szolgáltatás) egy háttérben, párhuzamosan futó komponens.
- Sokáig futó műveletek végrehajtására használható és nem biztosít felhasználói
- felületet.
- Ilyen művelet lehet például a zenelejátszás, miközben a felhasználó más
- alkalmazást használ, anélkül, hogy a háttérben futó zenelejátszás blokkolná
- vagy zavarná a másik alkalmazást, illetve a felhasználót.
- Egy másik komponens, mint például egy Activity indíthat Service-t és interakció
-ba léphet vele.
- Egy új service-t indíthat egy komponens a 
-\shape italic
-startService()
-\shape default
- metódus hívással, ami akkor is fut, ha a hívó komponens megszűnik.
- Service automatikusan leáll, ha a feladatát befejezte.
- Ez a feladat lehet például egy fájl feltöltése.
- Másik működési módja a service-nek az úgynevezett kötött (bound) service.
- Egy komponens a 
-\shape italic
-bindService()
-\shape default
- metódussal tud összeköttetésbe kerülni ezzel service-vel.
- Több komponens is kapcsolódhat egy service-hez, ha már egy komponens se
- kapcsolódik a szolgáltatáshoz, akkor megszűnik a service.
- Fontos callback metódusok, melyeket implementálhat egy service -nek:
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onStartCommand() 
-\series default
-akkor hívódik, mikor egy másik komponens meghívja a 
-\shape italic
-startService()
-\shape default
- metódust.
- Ha ez a metódus implementálásra kerül és befejezte a működését, akkor a
- le kell állítani a 
-\shape italic
-stopSelf()
-\shape default
- vagy 
-\shape italic
-stopService()
-\shape default
- metódussal.
- Ha csak kötött szolgáltatásként szeretnénk használni , akkor nem kell implement
-álni ezt a metódust.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onBind()
-\series default
- metódus hívódik, ha egy másik komponens akar kapcsolódni a service-hez
- a 
-\shape italic
-bindService()
-\shape default
- függvény hívással.
- Ha nem akarjuk megengedni a szolgáltatáshoz való csatlakozást akkor null-t
- kell visszatérő paraméterként, egyébként pedig egy IBinder típusú objektumot,
- amin keresztül a hívó komponens kommunikálhat a szolgáltatással.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onCreate()
-\series default
- a service létrehozásakor hívódik az 
-\shape italic
-onStartCommand()
-\shape default
- előtt.
-\end_layout
-
-\begin_layout Itemize
-
-\series bold
-onDestroy()
-\series default
- a rendszer hívja ezt a metódust, mikor a szolgáltatást már nem használják
- többé és meg kell szüntetni.
- Itt kell felszabadítani a foglalt erőforrásokat, szálakat.
-\end_layout
-
-\begin_layout Subsubsection*
-IntentService
-\end_layout
-
-\begin_layout Standard
-Az IntentService a Service osztályból öröklődik és aszinkron kéréseket kezel
- (Intent-eken keresztül).
- Kliens küld egy kérést a startService(Intent) híváson keresztül és a szolgáltat
-ás elindul, és leállítja magát, ha végre hajtotta a feladatát.
- Egyszerre csak egy kérést szolgál ki, ha több érkezik be, akkor egymás
- után lesznek kiszolgálva.
- Ez a módszer gyakran használt eljárás, annak érdekében, hogy tehermentesítsük
- az applikáció fő szálát.
- A használatához az IntentService osztályból kell származtatni és implementálni
- az 
-\shape italic
-onHandleIntent(Intent)
-\shape default
- metódust.
- Az IntentService meg fogja kapni ezt az Intent-et, elindítja az új szálat,
- és megállítja szolgáltatást.
-\end_layout
-
-\begin_layout Subsubsection
-Broadcast receiver
-\end_layout
-
-\begin_layout Standard
-A broadcast receiver egy olyan komponens, amely válaszol a rendszerszintű
- üzenetekre.
- Számos rendszerüzenetet kezelhet például a képernyő kikapcsolásról vagy
- az akkumulátor töltöttségének csökkenéséről érkező üzeneteket.
- Az alkalmazás is kezdeményezhet ilyen üzenet küldést például, ha egy másik
- alkalmazásnak akar üzenetet küldeni.
- A service-hez hasonlóan nem rendelkezik felhasználói felülettel.
-\end_layout
-
-\begin_layout Standard
-Az egyes komponenseket egy aszinkron üzenettel lehet aktiválni, amit Inetent-nek
- neveznek.
- Ez kapcsol össze komponenseket futási időben, akkor is, ha a komponens
- egy másik applikációhoz tartozik.
- Az Intent közvetíthet üzenetet másik komponensnek, például, hogy jelenítsenek
- meg egy képet vagy nyisson meg egy weboldalt.
-\end_layout
-
-\begin_layout Subsubsection*
-Intent
-\end_layout
-
-\begin_layout Standard
-Az intent üzenetekkel futás idejű kapcsolatot, kötést létesíthetünk Android
- komponensek között.
- Intent objektum egy adatstruktúra, ami általában a végrehajtandó művelet
- absztrakt leírását tartalmazza, illetve a fogadó komponens számára fontos
- információkat is tartalmazhat.
- Ezen felül tartalmaz a rendszer számár a lényeges információkat például:
- a fogadó komponens kategóriáját.
- 
-\end_layout
-
-\begin_layout Subsubsection
-Application 
-\end_layout
-
-\begin_layout Standard
-Ezen osztály segítségével lehet figyelni, karbantartani az egész applikáció
- állapotát.
- A saját application objektumunkat az AndroidManifest.xml fájl <application>
- tagja írja le, ami azt jelenti, hogy az osztály példánya létrejön az applikáció
- indulása elején.
- Általában nincs szükség erre az objektumra.
- A többi Android objektumból elérhető az Application objektum a 
-\shape italic
-getApplication()
-\shape default
- metódus segítségével.
-\end_layout
-
-\begin_layout Standard
-Ha szükség van egy globális Context objektumra (például BroadcastReceiver
- objektum beregisztrálásához), itt található a 
-\shape italic
-getApplicationContext()
-\shape default
- függvény, mely visszaadja ezt a Context objektumot.
-\end_layout
-
-\begin_layout Subsection
-Futási környezet és konfiguráció
-\end_layout
-
-\begin_layout Standard
-Az Android SDK tartalmaz egy alap könyvtárat, mely megvalósítja a Java programoz
-ási nyelv túlnyomó részét.
- 
-\end_layout
-
-\begin_layout Standard
-Minden alkalmazás saját szálon fut és saját Dalvik virtuális gép példánnyal
- rendelkezik, így egymástól elkülönítve tudnak futni az egyes alkalmazások.
- A Dalvik VM (virtuális gép) a Linux kernelre támaszkodik az alacsony szintű
- funkcionalitás használata során, mint például a szálkezelés.
- A Linux továbbá biztonsági, memória és hálózat kezelési szolgáltatásokat
- is nyújt.
-\end_layout
-
-\begin_layout Standard
-Az Android operációs rendszer megvalósítja a 
-\shape italic
-legkisebb jogosultság elvét, 
-\shape default
-így az alkalmazás csak a számára szükséges komponensekhez fér hozzá.
- Egy alkalmazás engedélyt kérhet arra, hogy komponensekhez, adatokhoz férhessen
- hozzá például: névjegyzék, tárolók (SD kártya), kamera, stb.
- Minden engedélyt a felhasználónak kell jóváhagynia telepítéskor.
-\end_layout
-
-\begin_layout Subsubsection
-AndroidManifest.xml
-\end_layout
-
-\begin_layout Standard
-Az Android rendszer számára szükséges konfigurációs paramétereket tartalmazza,
- illetve az alkalmazás által használt komponensek deklarációját.
- Tartalmazza továbbá a felhasználói jogosultságok listáját, deklarálja az
- alkalmazás futtatásához szükséges minimum Android API szint számát, illetve
- egyéb hardver és szoftver paramétereket.
- Azok a komponensek, amik nincsenek deklarálva ebben a fájlban, nem láthatóak
- a rendszer számára.
- Ez a fájl az alkalmazás gyökérkönyvtárában foglal helyet.
-\end_layout
-
-\begin_layout Standard
-így néz ki egy Activity deklarációja a manifest fájlban:
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-\begin_inset External
-	template JavaCode
-	filename manifest.java
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
-Az <activity> elemben az android:name paraméter tartalmazza az Activity
- osztályból származó osztály nevét, melyet az alkalmazásban használunk.
- Az android:label paraméterben megadhatjuk a felhasználó számára megjelenő
- nevet.
-\end_layout
-
-\begin_layout Standard
-A fenti példában látható <intent-filter> rész utasítja a rendszert, hogy
- a MainActivity nevű acvtivity objektumot töltse be az alkalmazás elindulása
- után.
-\end_layout
-
-\begin_layout Standard
-Komponensek deklarációja a manifest fájlban a következők lehetnek:
-\end_layout
-
-\begin_layout Itemize
-<activity> elemek az Activity-ból származó osztályokhoz
-\end_layout
-
-\begin_layout Itemize
-<service> elemek a Service illetve IntentService típusú osztályokhoz
-\end_layout
-
-\begin_layout Itemize
-<receiver> elemek a BroadcastReceiver osztályokhoz
-\end_layout
-
-\begin_layout Itemize
-<provider> elemek a tartalomszolgáltató osztályokhoz
-\end_layout
-
-\begin_layout Subsubsection*
-Adattárolás
-\end_layout
-
-\begin_layout Standard
-Az Android számos lehetőséget kínál az adatok perzisztencia tárolására.
- Ezek lehetnek megosztott preferenciák (Shared preference), mely primitív
- adatokat tarol kulcs-érték párok alapján, külső illetve belső tároló, illetve
- SQLite adatbázis.
- 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Megosztott preferenciák
-\series default
- segítségével tárolhatjuk el egyszerűen az alkalmazás, illetve az egyes
- Activity objektumok állapotát, mivel az adatok megmaradnak az alkalmazás
- megszűnése után is.
- Kulcs-érték párok segítségével el tudjuk menteni az objektumok változóinak
- értékét, majd visszaolvasni, ha szükséges.
- Az eltárolt attribútumok float, int, long, boolean és string típusúak lehetnek.
- A 
-\shape italic
-getSharedPreferences()
-\shape default
- metódus segítségével névvel ellátott preferenciát kapunk, melyet első paraméter
-ként kell megadnunk, és arra hivatkozva bárhonnan el tudjuk érni az alkalmzásból.
- A 
-\shape italic
-getPreferences()
-\shape default
- függvény segítségével az Activity objektumokhoz rendelhetünk egy preferenciát,
- amiben az adott tevékenység objektum adatait tárolhatjuk.
- 
-\end_layout
-
-\begin_layout Standard
-
-\series bold
-Belső tár 
-\series default
-segítségével
-\series bold
- 
-\series default
-olyan fájlokat hozhatunk létre a telefonkészülék belső, nem hordozható memóriájá
-ban, amikhez csak az alkalmazás férhet hozzá és annak eltávolításakor ezek
- a fájlok automatikusan törlődnek.
- 
-\end_layout
-
-\begin_layout Standard
-A 
-\series bold
-külső tár
-\series default
- lehet a telefonhoz csatolt SD kártya, azaz hordozható memória egység, melyen
- olyan fájlokat tárolhatunk, melyekhez a felhasználó is hozzáférhet.
- 
-\end_layout
-
-\begin_layout Standard
-Android alkalmazásokban SQLite 
-\series bold
-adatbázisok
-\series default
-at hozhatunk létre, melyek név szerint minden komponensből elérhetőek, de
- más applikációból már nem.
- Az SQLite támogatja a hagyományos relációs adatbázis funkciókat, mint az
- SQL szintaxis és tranzakciók.
- A futás során az adatbázisnak kevés memóriára van szüksége (kb.
- 250 KByte).
- Az adatbázisműveletek fájl műveleteket igényelnek, amik lassúak lehetnek,
- ezért aszinkron módon kell azokat végrehajtani.
- Adatbázis kezelés megvalósításához szükség lesz egy osztályra, mely az
- 
-\shape italic
-SQLiteOpenHelper 
-\shape default
-osztályból származik.
- Ennek az 
-\shape italic
-onCreate() 
-\shape default
-függvényét kell felüldefiniálni az adatbázist létrehozó implementációval,
- melyet SQL paranccsal adhatunk meg.
- Az 
-\shape italic
-onUpgrade()
-\shape default
- metódus felüldefiniálásával megadhatjuk a programunk, milyen utasításokat
- hajtson végre, ha a tábla korábbi verziója már létezik az adott eszközön.
- A helper osztályunk 
-\shape italic
-getReadableDatabase()
-\shape default
- és a 
-\shape italic
-getWriteableDatabase()
-\shape default
- függvényeinek segítségével kaphatunk egy SQLiteDatabase objektumot, melyen
- keresztül hozzáférhetünk az adatbázis táblákhoz és módosíthatjuk azokat.
- SQLiteDatabase 
-\shape italic
-query()
-\shape default
- és 
-\shape italic
-rawquary()
-\shape default
- metódusaival futtathatunk lekérdezéseket.
- Minden lekérdezés egy Cursor objektumot ad vissza, mely segítségével manőverezh
-etünk a lekérdezés eredményének sorai között.
- 
-\end_layout
-
-\begin_layout Standard
-\begin_inset Box Boxed
-position "t"
-hor_pos "c"
-has_inner_box 1
-inner_pos "t"
-use_parbox 0
-use_makebox 0
-width "100col%"
-special "none"
-height "1in"
-height_special "totalheight"
-status open
-
-\begin_layout Plain Layout
-\begin_inset External
-	template JavaCode
-	filename test.java
-
-\end_inset
-
-
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Subsection
-Hálózati protokollok a programban
-\end_layout
-
-\begin_layout Description
-
-\series bold
-UDP (User Datagram Protocol): 
-\series default
-kapcsolat nélküli, megbízhatatlan csomagtovábbítást nyújtó protokoll.
- Portszámot és checksum-ot is tartalmaz egy csomag.
- A csomagok nem biztos, hogy ugyanabban a sorrendben érkeznek meg a fogadóhoz,
- mint amilyen sorrendben el lettek küldve.
- A küldő nem kap visszaigazolást a csomag megérkezéséről.
- Ez a protokoll nagyon elterjedt a videojátékoknál és a telekommunikációban.
- 
-\end_layout
-
-\begin_layout Description
-
-\series bold
-TCP (Transmission Control Protocol): 
-\series default
-megbízható de ezért lassabb is, mint például az UDP.
- Folyamként vagy fájlként kezeli a kapcsolatokat.
- A csomagok megfelelő sorrendjéről, illetve az elveszett csomagok újra küldésérő
-l is gondoskodik.
- A csomagok pufferrelésével eléri, hogy az átviteli sebesség is közel állandó
- legyen az adat küldése, továbbítása során.
-\end_layout
-
-\begin_layout Description
-
-\series bold
-HTTP (Hypertext Transfer Protocol):
-\series default
- a web hálózati protokollja, fájlok és más adatok - azaz erőforrások - továbbítá
-sára használják.
- Ezek az erőforrások lehetnek HTML fájlok, képek, lekérdezési eredmények,
- stb.
- Használhat TCP és UDP protokollokat is.
- HTTP a kliens-szerver modellt használja, vagyis a HTTP kliens megnyitja
- a kapcsolatot és küld egy kérést a HTTP szervernek.
- Amint a szerver visszaküldte a választ lezárja a kapcsolatot.
- A HTTP üzenet felépítését tekintve egy kérés vagy válasz sorral kezdődik
- pl.: 
-\begin_inset Quotes sld
-\end_inset
-
-GET /path/to/file/index.html HTTP/1.0
-\begin_inset Quotes srd
-\end_inset
-
- vagy 
-\begin_inset Quotes sld
-\end_inset
-
-HTTP/1.0 200 OK
-\begin_inset Quotes srd
-\end_inset
-
-.
- A GET HTTP metódussal kérhetünk el egy erőforrást a szervertől, további
- metódusok még a POST és a HEAD.
- Ez után az erőforrás neve, címe szerepel majd a HTTP verzió.
- Válasz esetében csak a HTTP verzió és a státusz kód szerepel.
- Ezek után szerepelhetnek paraméterek 
-\begin_inset Quotes sld
-\end_inset
-
-PARAMÉTER: érték
-\begin_inset Quotes srd
-\end_inset
-
- alakban.
- Itt szerepelhet a szerver, illetve a kliens számra fontos információk,
- mint például az erőforrás módosításának ideje: 
-\begin_inset Quotes sld
-\end_inset
-
-Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
-\begin_inset Quotes srd
-\end_inset
-
-.
- Válasz üzenetek esetén a kért erőforrás az üzenet végén szerepel.
- Ebben az esetben a Paraméterek között szerepel az üzenet hossza és típusa.
- 
-\end_layout
-
-\begin_layout Description
-HTTP* egy specializált HTTP protokollt, melyet a ebben a programban használok
- az Android applikáció és a szerveren futó alkalmazás kommunikációjában.
- A kommunikációt mindenképpen a mobil alkalmazás kezdeményezi egy "GET
-\begin_inset Quotes srd
-\end_inset
-
- üzenet küldésével, mely ilyen adatokat tartalmaz: GET / HTTP*/1.0
-\backslash
-n REPORTPERIOD: <jelentésküldés ideje>
-\backslash
-nMODE: <DL vagy UL>
-\backslash
-n CONNECTION: <TCP vagy UDP>
-\backslash
-n Unit: <1, 2 vagy 3>
-\backslash
-n BUFFERSIZE: <buffer méret>
-\backslash
-n.
- Ez az üzenet tartalmazza a teszt paramétereit, amiket a felhasználó adott
- meg.
- A szerver oldali program ezek alapján indítja el a megfelelő küldő vagy
- fogadó szálat.
- A program a teszt leállításakor egy 
-\begin_inset Quotes sld
-\end_inset
-
-STOP
-\begin_inset Quotes srd
-\end_inset
-
- üzenetet küld a szervernek, mely ilyen alakú: "STOP / HTTP*/1.0
-\backslash
-n".
- Ennek hatására a szerver leállítja a teszt szálat.
 \end_layout
 
 \begin_layout Section
