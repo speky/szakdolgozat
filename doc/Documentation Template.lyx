@@ -1516,7 +1516,7 @@ Második generáció
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \paragraph_spacing single
@@ -1585,7 +1585,7 @@ Harmadik generáció
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -1675,7 +1675,7 @@ hivatalosan
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -1723,7 +1723,7 @@ A lenti táblázat tartalmazza az átviteli sebességeket különféle technoló
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -3129,7 +3129,7 @@ lines 0
 placement o
 overhang 0in
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -3164,7 +3164,7 @@ lines 0
 placement o
 overhang 0in
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -3663,7 +3663,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -3766,7 +3766,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -5969,7 +5969,7 @@ onPause
 \shape default
 metódus hívódik meg.
  Az Android keretrendszer nem biztosít lehetőséget ezen metódusok, események
- közvetlen meghívására, az Instrumentation.ok használatával ez mégis lehetővé
+ közvetlen meghívására, az Instrumentation-ok használatával ez mégis lehetővé
  válik.
  A tesztek futásuk során az Android emulátort használják.
 \end_layout
@@ -5983,9 +5983,9 @@ ExportActivityTest az ExportActivity osztályt teszteli.
 \begin_layout Description
 MainActivityInstrumentTest a MainActivityt teszteli és annak fontos adatainak
  alapértelmezett beállításait.
- Főkénta phoneDataList és networkDataList lista elemek értéket A menük közti
- navigálást és az Activity-k közti váltást és a felületen elhelyezett elemek
- működését teszteli.
+ Megvizsgálja a phoneDataList és networkDataList lista elemek értéket, ellenőrzi
+ a menük közti navigálást és az Activity-k közti váltást és a felületen
+ elhelyezett elemek működését teszteli.
 \end_layout
 
 \begin_layout Description
@@ -6000,22 +6000,24 @@ Rendszer teszt
 \end_layout
 
 \begin_layout Standard
-Ezen teszt során a szerver és kliens programok együttes tesztelését végeztem
- Android emulátorral és mobilkészülékkel egyaránt.
+Teszt során a szerver és kliens programok együttes tesztelését végeztem
+ Android emulátorral és mobilkészülékkel egyaránt - készülék típusa SonyEricsson
+ Arc S, az Android verzió 4.0.4.
  Szerverként minden esetben az asztali számítógépem szolgált, mely segítségével
- tudtam adatforgalmat geenrálni a mobilkészülék és a számítógép között.
- A számítógépem egy routerüen keresztül kapcoslódik az Internethez, meleyn
- be kellett állítani a port továbbytást, hogy tudjon kommunikálni a mobil
- készülékkel.
+ tudtam adatforgalmat generálni a mobilkészülék és a számítógép között.
+ A számítógépem egy router-en keresztül kapcoslódik az Internethez, melyen
+ be kellett állítani a port továbbítást, hogy tudjon kommunikálni a mobilkészülé
+kkel.
  A tesztek során számos hibát felderítettem a programban, melyeket alacsonyabb
- szintü tesztekkel nem volt lehetséges, mert ezek csak a két komponens (szerver
- és kliens) együttes jelenléte és kommunikációja esetén lehetett felderíteni.
- Ilyen probléma volt a mobilkészülék NAT-olt hálózatbn történő elérése.
+ szintű tesztekkel nem volt lehetséges megtalálni, mert ezek csak a két
+ komponens (szerver és kliens) együttes jelenléte és kommunikációja esetén
+ lehetett felderíteni.
+ Ilyen probléma volt a mobilkészülék NAT-olt hálózatban történő elérése.
  Biztonsági szempontok miatt nem lehet közvetlenül elérni a készülékeket
  publikus IP címen keresztül, így minden esetben a készüléknek kell kezdeményezn
 i a kommunikációt, mely folyamat során nyit egy portot, amin keresztül a
  külső program tud válaszolni a mobilon futó programnak.
- Ez főleg UDP protokoll esetén volt probléma, ahol incs állandó kapcsolat
+ Ez főleg UDP protokoll esetén volt probléma, ahol nincs állandó kapcsolat
  kiépítve, csak egy-egy üzenet elküldésének idejére.
  A tesztelések során valós környezteben is ki lett próbálva az applikáció,
  miközben aktívan kommunikált a szerverrel.
@@ -6023,16 +6025,17 @@ i a kommunikációt, mely folyamat során nyit egy portot, amin keresztül a
  Ennek minősége telefonkészüléktől és a terület műhold lefedettségétől is
  függ.
  Vannak területek, ahol centiméterre pontos értéket tud adni, máshol több
- méteres eltérés is jelentkezhet a vlaós pozícióhoz képest.
+ méteres eltérés is jelentkezhet a valós pozícióhoz képest.
  Ezért használtam a térképes megejelenítésnél az OSMDroid útvonal generálási
- metódusát , ami útvonalra illeszti a GPS koordinátákat, így kis eltérés
+ metódusát, ami útvonalra illeszti a GPS koordinátákat, így kis eltérés
  mellet is jó eredményeket tud mutatni a program.
  A tesztek során mind a kétféle protokollt és teszt módot kiprobáltam kombinálva
  egymással.
- Közben a mért adatokat, azok közül is a felü és letöltési sebességet a
- Speedtest nevü programmal ellenőriztem, mely megmondja, hogy az adott helyen
- milyen a sűvszélességgel rendelkezik a hálózat.
- 
+ Közben a mért adatokat, azok közül is a fel- és letöltési sebességet a
+ Speedtest nevü programmal ellenőriztem, mely megméri, hogy az adott helyen
+ milyen a sávszélességgel rendelkezik a hálózat.
+ Az emulátoron különböző Android verziók melett eltérő felbontású, képarányú
+ készülékkel is teszteltem a programot.
 \end_layout
 
 \begin_layout Subsection
@@ -6044,8 +6047,8 @@ A rendszer tesztelés során kiderült, hogy a HttpService osztályban hibásan
  lett implementálva a szerverhez kapcsolódás, így minden teszt futtatáskor
  újra próbált csatlakozni a szerverhez.
  Ez azt eredményezte, hogy mindig az első teszt portot (5500) akarta használni,
- ami a többszöri kapcsolódást megakadályozta, mert még a port foglalt volt.
- Ebben az esetben a megoldás az lett, hogy a szerverhez csatlakozott Socket
+ ami a többszöri kapcsolódást megakadályozta, mert a port még foglalt volt.
+ Ebben az esetben a megoldás az volt, hogy a szerverhez csatlakozott Socket
  objektumot eltárolja a program és csak akkor hoz létre újat ha ez a Socket
  objektum még nem létezik, így a szerverrel való kapcsolat megmarad és új
  teszt indítása esetén a tesztportok egyesével léptetődnek.
@@ -6054,8 +6057,8 @@ A rendszer tesztelés során kiderült, hogy a HttpService osztályban hibásan
 \begin_layout Standard
 A program tervezése során elkövetett hiba volt, hogy a TCP és UDP segédolsztályo
 k maguk kezelték a Socket objektumokat és a csatlakozást.
- Ebben az esetben a tesztelés során kiderült, hogy nem lehe tudni, a kapcsolati
- hibák okát és a program egz hibás futás végén is úgy tért vissza mintha
+ Ebben az esetben a tesztelés során kiderült, hogy nem lehet tudni, a kapcsolati
+ hibák okát és a program egy hibás futás végén is úgy tért vissza mintha
  egy sikeres futásnak lett volna vége.
  Ebben az esetben a megoldás az volt, hogy a socket objektumokat egy szintel
  feljebb a HttpServer vagy a HttpService osztályok végzik és a létrejött
@@ -6068,7 +6071,7 @@ UDP protokollt használó tesztek esetén a hálózati kommunikáció során nem
  használhatóak a Socket objektumok, a kapcsolat nem építhető ki a szerver
  oldal felől.
  A mobil telefon IP címe nem publikus, általában NAT-olva van az operátorok
- hálózata, egyrészt biztonsági szempontok miatt, másrészt a kevés címtartomány
+ hálózata, egyrészt biztonsági szempontok miatt, másrészt a kis címtartomány
  miatt.
  Ez azt eredményezte, hogy minden esetben a mobil készüléknek kell kezdeményezni
 e a kommunikációt, ezzel lehetővé téve hogy a szerver üzenetetket tudjon
@@ -6121,14 +6124,14 @@ a való fejelsztés lépéseibe, valamint a mobilhálózatok bonyolúlt és szer
  világába.
  Első lépésben az Android platform került ismertetésre, mely a bemutatott
  alkalmazás implementálása mellett számos új lehetőségeket rejt.
- Mára már kiforrot mind a platform és mind a fejlesztői környezet, melyel
+ Mára már kiforrot mind a platform, mind a fejlesztői környezet, melyel
  nagyon könnyen fejleszthetünk alkalmazásokat.
  Bár sok lehetőséget nyújt a különféle applikációk fejlesztésében, a dolgozatom
  elkészítése során nem találtam módot arra, hogy a hivatalos Android SDK
  segítségével a hanghívásokat is tesztelhessem.
- Kutatómunkám arar vezetett, hogy a szükséges információk alacsony szinten
- kerülnek letárolásra, illetve kezelésre, melyhez nem elég az Android SDK
- megváltoztatása sem.
+ Kutatómunkám során arra a következtetésre jutottam, hogy a szükséges információ
+k alacsony szinten kerülnek letárolásra, illetve kezelésre, melyhez nem
+ elég az Android SDK megváltoztatása sem.
 \end_layout
 
 \begin_layout Standard
@@ -6242,9 +6245,9 @@ Android SDK
 Eclipse 
 \series default
 (Indigo) egy IDE, integrált fejelsztő környezet.
- Többnyire Javaában íródott.
- Applikációk fejlesztésére használják, a plug-in-ek használatával és fejlesztésé
-vel több féle programozási nyelven történő fejlesztést is támogathat.
+ Többnyire Java-ban íródott.
+ Applikációk fejlesztésére használják, a plugin-ek használatával és fejlesztésév
+el több féle programozási nyelven történő fejlesztést is támogathat.
  Ezen eszköz támogatja az Android platformra történő fejlesztést is, így
  ezt hasnzáltam a dolgozatom elkészítéséhez.
  Könnyen integrálható bele egy plug-in, aminek segítségével futtathatunk
@@ -6258,7 +6261,8 @@ Git
 \series default
 egy nyílt forráskódú, elosztott verziókezelő szoftver, vagy másképpen egy
  szoftver forráskód kezelő rendszer, amely a sebességre helyezi a hangsúlyt.
- A Gitet eredetileg Linus Torvalds fejlesztette ki a Linux kernel fejlesztéséhez.
+ A Git-et eredetileg Linus Torvalds fejlesztette ki a Linux kernel fejlesztéséhe
+z.
  Minden Git munkamásolat egy teljes értékű repository teljes verziótörténettel
  és teljes revíziókövetési lehetőséggel, amely nem függ a hálózat elérésétől
  vagy központi szervertől.
@@ -6271,7 +6275,7 @@ GitHub
 \series default
 (www.github.com) egy Git-es fejlesztéseket támogató weboldal, mely ingyenes
  tárterületet biztosít a felhasználóknak.
- A dolgozatom készítése során itt tároltam a adatokat és a forráskodókat
+ A dolgozatom készítése során itt is tároltam a adatokat és a forráskodókat
  is.
 \end_layout
 
@@ -6281,8 +6285,9 @@ GitHub
 LyX 
 \series default
 egy nyílt forráskódú LaTeX dokumentum szerkesztő.
- Leegyszerűsíti és felgyorsítja sok közös LaTeX elem használatát, ugyanakkor
- engedi, hogy a felhasnzálók TeX kódot is használhassanak, ahol szükséges.
+ Leegyszerűsíti és felgyorsítja a dokumentációt és sok közös LaTeX elem
+ használatát, ugyanakkor engedi, hogy a felhasnzálók TeX kódot is használhassana
+k, ahol szükséges.
  LyX weboldala: http://www.lyx.org.
 \end_layout
 
@@ -6295,10 +6300,10 @@ Visual
 \series bold
 Studio 2010 Ultimate 
 \series default
-egy professzionális fejelsztő eszköz, mely nagyon sok programozásinyelven
+egy professzionális fejlesztő eszköz, mely nagyon sok programozási nyelven
  történő fejelsztést támogat.
- Ezenkívül széleskörüen támogatja a fejlesztés többi fázisát, aspektusát
- is így különféle diagrammok is készíthetőek a segítségével.
+ Ezen kívül széleskörűen támogatja a fejlesztés többi fázisát, aspektusát
+ is így különféle UML diagrammok is készíthetőek a segítségével.
  ennek köszönhetően ezzel készítettem el a dolgozatban szereplő osztály
  és szekvencia diagrammokat.
 \end_layout

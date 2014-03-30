@@ -29,7 +29,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	private Scanner scanner = null;
 	private boolean isScanStopped = false;	
 	private ReportI reporter = null;
-	private boolean isUpload;
+	private boolean isUpload = false;
 
 	// for testing purposes
 	private Vector<TCPReport> tcpReportList = null; 
@@ -46,20 +46,18 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		super();
 		this.logger = logger;
 		this.reporter = reporter;
-
+		isUpload = upload;
+		tcpReportList = new Vector<TCPReport>();
+		udpReportList = new Vector<UDPReport>();
 		try {
 			socket =  new Socket(serverAddress, port);
-			scanner = new Scanner(socket.getInputStream());
-			isUpload = upload;
+			scanner = new Scanner(socket.getInputStream());			
 		} catch (UnknownHostException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		} catch (IOException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
-		tcpReportList = new Vector<TCPReport>();
-		udpReportList = new Vector<UDPReport>();
 	}
-
 
 	public void setData(DataType type) {
 		data = type;
@@ -73,17 +71,18 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		PrintWriter printer = null;
 		try {
 			printer = new PrintWriter(socket.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("POST "+ id +" HTTP*/1.0\n");
+			buffer.append("REPORT: "+ type +"\n");		
+			buffer.append("MESSAGE: "+message+"\n");
+			buffer.append("END\n");
+			
+			printer.print(buffer);
+			printer.flush();
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("POST "+ id +" HTTP*/1.0\n");
-		buffer.append("REPORT: "+ type +"\n");		
-		buffer.append("MESSAGE: "+message+"\n");
-		buffer.append("END\n");
-		printer.print(buffer);
-		printer.flush();
 	}
 
 	public ReportReceiver(Logger logger, Socket socket, ReportI reporter) {
@@ -97,11 +96,11 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 
 	public void stopScaning(){
 		try {
-			socket.close();
+			socket.close();		
+			socket = null;
 		} catch (IOException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
-		socket = null;
 		isScanStopped = true;
 	}
 
@@ -200,6 +199,8 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	public void setReceivedBytes(final int id, final int interval, final int bytes) {
 		TCPReport report = new TCPReport(id, interval, (double)bytes, 0.0, 0.0);
 		calcSpeed(report);
+		report.setData(data);
+		report.setRate(rate);
 		tcpReportList.add(report);	
 		reporter.sendMessage("TCP", report.toString());
 	}
@@ -207,8 +208,10 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	@Override
 	public void setReceivedBytes(final int id, final int interval, final int bytes, final double jitter, final int lost, final int outOfOrdered, final int sum ){		
 		UDPReport report = new UDPReport(id, interval, (double)bytes, 0.0, 0.0, jitter, lost, outOfOrdered, sum);
+		report.setData(data);
+		report.setRate(rate);
 		calcSpeed(report);
-		tcpReportList.add(report);	
+		udpReportList.add(report);	
 		reporter.sendMessage("UDP", report.toString());
 	}
 

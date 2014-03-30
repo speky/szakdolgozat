@@ -17,7 +17,7 @@ public class ReportSender implements MessageI{
 	
 	public ReportSender(Logger logger, int port){
 		this.logger = logger;
-		this.port = port;		
+		this.port = port;
 		if (createSocket()) {
 			try {
 				printer = new PrintWriter(socket.getOutputStream());

@@ -120,13 +120,13 @@ public class OSMActivity extends Activity implements TestObserver {
 		viaPoints.add(new GeoPoint(47.493686, 19.069658));
 		viaPoints.add(new GeoPoint(47.495769, 19.070244));
 
-		 */	
+		 */
 		Location loc = new Location("dummyprovider");
 		loc.setLongitude(19.070567);
 		loc.setLatitude(47.497147);
 		// set camera to the location
 		controller.setCenter(new GeoPoint(loc));						
-		mapView.postInvalidate();			
+		mapView.postInvalidate();	
 	}
 
 	@Override
@@ -146,8 +146,8 @@ public class OSMActivity extends Activity implements TestObserver {
 
 	private void load() {		
 		controller.setZoom(sharedPreferences.getInt(ZOOM, 15));
-		float lat = sharedPreferences.getFloat(LAT, 0.0f);
-		float lon = sharedPreferences.getFloat(LON, 0.0f);
+		float lat = sharedPreferences.getFloat(LAT, 47.497147f);				
+		float lon = sharedPreferences.getFloat(LON, 19.070567f);
 		controller.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString(TESTNAME, "");
@@ -161,6 +161,9 @@ public class OSMActivity extends Activity implements TestObserver {
 		} else {
 			setTestIdString();			
 		}
+		// set camera to the location
+		controller.setCenter(new GeoPoint(lat, lon));						
+		mapView.postInvalidate();
 	}	
 
 	private void save() {
@@ -271,7 +274,7 @@ public class OSMActivity extends Activity implements TestObserver {
 	}
 
 	private void loadRoad() {		
-		if (dataList == null || nodeCount == 0) {
+		if (dataList == null || nodeCount <= 0) {
 			return;
 		}
 
@@ -349,9 +352,9 @@ public class OSMActivity extends Activity implements TestObserver {
 	}
 
 	private void setProperLocationOnNodes(){
-		if (null == road){
+		if (null == road || road.mNodes.size() <1){
 			return;
-		}		
+		}
 		nodeB.mLocation = road.mNodes.get(road.mNodes.size()-1).mLocation;		
 	}
 

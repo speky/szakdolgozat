@@ -16,6 +16,7 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -60,7 +61,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private int signalLevel = SIGNAL_UNKOWN;
 	private int testId = 0;
 	private String testName = "";
-	private int rateType = 0;
+	private int  rateType = 0;
 	private boolean networkConnected = false;
 	private String networkType = ""; 
 	private boolean isTestRunning = false;
@@ -243,10 +244,10 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
 		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
 		httpIntent.putExtra("udpRate", prefs.getString("udpRate", "1024"));
-		
-		rateType = prefs.getInt("rateType", 1);
-		httpIntent.putExtra("rateType", Integer.toString(rateType));
-
+		String unit = prefs.getString("rateType", "1");
+		httpIntent.putExtra("rateType", unit);
+		rateType =  Integer.parseInt(unit); 
+				
 		isTestRunning = true;
 		startService(httpIntent);
 		return true;

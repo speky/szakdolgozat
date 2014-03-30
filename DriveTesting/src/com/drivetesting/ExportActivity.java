@@ -252,7 +252,7 @@ class ExportToCVS extends AsyncTask<String, Void, Boolean> {
 
 	protected Boolean doInBackground(final String... args) {
 		List<DbData> datas = null;
-		if (testId == 0 && testName.equals("")) {
+		if (testId == -1 || testName.equals("ALL")) {
 				datas = dbData.queryAll();
 		} else  if (testId != 0 ) {		
 			datas = dbData.querySpecifiedTest(String.valueOf(testId));

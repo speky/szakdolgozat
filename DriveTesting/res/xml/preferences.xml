@@ -43,7 +43,7 @@
     />
       <ListPreference     android:title="Units"
                       android:summary="Select the unit type"
-                      android:key="unitType"
+                      android:key="rateType"
                       android:defaultValue="1"
                       android:entries="@array/listArray"
                       android:entryValues="@array/listValues" />

@@ -73,8 +73,14 @@ public class TCPReport {
 		tokens = new StringTokenizer(report);
 		try {			
 			reporterId = Integer.parseInt((String)tokens.nextElement());
-			interval = Long.parseLong((String)tokens.nextElement());			
-			transferedData = Double.parseDouble((String)tokens.nextElement());			
+			interval = Long.parseLong((String)tokens.nextElement());
+			tokens.nextElement();//sec
+			transferedData = Double.parseDouble((String)tokens.nextElement());
+			tokens.nextElement();//Data type
+			dlSpeed = Double.parseDouble((String)tokens.nextElement());
+			tokens.nextElement();//rate
+			ulSpeed = Double.parseDouble((String)tokens.nextElement());
+			tokens.nextElement();//rate
 		} catch (Exception ex) {
 			ex.getMessage();
 			return false;

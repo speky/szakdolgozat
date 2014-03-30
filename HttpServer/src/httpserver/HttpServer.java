@@ -181,16 +181,19 @@ class ServerThread extends Thread{
 			serverSocket.setSoTimeout(0);
 		}
 		catch (SocketTimeoutException e) {
-			logger.addLineAndPrint(TAG+e.getMessage());
+			logger.addLineAndPrint(TAG + id +e.getMessage());
 			e.printStackTrace();
+			return ;
 		}
 		catch (SocketException e) {
-			logger.addLineAndPrint(TAG+e.getMessage());			
+			logger.addLineAndPrint(TAG+ id+e.getMessage());			
 			e.printStackTrace();
+			return ;
 		}
 		catch (IOException e) {
-			logger.addLineAndPrint(TAG+e.getMessage());
+			logger.addLineAndPrint(TAG + id +e.getMessage());
 			e.printStackTrace();
+			return ;
 		}
 		
 		reporter = new ReportSender(logger, ReportPort);
@@ -301,13 +304,16 @@ public class HttpServer {
 			while (true) {
 				// wait for client connection
 				logger.addLineAndPrint(TAG+"Waiting for connection on port:"+ SERVER_PORT +"\n");
-				Socket socket = serverSocket.accept();	
-				//figure out what is the ip-address of the client
-				InetAddress client = socket.getInetAddress();
-				//and print it to log
-				logger.addLineAndPrint(TAG+client + " connected to server.\n");
-				// start thread for handling a client
-				new Thread(new ServerThread(logger, socket));				
+				Socket socket = serverSocket.accept();
+				if (socket != null) {
+					//figure out what is the ip-address of the client
+					InetAddress client = socket.getInetAddress();
+					//and print it to log
+					logger.addLineAndPrint(TAG+client + " connected to server.\n");
+					  // start thread for handling a client
+					
+					new Thread(new ServerThread(logger, socket));
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Thread hiba: " + e.getMessage());
