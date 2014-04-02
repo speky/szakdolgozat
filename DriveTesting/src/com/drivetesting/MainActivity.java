@@ -7,7 +7,9 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -26,6 +28,8 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	private String[] from = new String[] {"name", "value"};
 	private int[] to = new int[] { R.id.column_name, R.id.column_value};
 
+	private SharedPreferences sharedPreferences;
+	
 	private List<HashMap<String, String>> phoneDataList  = null;
 	private List<HashMap<String, String>> networkDataList  = null;
 
@@ -45,7 +49,9 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 		}
 
 		setContentView(R.layout.main_tab);
-						               
+		
+		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		
 		phoneDataList  = new ArrayList<HashMap<String, String>>();
 		networkDataList  = new ArrayList<HashMap<String, String>>();
 		
@@ -82,13 +88,15 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 	protected void onPause() {
 		super.onPause();	
 		Log.d(TAG, "onPause");
+		save();
 		((DriveTestApp)getApplication()).removePhoneStateObserver(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.d(TAG, "onResume ");		
+		Log.d(TAG, "onResume ");
+		load();
 		((DriveTestApp)getApplication()).registerPhoneStateObserver(this);	 
 	}
 
@@ -220,10 +228,53 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 		setHashMapElement(networkDataList, "CID", "-");
 	}
 
-	//location 
-	//provider
-	// gps accuracy
+	
+	private void save() {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putString("SignalStrength", getHashMapElement(phoneDataList, "Signal strength"));
+		editor.putString("CdmaEcio", getHashMapElement(phoneDataList, "Cdma EcIo"));
+		editor.putString("EvdoDbm", getHashMapElement(phoneDataList, "Evdo dBm"));
+		editor.putString("EvdoEcio", getHashMapElement(phoneDataList, "Evdo EcIo"));
+		editor.putString("EvdoSnr", getHashMapElement(phoneDataList, "Evdo SNR"));
+		editor.putString("BitRate", getHashMapElement(phoneDataList, "Bit error rate"));
+				
+		editor.putString("CallState", getHashMapElement(networkDataList, "Call state"));
+		editor.putString("ServiceState", getHashMapElement(networkDataList, "Service state"));
+		editor.putString("NetworkType", getHashMapElement(networkDataList, "Network type"));
+		editor.putString("NetworkState", getHashMapElement(networkDataList, "Network state"));
+		editor.putString("DataDirection", getHashMapElement(networkDataList, "Data direction"));
+		editor.putString("DataConnection", getHashMapElement(networkDataList, "Data connection state"));
+		editor.putString("MNC", getHashMapElement(networkDataList, "MNC"));
+		editor.putString("MCC", getHashMapElement(networkDataList, "MCC"));
+		editor.putString("LAC", getHashMapElement(networkDataList, "LAC"));
+		editor.putString("CID", getHashMapElement(networkDataList, "CID"));
+				
+		editor.commit();
+	}
 
+	private void load() {
+		setHashMapElement(phoneDataList, "Signal strength", sharedPreferences.getString("SignalStrength", "-"));
+		setHashMapElement(phoneDataList, "Cdma EcIo", sharedPreferences.getString("CdmaEcio", "-"));
+		setHashMapElement(phoneDataList, "Evdo dBm", sharedPreferences.getString("EvdoDbm", "-"));
+		setHashMapElement(phoneDataList, "Evdo EcIo", sharedPreferences.getString("EvdoEcio", "-"));
+		setHashMapElement(phoneDataList, "Evdo SNR", sharedPreferences.getString("EvdoSnr", "-"));
+		setHashMapElement(phoneDataList, "Bit error rate", sharedPreferences.getString("BitRate", "-"));		
+		phoneDataAdapter.notifyDataSetChanged();
+				
+		setHashMapElement(networkDataList, "Call state", sharedPreferences.getString("CallState", "-"));
+		setHashMapElement(networkDataList, "Service state", sharedPreferences.getString("ServiceState", "-"));
+		setHashMapElement(networkDataList, "Network state", sharedPreferences.getString("NetworkState", "-"));
+		setHashMapElement(networkDataList, "Network type", sharedPreferences.getString("NetworkType", "-"));
+		setHashMapElement(networkDataList, "Data direction", sharedPreferences.getString("DataDirection", "-"));
+		setHashMapElement(networkDataList, "Data connection state", sharedPreferences.getString("DataConnection", "-"));
+		setHashMapElement(networkDataList, "MNC", sharedPreferences.getString("MNC", "-"));
+		setHashMapElement(networkDataList, "MCC", sharedPreferences.getString("MCC", "-"));
+		setHashMapElement(networkDataList, "LAC", sharedPreferences.getString("LAC", "-"));
+		setHashMapElement(networkDataList, "CID", sharedPreferences.getString("CID", "-"));
+		networkDataAdapter.notifyDataSetChanged();
+		separatedAdapter.notifyDataSetChanged();
+	}
+	
 	private int findElement(final String key, List<HashMap<String, String>> dataList) {
 		for (int i = 0; i < dataList.size(); ++i) {
 			String name = dataList.get(i).get("name");
@@ -247,12 +298,22 @@ public class MainActivity extends Activity implements PhoneStateObserver  {
 			dataList.get(id).put("value", value);
 		}
 	}
+	
+	private String getHashMapElement(List<HashMap<String, String>> dataList, String key){
+		int id = findElement(key, dataList);
+		String value = "-1";
+		if (id != -1){
+			value = dataList.get(id).get("value");
+		}
+		return value;		
+	}
 
+	
 	@Override
 	public void updateSignalStrength(String value) {
 		setHashMapElement(phoneDataList, "Signal strength", value + getApplicationContext().getString(R.string.unit_dbm));
 		phoneDataAdapter.notifyDataSetChanged();
-		separatedAdapter.notifyDataSetChanged();	
+		separatedAdapter.notifyDataSetChanged();
 	}	
 	@Override
 	public void updateCdmaEcio(String value) {

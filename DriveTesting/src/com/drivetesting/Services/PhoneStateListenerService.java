@@ -198,18 +198,18 @@ public class PhoneStateListenerService extends Service {
 
 		private String getMCC(){
 			String simOperator = telephonyManager.getNetworkOperator();
-			if (simOperator != null) {
+			if (simOperator != null && simOperator.length() > 2) {
 				return simOperator.substring(0, 3);
 			}
-			return null;
+			return "-1";
 		}
 
 		private String getMNC(){
 			String simOperator = telephonyManager.getNetworkOperator();
-			if (simOperator != null) {
+			if (simOperator != null && simOperator.length() > 2) {
 				return simOperator.substring(3);
 			}
-			return null;
+			return "-1";
 		}
 
 		@Override

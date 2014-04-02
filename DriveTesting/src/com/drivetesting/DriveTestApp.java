@@ -340,6 +340,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		notifyServiceStateChange(value);
 	}
 	public void setCellLocation(final String mcc, final String mnc, final String lac, final String cid) {
+		
 		MCC = Integer.parseInt(mcc);
 		MNC = Integer.parseInt(mnc);
 		LAC = Integer.parseInt(lac);

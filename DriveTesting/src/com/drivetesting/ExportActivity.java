@@ -69,7 +69,7 @@ public class ExportActivity extends Activity {
 		editor.commit();
 	}
 
-	private void load() {	    	    
+	private void load() {    
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString(TESTNAME, "");
 		if (testId == 0) {

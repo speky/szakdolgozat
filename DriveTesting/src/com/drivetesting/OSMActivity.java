@@ -172,8 +172,8 @@ public class OSMActivity extends Activity implements TestObserver {
 		editor.putString(TESTNAME, testName);
 		editor.putInt(ZOOM, mapView.getZoomLevel());
 		GeoPoint c = (GeoPoint) mapView.getMapCenter();
-		editor.putFloat(LAT, c.getLatitudeE6());
-		editor.putFloat(LON, c.getLongitudeE6());
+		editor.putFloat(LAT, (float) c.getLatitude());
+		editor.putFloat(LON, (float) c.getLongitude());
 
 		editor.commit();
 	}
