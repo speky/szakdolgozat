@@ -47,6 +47,8 @@ public class OSMActivity extends Activity implements TestObserver {
 	private final String TESTNAME = "testName";
 	private final String ZOOM = "zoom";
 
+	private static int offset = 1;
+	
 	private RoadManager roadManager = new OSRMRoadManager();
 	private MapView mapView;
 	private int noOfPoints;
@@ -146,8 +148,9 @@ public class OSMActivity extends Activity implements TestObserver {
 
 	private void load() {		
 		controller.setZoom(sharedPreferences.getInt(ZOOM, 15));
-		float lat = sharedPreferences.getFloat(LAT, 47.497147f);				
-		float lon = sharedPreferences.getFloat(LON, 19.070567f);
+		GeoPoint p = new GeoPoint(47.497147, 19.070567);
+		float lat = sharedPreferences.getInt(LAT, p.getLatitudeE6());
+		float lon = sharedPreferences.getInt(LON, p.getLongitudeE6());
 		controller.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString(TESTNAME, "");
@@ -171,9 +174,9 @@ public class OSMActivity extends Activity implements TestObserver {
 		editor.putLong(TESTID, testId);
 		editor.putString(TESTNAME, testName);
 		editor.putInt(ZOOM, mapView.getZoomLevel());
-		GeoPoint c = (GeoPoint) mapView.getMapCenter();
-		editor.putFloat(LAT, (float) c.getLatitude());
-		editor.putFloat(LON, (float) c.getLongitude());
+		GeoPoint c = (GeoPoint) mapView.getMapCenter();		
+		editor.putInt(LAT, c.getLatitudeE6());
+		editor.putInt(LON, c.getLongitudeE6());
 
 		editor.commit();
 	}
@@ -266,6 +269,13 @@ public class OSMActivity extends Activity implements TestObserver {
 
 	private RoadNode addRoadNode(DbData data) {
 		RoadNode node = new RoadNode();
+		 
+		if (data.lat == 0.0) {
+			data.lat = 10.0 + offset;
+		}
+		if (data.lon == 0.0) {
+			data.lon = 10.0 +offset++;
+		}
 		node.mLocation = new GeoPoint(data.lat, data.lon);
 		node.mInstructions = data.toDescriptionString();
 		node.mDuration = data.signalLevel;
@@ -355,7 +365,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		if (null == road || road.mNodes.size() <1){
 			return;
 		}
-		nodeB.mLocation = road.mNodes.get(road.mNodes.size()-1).mLocation;		
+		nodeB.mLocation = road.mNodes.get(road.mNodes.size()-1).mLocation;
 	}
 
 	// add a  new road marker

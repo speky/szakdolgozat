@@ -30,7 +30,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportBaseSettings() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0 B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		
 		String output = report.toString();
 		Assert.assertTrue(output.equals("1 100 sec 123.0 B 0.0 bits 0.0 bits 1.3 1 1 3"));
@@ -39,7 +39,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportBaseSettingsInKB() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0 B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		report.setData(DataType.KB);
 		
 		String output = report.toString();
@@ -49,7 +49,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportBaseSettingsInMB() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0 B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		report.setData(DataType.MB);
 		
 		String output = report.toString();
@@ -59,7 +59,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportWithSpeedSetting() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0  B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		report.setDLSpeed(10.2);
 		report.setULSpeed(1.2);
 		
@@ -70,7 +70,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportWithSpeedSettingInKbits() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0  B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		report.setDLSpeed(10.2);
 		report.setULSpeed(1.2);
 		report.setRate(RateType.KBITS);
@@ -81,7 +81,7 @@ public class UDPReportTest {
 	@Test
 	public void testPositiveReportWithSpeedSettingInMbits() {
 		UDPReport report = new UDPReport();
-		Assert.assertEquals(true, report.parseReport("1 100 123.0 1.3 1 1 3"));
+		Assert.assertEquals(true, report.parseReport("1 100 sec 123.0  B 0.0 bits 0.0 bits 1.3 1 1 3"));
 		report.setDLSpeed(10.2);
 		report.setULSpeed(1.2);
 		report.setRate(RateType.MBITS);

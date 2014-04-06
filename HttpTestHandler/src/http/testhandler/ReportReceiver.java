@@ -66,18 +66,18 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	public void setRate(RateType type) {
 		rate = type;
 	}
-	
+
 	public void sendReportMessage(String id, String type,  String message){					
 		PrintWriter printer = null;
 		try {
 			printer = new PrintWriter(socket.getOutputStream());
-		
+
 			StringBuffer buffer = new StringBuffer();
 			buffer.append("POST "+ id +" HTTP*/1.0\n");
 			buffer.append("REPORT: "+ type +"\n");		
 			buffer.append("MESSAGE: "+message+"\n");
 			buffer.append("END\n");
-			
+
 			printer.print(buffer);
 			printer.flush();
 		} catch (IOException e) {			
@@ -95,12 +95,7 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 	}
 
 	public void stopScaning(){
-		try {
-			socket.close();		
-			socket = null;
-		} catch (IOException e) {
-			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
-		}
+
 		isScanStopped = true;
 	}
 
@@ -171,9 +166,12 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 						System.out.println(TAG+" receiver report" + buffer.toString());
 						parseReport(buffer);
 					}
-				}				
+				}
 			}
-		} catch (IOException e) {
+			socket.close();		
+			socket = null;
+		}
+		catch (IOException e) {
 			logger.addLine(TAG +"Error:"+e.getLocalizedMessage());
 		}
 		finally {

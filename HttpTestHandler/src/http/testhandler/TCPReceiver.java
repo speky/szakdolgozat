@@ -16,18 +16,18 @@ public class TCPReceiver extends ConnectionInstance {
 	private int readedBytes = 0;
 	private MessageI reportSender = null;
 	private ReceiverReportI reportReceiver = null;
-	
+
 	public TCPReceiver(Logger logger, final int id, MessageI sender, ReceiverReportI receiver) {
 		super(ConnectionInstance.TCP, id, logger);
 		logger.addLine(TAG + " TCP receiver created id: " + Integer.toString(id));
 		reportSender = sender;
 		reportReceiver = receiver;
 	}
-		
+
 	public void setReportInterval(int milisec) {
 		reportInterval = milisec;
 	}
-	
+
 	public boolean setSocket(Socket socket) {
 		if (socket == null) {
 			return false;
@@ -36,7 +36,7 @@ public class TCPReceiver extends ConnectionInstance {
 		this.socket = socket;
 		return true;
 	}
-		
+
 	public Integer call() {	
 		try {
 			if (socket == null) {
@@ -44,29 +44,29 @@ public class TCPReceiver extends ConnectionInstance {
 				logger.addLine(TAG+errorMessage );
 				return id;
 			}
-			
+
 			if (reportInterval > 0) {
 				timer = new Timer();
 				timer.scheduleAtFixedRate(new TimerTask() {
-					  @Override
-					  public void run() {
-						  if (reportReceiver  != null ) {								
-							  reportReceiver.setReceivedBytes(id, reportInterval/1000, readedBytes);
-						  } else if (null != reportSender){
-							  reportSender.sendReportMessage(Integer.toString(id), "TCP", 
-									  	Integer.toString(id)+" " +Integer.toString(reportInterval/1000)+ " "+Integer.toString(readedBytes));
-						  }
-						  readedBytes = 0;
-						  logger.addLine(TAG+" readedByte = "+ Integer.toString(readedBytes ));
-					  }
-					}, reportInterval, reportInterval);
+					@Override
+					public void run() {
+						if (reportReceiver  != null ) {								
+							reportReceiver.setReceivedBytes(id, reportInterval/1000, readedBytes);
+						} else if (null != reportSender){
+							reportSender.sendReportMessage(Integer.toString(id), "TCP", 
+									Integer.toString(id)+" " +Integer.toString(reportInterval/1000)+ " "+Integer.toString(readedBytes));
+						}
+						readedBytes = 0;
+						logger.addLine(TAG+" readedByte = "+ Integer.toString(readedBytes ));
+					}
+				}, reportInterval, reportInterval);
 			}
-			
+
 			readPackets();
 			socket.close();
 		}		
 		catch (Exception e) {
-			 errorMessage = "Some kinf of error occured!";
+			errorMessage = "Some kinf of error occured!";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());
 		} 
 		finally{
@@ -79,7 +79,7 @@ public class TCPReceiver extends ConnectionInstance {
 					socket.close();
 					socket = null;
 				}				
-				
+
 			} catch (IOException e) {
 				errorMessage = "Cannot close socket!";
 				logger.addLine(TAG+ errorMessage);
@@ -106,7 +106,7 @@ public class TCPReceiver extends ConnectionInstance {
 			}
 		}
 	}
-	
+
 	public void readPackets() {
 		InputStream inputStream = null;
 		try {
@@ -117,10 +117,10 @@ public class TCPReceiver extends ConnectionInstance {
 		}
 		int size = 2000;
 		byte[] byteBuffer = new byte[size];
-						
+
 		//socket.setReceiveBufferSize(1024);//1KB
 		//logger.addLine(TAG + "rec buff size: "+ socket.getReceiveBufferSize());
-				
+
 		try {
 			while (reading && inputStream != null) {
 				int bytes = inputStream.read(byteBuffer);
@@ -129,7 +129,11 @@ public class TCPReceiver extends ConnectionInstance {
 			}					
 		} catch (IOException e) {
 			logger.addLine(TAG+e.getMessage());			
-			e.printStackTrace();			
+			e.printStackTrace();
+
+		} catch (Exception e) {
+			logger.addLine(TAG+e.getMessage());			
+			e.printStackTrace();
 		}
 		finally {
 			byteBuffer = null;

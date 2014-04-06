@@ -65,8 +65,8 @@ public class TCPReport {
 	public double getTransferedData() {
 		return transferedData; 
 	}
-	
-	public boolean parseReport(final String report) {
+
+	public boolean parseFullReport(final String report) {
 		if (report == null) {
 			return false;
 		}
@@ -81,6 +81,23 @@ public class TCPReport {
 			tokens.nextElement();//rate
 			ulSpeed = Double.parseDouble((String)tokens.nextElement());
 			tokens.nextElement();//rate
+		} catch (Exception ex) {
+			ex.getMessage();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean parseReport(final String report) {
+		if (report == null) {
+			return false;
+		}
+		tokens = new StringTokenizer(report);
+		try {			
+			reporterId = Integer.parseInt((String)tokens.nextElement());
+			interval = Long.parseLong((String)tokens.nextElement());			
+			transferedData = Double.parseDouble((String)tokens.nextElement());
+			
 		} catch (Exception ex) {
 			ex.getMessage();
 			return false;

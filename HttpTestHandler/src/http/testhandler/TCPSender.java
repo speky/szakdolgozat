@@ -6,12 +6,12 @@ import java.net.Socket;
 
 
 public class TCPSender  extends ConnectionInstance {	
-		
+
 	private byte[] byteBuffer;	
 	private Socket socket = null;
 	private boolean running = true;	
 	private final String TAG = "TCPSender: ";
-	
+
 	public TCPSender(Logger logger, final int id, final int bufferSize) {
 		super(ConnectionInstance.TCP, id, logger);				
 		logger.addLine(TAG+ "Created, id: " + id);		
@@ -32,16 +32,9 @@ public class TCPSender  extends ConnectionInstance {
 	public void stop() {
 		logger.addLine(TAG+" stopped!");				
 		running = false;
-		try {
-			socket.close();
-			socket = null;
-		} catch (IOException e) {
-			errorMessage = "Socket cannot stopped!";
-			logger.addLine(TAG+errorMessage);
-			e.printStackTrace();
-		}
+
 	}
-	
+
 	public Integer call() {
 		try {
 			if (checkPrerequisite() == false) {
@@ -50,14 +43,23 @@ public class TCPSender  extends ConnectionInstance {
 			OutputStream outputStream = socket.getOutputStream();
 			logger.addLine(TAG+"Send message,  sendertId: " + id);
 			while (running) {
-				 outputStream.write(byteBuffer);
-				 outputStream.flush();
+				outputStream.write(byteBuffer);
+				outputStream.flush();
 			}			
 			logger.addLine(TAG+" Sending ended!");
-		} catch (Exception e) {
+			socket.close();
+			socket = null;
+		}
+		catch (IOException e) {
+			errorMessage = "Socket cannot stopped!";
+			logger.addLine(TAG+errorMessage);
+			e.printStackTrace();
+		}
+		catch (Exception e) {
 			errorMessage = "Error occured in sending packets";
 			logger.addLine(TAG+"ERROR in run() " + e.getMessage());			
 		}
+
 		finally{
 			try {								
 				if (socket != null) {
@@ -80,5 +82,5 @@ public class TCPSender  extends ConnectionInstance {
 		return true;
 	}
 
-	
+
 }

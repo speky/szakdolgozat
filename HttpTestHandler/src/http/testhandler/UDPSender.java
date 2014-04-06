@@ -28,7 +28,7 @@ public class UDPSender extends ConnectionInstance {
 		bufferSize = bufferSizeInByte;
 		initDelay();
 	}
-	
+
 	public void setRateInBitsPerSec(final double rate) {
 		UDPRate = rate;
 		initDelay();
@@ -47,7 +47,7 @@ public class UDPSender extends ConnectionInstance {
 		// store in milliseconds
 		delay_target *= 1000.0;
 		//logger.addLine(TAG + "DELAY_TARGET: "+ delay_target );
-		
+
 	}
 
 	// used on mobile side
@@ -78,7 +78,7 @@ public class UDPSender extends ConnectionInstance {
 		}
 		return false;
 	}
-	
+
 	private void getAddressThroughNAT() {
 		// Buffer for receiving incoming data
 		byte[] inboundDatagramBuffer = new byte[bufferSize];
@@ -95,17 +95,14 @@ public class UDPSender extends ConnectionInstance {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
 		}
 	}
-	
+
 	@Override
 	public void stop() {
 		logger.addLine(TAG+" stopped!");
 		running = false;
-		if (socket != null) {
-			socket.close();
-			socket = null;
-		}
+
 	}
-	
+
 	public Integer call() {
 		try {
 			byte[] buf = new byte[bufferSize];
@@ -149,6 +146,10 @@ public class UDPSender extends ConnectionInstance {
 						return id;
 					}
 				}
+			}
+			if (socket != null) {
+				socket.close();
+				socket = null;
 			}
 		} catch (SocketException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
