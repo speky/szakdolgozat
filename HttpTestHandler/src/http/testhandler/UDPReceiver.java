@@ -71,10 +71,7 @@ public class UDPReceiver extends ConnectionInstance {
 	public void stop(){
 		logger.addLine(TAG+" stopped!");
 		running = false;
-		if (socket != null) {
-			socket.close();
-			socket = null;
-		}
+
 		if (timer != null) {
 			timer.cancel();
 			timer = null;
@@ -159,26 +156,33 @@ public class UDPReceiver extends ConnectionInstance {
 		DatagramPacket datagramPacket = new DatagramPacket(buf, bufferSize);		
 
 		logger.addLine(TAG+"UDP receiver started");
-		while (running && socket != null) {
-			try {
+		try {
+			while (running && socket != null) {
 				socket.receive(datagramPacket);
 				byte[] bytes = datagramPacket.getData();
 				readBytes += bytes.length;								
-			} catch (IOException e) {
-				logger.addLine(TAG+ " Error: " + e.getMessage());
-				return id;
+			
+				++packetCount;
+				long time = Calendar.getInstance().getTimeInMillis();
+				String received = new String(datagramPacket.getData(), 0, datagramPacket.getLength()) + ", from address: "
+											+ datagramPacket.getAddress() + ", port: " + datagramPacket.getPort();
+				//logger.addLine(TAG+received);
+				parsePackage(received, time);
+	
 			}
-			++packetCount;
-			long time = Calendar.getInstance().getTimeInMillis();
-			String received = new String(datagramPacket.getData(), 0, datagramPacket.getLength()) + ", from address: "
-										+ datagramPacket.getAddress() + ", port: " + datagramPacket.getPort();
-			//logger.addLine(TAG+received);
-			parsePackage(received, time);
-
+		} catch (IOException e) {
+			logger.addLine(TAG+ " Error: " + e.getMessage());
+			
 		}
-		if (timer != null) {
-			timer.cancel();
-			timer = null;
+		finally {
+			if (socket != null && !socket.isClosed()) {
+				socket.close();
+				socket = null;
+			}
+			if (timer != null) {
+				timer.cancel();
+				timer = null;
+			}
 		}
 		logger.addLine(TAG+ "exited!");
 		return id;

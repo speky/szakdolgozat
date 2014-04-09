@@ -341,16 +341,16 @@ public class OSMActivity extends Activity implements TestObserver {
 		mapView.getOverlays().add(roadNodeMarkers);
 		mapView.getOverlays().add(scaleBarOverlay);				
 		mapView.postInvalidate();
-		mapView.invalidate();
+		//mapView.invalidate();
 	}
 
 	private void drawRoadOnMap() {
 		if (road == null){
 			return;
 		}
-		if (road.mStatus == Road.STATUS_DEFAULT) {
+		/*if (road.mStatus == Road.STATUS_DEFAULT) {
 			Toast.makeText(mapView.getContext(), "We have a problem to get the route", Toast.LENGTH_SHORT).show();
-		}
+		}*/
 
 		PathOverlay roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
 		//set the road line color

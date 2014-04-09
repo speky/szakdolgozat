@@ -62,8 +62,7 @@ public class TCPReceiver extends ConnectionInstance {
 				}, reportInterval, reportInterval);
 			}
 
-			readPackets();
-			socket.close();
+			readPackets();			
 		}		
 		catch (Exception e) {
 			errorMessage = "Some kinf of error occured!";
@@ -74,7 +73,7 @@ public class TCPReceiver extends ConnectionInstance {
 				timer.cancel();
 			}
 			try {
-				if (!socket.isClosed()) {
+				if (socket != null && !socket.isClosed()) {
 					logger.addLine(TAG+"Close socket");
 					socket.close();
 					socket = null;
@@ -95,16 +94,8 @@ public class TCPReceiver extends ConnectionInstance {
 		reading = false;
 		if (timer != null) {
 			timer.cancel();
-		}		
-		if (socket != null) {
-			try {				
-				socket.close();				
-			} catch (IOException e) {
-				errorMessage = "Cannot close socket!";
-				logger.addLine(TAG+ errorMessage);
-				e.printStackTrace();
-			}
-		}
+			timer = null;
+		}	
 	}
 
 	public void readPackets() {
@@ -137,14 +128,14 @@ public class TCPReceiver extends ConnectionInstance {
 		}
 		finally {
 			byteBuffer = null;
-			if (inputStream != null) {
+			/*if (inputStream != null) {
 				try {					
 					inputStream.close();
 				} catch (IOException e) {
 					logger.addLine(TAG+e.getMessage());
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}		
 	}
 }
