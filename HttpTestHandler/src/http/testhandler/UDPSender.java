@@ -25,7 +25,7 @@ public class UDPSender extends ConnectionInstance {
 	public UDPSender(final int id, Logger logger, final int bufferSizeInByte) {
 		super(ConnectionInstance.UDP, id, logger);
 		logger.addLine(TAG+ " id: " + id);
-		bufferSize = bufferSizeInByte;
+		bufferSize = 1000;
 		initDelay();
 	}
 
@@ -79,17 +79,20 @@ public class UDPSender extends ConnectionInstance {
 		return false;
 	}
 
-	private void getAddressThroughNAT() {
-		// Buffer for receiving incoming data
-		byte[] inboundDatagramBuffer = new byte[bufferSize];
-		DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length);
-		// Actually receive the datagram
+	private void getAddressThroughNAT() {		
 		try {
+			//Buffer for receiving incoming data
+			final int size = 1000;
+			byte[] inboundDatagramBuffer = new byte[size];
+			Utility.fillStringBuffer(inboundDatagramBuffer, size);
+			DatagramPacket inboundDatagram = new DatagramPacket(inboundDatagramBuffer, size);
+			// Actually receive the datagram
 			socket.receive(inboundDatagram);
 			// Source IP address
 			receiverAddress = inboundDatagram.getAddress();
 			receiverPort = inboundDatagram.getPort();
-			DatagramPacket out = new DatagramPacket(inboundDatagramBuffer, 1000, receiverAddress, receiverPort);
+			
+			DatagramPacket out = new DatagramPacket(inboundDatagramBuffer, size, receiverAddress, receiverPort);
 			socket.send(out);
 		} catch (IOException e) {
 			logger.addLine(TAG+ " Error: " + e.getLocalizedMessage());
@@ -134,7 +137,7 @@ public class UDPSender extends ConnectionInstance {
 					Utility.fillStringBuffer(buf, bufferSize, packetData);
 				}
 
-				DatagramPacket out = new DatagramPacket(buf, buf.length, receiverAddress, receiverPort);
+				DatagramPacket out = new DatagramPacket(buf, bufferSize, receiverAddress, receiverPort);
 				socket.send(out);
 
 				// wait for hold the preset 

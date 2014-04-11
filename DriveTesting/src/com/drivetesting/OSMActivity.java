@@ -3,9 +3,8 @@ package com.drivetesting;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
-import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
+import org.osmdroid.bonuspack.overlays. Marker;
+import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -13,6 +12,7 @@ import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
@@ -35,7 +35,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.drivetesting.observers.TestObserver;
 
@@ -53,8 +52,7 @@ public class OSMActivity extends Activity implements TestObserver {
 	private MapView mapView;
 	private int noOfPoints;
 	private int nodeCount;
-	private IMapController controller;
-	private ItemizedOverlayWithBubble<ExtendedOverlayItem> roadNodeMarkers;
+	private MapController controller;	
 	private ScaleBarOverlay scaleBarOverlay = null;
 	private List<RoadNode> nodes = null; 
 	private RoadNode nodeA = null;
@@ -95,7 +93,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
 
-		controller = mapView.getController();		
+		controller = (MapController)mapView.getController();		
 		mapView.setTileSource(TileSourceFactory.MAPNIK);		
 
 		//Add Scale Bar
@@ -106,9 +104,9 @@ public class OSMActivity extends Activity implements TestObserver {
 		//locationOverlay =  new MyLocationOverlay(getApplicationContext(), mapView);
 		mapView.getOverlays().add(locationOverlay);
 		 */
-		final ArrayList<ExtendedOverlayItem> roadItems = new ArrayList<ExtendedOverlayItem>();
-		roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
-
+		//final ArrayList<ExtendedOverlayItem> roadItems = new ArrayList<ExtendedOverlayItem>();
+		//roadNodeMarkers = new ItemizedOverlayWithBubble<ExtendedOverlayItem>(this, roadItems, mapView);
+				
 		controller.setZoom(15);		
 		testId = application.getTestId();
 		testName = application.getTestName();
@@ -128,7 +126,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		loc.setLatitude(47.497147);
 		// set camera to the location
 		controller.setCenter(new GeoPoint(loc));						
-		mapView.postInvalidate();	
+		mapView.invalidate();	
 	}
 
 	@Override
@@ -149,8 +147,8 @@ public class OSMActivity extends Activity implements TestObserver {
 	private void load() {		
 		controller.setZoom(sharedPreferences.getInt(ZOOM, 15));
 		GeoPoint p = new GeoPoint(47.497147, 19.070567);
-		float lat = sharedPreferences.getInt(LAT, p.getLatitudeE6());
-		float lon = sharedPreferences.getInt(LON, p.getLongitudeE6());
+		float lat = sharedPreferences.getFloat(LAT, (float) (p.getLatitudeE6()/1E6));
+		float lon = sharedPreferences.getFloat(LON, (float) (p.getLongitudeE6()/1E6));
 		controller.setCenter(new GeoPoint(lat, lon));
 		testId = sharedPreferences.getLong(TESTID, 0);
 		testName = sharedPreferences.getString(TESTNAME, "");
@@ -166,7 +164,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		}
 		// set camera to the location
 		controller.setCenter(new GeoPoint(lat, lon));						
-		mapView.postInvalidate();
+		mapView.invalidate();
 	}	
 
 	private void save() {
@@ -175,8 +173,8 @@ public class OSMActivity extends Activity implements TestObserver {
 		editor.putString(TESTNAME, testName);
 		editor.putInt(ZOOM, mapView.getZoomLevel());
 		GeoPoint c = (GeoPoint) mapView.getMapCenter();		
-		editor.putInt(LAT, c.getLatitudeE6());
-		editor.putInt(LON, c.getLongitudeE6());
+		editor.putFloat(LAT, (float)(c.getLatitudeE6()/1E6));
+		editor.putFloat(LON, (float)(c.getLongitudeE6()/1E6));
 
 		editor.commit();
 	}
@@ -262,8 +260,7 @@ public class OSMActivity extends Activity implements TestObserver {
 
 	private void clearMap() {
 		noOfPoints = 0;
-		nodes = new ArrayList<RoadNode>();
-		roadNodeMarkers.removeAllItems();
+		nodes = new ArrayList<RoadNode>();		
 		mapView.getOverlays().clear();		
 	}
 
@@ -276,6 +273,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		if (data.lon == 0.0) {
 			data.lon = 10.0 +offset++;
 		}
+		
 		node.mLocation = new GeoPoint(data.lat, data.lon);
 		node.mInstructions = data.toDescriptionString();
 		node.mDuration = data.signalLevel;
@@ -292,8 +290,7 @@ public class OSMActivity extends Activity implements TestObserver {
 		
 		// handle the first node on the map
 		if (0 == noOfPoints) {
-			nodeA = addRoadNode(dataList.get(noOfPoints++));
-			addRoadMarker(nodeA);
+			nodeA = addRoadNode(dataList.get(noOfPoints++));			
 			--nodeCount;
 			nodeB = nodeA;
 		}
@@ -337,11 +334,12 @@ public class OSMActivity extends Activity implements TestObserver {
 	}
 
 	private void setOverlays(){
-		controller.setCenter(nodeB.mLocation);						
-		mapView.getOverlays().add(roadNodeMarkers);
+		for (int i = 0; i < nodes.size(); ++i)		{
+			addRoadMarker(nodes.get(i));
+		}
+		controller.setCenter(nodeB.mLocation);
 		mapView.getOverlays().add(scaleBarOverlay);				
-		mapView.postInvalidate();
-		//mapView.invalidate();
+		mapView.invalidate();
 	}
 
 	private void drawRoadOnMap() {
@@ -352,7 +350,7 @@ public class OSMActivity extends Activity implements TestObserver {
 			Toast.makeText(mapView.getContext(), "We have a problem to get the route", Toast.LENGTH_SHORT).show();
 		}*/
 
-		PathOverlay roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
+		Polyline roadOverlay = RoadManager.buildRoadOverlay(road, mapView.getContext());
 		//set the road line color
 		roadOverlay.setColor(Color.GREEN);
 
@@ -390,10 +388,15 @@ public class OSMActivity extends Activity implements TestObserver {
 				marker = getResources().getDrawable(R.drawable.marker_great);
 				break;
 			}
-			ExtendedOverlayItem nodeMarker = new ExtendedOverlayItem("Step " + noOfPoints, node.mInstructions, node.mLocation, this);
-			nodeMarker.setMarkerHotspot(OverlayItem.HotspotPlace.CENTER);
-			nodeMarker.setMarker(marker);
-			roadNodeMarkers.addItem(nodeMarker);
+			
+			Marker nodeMarker = new Marker(mapView);
+			if (marker != null) {
+				nodeMarker.setIcon(marker);
+			}
+			nodeMarker.setTitle("Step " + noOfPoints);
+			nodeMarker.setSnippet( node.mInstructions);
+			nodeMarker.setPosition(node.mLocation);
+			mapView.getOverlays().add(nodeMarker);			
 		}
 	}
 

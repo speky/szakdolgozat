@@ -37,7 +37,7 @@ public class UDPReceiver extends ConnectionInstance {
 		reportSender = sender;
 		reportReceiver = receiver;		
 		this.reportInterval = reportInterval;		
-		this.bufferSize = bufferSize;
+		this.bufferSize = 1000;
 	}
 
 	// on the mobile side
@@ -110,10 +110,12 @@ public class UDPReceiver extends ConnectionInstance {
 	private void sendAddressToSenderThroughNAT() {
 		try{
 			// Buffer for receiving incoming data
-			byte[] inboundDatagramBuffer = new byte[bufferSize];
-			DatagramPacket datagram = new DatagramPacket(inboundDatagramBuffer, inboundDatagramBuffer.length, senderAddress, senderPort);
+			final int size = 1000;
+			byte[] inboundDatagramBuffer = new byte[size ];
+			Utility.fillStringBuffer(inboundDatagramBuffer, size);
+			DatagramPacket datagram = new DatagramPacket(inboundDatagramBuffer, size, senderAddress, senderPort);			
 			socket.send(datagram);
-			DatagramPacket data = new DatagramPacket(inboundDatagramBuffer, bufferSize);
+			DatagramPacket data = new DatagramPacket(inboundDatagramBuffer, size);
 			socket.receive(data);
 			//InetAddress adr = data.getAddress();
 		} catch (IOException e) {
