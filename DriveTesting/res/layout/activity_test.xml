@@ -111,7 +111,7 @@
             android:layout_alignParentTop="true"
             android:onClick="onSaveClick"
             android:text="@string/save" />
-
+        
         <Button
             android:id="@+id/buttonClear"
             android:layout_width="wrap_content"
@@ -120,6 +120,16 @@
             android:layout_alignParentTop="true"
             android:onClick="onClearClick"
             android:text="@string/clean" />
+
+        <Button
+            android:id="@+id/buttonExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:onClick="onExitClick"
+            android:text="@string/exit" />
+
     </RelativeLayout>
 
 </LinearLayout>

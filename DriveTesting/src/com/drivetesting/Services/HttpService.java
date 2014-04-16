@@ -44,7 +44,6 @@ public class HttpService extends IntentService implements ReportI {
 	private static final int SOCKET_TIMEOUT = 1000;
 
 	private final String TAG = "HttpClient: ";
-	private final int ServerPort = 4500;
 	private final int ReportPort = 5000;
 
 	private  String serverAddress = null;
@@ -52,7 +51,8 @@ public class HttpService extends IntentService implements ReportI {
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
-	private static Socket socket = null;
+	public static Socket socket = null;
+	private static int serverPort = 0;
 	private Scanner scanner;
 	private PrintWriter printWriter = null;
 	private Properties answerProperty = new Properties();
@@ -68,7 +68,8 @@ public class HttpService extends IntentService implements ReportI {
 	private int rateType = 1;
 
 	private Messenger messenger = null;
-
+	
+		
 	public void sendMessage(final String key, final String value) {
 		if (messenger != null) {
 			Message m = Message.obtain();			
@@ -114,9 +115,11 @@ public class HttpService extends IntentService implements ReportI {
 		messenger = (Messenger) intent.getExtras().get("handler"); 		
 	
 		serverAddress = (String)intent.getExtras().get("serverIp");
-		if (serverAddress == null || serverAddress.equals("0.0.0.0")) {
-			sendMessage("error", "Error: Invalid server address!");
-			System.out.println("Invalid server address!");
+		int port =Integer.parseInt((String)intent.getExtras().get("serverPort"));
+		if (serverAddress == null || serverAddress.equals("0.0.0.0") || port == 0) {
+			String msg = "Invalid server address or port!";
+			sendMessage("error", "Error: " + msg);
+			System.out.println(msg);
 		}
 
 		type = (Integer)intent.getExtras().get("type");
@@ -138,8 +141,9 @@ public class HttpService extends IntentService implements ReportI {
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
-			if (null == socket ) {
-				socket = createSocket(ServerPort);
+			if (null == socket || port != serverPort) {
+				socket = createSocket(port);
+				serverPort = port;
 			}
 			scanner = new Scanner(socket.getInputStream());
 			printWriter = new PrintWriter(socket.getOutputStream());
@@ -147,7 +151,7 @@ public class HttpService extends IntentService implements ReportI {
 			makeNewThread();
 		}catch (Exception e) {
 			e.printStackTrace();
-			sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+ ServerPort );
+			sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+ serverPort );
 			pool.shutdownNow();
 		}
 	}

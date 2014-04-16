@@ -1,11 +1,20 @@
 package com.drivetesting;
 
+import http.testhandler.HttpParser;
+import http.testhandler.Logger;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import android.app.ActionBar;
@@ -32,43 +41,44 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.drivetesting.observers.TestObserver;
+import com.drivetesting.services.HttpService;
 
-public class TestActivity extends Activity implements TestObserver {
-	
+public class TestActivity extends Activity implements TestObserver, AsyncResponse {
+
 	private final String TAG = "TestActivity: ";
 	private final String DIRECTION_GROUP = "DirectionGroup";
 	private final String TYPE_GROUP = "TypeGroup";
 	private final String MESSAGE = "message";
 	private final String STARTON = "start";
-		
+
 	private RadioGroup directionGroup = null;
 	private int directionGroupIndex = 0;	
 	private RadioGroup typeGroup = null;
 	private int typeGroupIndex = 0;
-		
+
 	private ProgressBar progressBar = null;
-	
+
 	private SharedPreferences sharedPreferences;
-	
+
 	private String[] from = new String[] { "value"};
 	private int[] to = new int[] {R.id.column_value};
 
 	private List<HashMap<String, String>> messageList  = null;
 	private SeparatedListAdapter separatedAdapter = null;
 	private SimpleAdapter messageAdapter = null;
-	
+
 	private DriveTestApp application = null;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		application = ((DriveTestApp)getApplication());
-		
+
 		ActionBar actionBar = getActionBar();	
 		actionBar.setDisplayShowHomeEnabled(false) ;
 		actionBar.setTitle("Test");
-				
+
 		setContentView(R.layout.activity_test);
 
 		messageList  = new ArrayList<HashMap<String, String>>();					
@@ -80,7 +90,7 @@ public class TestActivity extends Activity implements TestObserver {
 		list.setAdapter(separatedAdapter);		
 		messageAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
-		
+
 		sharedPreferences = getPreferences(Context.MODE_PRIVATE);
 
 		directionGroup = (RadioGroup)findViewById(R.id.dir_group);
@@ -88,15 +98,15 @@ public class TestActivity extends Activity implements TestObserver {
 
 		typeGroup = (RadioGroup)findViewById(R.id.type_group);
 		typeGroupIndex = typeGroup.getCheckedRadioButtonId();
-    	
+
 		progressBar = ((ProgressBar)findViewById(R.id.progressBar));
 		progressBar.setVisibility(ProgressBar.INVISIBLE);
-		
+
 		findViewById(R.id.bt_startTest).setEnabled(true);
 		findViewById(R.id.bt_stopTest).setEnabled(false);
-	
+
 	}
-	 
+
 	// Function to show settings dialog       
 	private void showSettingsGPSAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -128,7 +138,7 @@ public class TestActivity extends Activity implements TestObserver {
 		// Showing Alert Message
 		alertDialog.show();
 	}
-	
+
 	private void showSettingsNetworkAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
@@ -159,18 +169,31 @@ public class TestActivity extends Activity implements TestObserver {
 		// Showing Alert Message
 		alertDialog.show();
 	}
-	
+
 	public void onStartTestClick(View view) {
 		if (application.isInternetConnectionActive() == false) {	        
 			showSettingsNetworkAlert();
 			return;
 		}
 		final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-	    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {	        
+		if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) == false ) {	        
 			showSettingsGPSAlert();
 			return;
 		}	    
 		((DriveTestApp)getApplication()).startGPSService();
+
+		if (application.controlPort == 0) {
+			ConnectToServer  task = new ConnectToServer(application.ServerPort, application.getServerIp());		
+			task.delegate = this;		
+			task.execute("");
+		}
+		else {
+			processFinish(application.controlPort);
+		}
+	}
+
+	public void processFinish(int output){
+		application.controlPort = output;
 		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
 		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;
 		progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -178,7 +201,60 @@ public class TestActivity extends Activity implements TestObserver {
 		findViewById(R.id.bt_stopTest).setEnabled(true);
 		application.startHttpClientService(direction, type);
 	}
+
+	public class ConnectToServer extends AsyncTask<String, Void, Integer>{
+		public AsyncResponse delegate=null;
+		private int port;
+		private String ip;
+
+		ConnectToServer(int serverPort, String serverIP){
+			port = serverPort;
+			ip = serverIP;
+		}
+
+		protected Integer doInBackground(final String... args) {
+			try {			
+				Socket socket = new Socket();				 
+				socket.connect(new InetSocketAddress(ip, port));	
+
+				String msg ="INVITE / HTTP*/1.0\nEND\n";
+				// send message to the server
+				PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+				printWriter.println(msg);			
+				printWriter.flush();
+
+				StringBuffer buffer = new StringBuffer();
+				Scanner scanner = new Scanner(socket.getInputStream());
+				while (scanner.hasNextLine()) {
+					String readedLine = scanner.nextLine();
+					if (readedLine.compareTo("END") !=  0) {
+						buffer.append("+"+readedLine);
+					}else{
+						Log.d(TAG, "Receive message from server: "+ buffer.toString());
+						break;
+					}
+				}		
+				HttpParser parser = new HttpParser(new Logger(""));
+				parser.parseHttpMessage(buffer.toString());
+				printWriter.close();
+				scanner.close();
+				socket.close();
+				socket = null;
+				if (parser.getMethod().equals("INVITE")) {
+					return Integer.parseInt(parser.getHeadProperty("PORT"));					
+				}			
+			} catch (Exception e) {
+				Log.d(TAG, "ERROR in run() " + e.getMessage());
+			}
+			return 0;
+		}
 		
+		@Override
+		protected void onPostExecute(Integer result) {
+			delegate.processFinish(result);
+		}
+	}
+
 	public void onStopTestClick(View view) {
 		Log.d(TAG, "Stop test");
 		application.stopHttpClientService();
@@ -190,7 +266,7 @@ public class TestActivity extends Activity implements TestObserver {
 	private void setMessage(String message){
 		messageList.clear();		
 		StringTokenizer tokens = new StringTokenizer(message, "\n");
-		
+
 		while (tokens.hasMoreTokens()) {
 			String line = tokens.nextToken();
 			// add new element
@@ -201,23 +277,41 @@ public class TestActivity extends Activity implements TestObserver {
 		messageAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
 	}
-	
+
 	private void deleteMessages() {
 		messageList.clear();
 		messageAdapter.notifyDataSetChanged();
 		separatedAdapter.notifyDataSetChanged();
 	}
-	
+
 	public void onClearClick(View view) {
 		deleteMessages();
 		application.clearTestMessage();
 	}
-	
+
 	public void onSaveClick(View view) {		
 		SaveFileTask task = new SaveFileTask(this, messageList);
 		task.execute("");
 	}
-	
+
+	public void onExitClick(View view) {		
+		application.stopHttpClientService();
+		progressBar.setVisibility(ProgressBar.INVISIBLE);		
+		findViewById(R.id.bt_startTest).setEnabled(true);
+		findViewById(R.id.bt_stopTest).setEnabled(false);
+		
+		try {
+			if (HttpService.socket != null) {
+				HttpService.socket.close();
+				HttpService.socket = null;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		application.controlPort = 0;
+	}
+
+
 	public void onDirectionChoosed(View view) {
 		// Is the button now checked?
 		boolean checked = ((RadioButton) view).isChecked();
@@ -250,11 +344,11 @@ public class TestActivity extends Activity implements TestObserver {
 	public void onResume() {
 		super.onResume();
 		application.registerReportObserver(this);	
-		
+
 		load();
-		
+
 		setMessage(application.getTestMessage());
-		
+
 		if (application.isTestRunning()) {
 			progressBar.setVisibility(ProgressBar.VISIBLE);
 		} else {
@@ -266,8 +360,7 @@ public class TestActivity extends Activity implements TestObserver {
 		SharedPreferences.Editor editor = sharedPreferences.edit();
 		editor.putInt(DIRECTION_GROUP, directionGroupIndex);
 		editor.putInt(TYPE_GROUP, typeGroupIndex);
-	//	editor.putString(MESSAGE, messageList.get(0).get("value"));
-		editor.putBoolean(STARTON, findViewById(R.id.bt_startTest).isEnabled());
+		//	editor.putString(MESSAGE, messageList.get(0).get("value"));		
 		editor.commit();
 	}
 
@@ -277,18 +370,17 @@ public class TestActivity extends Activity implements TestObserver {
 			typeGroupIndex = index;
 			typeGroup.check(typeGroupIndex);
 		}
-				
+
 		index = sharedPreferences.getInt(DIRECTION_GROUP, R.id.dir_dl);
 		if (index != 0) {
 			directionGroupIndex = index;
 			directionGroup.check(directionGroupIndex);
 		}
-		
+
 		setMessage(sharedPreferences.getString(MESSAGE, ""));
 		
-		Boolean isStarted = sharedPreferences.getBoolean(STARTON, true);
-		findViewById(R.id.bt_startTest).setEnabled(isStarted);
-		findViewById(R.id.bt_stopTest).setEnabled(!isStarted);		
+		findViewById(R.id.bt_startTest).setEnabled(!application.isTestRunning());
+		findViewById(R.id.bt_stopTest).setEnabled(application.isTestRunning());		
 	}
 
 	@Override
@@ -328,12 +420,12 @@ public class TestActivity extends Activity implements TestObserver {
 	@Override
 	public void update(int action, String str) {
 		setMessage(str) ;
-    	// error happened or test ended
-    	if (action == 0) {  		
-    		progressBar.setVisibility(ProgressBar.INVISIBLE);
-    		findViewById(R.id.bt_startTest).setEnabled(true);
-    		findViewById(R.id.bt_stopTest).setEnabled(false);    		
-    	}		
+		// error happened or test ended
+		if (action == 0) {  		
+			progressBar.setVisibility(ProgressBar.INVISIBLE);
+			findViewById(R.id.bt_startTest).setEnabled(true);
+			findViewById(R.id.bt_stopTest).setEnabled(false);    		
+		}		
 	}	
 }
 
@@ -345,15 +437,15 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 	private Context context ;	
 	private String fileName;
 	private List<HashMap<String, String>> log;
-	
+
 	SaveFileTask(Context context, List<HashMap<String, String>> logs) {		 
 		this.context = context;
 		log = logs;
 		dialog = new ProgressDialog(context);
-		
-				
+
+
 		fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'", Locale.getDefault()).format(new Date());
-		 
+
 		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
 	}
 
@@ -367,25 +459,26 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 		if (fileName.equals("")) {
 			return false;
 		}
-		
+
+
 		String logString =  "";
-		
+
 		for (HashMap<String, String> map : log) {
 			for (HashMap.Entry<String, String> entry : map.entrySet()) {
 				logString  += entry.getValue()+ "\n";
 			}			
 		}
-		
+
 		if (fileHandler.writeFile(true, logString, true)) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	protected void onPostExecute(final Boolean success) {
 		if (this.dialog.isShowing()) { 
-			this.dialog.dismiss(); 
+			this.dialog.dismiss();			
 		}if (success) {
 			Toast.makeText(context, "Log saving successful! File: "+ fileHandler.getFilePath(), Toast.LENGTH_SHORT).show();
 		} else {

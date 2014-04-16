@@ -57,7 +57,7 @@ public class Logger {
 		}
 	}
 	public Logger(final String filePath){
-		if (filePath.equals("")) {
+		if (filePath == null || filePath.equals("")) {
 			writeOnConsole = true;
 		}else{
 			makeFileInstance(filePath);

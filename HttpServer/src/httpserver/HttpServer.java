@@ -35,9 +35,9 @@ class ServerThread extends Thread{
 	private static final int MAX_THREAD = 5;
 	private static final String TAG = "ServerThread id: ";
 	private final int ReportPort = 5000;
-	private final int FirstPort = 5500;
+	private final int FirstPort = 5501;
 	private final int MaxPort = 5600;
-	private final int SOCKET_TIMEOUT = 5000; //in milisec	
+	private final int SOCKET_TIMEOUT = 3000; //in milisec	
 
 	private int id = 1;
 	private Logger logger = null;
@@ -66,12 +66,13 @@ class ServerThread extends Thread{
 		try {
 			scanner = new Scanner( commandSocket.getInputStream());
 			printWriter = new PrintWriter(commandSocket.getOutputStream());
+			
+			// the thread start itself
+			start();
 		} catch (IOException e) {
 			logger.addLineAndPrint(TAG + id +"Error at scanner creation: "+e.getMessage());
 			e.printStackTrace();
-		}
-		// the thread start itself 
-		start();
+		}				
 	}	
 
 	private int getNextFreePort() {
@@ -310,9 +311,49 @@ public class HttpServer {
 					InetAddress client = socket.getInetAddress();
 					//and print it to log
 					logger.addLineAndPrint(TAG+client + " connected to server.\n");
-					  // start thread for handling a client
+
+					try {
+						HttpParser parser = new HttpParser(logger);
+						Scanner scanner = new Scanner( socket.getInputStream());
+						PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+						
+						if  (scanner.hasNextLine()){	
+							StringBuffer buffer = new StringBuffer();
+							String readedLine = scanner.nextLine();
+							buffer.append(readedLine);
+							while (readedLine.compareTo("END") !=  0) {
+								//Read the request line
+								readedLine = scanner.nextLine();
+								if (readedLine.compareTo("END") !=  0) {
+									buffer.append("+"+readedLine);							
+								}
+							}
+						
+							parser.parseHttpMessage(buffer.toString());
+
+							int port = 5500;
+							if (parser.getMethod().equals("INVITE")) {								
+								String msg = "INVITE / HTTP*/1.0\nPORT: "+port +" \nEND\n";
+								printWriter.println(msg);
+								printWriter.flush();								
+								printWriter.close();
+								scanner.close();
+								socket.close();
+								ServerSocket control = new ServerSocket();
+								control .setReuseAddress(true);
+								control.bind(new InetSocketAddress(port));
+								Socket controlSocket = control.accept();
+								logger.addLineAndPrint(TAG+client + " start control socket\n");
+								// start thread for handling a client
+								new Thread(new ServerThread(logger, controlSocket));			
+							}
+						}
+					} catch (Exception e) {
+						logger.addLineAndPrint("Error : "+e.getMessage());
+						e.printStackTrace();
+					}
 					
-					new Thread(new ServerThread(logger, socket));
+					
 				}
 			}
 		} catch (Exception e) {

@@ -32,5 +32,6 @@
     <string name="settestname">Set Test Name</string>
     <string name="choosetestid">Choose Test ID</string>
     <string name="message_header">Messages</string>
+    <string name="exit">Exit</string>
     
 </resources>

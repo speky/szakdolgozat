@@ -1,13 +1,22 @@
 package com.drivetesting;
 
+import http.testhandler.HttpParser;
+import http.testhandler.Logger;
 import http.testhandler.TCPReport;
 import http.testhandler.UDPReport;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import android.app.Application;
 import android.content.Intent;
@@ -37,6 +46,9 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	public static final int UPLOAD = 0;
 	public static final int DOWNLOAD = 1;
 	
+	public final int ServerPort = 4500;
+	public int controlPort = 0;
+	
 	public static final int ACTION_END = 0;
 	public static final int ACTION_REPORT = 1;
 	
@@ -59,7 +71,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 	private int CID = 0;
 	private double signalStrength = 0.0;
 	private int signalLevel = SIGNAL_UNKOWN;
-	private int testId = 0;
+	private long testId = 0;
 	private String testName = "";
 	private int  rateType = 0;
 	private boolean networkConnected = false;
@@ -107,7 +119,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				action = ACTION_REPORT;
 				
 				UDPReport report = new UDPReport();
-				report.parseReport(data);				
+				report.parseFullReport(data);				
 				Log.d(TAG, "get data" + message.toString());
 				storeUDPReportItem(report.dlSpeed, report.ulSpeed, report.jitter, report.lostDatagram, report.sumDatagram);
 			}
@@ -143,14 +155,17 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 			dataStorage.insert(testId,"testName1", 47.497219, 19.069383, 5.2, 2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
 			dataStorage.insert(testId,"testName1", 47.497994, 19.068972, 8.3, 3, 9.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
 			//dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
+		} else {
+			DbData data = dataStorage.queryLastInsertedRow();
+			testId = data.id;
 		}
 		
 		// start phone state service
 		startService(new Intent(getApplicationContext(), PhoneStateListenerService.class));	
 	}
 
-	public void fakeinsert() {
-		dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
+	public String getServerIp() {
+		return prefs.getString("serverIp", "0.0.0.0");		
 	}
 	
 	public SharedPreferences getSharedPreference() {
@@ -240,7 +255,8 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		}
 
 		testName = prefs.getString("testName", "");		
-		httpIntent.putExtra("serverIp", prefs.getString("serverIp", "0.0.0.0"));
+		httpIntent.putExtra("serverIp", getServerIp());
+		httpIntent.putExtra("serverPort", Integer.toString(controlPort));
 		httpIntent.putExtra("direction", direction);
 		httpIntent.putExtra("type", type);				
 		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
@@ -254,7 +270,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		startService(httpIntent);
 		return true;
 	}
-		
+	
 	public void stopHttpClientService() {
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
