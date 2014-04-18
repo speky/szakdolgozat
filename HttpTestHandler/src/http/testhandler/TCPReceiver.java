@@ -19,6 +19,7 @@ public class TCPReceiver extends ConnectionInstance {
 
 	public TCPReceiver(Logger logger, final int id, MessageI sender, ReceiverReportI receiver) {
 		super(ConnectionInstance.TCP, id, logger);
+		this.id = id;
 		logger.addLine(TAG + " TCP receiver created id: " + Integer.toString(id));
 		reportSender = sender;
 		reportReceiver = receiver;

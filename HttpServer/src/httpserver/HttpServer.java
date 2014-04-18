@@ -35,7 +35,8 @@ class ServerThread extends Thread{
 	private static final int MAX_THREAD = 5;
 	private static final String TAG = "ServerThread id: ";
 	private final int ReportPort = 5000;
-	private final int FirstPort = 5501;
+	
+	private final int FirstPort = 5510;	
 	private final int MaxPort = 5600;
 	private final int SOCKET_TIMEOUT = 3000; //in milisec	
 
@@ -289,11 +290,23 @@ class ServerThread extends Thread{
 public class HttpServer {
 
 	private static final int SERVER_PORT = 4500;
+	private static final int FirstControlPort = 5500;	
+	private static final int MaxControlPort = 5509;
+	
 	private static final String TAG = "HTTP_Server: ";
-
+	
 	private static ServerSocket serverSocket = null;
 	private static Logger logger = null;
+	
+	private static int port = FirstControlPort -1;
 
+	private static void calcNextControlPort() {
+		++port;
+		if (port > MaxControlPort ){
+			port = FirstControlPort;
+		}
+	}
+	
 	public static void main(String[] args) {		
 		logger = new Logger("server.log");		
 		try	{
@@ -331,8 +344,8 @@ public class HttpServer {
 						
 							parser.parseHttpMessage(buffer.toString());
 
-							int port = 5500;
-							if (parser.getMethod().equals("INVITE")) {								
+							calcNextControlPort();
+							if (parser.getMethod().equals("INVITE")) {		
 								String msg = "INVITE / HTTP*/1.0\nPORT: "+port +" \nEND\n";
 								printWriter.println(msg);
 								printWriter.flush();								
@@ -343,7 +356,7 @@ public class HttpServer {
 								control .setReuseAddress(true);
 								control.bind(new InetSocketAddress(port));
 								Socket controlSocket = control.accept();
-								logger.addLineAndPrint(TAG+client + " start control socket\n");
+								logger.addLineAndPrint(TAG+client + " start control socket port: "+port);
 								// start thread for handling a client
 								new Thread(new ServerThread(logger, controlSocket));			
 							}
@@ -351,8 +364,7 @@ public class HttpServer {
 					} catch (Exception e) {
 						logger.addLineAndPrint("Error : "+e.getMessage());
 						e.printStackTrace();
-					}
-					
+					}				
 					
 				}
 			}

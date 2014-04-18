@@ -49,8 +49,7 @@ public class HttpService extends IntentService implements ReportI {
 	private  String serverAddress = null;
 	private Logger logger;
 	private ExecutorService pool = null;
-	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
-	private int threadCount = 0;
+	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();	
 	public static Socket socket = null;
 	private static int serverPort = 0;
 	private Scanner scanner;
@@ -59,7 +58,7 @@ public class HttpService extends IntentService implements ReportI {
 	private Properties headerProperty = new Properties();
 	private ArrayList<ConnectionInstance> connectionInstances = new ArrayList<ConnectionInstance>();
 	private ReportReceiver reportReceiver = null;
-	private String errorMessage = null;
+	private int testId = 0;
 	private int type = 0;
 	private int direction = 0;
 	private int bufferSize = 8000;
@@ -98,17 +97,12 @@ public class HttpService extends IntentService implements ReportI {
 			logger.addLine(TAG + " Create new socket");
 			return socket;
 		} catch (UnknownHostException e) {
-			errorMessage  = "Test socket creating problem";
 			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
-			//sendMessage("error", errorMessage);			
-		} catch (IOException e) {
-			errorMessage = "Test socket creating problem (I/O)";
+		} catch (IOException e) {			
 			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
-			//sendMessage("error", errorMessage);			
 		}
 		return null;
 	}
-
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -122,6 +116,8 @@ public class HttpService extends IntentService implements ReportI {
 			System.out.println(msg);
 		}
 
+		long id  = (Long)intent.getExtras().get("id");
+		testId = (int)id;
 		type = (Integer)intent.getExtras().get("type");
 
 		if (type != DriveTestApp.UDP && type != DriveTestApp.TCP) {
@@ -141,7 +137,7 @@ public class HttpService extends IntentService implements ReportI {
 		rateType = Integer.parseInt((String)intent.getExtras().get("rateType"));
 
 		try {
-			if (null == socket || port != serverPort) {
+			if (null == socket || port != serverPort && port != 0) {
 				socket = createSocket(port);
 				serverPort = port;
 			}
@@ -226,41 +222,41 @@ public class HttpService extends IntentService implements ReportI {
 			switch (rateType) {
 			case 1:
 				reportReceiver.setData(DataType.BYTE);
-				reportReceiver.setRate(RateType.BITS);						
+				reportReceiver.setRate(RateType.BITS);
 				break;
 			case 2:
 				reportReceiver.setData(DataType.KB);
-				reportReceiver.setRate(RateType.KBITS);				
+				reportReceiver.setRate(RateType.KBITS);
 				break;
 			case 3:
 				reportReceiver.setData(DataType.MB);
-				reportReceiver.setRate(RateType.MBITS);				
+				reportReceiver.setRate(RateType.MBITS);
 				break;
 			}			
 			reportReceiver.start();
 
 			if (type == DriveTestApp.TCP) {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					TCPReceiver receiver = new TCPReceiver(logger, ++threadCount, null, reportReceiver);
+					TCPReceiver receiver = new TCPReceiver(logger, testId, null, reportReceiver);
 					receiver.setReportInterval(reportPeriod);
 					if (receiver.setSocket(socket)) {					
 						addConnectionInstance(receiver);
 					}
 				} else {
-					TCPSender sender = new TCPSender(logger, ++threadCount, bufferSize);
+					TCPSender sender = new TCPSender(logger, testId, bufferSize);
 					if (sender.setSocket(socket)){
 						addConnectionInstance(sender);
 					}
 				}
 			} else {
 				if (direction == DriveTestApp.DOWNLOAD) {
-					UDPReceiver receiver = new UDPReceiver(++threadCount, logger, null,  reportReceiver, reportPeriod,  bufferSize);
+					UDPReceiver receiver = new UDPReceiver(testId, logger, null,  reportReceiver, reportPeriod,  bufferSize);
 					if (receiver.setSenderParameters(testPort, serverAddress)) {
 						addConnectionInstance(receiver);
 					}
 
 				} else {
-					UDPSender sender = new UDPSender(++threadCount, logger, bufferSize);					
+					UDPSender sender = new UDPSender(testId, logger, bufferSize);					
 					if (sender.setReceiverParameters(testPort, serverAddress)) {
 						// udprate in kbits
 						sender.setRateInBitsPerSec(udpRate * 1024);

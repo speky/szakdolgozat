@@ -35,6 +35,7 @@ public class UDPReceiver extends ConnectionInstance {
 		super(ConnectionInstance.UDP, id, logger);
 		logger.addLine(TAG+ " id: " + id);
 		reportSender = sender;
+		this.id = id;
 		reportReceiver = receiver;		
 		this.reportInterval = reportInterval;		
 		this.bufferSize = 1000;

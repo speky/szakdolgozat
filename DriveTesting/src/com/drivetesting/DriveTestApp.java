@@ -258,7 +258,8 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		httpIntent.putExtra("serverIp", getServerIp());
 		httpIntent.putExtra("serverPort", Integer.toString(controlPort));
 		httpIntent.putExtra("direction", direction);
-		httpIntent.putExtra("type", type);				
+		httpIntent.putExtra("type", type);
+		httpIntent.putExtra("id", testId);
 		httpIntent.putExtra("bufferSize", prefs.getString("bufferSize", "8000"));
 		httpIntent.putExtra("reportPeriod", prefs.getString("reportPeriod", "1000"));
 		httpIntent.putExtra("udpRate", prefs.getString("udpRate", "1024"));

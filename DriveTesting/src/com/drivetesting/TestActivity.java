@@ -181,7 +181,11 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 			return;
 		}	    
 		((DriveTestApp)getApplication()).startGPSService();
-
+		
+		progressBar.setVisibility(ProgressBar.VISIBLE);
+		findViewById(R.id.bt_startTest).setEnabled(false);
+		findViewById(R.id.bt_stopTest).setEnabled(true);
+		
 		if (application.controlPort == 0) {
 			ConnectToServer  task = new ConnectToServer(application.ServerPort, application.getServerIp());		
 			task.delegate = this;		
@@ -195,10 +199,7 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 	public void processFinish(int output){
 		application.controlPort = output;
 		int direction = directionGroupIndex == R.id.dir_dl ? DriveTestApp.DOWNLOAD : DriveTestApp.UPLOAD;
-		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;
-		progressBar.setVisibility(ProgressBar.VISIBLE);
-		findViewById(R.id.bt_startTest).setEnabled(false);
-		findViewById(R.id.bt_stopTest).setEnabled(true);
+		int type = typeGroupIndex == R.id.type_tcp ? DriveTestApp.TCP : DriveTestApp.UDP;		
 		application.startHttpClientService(direction, type);
 	}
 
@@ -294,7 +295,8 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 		task.execute("");
 	}
 
-	public void onExitClick(View view) {		
+	public void onExitClick(View view) {
+		Toast.makeText(this, "Test session released!", Toast.LENGTH_SHORT).show();
 		application.stopHttpClientService();
 		progressBar.setVisibility(ProgressBar.INVISIBLE);		
 		findViewById(R.id.bt_startTest).setEnabled(true);
