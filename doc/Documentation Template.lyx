@@ -2813,7 +2813,11 @@ Last-Modified: Fri, 31 Dec 1999 23:59:59 GMT
 \begin_layout Description
 HTTP* egy specializált HTTP protokoll, melyet ebben a programban használok
  az Android applikáció és a szerveren futó alkalmazás kommunikációjában.
- A kommunikációt mindenképpen a mobil alkalmazás kezdeményezi egy "GET
+ A mobil kapcsolódás után küld egy INVITE üzenetet,amire a szerver válaszként
+ elüldi a kontroll port számát, majd bontja ezt a kapcoslatot.
+ A további üzeneteket ezen az új porton keresztül küldheti a mobilegység
+ a szervernek.
+ A tesztelést mindenképpen a mobil alkalmazás kezdeményezi egy "GET
 \begin_inset Quotes srd
 \end_inset
 
@@ -3599,6 +3603,26 @@ Save logs
  belül.
 \end_layout
 
+\begin_layout Standard
+Az "Exit
+\begin_inset Quotes srd
+\end_inset
+
+ gomb segítségével bontható a kapcsolat a szerverrel.
+ Ekkor megjelenik a 
+\begin_inset Quotes sld
+\end_inset
+
+Test session released!
+\begin_inset Quotes srd
+\end_inset
+
+ üzenet a kijelzőn.
+ A következő teszt futtatásakor a telefon újra kapcsolódik a szerverhez
+ a következő szabad porton.
+ keresztül.
+\end_layout
+
 \begin_layout Subsubsection*
 Map (térkép) ablak
 \end_layout
@@ -3663,7 +3687,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -4099,7 +4123,7 @@ Szerver oldal
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -4985,10 +5009,11 @@ ServerSocket
  objektumot és az előre definiált 4500 porton vár a kliens (mobilegység)
  csatlakozására.
  A ServerSocket accept metódusa blokkolja a futást, amíg nem kapcsolódik
- a kliens, amint ez megtörtént létrehoz egy új szálat (Thread), amiben a
- ServerThread osztály egy példánya fog futni.
- Jelen állapotában csak egy mobilt tud kiszolgálni az osztály, de könnyedén
- módosítható, hogy több eszközt is ki tudjon szolgálni.
+ a kliens, majd üzenetváltás során közli a következő port számát ami keresztül
+ a vezérlő üzenetet fogadja a szerver.
+ Amint ez megtörtént létrehoz egy új szálat (Thread), amiben a ServerThread
+ osztály egy példánya fog futni.
+ Így több mobilkészüléket is ki tud szolgálni a szerver.
 \end_layout
 
 \begin_layout Description
@@ -6001,8 +6026,9 @@ Rendszer teszt
 
 \begin_layout Standard
 Teszt során a szerver és kliens programok együttes tesztelését végeztem
- Android emulátorral és mobilkészülékkel egyaránt - készülék típusa SonyEricsson
- Arc S, az Android verzió 4.0.4.
+ Android emulátorral és mobilkészülékkel egyaránt.
+ A teszt során hasnzált mobilkészülékek: készülék típusa SonyEricsson Arc
+ S, az Android verzió 4.0.4, valamint Sony Xperia Z 4.2-es Andorid verzióval.
  Szerverként minden esetben az asztali számítógépem szolgált, mely segítségével
  tudtam adatforgalmat generálni a mobilkészülék és a számítógép között.
  A számítógépem egy router-en keresztül kapcoslódik az Internethez, melyen
@@ -6217,8 +6243,8 @@ Mobil jelerősségének számítása, http://en.wikipedia.org/wiki/Mobile_phone_
 \end_layout
 
 \begin_layout Itemize
-[Wikipedia] mobil operáciosrendszerek, http://en.wikipedia.org/wiki/Mobile_operati
-ng_system (2014.021.06)
+[Wikipedia] mobil operáciosrendszerek, http://en.wikipedia.org/wiki/Mobile-operati
+ng-system (2014.021.06)
 \end_layout
 
 \begin_layout Chapter

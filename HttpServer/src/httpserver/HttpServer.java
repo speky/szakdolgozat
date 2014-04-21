@@ -98,7 +98,7 @@ class ServerThread extends Thread{
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 		} catch (Exception e) {
-			logger.addLineAndPrint(TAG + id + " ERROR in createsocket() port: "+ port + " " + e.getMessage());
+			logger.addLineAndPrint(TAG + id + " Try create socket on port: "+ port + " " + e.getMessage());
 			return -1;
 		}
 		return port;
