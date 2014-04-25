@@ -58,7 +58,7 @@ public class TCPReceiver extends ConnectionInstance {
 									Integer.toString(id)+" " +Integer.toString(reportInterval/1000)+ " "+Integer.toString(readedBytes));
 						}
 						readedBytes = 0;
-						logger.addLine(TAG+" readedByte = "+ Integer.toString(readedBytes ));
+						//logger.addLine(TAG+" readedByte = "+ Integer.toString(readedBytes ));
 					}
 				}, reportInterval, reportInterval);
 			}

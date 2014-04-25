@@ -44,10 +44,10 @@ class ServerThread extends Thread{
 	private Logger logger = null;
 	private HttpParser parser = null;	
 	private Properties HeaderProperty = null;
-	private int portOffset = 0;
 	private ExecutorService pool = null;
 	private Set<Future<Integer>> threadSet = new HashSet<Future<Integer>>();
 	private int threadCount = 0;
+	private int portOffset = 0;
 	private ReportSender reporter = null;
 	private Vector<ConnectionInstance> connectionInstances = new Vector<ConnectionInstance>();	
 	private Socket commandSocket = null;
@@ -55,7 +55,8 @@ class ServerThread extends Thread{
 	private Socket testSocket = null;
 	private ServerSocket serverSocket = null;
 	private PrintWriter printWriter;
-
+	private int testPort = -1; 
+	
 	public ServerThread(Logger logger, Socket socket) {
 		super();
 		this.logger = logger;		
@@ -78,30 +79,30 @@ class ServerThread extends Thread{
 
 	private int getNextFreePort() {
 		int nextPort = FirstPort + portOffset;
-		++portOffset;
+		portOffset += 2; // 1 for test port and other 1 for reporter
 		if (nextPort > MaxPort) {
 			nextPort = FirstPort;
-			portOffset = 1;
+			portOffset = 2;
 		}
 		return nextPort;
 	}
 	
 	protected int createSocket() {		
-		int port = -1;
+		
 		try {
-			port = getNextFreePort();
+			testPort = getNextFreePort();
 			// re-use the port thus  test instances could attach to this port many times
 			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
-			serverSocket.bind(new InetSocketAddress(port));
+			serverSocket.bind(new InetSocketAddress(testPort));
 			
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
 		} catch (Exception e) {
-			logger.addLineAndPrint(TAG + id + " Try create socket on port: "+ port + " " + e.getMessage());
+			logger.addLineAndPrint(TAG + id + " Try create socket on port: "+ testPort + " " + e.getMessage());
 			return -1;
 		}
-		return port;
+		return testPort;
 	}
 		
 	public void run() {
@@ -137,7 +138,9 @@ class ServerThread extends Thread{
 							}
 						}
 						connectionInstances.clear();
-						reporter.stop();
+						if (reporter != null) {
+							reporter.stop();
+						}
 						reporter = null;						
 					}else{
 						sendResponse();
@@ -183,23 +186,20 @@ class ServerThread extends Thread{
 			serverSocket.setSoTimeout(0);
 		}
 		catch (SocketTimeoutException e) {
-			logger.addLineAndPrint(TAG + id +e.getMessage());
-			e.printStackTrace();
+			logger.addLineAndPrint(TAG + id +"Error :"+ e.getMessage());			
 			return ;
 		}
 		catch (SocketException e) {
-			logger.addLineAndPrint(TAG+ id+e.getMessage());			
-			e.printStackTrace();
+			logger.addLineAndPrint(TAG+ id+"Error: "+ e.getMessage());
 			return ;
 		}
 		catch (IOException e) {
-			logger.addLineAndPrint(TAG + id +e.getMessage());
-			e.printStackTrace();
+			logger.addLineAndPrint(TAG + id +"Error: "+ e.getMessage());			
 			return ;
 		}
+		logger.addLineAndPrint(TAG + "reporter port: " + (testPort+1));
 		
-		reporter = new ReportSender(logger, ReportPort);
-		
+		reporter = new ReportSender(logger, testPort+1);		
 		if (reporter.isSocketConnected() == false) {
 			reporter = null;
 			return;

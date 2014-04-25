@@ -2,6 +2,7 @@ package http.testhandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,8 +14,7 @@ public class ReportSender implements MessageI{
 	private Socket socket = null;
 	private int port = 0; 
 	private PrintWriter printer = null;
-	private boolean socketConnected = false;
-	
+		
 	public ReportSender(Logger logger, int port){
 		this.logger = logger;
 		this.port = port;
@@ -38,19 +38,28 @@ public class ReportSender implements MessageI{
 	}
 	
 	public boolean isSocketConnected() {
-		return socketConnected;
+		if (null != socket) {
+			return socket.isConnected();
+		}
+		return false;
 	}
 	
 	protected boolean createSocket() {
-		try {
-			serverSocket = new ServerSocket(port);
+		try {			
+			serverSocket = new ServerSocket();
+			serverSocket.setReuseAddress(true);
+			serverSocket.bind(new InetSocketAddress(port));			
+			// set timer for the accept
+			serverSocket.setSoTimeout(3000);
+			
 			socket = serverSocket.accept();
+			
+			serverSocket.setSoTimeout(0);
 
 		} catch (Exception e) {
-			logger.addLine(TAG + e.getMessage());
+			logger.addLine(TAG + "Error in ReportSender socket:  "+e.getMessage());
 			return false;
-		}
-		socketConnected = true;
+		}		
 		return true;
 	}
 

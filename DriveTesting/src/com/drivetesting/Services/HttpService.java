@@ -97,9 +97,9 @@ public class HttpService extends IntentService implements ReportI {
 			logger.addLine(TAG + " Create new socket");
 			return socket;
 		} catch (UnknownHostException e) {
-			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
-		} catch (IOException e) {			
-			logger.addLine(TAG + "ERROR in run() " + e.getMessage());
+			logger.addLine(TAG + "ERROR UnknownHostE in createSocket() " + e.getMessage());
+		} catch (IOException e) {
+			logger.addLine(TAG + "ERROR IOE in createSocket() " + e.getMessage());
 		}
 		return null;
 	}
@@ -167,7 +167,7 @@ public class HttpService extends IntentService implements ReportI {
 		}
 		logger.addLine(TAG+ "stop threads");
 		try {
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -218,7 +218,11 @@ public class HttpService extends IntentService implements ReportI {
 				return;
 			}
 
-			reportReceiver = new ReportReceiver(logger, this, serverAddress, ReportPort, isUpload);
+			reportReceiver = new ReportReceiver(logger, this, serverAddress, testPort+1, isUpload);
+			if (reportReceiver.isConnected() == false) {
+				sendMessage("error", "Could not connect to reporter! report port: "+ (testPort+1));
+				return;
+			}
 			switch (rateType) {
 			case 1:
 				reportReceiver.setData(DataType.BYTE);
@@ -278,16 +282,16 @@ public class HttpService extends IntentService implements ReportI {
 					deleteInstance(instance);
 				} catch (ExecutionException e) {
 					e.printStackTrace();
-					sendMessage("error", "Error: " + e.getMessage());					
+					sendMessage("error", "Error ExecutionException: " + e.getMessage());					
 					pool.shutdownNow();
-				} catch (InterruptedException e) {					
+				} catch (InterruptedException e) {
 					e.printStackTrace();
-					sendMessage("error", "Error: "  +e.getMessage());					
+					sendMessage("error", "Error InterruptedException: "  +e.getMessage());					
 					pool.shutdownNow();
 				}
 			}
 		}catch (IOException ex) {
-			String errorMessage = "Error: " + ex.getMessage();
+			String errorMessage = "Error IOException: " + ex.getMessage();
 			logger.addLine(TAG+errorMessage );
 			sendMessage("error", errorMessage );			
 			pool.shutdownNow();

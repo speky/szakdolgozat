@@ -46,7 +46,7 @@ public class UDPSender extends ConnectionInstance {
 		delay_target = 1.0 / (double)(UDPRate/ (bufferSize * Bytes_to_Bits));
 		// store in milliseconds
 		delay_target *= 1000.0;
-		logger.addLine(TAG + "DELAY_TARGET: "+ delay_target );
+		//logger.addLine(TAG + "DELAY_TARGET: "+ delay_target );
 
 	}
 
@@ -123,13 +123,13 @@ public class UDPSender extends ConnectionInstance {
 				// delay between writes
 				// make an adjustment for how long the last loop iteration took
 				adjust = (long)(delay_target) + (lastPacketTime-time);
-				logger.addLine(TAG + "ADJUST: "+ adjust);
+				//logger.addLine(TAG + "ADJUST: "+ adjust);
 				lastPacketTime = time;
 
 				if (adjust > 0  ||  delay > 0) {
 					delay += adjust;
 				}
-				logger.addLine(TAG + "DELAY: "+ delay);
+				//logger.addLine(TAG + "DELAY: "+ delay);
 
 				byte[]  packetData = (Integer.toString(++packetID) +" " + Long.toString(time) +" ").getBytes();
 				// re-generate byte buffer array if the packet id or time data's length has changed

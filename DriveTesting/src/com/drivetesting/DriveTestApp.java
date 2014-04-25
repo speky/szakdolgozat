@@ -1,22 +1,13 @@
 package com.drivetesting;
 
-import http.testhandler.HttpParser;
-import http.testhandler.Logger;
 import http.testhandler.TCPReport;
 import http.testhandler.UDPReport;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-import java.util.StringTokenizer;
 
 import android.app.Application;
 import android.content.Intent;
@@ -25,7 +16,6 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -276,7 +266,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 		Intent httpIntent = new Intent(this, HttpService.class);		
 		stopService(httpIntent);
 		isTestRunning = false;				
-		//		dataStorage.close();
+		//dataStorage.close();
 	}
 
 	public DbData queryLastInsertedRow() {

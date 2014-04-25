@@ -221,7 +221,7 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 				String msg ="INVITE / HTTP*/1.0\nEND\n";
 				// send message to the server
 				PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
-				printWriter.println(msg);			
+				printWriter.println(msg);
 				printWriter.flush();
 
 				StringBuffer buffer = new StringBuffer();
@@ -245,7 +245,7 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 					return Integer.parseInt(parser.getHeadProperty("PORT"));					
 				}			
 			} catch (Exception e) {
-				Log.d(TAG, "ERROR in run() " + e.getMessage());
+				Log.d(TAG, "ERROR in doInBackground() " + e.getMessage());
 			}
 			return 0;
 		}
@@ -445,9 +445,7 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 		log = logs;
 		dialog = new ProgressDialog(context);
 
-
 		fileName = new SimpleDateFormat("yyyyMMddhhmm'.txt'", Locale.getDefault()).format(new Date());
-
 		fileHandler = new FileHandler(context, fileName, DIRECTORY);		
 	}
 
@@ -462,7 +460,6 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 			return false;
 		}
 
-
 		String logString =  "";
 
 		for (HashMap<String, String> map : log) {
@@ -470,11 +467,9 @@ class SaveFileTask extends AsyncTask<String, Void, Boolean> {
 				logString  += entry.getValue()+ "\n";
 			}			
 		}
-
 		if (fileHandler.writeFile(true, logString, true)) {
 			return true;
 		}
-
 		return false;
 	}
 

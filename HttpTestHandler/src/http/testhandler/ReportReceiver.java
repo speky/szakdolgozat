@@ -93,9 +93,15 @@ public class ReportReceiver extends Thread implements ReceiverReportI{
 		tcpReportList = new Vector<TCPReport>();
 		udpReportList = new Vector<UDPReport>();
 	}
-
+	
+	public boolean isConnected(){
+		if (socket == null){
+			return false;
+		}		
+		return socket.isConnected();
+	}
+	
 	public void stopScaning(){
-
 		isScanStopped = true;
 	}
 
