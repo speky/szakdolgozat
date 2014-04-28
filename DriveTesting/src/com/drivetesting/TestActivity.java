@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,8 +48,7 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 	private final String DIRECTION_GROUP = "DirectionGroup";
 	private final String TYPE_GROUP = "TypeGroup";
 	private final String MESSAGE = "message";
-	private final String STARTON = "start";
-
+	
 	private RadioGroup directionGroup = null;
 	private int directionGroupIndex = 0;	
 	private RadioGroup typeGroup = null;
@@ -104,7 +102,6 @@ public class TestActivity extends Activity implements TestObserver, AsyncRespons
 
 		findViewById(R.id.bt_startTest).setEnabled(true);
 		findViewById(R.id.bt_stopTest).setEnabled(false);
-
 	}
 
 	// Function to show settings dialog       

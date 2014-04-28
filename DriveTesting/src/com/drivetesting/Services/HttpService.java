@@ -44,8 +44,7 @@ public class HttpService extends IntentService implements ReportI {
 	private static final int SOCKET_TIMEOUT = 1000;
 
 	private final String TAG = "HttpClient: ";
-	private final int ReportPort = 5000;
-
+	
 	private  String serverAddress = null;
 	private Logger logger;
 	private ExecutorService pool = null;
@@ -147,7 +146,11 @@ public class HttpService extends IntentService implements ReportI {
 			makeNewThread();
 		}catch (Exception e) {
 			e.printStackTrace();
-			sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+ serverPort );
+			if (port == 0) {
+				sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: 4500");
+			} else {
+				sendMessage("error", "Error: Cannot connect to server! IP: "+  serverAddress +" port: "+  port);
+			}
 			pool.shutdownNow();
 		}
 	}

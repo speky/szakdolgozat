@@ -141,9 +141,16 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 			dataStorage.deleteAll();
 			//dataStorage.insert(3, "testName3", 12.0, 3.0, 0.0, 0, 0.0, 0.0, 0.0, 0, 0, 2, 2, 2, 2, 1, "networkType");
 			++testId;
-			dataStorage.insert(testId,"testName1", 47.497147, 19.070567, 1.1, 1, 1.1, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "UTMS");
+			
+			dataStorage.insert(1,"testName1", 47.497147, 19.070567, 12, 4, 0.0, 141.90, 0.0, 0, 0, 1200, 38392, 216, 30, 2, "HSPA");
+			/*dataStorage.insert(1,"testName1", 47.497142, 19.070572, 10, 3, 0.0, 102.89, 0.0, 0, 0, 1200, 38392, 216, 30, 2, "HSPA", "2014-04-20 08:10:19");
+			dataStorage.insert(1,"testName1", 47.496517, 19.068228, 9, 3, 0.0, 127.49, 0.0, 0, 0, 1200, 38392, 216, 30, 2, "HSPA", "2014-04-20 08:10:24");
+			dataStorage.insert(1,"testName1", 47.495844, 19.066064, 5, 2, 0.0, 100.10, 0.0, 0, 0, 1200, 38392, 216, 30, 2, "EDGE", "2014-04-20 08:10:29");
+			dataStorage.insert(1,"testName1", 47.495169, 19.063558, 8, 3, 0.0, 121.29, 0.0, 0, 0, 1200, 38392, 216, 30, 2, "HSPA", "2014-04-20 08:10:34");
+			*/		
 			dataStorage.insert(testId,"testName1", 47.497219, 19.069383, 5.2, 2, 2.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
 			dataStorage.insert(testId,"testName1", 47.497994, 19.068972, 8.3, 3, 9.3, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "GSM");
+			
 			//dataStorage.insert(1, "testName1", 47.495769, 19.070244, 13.4, 4, 14.2, 0.0, 0.0, 0, 0,2, 2, 2, 2, 1, "EDGE");
 		} else {
 			DbData data = dataStorage.queryLastInsertedRow();
@@ -215,7 +222,7 @@ public class DriveTestApp extends Application implements TestSubject, PhoneState
 				LAC,
 				CID, 
 				rateType, 
-				networkType );
+				networkType);
 	}
 
 

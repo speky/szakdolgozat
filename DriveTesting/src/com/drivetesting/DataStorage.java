@@ -73,7 +73,9 @@ public class DataStorage {
 
 	public void insert(long testId, String testName, double lat, double lon, double signalStrength, int signalLevel,  double up, 
 			double down, double jitter, int lost, int sum,	 int mcc, int mnc, int lac, int cid, int rate, String networkType) {		
+		
 		String date = currentTime();
+					
 		ContentValues values = new ContentValues();
 		values.put(TESTID,  testId);
 		values.put(TESTNAME,  testName);

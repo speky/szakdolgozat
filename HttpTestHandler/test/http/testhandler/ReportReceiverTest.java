@@ -42,7 +42,7 @@ public class ReportReceiverTest {
 	public void testSendReportMessageTCP() {
 		final ReportI reporter = mock(ReportI.class);
 		final Socket socket = mock(Socket.class);																					//Id Interval Transfered data
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200  sec 3200 B 0.0 bits 0.0 bits");
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200   3200 ");
 		
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		Assert.assertTrue(true == receiver.parseReport(str));
@@ -64,7 +64,7 @@ public class ReportReceiverTest {
 	public void testSendReportMessageTCPWithKbAndKbits() {
 		final ReportI reporter = mock(ReportI.class);
 		final Socket socket = mock(Socket.class);																					//Id Interval Transfered data
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200 sec  3200 B 0.0 bits 0.0 bits ");
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200  3200 0.0  0.0 ");
 		
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		receiver.setData(DataType.KB);
@@ -82,7 +82,7 @@ public class ReportReceiverTest {
 	public void testSendReportMessageTCPWithMbAndMbits() {
 		final ReportI reporter = mock(ReportI.class);
 		final Socket socket = mock(Socket.class);																					//Id Interval Transfered data
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200 sec 3200 B 0.0 bits 0.0 bits");
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: TCP+MESSAGE: 1 200 3200 0.0 0.0");
 		
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		receiver.setData(DataType.MB);
@@ -100,7 +100,7 @@ public class ReportReceiverTest {
 	@Test
 	public void testSendReportMessageUDP() {
 		final Socket socket = mock(Socket.class);																					//Id Interval Tranfer Jitter Lost outOfOrder Total
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200 sec 3200  B 0.0 bits 0.0 bits 1.1  2 1 5");
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200  3200  1.1  2 1 5");
 		final ReportI reporter = mock(ReportI.class);
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		Assert.assertTrue(true == receiver.parseReport(str));
@@ -125,8 +125,8 @@ public class ReportReceiverTest {
 	@Test
 	public void testSendReportMessageUDPWithKbAndKbits() {
 		final ReportI reporter = mock(ReportI.class);
-		final Socket socket = mock(Socket.class);																					//Id Interval Transfered data
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200 sec  3200 B 0.0 bits 0.0 bits 1.1 3 3 12");
+		final Socket socket = mock(Socket.class);																					
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200 3200 1.1 3 3 12");
 		
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		receiver.setData(DataType.KB);
@@ -143,7 +143,7 @@ public class ReportReceiverTest {
 	public void testSendReportMessageUDPWithMbAndMbits() {
 		final ReportI reporter = mock(ReportI.class);
 		final Socket socket = mock(Socket.class);																					//Id Interval Transfered data
-		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200 sec  3200 B 0.0 bits 0.0 bits 1.1 3 3 12");
+		StringBuffer str = new StringBuffer("POST 1 HTTP*/1.0+REPORT: UDP+MESSAGE: 1 200 3200 1.1 3 3 12");
 		
 		ReportReceiver receiver = new ReportReceiver(logger, socket, reporter);
 		receiver.setData(DataType.MB);

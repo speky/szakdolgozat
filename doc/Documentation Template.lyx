@@ -3521,7 +3521,7 @@ lines 0
 placement o
 overhang 0col%
 width "50col%"
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \noindent
@@ -3832,14 +3832,24 @@ Output file name
 \end_inset
 
  szövegmezőben, mely a külső memória egységen lesz letárolva 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Quotes sld
 \end_inset
 
-sdcard/Android/com.drivetesting/files/export
+sdcard/Android/com.drivetesting/files/
+\end_layout
+
+\begin_layout Standard
+export
 \begin_inset Quotes srd
 \end_inset
 
  illetve, ha ez nem lehetséges akkor az applikáció könyvtárában 
+\end_layout
+
+\begin_layout Standard
 \begin_inset Quotes sld
 \end_inset
 
@@ -3896,11 +3906,17 @@ Server IP address - szerver publikus IP címe
 \end_layout
 
 \begin_layout Itemize
-Buffer size - egy-egy átküldött adatmennyiség mérete
+Buffer size - egy-egy átküldött adatmennyiség mérete byte mértékegységben
+ megadva
 \end_layout
 
 \begin_layout Itemize
-Report period - jelentés gyakoriságának ideje
+Report period - jelentés gyakoriságának ideje miliszekondumban
+\end_layout
+
+\begin_layout Itemize
+UDP bitrate - UDP tesztek esetén az átviteli sebességrátát lehet megadni
+ kpb-ben
 \end_layout
 
 \begin_layout Itemize
@@ -3956,6 +3972,8 @@ Messages
 
  fejlécű listában a teszt ablakban.
  Ezek a bejegyzések tartalmazzák a különböző mérési eredményeket.
+ Új teszt indításakor ez a lista törlésre kerül és az új mérések kerülnek
+ bele.
  A 
 \begin_inset Quotes sld
 \end_inset
@@ -3964,10 +3982,24 @@ Save logs
 \begin_inset Quotes srd
 \end_inset
 
- gomb segítségével elmenthető a Messages üzenet doboz aktuális tartalma.
+ gomb segítségével elmenthető a "Messages
+\begin_inset Quotes srd
+\end_inset
+
+ mérési lista aktuális tartalma.
  Az elmentett fájl neve és elérési útja egy felugróablakban lesz látható.
+ Az 
+\begin_inset Quotes sld
+\end_inset
+
+Exit
+\begin_inset Quotes srd
+\end_inset
+
+ feliratú gombbal lehet bontani a szerverrel veló kapcsolatot.
  A térképen látható az épp futó teszt és méréseknek megfelelően frissülnek
- az adatok rajta.
+ az adatok rajta, ha a futó teszt név vagy id van beállítva a teszt azonosítókén
+t.
  Lehetőség van korábbi tesztek eredményeit is megjeleníteni a térképen teszt
  azonosító vagy teszt név alapján.
  Az export ablakban bármely tesztet ki lehet exportálni CSV formátumban
@@ -4038,15 +4070,20 @@ Hibásan megadott szerver IP cím esetén a teszt futása hamar leáll és a kö
  Ha a szerver nem közvetlenül kapcsolódik az internethez, akkor a hálózati
  eszközökben a PortForwarding funkció használatát és beállításait is érdemes
  ellenőrizni.
+ Ez az üzenet akkor is megjelenhet, ha nem fut a szerver oldali alkalmazás.
+ Ilyenkor el kell indítani a szerveren a programot, majd újra elindítani
+ a tesztet a mobilkészüléken.
 \end_layout
 
 \begin_layout Itemize
 Foglalt teszt port esetén a "Could not connect to server! Test port: <port
- szám>" üzenetet láthatja a felhasználó.
- Ez akkor történhet meg, ha egy másik program már használja az adott portot,
- ebben az esetben próbálkozzon új tesztet indítani, a teszt megpróbál egy
+ szám>" vagy a "Could not connect to server! Report port: <port szám>" üzenetet
+ láthatja a felhasználó.
+ Ez akkor történhet meg, ha a port foglalt, mert például egy másik program
+ már használja.
+ Ebben az esetben próbálkozzon új tesztet indítani, a teszt megpróbál egy
  másik portot használni.
- A szerver gépen az 5500 és 5600 közötti portokat használhatja teszt futtatásra
+ A szerver gépen az 5510 és 5600 közötti portokat használhatja teszt futtatásra
  a program.
  Minden teszt indításkor egy új portot fog választani a program.
  
@@ -4061,12 +4098,29 @@ A program architektúrája
 \end_layout
 
 \begin_layout Standard
-A szerveroldali és a mobil alkalmazás is használja a 
+A szerver oldali és a mobil alkalmazás is használja a 
 \shape italic
-HttpFileHandler.jar
+HttpTestHandler.jar
 \shape default
  fájlt, ami tartalmazza a közösen használt osztályokat.
- Ezen osztályok nagy része a tesztek futtatásában játszik szerepet.
+ Ezen osztályok a tesztek futtatásában, illetve az üzenetek értelmezésében
+ játszanak szerepet.
+ A következő oldalakon a három fő modul - HttpTestHandler, mobil és szerver
+ oldali - osztályainak kapcsolata és hierarchiája látható.
+ A kliens oldali nem fért rá egy oldalra, így két részre lett bontva.
+ Az ábrákon fel van tüntetve, hogy az alaklamzások, milyen közös, a HttpTestHand
+ler-ből származó osztályokat használnak.
+ Az osztálydiagramokon az osztályok dobozában az adott osztályhoz tartozó
+ változók, konstansok és függvények is megtalálhatóak, valamint a nyilak
+ jelzik az osztályok közti kapcoslatot az UML szabályainak meglelően.
+ A zöld színű dobozok az interfészeket jelölik.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -5706,7 +5760,7 @@ Az alábbi szekvencia diagrammon egy TCP teszt futása során használt üzenet
 \end_layout
 
 \begin_layout Enumerate
-Felhasnzáló megnyomja a 
+Felhasználó megnyomja a 
 \begin_inset Quotes sld
 \end_inset
 
@@ -5775,6 +5829,13 @@ A ReportReceiver továbbítja a DriveTestApp application objektumnak az üzenete
 \begin_layout Enumerate
 A TestActivity Message ablakában megjelenik a frissített üzenetek listája,
  amit láthat a felhasználó.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -6034,7 +6095,7 @@ Teszt során a szerver és kliens programok együttes tesztelését végeztem
  A számítógépem egy router-en keresztül kapcoslódik az Internethez, melyen
  be kellett állítani a port továbbítást, hogy tudjon kommunikálni a mobilkészülé
 kkel.
- A tesztek során számos hibát felderítettem a programban, melyeket alacsonyabb
+ A tesztek során számos hibátfelderítettem a programban, melyeket alacsonyabb
  szintű tesztekkel nem volt lehetséges megtalálni, mert ezek csak a két
  komponens (szerver és kliens) együttes jelenléte és kommunikációja esetén
  lehetett felderíteni.
@@ -6054,7 +6115,49 @@ i a kommunikációt, mely folyamat során nyit egy portot, amin keresztül a
  méteres eltérés is jelentkezhet a valós pozícióhoz képest.
  Ezért használtam a térképes megejelenítésnél az OSMDroid útvonal generálási
  metódusát, ami útvonalra illeszti a GPS koordinátákat, így kis eltérés
- mellet is jó eredményeket tud mutatni a program.
+ mellet
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename device-2014-04-28-212616.png
+	lyxscale 70
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Egy teszt futtatás első eleme
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+is jó eredményeket tud mutatni a program.
  A tesztek során mind a kétféle protokollt és teszt módot kiprobáltam kombinálva
  egymással.
  Közben a mért adatokat, azok közül is a fel- és letöltési sebességet a
@@ -6062,6 +6165,95 @@ i a kommunikációt, mely folyamat során nyit egy portot, amin keresztül a
  milyen a sávszélességgel rendelkezik a hálózat.
  Az emulátoron különböző Android verziók melett eltérő felbontású, képarányú
  készülékkel is teszteltem a programot.
+\end_layout
+
+\begin_layout Standard
+Oldalt látható képek egy teszt futtatás eredményei.
+ Ebben az esetben TCP protokollt használtam és lteöltést teszteltem 5 másodperce
+s mintavételezési periódusokkal.
+ Az időkülönbség jól látható a 
+\begin_inset Quotes sld
+\end_inset
+
+Time
+\begin_inset Quotes srd
+\end_inset
+
+ mezőkből.
+ A jelerősség szempontjából a négy mérési pontból háromnál elé jó a jelerősség
+ 8dBm felettiek ez az adat is látható a mérési ponthoz tartozó felugró ablakban.
+ Valamint az ebből a jelerősségből számított jel szint - 
+\begin_inset Quotes sld
+\end_inset
+
+signal level
+\begin_inset Quotes srd
+\end_inset
+
+ elem- is ami ebben az esetben 3.
+ A harmadik mérési pontban a jelerősség 5 dBm, ami kisebb ,mint 8, ezért
+ a jel szint is csökkent 2-re, valamint a térképen színnel is látható a
+ különbség az egyes mérési pontot jelző ikonok között.
+ a harmadik mérési pontnak sárga színe van, míg a többinek zöld.
+ A színek a jel szintel vannak összehangban.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Wrap figure
+lines 0
+placement o
+overhang 0col%
+width "50col%"
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align left
+\begin_inset Graphics
+	filename device-2014-04-28-215332.png
+	lyxscale 70
+	scale 70
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Egy teszt futtatás harmadik eleme
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+A harmadik mérési pontnál a hálózat típusa is megváltozott HUSPA-ról EDGE-re.
+ Ez handover-re utal, vagyis valószínüleg a telefonkészülék kiért egy 3G-s
+ adó hatósugarából és egy 2G-s torony vette át a kiszolgálást, majd - mivel
+ a következő pont ismét HSPA hálózat típusú - visszaváltott egy 3G-s adóra.
+ Ezt a jelenséget többféle dolog is okozhatja: a 3G-s hálózat rosszúl van
+ méretezve, tervezve és nem fedik le elég jól az adott területet, vagy például
+ az adott torony túlterhelődött, vagy meghibásodott.
+ 
+\end_layout
+
+\begin_layout Standard
+A letöltési sebesség nem mondható jónak, egy 3G-s hálózat névleges letöltési
+ sebessége több Mbps, a mért érték pedig csak 100-200 Kbps között mozog.
+ Ennek oka lehet, hogy az adott hálózat jócskán le van terhelve és sokan
+ akarják egyszerre használni a szélessávú adatelérést.
+ Ebben az esetben az operátornak kell módosítani, bővíteni a hálozati apparátust.
+ Másik lehetőség, hogy a felhasználónak korlátozva van a letöltési sebessége
+ az operátor által.
+ A teszt alatt a telefonkészülékem elérte az előfizetői csomag által megszabott
+ adatforgalmat, így korlátozva lett a hálózati hozzáférésem.
+ Ez okozhatta az alacsony sebességrátát.
 \end_layout
 
 \begin_layout Subsection
@@ -6167,6 +6359,10 @@ Továbbá ismertettem a mobilhálózatokat és ezek generációit.
  dignosztikai programoknak nagy szerepe van és lesz is.
  Olyan alkalmazást valósítottam meg, mellyel a telefonhálózatok operátorai
  költséghatékonyan megkönyíthetik a munkájukat.
+ Kis egyszerüsitéssel akár az előfizetők is használjatják a programot, melyel
+ képesek lehetnek egységes hibaüzeneteket, jelentéseket küldeni az operátoroknak
+ a hálózati hibákkal kapcsolatban.
+ Ez nagyban hozzájárulna a gyors és hatékony hibajavitáshoz is.
  Természetesen még nagyon sok elemmel ki lehetne egészíteni a programot,
  ami még hatékonyabbá és többoldaluvá tehetné a programot, például a program
  tovább bővithető az Android nyújtotta új szolgáltatásokkal, illetve alacsony

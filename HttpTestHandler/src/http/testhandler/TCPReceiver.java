@@ -116,7 +116,7 @@ public class TCPReceiver extends ConnectionInstance {
 		try {
 			while (reading && inputStream != null) {
 				int bytes = inputStream.read(byteBuffer);
-				logger.addLine(TAG+"Readed Bytes: "+ Integer.toString(bytes));
+				//logger.addLine(TAG+"Readed Bytes: "+ Integer.toString(bytes));
 				readedBytes += bytes;
 			}					
 		} catch (IOException e) {

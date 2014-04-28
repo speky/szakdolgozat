@@ -34,11 +34,10 @@ import java.util.concurrent.Future;
 class ServerThread extends Thread{	
 	private static final int MAX_THREAD = 5;
 	private static final String TAG = "ServerThread id: ";
-	private final int ReportPort = 5000;
-	
+		
 	private final int FirstPort = 5510;	
 	private final int MaxPort = 5600;
-	private final int SOCKET_TIMEOUT = 3000; //in milisec	
+	private final int SOCKET_TIMEOUT = 4000; //in milisec	
 
 	private int id = 1;
 	private Logger logger = null;

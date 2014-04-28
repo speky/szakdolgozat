@@ -335,7 +335,7 @@ public class OSMActivity extends Activity implements TestObserver {
 
 	private void setOverlays(){
 		for (int i = 0; i < nodes.size(); ++i)		{
-			addRoadMarker(nodes.get(i));
+			addRoadMarker(nodes.get(i), i);
 		}
 		controller.setCenter(nodeB.mLocation);
 		mapView.getOverlays().add(scaleBarOverlay);				
@@ -356,7 +356,7 @@ public class OSMActivity extends Activity implements TestObserver {
 
 		mapView.getOverlays().add(roadOverlay);
 		setProperLocationOnNodes();
-		addRoadMarker(nodeB);
+		addRoadMarker(nodeB, noOfPoints);
 	}
 
 	private void setProperLocationOnNodes(){
@@ -367,7 +367,7 @@ public class OSMActivity extends Activity implements TestObserver {
 	}
 
 	// add a  new road marker
-	private void addRoadMarker(RoadNode node) {
+	private void addRoadMarker(RoadNode node, int id) {
 		if (node != null) {
 			Drawable marker = null;
 
@@ -393,7 +393,7 @@ public class OSMActivity extends Activity implements TestObserver {
 			if (marker != null) {
 				nodeMarker.setIcon(marker);
 			}
-			nodeMarker.setTitle("Step " + noOfPoints);
+			nodeMarker.setTitle("Id " + id);
 			nodeMarker.setSnippet( node.mInstructions);
 			nodeMarker.setPosition(node.mLocation);
 			mapView.getOverlays().add(nodeMarker);			
