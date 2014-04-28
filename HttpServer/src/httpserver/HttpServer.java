@@ -53,7 +53,9 @@ class ServerThread extends Thread{
 	private Socket commandSocket = null;
 	private Scanner scanner = null;	
 	private Socket testSocket = null;
+	private Socket reportSocket = null; 
 	private ServerSocket serverSocket = null;
+	private ServerSocket reporterServerSocket = null;
 	private PrintWriter printWriter;
 	private int testPort = -1; 
 	
@@ -94,10 +96,16 @@ class ServerThread extends Thread{
 			// re-use the port thus  test instances could attach to this port many times
 			serverSocket = new ServerSocket();
 			serverSocket.setReuseAddress(true);
-			serverSocket.bind(new InetSocketAddress(testPort));
-			
+			serverSocket.bind(new InetSocketAddress(testPort));			
 			// set timer for the accept
 			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+			
+			reporterServerSocket = new ServerSocket();
+			reporterServerSocket .setReuseAddress(true);
+			reporterServerSocket .bind(new InetSocketAddress(testPort+1));			
+			// set timer for the accept
+			serverSocket.setSoTimeout(SOCKET_TIMEOUT);
+			
 		} catch (Exception e) {
 			logger.addLineAndPrint(TAG + id + " Try create socket on port: "+ testPort + " " + e.getMessage());
 			return -1;
@@ -184,6 +192,9 @@ class ServerThread extends Thread{
 		try {
 			testSocket = serverSocket.accept();
 			serverSocket.setSoTimeout(0);
+									
+			reportSocket = reporterServerSocket.accept();			
+			reporterServerSocket.setSoTimeout(0);
 		}
 		catch (SocketTimeoutException e) {
 			logger.addLineAndPrint(TAG + id +"Error :"+ e.getMessage());			
@@ -199,7 +210,7 @@ class ServerThread extends Thread{
 		}
 		logger.addLineAndPrint(TAG + "reporter port: " + (testPort+1));
 		
-		reporter = new ReportSender(logger, testPort+1);		
+		reporter = new ReportSender(logger, reportSocket);//testPort+1);		
 		if (reporter.isSocketConnected() == false) {
 			reporter = null;
 			return;
