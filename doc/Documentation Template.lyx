@@ -2902,7 +2902,11 @@ A mobilkészüléken be kell kapcsolni a mobilhálózaton keresztüli adatelér�
 \begin_layout Standard
 Szükséges továbbá egy asztali számítógép, melyen található JVM (Java virtuális
  gép) a szerver oldali program futtatásához.
- Ennek internet hozzáférést kell biztosítani.
+ Ennek internet hozzáférést kell biztosítani, ha router illetve egyéb más
+ hálózati eszköz is érintett a kommunikációban, úgy biztosítani kell, hogy
+ az applikációk kommunikálni tudjanak a 4500-as porton keresztül.
+ Továbbá a programok használhatják még az 5000, illetve a 5500 és 5600 közötti
+ portokat a kommunikáció során.
 \end_layout
 
 \begin_layout Standard
@@ -2923,11 +2927,7 @@ Valamint az Apache ant, amit innen tölthetünk le: [ant].
 
 \begin_layout Standard
 A feltelepített Drive Test programban be kell állítani a szerver oldali
- számítógép IP címét, ha router illetve egyéb más hálózati eszköz is érintett
- a kommunikációban, úgy biztosítani kell, hogy az applikációk kommunikálni
- tudjanak a 4500-as porton keresztül.
- Továbbá a programok használhatják még az 5000, illetve a 5500 és 5600 közötti
- portokat a kommunikáció során.
+ számítógép publikus IP címét.
 \end_layout
 
 \begin_layout Standard
@@ -3007,7 +3007,7 @@ segítségével könnyedén fordíthatjuk és futtathatjuk az alkalmazást:
 \end_layout
 
 \begin_layout Description
-- Egy tetszőleg terminálban menjünk a HttpServer könyvtárba.
+- Egy tetszőleg terminálban lépjünk be a HttpServer könyvtárba.
 \end_layout
 
 \begin_layout Description
@@ -4575,13 +4575,13 @@ Döntések a megvalósítás során
 \end_layout
 
 \begin_layout Standard
-A fejlesztést megelőző kutatómunka során kiderült, hogy az android SDK nem
+A fejlesztést megelőző kutatómunka során kiderült, hogy az Android SDK nem
  támogatja számos hálózati berendezés és készülék információ elérését (biztonság
 i okokból), így nem lehet egyszerűen az Android SDK segítségével úgy hívást
  kezdeményezni, hogy a hívás végeztével a hívásról adatokat kaphasson a
  program.
  Ehhez alacsony szinten, kernel szinten kellene hozzá férni az adatokhoz.
- Így a programban csak adathívásokra korlátozódik a tesztelés a tervezett
+ Így a programban csak az adatforgalomra korlátozódik a tesztelés a tervezett
  hangívások helyett.
 \end_layout
 
@@ -4591,12 +4591,12 @@ A program Java programozási nyelven készül, mert az Android is erre épül
  megvalósítani.
  Ráadásul a Java készen ad sok programozást segítő könyvtárat, többek között
  a hálózati kommunikációhoz.
- Sajnos ebben az esetben a Java.net csomagban lévő osztályok egy nagy részét
+ Sajnos ebben az esetben a java.net csomagban lévő osztályok egy nagy részét
  elfedik a hálózati kommunikációnak, így mikor egy Socket outputstream-jén
  keresztül egy üzenetet küldök a másik félnek, akkor csak bízni tudok benne,
  hogy a program valóban egyből kiküldi az üzenetet és nem végez semmiféle
- tömörítési, egyszerűsítési eljárást a csomagon, ami meghamisíthatná a mérési
- eredményeket és így a tesztek eredményeit is.
+ tömörítési, egyszerűsítési eljárást a csomagokon, ami meghamisíthatná a
+ mérési eredményeket és így a tesztek eredményeit is.
 \end_layout
 
 \begin_layout Standard
@@ -4605,7 +4605,7 @@ A hálózati forgalom mérésére, figyelésére használtam volna a TrafficStat
  forgalomról nyújt információkat a /proc/uid_stat/<uid> könyvtárból.
  Ez tartalmazza a TCP vagy UDP protokollokon küldött és fogadott byte-ok
  és csomagok számát.
- Ha a fájlok nem léteznek aTrafficStats nem tud hálózati statisztikával
+ Ha a fájlok nem léteznek a TrafficStats nem tud hálózati statisztikával
  szolgálni.
  A getUidTxBytes() és a getUIDRxBytes() jelentések csak a TCP forgalmat
  tartalmazzák az UDP-re vonatkozót nem.
@@ -5768,20 +5768,23 @@ Start Test
 \begin_inset Quotes srd
 \end_inset
 
- gombot a TestActivity-ben és elindul a GSP helyszolgáltatás és a HttpService
- osztály példányosul és egy külön szálon, a háttérben futni kezd.
-\end_layout
-
-\begin_layout Enumerate
-Előre megadott porton keresztül és a beállításoknál meghatározott IP címen
- elérhető HttpServer objektumhoz kapcsolódik egy Socket-en keresztül.
+ gombot a TestActivity-ben és elindul a GSP helyszolgáltatás és egy előre
+ megadott porton keresztül és a beállításoknál meghatározott IP címen elérhető
+ HttpServer objektumhoz kapcsolódik egy Socket-en keresztül.
+ Majd lekéri a szervertől a kontrol port címét, ahova teszt inditási, leállítási
+ kérelmeket fogja küldeni kliens.
  
 \end_layout
 
 \begin_layout Enumerate
-A kapcsolat létrejötte után a HttpServer példány létrehoz egy ServerThread
- példányt egy új szálon.
+A HttpServer létrehoz egy ServerThread példányt egy új szálon.
  Ez szolgálja majd ki a telefontól érkező teszt kéréseket.
+\end_layout
+
+\begin_layout Enumerate
+A HttpService osztály példányosul és egy külön szálon, a háttérben futni
+ kezd.
+ Kapcsolódik egy Socket-en a szerverhez a megkapott kontroll porton keresztül.
 \end_layout
 
 \begin_layout Enumerate
@@ -5798,7 +5801,7 @@ A ServerThread létrehozza a ReportSender osztályt, ami szükség esetén tová
 
 \begin_layout Enumerate
 HttpServer létrehozza a ReportReceiver egy példányát és csatlakozik a ReportSend
-erhez egy előre definiált porton.
+erhez egy a teszt portot követő porton keresztül.
 \end_layout
 
 \begin_layout Enumerate
@@ -5829,6 +5832,15 @@ A ReportReceiver továbbítja a DriveTestApp application objektumnak az üzenete
 \begin_layout Enumerate
 A TestActivity Message ablakában megjelenik a frissített üzenetek listája,
  amit láthat a felhasználó.
+\end_layout
+
+\begin_layout Standard
+A teszt addig fut és a jelentések is periodikusan addig érkeznek, amíg a
+ felhasználó le nem állítja a 
+\begin_inset Quotes sld
+\end_inset
+
+Stop" gombbal.
 \end_layout
 
 \begin_layout Standard
@@ -6130,7 +6142,7 @@ status open
 \noindent
 \align left
 \begin_inset Graphics
-	filename device-2014-04-28-212616.png
+	filename test_elso.png
 	lyxscale 70
 	scale 70
 
@@ -6169,8 +6181,8 @@ is jó eredményeket tud mutatni a program.
 
 \begin_layout Standard
 Oldalt látható képek egy teszt futtatás eredményei.
- Ebben az esetben TCP protokollt használtam és lteöltést teszteltem 5 másodperce
-s mintavételezési periódusokkal.
+ Ebben az esetben TCP protokollt használtam és letöltést teszteltem 20 másodperc
+es mintavételezési periódusokkal.
  Az időkülönbség jól látható a 
 \begin_inset Quotes sld
 \end_inset
@@ -6180,9 +6192,10 @@ Time
 \end_inset
 
  mezőkből.
- A jelerősség szempontjából a négy mérési pontból háromnál elé jó a jelerősség
- 8dBm felettiek ez az adat is látható a mérési ponthoz tartozó felugró ablakban.
- Valamint az ebből a jelerősségből számított jel szint - 
+ A jelerősség szempontjából a négy mérési pontból háromnál elég jó a jelerősség,
+ 8 dBm felettiek.
+ Ez az adat is látható a mérési ponthoz tartozó felugró ablakban.
+ Valamint az ebből a jelerősségből számított jelszint - 
 \begin_inset Quotes sld
 \end_inset
 
@@ -6190,12 +6203,12 @@ signal level
 \begin_inset Quotes srd
 \end_inset
 
- elem- is ami ebben az esetben 3.
- A harmadik mérési pontban a jelerősség 5 dBm, ami kisebb ,mint 8, ezért
- a jel szint is csökkent 2-re, valamint a térképen színnel is látható a
- különbség az egyes mérési pontot jelző ikonok között.
- a harmadik mérési pontnak sárga színe van, míg a többinek zöld.
- A színek a jel szintel vannak összehangban.
+ elem- is, ami ebben az esetben 3.
+ A harmadik mérési pontban a jelerősség már csak 5 dBm, ezért a jel szint
+ is csökkent 2-re, valamint a térképen színnel is látható a különbség az
+ egyes mérési pontot jelző ikonok között.
+ A harmadik mérési pontnak sárga színe van, míg a többinek zöld.
+ A színek a jelszinttel vannak összehangban.
 \end_layout
 
 \begin_layout Standard
@@ -6210,7 +6223,7 @@ status open
 \noindent
 \align left
 \begin_inset Graphics
-	filename device-2014-04-28-215332.png
+	filename test_harmadik.png
 	lyxscale 70
 	scale 70
 
@@ -6235,10 +6248,11 @@ Egy teszt futtatás harmadik eleme
 
 A harmadik mérési pontnál a hálózat típusa is megváltozott HUSPA-ról EDGE-re.
  Ez handover-re utal, vagyis valószínüleg a telefonkészülék kiért egy 3G-s
- adó hatósugarából és egy 2G-s torony vette át a kiszolgálást, majd - mivel
- a következő pont ismét HSPA hálózat típusú - visszaváltott egy 3G-s adóra.
- Ezt a jelenséget többféle dolog is okozhatja: a 3G-s hálózat rosszúl van
- méretezve, tervezve és nem fedik le elég jól az adott területet, vagy például
+ adótorony hatósugarából és egy 2G-s torony vette át a kiszolgálást, majd
+ - mivel a következő pont ismét HSPA hálózat típusú - visszaváltott egy
+ 3G-s adóra.
+ Ezt a jelenséget többféle dolog is okozhatja: a 3G-s hálózat rosszul van
+ méretezve, tervezve és nem fedi le elég jól az adott területet, vagy esetleg
  az adott torony túlterhelődött, vagy meghibásodott.
  
 \end_layout
